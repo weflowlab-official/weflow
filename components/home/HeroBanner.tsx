@@ -75,7 +75,7 @@ const LINE2A = "우리만의 플로우를 담다,";
 const LINE2B = "WEFLOW";
 
 /**
- * 메인 페이지 최상단 히어로 — 배경 영상 위에 타이틀·CTA 두 개(제작 사례/차별점)를 얹고,
+ * 메인 페이지 최상단 히어로 — 배경 영상 위에 타이틀·CTA 두 개(사이트 점검/차별점)를 얹고,
  * 아래에 대표 이미지 캐러셀을 붙인다.
  */
 export default function HeroBanner() {
@@ -226,14 +226,13 @@ export default function HeroBanner() {
           }}
         >
           <Link
-            href="/cases"
+            href="/check"
             className="btn-primary hero-btn hero-btn--gold hero-btn--accent"
             style={{ width: "min(240px, 80vw)" }}
           >
-            <span className="hero-btn__label">제작 사례 바로가기</span>
+            <span className="hero-btn__label">내 사이트 점검하기</span>
           </Link>
 
-          {/* 사이트 점검은 헤더 메뉴(금색)로 보내고, 이 자리는 차별점 페이지로 쓴다 */}
           <Link
             href="/difference"
             className="btn-primary hero-btn hero-btn--gold"
