@@ -15,7 +15,6 @@ import HomeServiceSection from "@/components/home/HomeServiceSection";
 import HomeAboutSection from "@/components/home/HomeAboutSection";
 import ComparisonCTA from "@/components/home/ComparisonCTA";
 import FinalCTA from "@/components/home/FinalCTA";
-import CasesCarouselJsonLd from "@/components/CasesCarouselJsonLd";
 
 export default function HomePage() {
   // 이 페이지에 있는 동안만 body에 스크롤 스냅 클래스를 붙인다
@@ -41,9 +40,6 @@ export default function HomePage() {
 
   return (
     <>
-      {/* 네이버 광고 '웹사이트정보' 확장소재용 제작 사례 캐러셀 — 광고 연결 URL(메인)에서 수집된다 */}
-      <CasesCarouselJsonLd />
-
       {/* 1~2. 첫 화면 — 히어로와 신뢰 밴드를 한 덩어리로 묶어 화면 높이를 나눠 갖는다.
              밴드 높이를 픽셀로 빼면 기종·브라우저마다 글씨·여백이 달라 어긋나므로,
              밴드는 제 높이만 쓰고 히어로가 남은 공간을 채우게 한다 (flex: 1). */}

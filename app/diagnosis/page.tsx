@@ -4,7 +4,6 @@ import { Check, Phone, XCircle } from 'lucide-react'
 import { projectTypes } from '@/data/common'
 import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
-import CasesCarouselJsonLd from '@/components/CasesCarouselJsonLd'
 
 export default function DiagnosisPage() {
   const [form, setForm] = useState({ name: '', phone: '', type: '', industry: '', note: '', agree: false })
@@ -138,9 +137,6 @@ export default function DiagnosisPage() {
 
   return (
     <div style={{ background: 'var(--section-a)' }}>
-      {/* 네이버 광고 '웹사이트정보' 확장소재용 — 광고가 이 페이지로 떨어질 때 수집된다 */}
-      <CasesCarouselJsonLd />
-
       {/* ── 본문 — PC·모바일 모두 폼만 보인다 (h1 은 폼 제목 '무료 상담 신청') ── */}
       <section style={{ padding: 'clamp(2rem, 5vw, 3rem) 1.5rem' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>

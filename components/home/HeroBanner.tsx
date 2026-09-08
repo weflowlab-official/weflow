@@ -226,11 +226,11 @@ export default function HeroBanner() {
           }}
         >
           <Link
-            href="/check"
+            href="/diagnosis"
             className="btn-primary hero-btn hero-btn--gold hero-btn--accent"
             style={{ width: "min(240px, 80vw)" }}
           >
-            <span className="hero-btn__label">내 사이트 점검하기</span>
+            <span className="hero-btn__label">홈페이지 제작 문의</span>
           </Link>
 
           <Link

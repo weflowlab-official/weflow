@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PortfolioShowcase from "@/components/cases/PortfolioShowcase";
-import CasesCarouselJsonLd from "@/components/CasesCarouselJsonLd";
 
 /**
  * 제작 사례 페이지(/cases) — 실제 제작 사례만 보여준다.
@@ -23,8 +22,6 @@ export const metadata: Metadata = {
 export default function CasesPage() {
   return (
     <div>
-      {/* 제작 사례 캐러셀 구조화 데이터 — 네이버 캐러셀 가이드(image 필수·절대 URL)에 맞춘 공용 마크업 */}
-      <CasesCarouselJsonLd />
       <section
         style={{
           background: "var(--section-a)",
