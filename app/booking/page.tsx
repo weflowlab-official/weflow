@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Check, CalendarDays, Clock, User, XCircle } 
 import { projectTypes } from '@/data/common'
 import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
+import CasesCarouselJsonLd from '@/components/CasesCarouselJsonLd'
 import Reveal from '@/components/Reveal'
 import SplitText from '@/components/SplitText'
 
@@ -199,6 +200,8 @@ export default function BookingPage() {
 
   return (
     <div style={{ background: 'var(--section-a)', minHeight: '100vh' }}>
+      {/* 네이버 광고 '웹사이트정보' 확장소재용 — 광고가 이 페이지로 떨어질 때 수집된다 */}
+      <CasesCarouselJsonLd />
 
       {/* ── 헤더 ── */}
       <section style={{ background: 'var(--section-b)', borderBottom: '1px solid var(--border)', padding: 'clamp(1.5rem, 3vw, 2.5rem) clamp(1rem, 3vw, 1.5rem) clamp(1.25rem, 2vw, 2rem)' }}>

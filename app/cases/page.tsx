@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PortfolioShowcase from "@/components/cases/PortfolioShowcase";
-import { portfolios } from "@/data/cases";
+import CasesCarouselJsonLd from "@/components/CasesCarouselJsonLd";
 
 /**
  * 제작 사례 페이지(/cases) — 실제 제작 사례만 보여준다.
@@ -20,38 +20,11 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * 제작 사례를 목록 형태로 내보낸다.
- * "위플로우가 만든 사이트" 같은 질문에 업종·플랜·실제 주소가 함께 인용되도록,
- * 화면에 그리는 데이터(data/cases.ts)를 그대로 쓴다.
- */
-const CASES_JSON_LD = {
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  name: "WEFLOW 제작 사례",
-  description: "WEFLOW가 직접 제작한 홈페이지 사례 목록.",
-  numberOfItems: portfolios.filter((p) => !p.placeholder).length,
-  itemListElement: portfolios
-    .filter((p) => !p.placeholder) // 참고용 샘플은 검색엔진 구조화 데이터에서 제외
-    .map((p, i) => ({
-    "@type": "ListItem",
-    position: i + 1,
-    item: {
-      "@type": "WebSite",
-      name: p.name,
-      url: p.url,
-      description: `${p.desc} — ${p.category} 업종, ${p.plan} 플랜으로 제작.`,
-    },
-  })),
-};
-
 export default function CasesPage() {
   return (
     <div>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(CASES_JSON_LD) }}
-      />
+      {/* 제작 사례 캐러셀 구조화 데이터 — 네이버 캐러셀 가이드(image 필수·절대 URL)에 맞춘 공용 마크업 */}
+      <CasesCarouselJsonLd />
       <section
         style={{
           background: "var(--section-a)",
