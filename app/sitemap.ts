@@ -6,7 +6,7 @@ import { portfolios } from '@/data/cases'
 const BASE = 'https://weflowlab.kr'
 
 /** 사례 상세 페이지들의 갱신일 — 사례 내용을 고쳤을 때 이 날짜만 올리면 된다 */
-const CASES_UPDATED = '2026-08-23'
+const CASES_UPDATED = '2026-09-09'
 
 /**
  * updated 는 그 페이지 내용을 실제로 고친 날짜다 (YYYY-MM-DD).

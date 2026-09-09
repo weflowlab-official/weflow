@@ -142,6 +142,20 @@ export default function PortfolioShowcase() {
   const [active, setActive] = useState(ALL)
   const filtered = active === ALL ? portfolios : portfolios.filter(p => p.category === active)
 
+  // 고른 칩을 주소(?cat=업종)에 남긴다 — 상세로 들어갔다 뒤로 가거나 '← 제작 사례'로 돌아와도 같은 칩이 열려 있게.
+  // 처음 들어올 때 주소에 칩이 있으면 그걸로 시작한다 (없거나 모르는 값이면 '전체').
+  useEffect(() => {
+    const cat = new URLSearchParams(window.location.search).get('cat')
+    if (cat && CATEGORIES.includes(cat)) setActive(cat)
+  }, [])
+  const choose = (cat: string) => {
+    setActive(cat)
+    const url = new URL(window.location.href)
+    if (cat === ALL) url.searchParams.delete('cat')
+    else url.searchParams.set('cat', cat)
+    window.history.replaceState(window.history.state, '', url)
+  }
+
   return (
     <div>
       {/* 업종 칩 */}
@@ -151,7 +165,7 @@ export default function PortfolioShowcase() {
           return (
             <button
               key={cat}
-              onClick={() => setActive(cat)}
+              onClick={() => choose(cat)}
               className="subhead"
               style={{
                 flexShrink: 0,

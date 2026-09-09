@@ -77,7 +77,8 @@ export default async function CaseDetailPage({
         </span>
         <div style={{ maxWidth: '900px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <Reveal variant="up">
-            <Link href="/cases" className="footnote case-poster__back">
+            {/* 목록으로 — 이 사례의 업종 칩이 열린 채로 돌아간다 */}
+            <Link href={`/cases?cat=${encodeURIComponent(p.category)}`} className="footnote case-poster__back">
               ← 제작 사례
             </Link>
             <p className="case-eyebrow">{p.category} · {p.plan} 제작 사례</p>

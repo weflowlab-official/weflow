@@ -86,7 +86,7 @@ export interface Portfolio {
  */
 // 칩 목록 — 아직 사례가 없는 업종도 포함해 보여준다 (사례는 채워지는 대로 추가)
 export const categoryOrder = [
-  '기업/비즈니스', '쇼핑몰/결제', '인테리어', '차량', '캠핑/레저', '보험',
+  '기업/비즈니스', '쇼핑몰/결제', '인테리어', '캠핑/레저', '차량/모빌리티', '보험',
   '의료/병원', '뷰티/미용', '학원/교육', '음식점/카페', '법률/세무', '부동산',
   '펜션/숙박', '헬스/피트니스', '반려동물', '제조/공장', '웨딩/스튜디오', '청소/이사',
 ]
@@ -277,7 +277,7 @@ export const portfolios: Portfolio[] = [
   {
     slug: 'ksmobility',
     name: 'OO맨',
-    category: '차량',
+    category: '차량/모빌리티',
     plan: '랜딩페이지',
     desc: '프리미엄 특장 카니발 전문',
     url: 'https://teukjangman.kr/',
@@ -338,6 +338,66 @@ export const portfolios: Portfolio[] = [
         '/images/cases/cases-ksmobility/cases-ksmobility-07.webp',
         '/images/cases/cases-ksmobility/cases-ksmobility-11.webp',
         '/images/cases/cases-ksmobility/cases-ksmobility-13.webp',
+      ],
+    },
+  },
+  {
+    slug: 'hrentcar',
+    name: 'H렌터카',
+    category: '차량/모빌리티',
+    plan: '홈페이지',
+    desc: '경기·서울 전 지역 합리적인 가격의 렌터카',
+    url: 'https://1666-6304.vercel.app/',
+    images: [
+      '/images/cases/cases-hrentcar/cases-hrentcar-01.webp',
+      '/images/cases/cases-hrentcar/cases-hrentcar-02.webp',
+      '/images/cases/cases-hrentcar/cases-hrentcar-03.webp',
+      '/images/cases/cases-hrentcar/cases-hrentcar-04.webp',
+      '/images/cases/cases-hrentcar/cases-hrentcar-05.webp',
+      '/images/cases/cases-hrentcar/cases-hrentcar-06.webp',
+      '/images/cases/cases-hrentcar/cases-hrentcar-07.webp',
+    ],
+    detail: {
+      summary: '쓰던 홈페이지의 뼈대는 살리고, 렌터카에 맞게 다시 입혔습니다.',
+      duration: '1주',
+      poster: { from: '#0f2a55', to: '#2f5fa8', ink: '#f5f7fb', mark: 'RENT' },
+      quotes: [
+        '기존 홈페이지 구성은 그대로 두고, 업종만 렌터카로 바꾸고 싶어요',
+        '전화 상담 버튼이 어느 화면에서든 바로 보였으면 해요',
+        '전문적이고 신뢰감 있으면서도 편안한 분위기였으면 해요',
+        '깔끔하고 가독성 좋은 디자인으로 부탁드려요',
+      ],
+      background:
+        '이미 쓰고 있던 홈페이지가 있었습니다. 구성은 마음에 드니 그대로 두고, 업종을 렌터카로 바꿔 달라는 요청이었습니다. 새로 짓는 것보다 어려운 건 "그대로"의 기준입니다. 익숙한 흐름은 지키면서, 렌터카 손님이 먼저 찾는 정보가 앞에 오도록 다시 짰습니다.',
+      points: [
+        {
+          title: '뼈대는 그대로, 내용은 렌터카로',
+          body:
+            '메뉴 구조와 화면 흐름은 기존 홈페이지를 따랐습니다. 대신 보유 차량과 1일 요금, 영업 지역처럼 렌터카 손님이 먼저 찾는 정보로 채웠습니다.',
+        },
+        {
+          title: '차급별로 나눠 보이게',
+          body:
+            '경차·소형부터 승합까지 차급별 페이지를 두고 요금을 같은 자리에 붙였습니다. 원하는 차를 빨리 찾고, 전화하기 전에 금액을 가늠할 수 있습니다.',
+        },
+        {
+          title: '전화 한 통으로 이어지게',
+          body:
+            '24시간 상담이 강점이라 화면 어디서든 전화 상담 버튼이 보이게 했습니다. 이용 절차와 자격·서류를 미리 안내해 상담이 짧아지도록 했습니다.',
+        },
+        {
+          title: '신뢰감은 정돈에서',
+          body:
+            '남색과 흰색으로 색을 절제하고, 표와 여백으로 정보를 정리했습니다. 화려함보다 읽기 편한 화면이 전문성과 편안함을 함께 줍니다.',
+        },
+      ],
+      features: ['차급별 보유 차량·1일 요금', '영업 지역 안내', '이용 절차 안내', '대여 자격·보험·서류 안내', '자주 묻는 질문', '24시간 전화 상담 연결'],
+      results: [
+        '/images/cases/cases-hrentcar/cases-hrentcar-01.webp',
+        '/images/cases/cases-hrentcar/cases-hrentcar-02.webp',
+        '/images/cases/cases-hrentcar/cases-hrentcar-05.webp',
+        '/images/cases/cases-hrentcar/cases-hrentcar-06.webp',
+        '/images/cases/cases-hrentcar/cases-hrentcar-07.webp',
       ],
     },
   },
@@ -515,7 +575,7 @@ export const portfolios: Portfolio[] = [
   {
     slug: 'ruricompany',
     name: 'OO컴퍼니',
-    category: '차량',
+    category: '차량/모빌리티',
     plan: '랜딩페이지',
     desc: '신차 할부 · 리스 · 장기렌트 상담',
     url: 'https://ruricompany.vercel.app/',
@@ -649,6 +709,16 @@ export const portfolios: Portfolio[] = [
     desc: '시공 사례 갤러리 중심의 인테리어 홈페이지',
     url: '',
     images: ['/images/cases/samples/sample-interior-1.webp'],
+    placeholder: true,
+  },
+  {
+    slug: 'sample-car-1',
+    name: 'OO오토케어',
+    category: '차량/모빌리티',
+    plan: '홈페이지',
+    desc: '수입차 정비·디테일링 예약 문의 홈페이지',
+    url: '',
+    images: ['/images/cases/samples/sample-car-1.webp'],
     placeholder: true,
   },
   {
