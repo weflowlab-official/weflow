@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import PortfolioShowcase from "@/components/cases/PortfolioShowcase";
+import { CTA_BTN } from "@/lib/ctaButton";
 
 /**
  * 제작 사례 페이지(/cases) — 실제 제작 사례만 보여준다.
@@ -19,7 +21,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CasesPage() {
+/**
+ * 주소의 ?cat=업종 을 서버에서 읽어 목록에 넘긴다.
+ * 상세에서 뒤로 가거나 '← 제작 사례'로 돌아올 때, 첫 화면부터 그 업종 칩이 열린 채로 그려져
+ * '전체'가 잠깐 보였다가 바뀌는 깜빡임이 없다. (이 페이지는 요청마다 서버에서 그린다)
+ */
+export default async function CasesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ cat?: string }>
+}) {
+  const { cat } = await searchParams
   return (
     <div>
       <section
@@ -56,15 +68,23 @@ export default function CasesPage() {
           </p>
 
           {/* 실제 제작 사례 목록 */}
-          <PortfolioShowcase />
+          <PortfolioShowcase initialCategory={cat} />
 
-          <div style={{ textAlign: "center", marginTop: "clamp(2.5rem, 5vw, 3.5rem)" }}>
-            <Link
-              href="/diagnosis"
-              className="btn-gold btn-gold--fill"
-              style={{ fontSize: "1rem", padding: "0.85rem 2.2rem" }}
-            >
-              <span className="btn-gold__label">무료 상담 신청 →</span>
+          {/* 마무리 CTA — 다른 탭과 같은 두 버튼 한 쌍 */}
+          <div
+            style={{
+              display: "flex",
+              gap: "0.75rem",
+              justifyContent: "center",
+              flexWrap: "wrap",
+              marginTop: "clamp(2.5rem, 5vw, 3.5rem)",
+            }}
+          >
+            <a href="tel:010-2971-7280" className="btn-gold" style={CTA_BTN}>
+              <span className="btn-gold__label">전화 상담하기</span> <ArrowRight size={18} strokeWidth={2.5} />
+            </a>
+            <Link href="/diagnosis" className="btn-gold btn-gold--fill" style={CTA_BTN}>
+              <span className="btn-gold__label">무료 상담 신청</span> <ArrowRight size={18} strokeWidth={2.5} />
             </Link>
           </div>
         </div>

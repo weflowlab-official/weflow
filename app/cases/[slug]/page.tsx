@@ -37,10 +37,17 @@ export async function generateMetadata({
 
 export default async function CaseDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>
+  /** from — 목록에서 열려 있던 업종 칩. 전체 탭에서 왔으면 없다 */
+  searchParams: Promise<{ from?: string }>
 }) {
   const { slug } = await params
+  const { from } = await searchParams
+  // 목록·다른 사례로 갈 때 열려 있던 업종 칩을 그대로 들고 다닌다
+  const listHref = from ? `/cases?cat=${encodeURIComponent(from)}` : '/cases'
+  const caseHref = (s: string) => (from ? `/cases/${s}?from=${encodeURIComponent(from)}` : `/cases/${s}`)
   const p = detailed.find(x => x.slug === slug)
   if (!p) notFound()
 
@@ -77,8 +84,8 @@ export default async function CaseDetailPage({
         </span>
         <div style={{ maxWidth: '900px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <Reveal variant="up">
-            {/* 목록으로 — 이 사례의 업종 칩이 열린 채로 돌아간다 */}
-            <Link href={`/cases?cat=${encodeURIComponent(p.category)}`} className="footnote case-poster__back">
+            {/* 목록으로 — 들어올 때 열려 있던 업종 칩 그대로 돌아간다 (전체 탭에서 왔으면 전체) */}
+            <Link href={listHref} className="footnote case-poster__back">
               ← 제작 사례
             </Link>
             <p className="case-eyebrow">{p.category} · {p.plan} 제작 사례</p>
@@ -323,7 +330,7 @@ export default async function CaseDetailPage({
               {related.map(r => (
                 <li key={r.slug}>
                   <Link
-                    href={r.detail ? `/cases/${r.slug}` : '/cases'}
+                    href={r.detail ? caseHref(r.slug) : listHref}
                     className="case-related__card"
                   >
                     <div className="case-related__thumb">

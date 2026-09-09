@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { portfolios, categoryOrder, type Portfolio } from '@/data/cases'
@@ -8,7 +8,7 @@ const ROTATE_MS = 3500
 // 사진마다 비율이 조금씩 달라(약 2.0~2.2:1) 중간값으로 고정하고 cover 로 채운다
 const PHOTO_ASPECT = '2.05 / 1'
 
-function PortfolioCard({ p }: { p: Portfolio }) {
+function PortfolioCard({ p, from }: { p: Portfolio; from?: string }) {
   const [index, setIndex] = useState(0)
   const [hovered, setHovered] = useState(false)
 
@@ -107,7 +107,7 @@ function PortfolioCard({ p }: { p: Portfolio }) {
           참고용 샘플(placeholder)은 링크를 덮지 않아 눌리지 않는다. */}
       {p.placeholder ? null : p.detail ? (
         <Link
-          href={`/cases/${p.slug}`}
+          href={from ? `/cases/${p.slug}?from=${encodeURIComponent(from)}` : `/cases/${p.slug}`}
           aria-label={`${p.name} 제작 사례 자세히 보기`}
           style={{ position: 'absolute', inset: 0, zIndex: 2 }}
         />
@@ -137,16 +137,20 @@ const CATEGORIES = [
   ),
 ]
 
+/** 주소의 cat 값이 아는 업종이면 그대로, 아니면 '전체' */
+const validCategory = (cat?: string | null) => (cat && CATEGORIES.includes(cat) ? cat : ALL)
+
 /** 실제 제작 사례 — 업종 칩으로 거르고, 한 줄에 두 칸(화면 반)씩 채운다 */
-export default function PortfolioShowcase() {
-  const [active, setActive] = useState(ALL)
+export default function PortfolioShowcase({ initialCategory }: { initialCategory?: string }) {
+  // 서버가 주소(?cat=)에서 읽어 넘긴 업종으로 첫 화면부터 시작한다 — '전체'가 먼저 보이는 깜빡임이 없다
+  const [active, setActive] = useState(() => validCategory(initialCategory))
   const filtered = active === ALL ? portfolios : portfolios.filter(p => p.category === active)
 
   // 고른 칩을 주소(?cat=업종)에 남긴다 — 상세로 들어갔다 뒤로 가거나 '← 제작 사례'로 돌아와도 같은 칩이 열려 있게.
-  // 처음 들어올 때 주소에 칩이 있으면 그걸로 시작한다 (없거나 모르는 값이면 '전체').
-  useEffect(() => {
-    const cat = new URLSearchParams(window.location.search).get('cat')
-    if (cat && CATEGORIES.includes(cat)) setActive(cat)
+  // 브라우저가 이전 화면을 그대로 되살려 서버 값이 없을 때를 대비해, 그리기 전에 주소를 한 번 더 확인한다.
+  useLayoutEffect(() => {
+    const fromUrl = validCategory(new URLSearchParams(window.location.search).get('cat'))
+    setActive(prev => (prev === fromUrl ? prev : fromUrl))
   }, [])
   const choose = (cat: string) => {
     setActive(cat)
@@ -189,7 +193,7 @@ export default function PortfolioShowcase() {
       {filtered.length > 0 ? (
         <div className="portfolio-grid">
           {filtered.map(p => (
-            <PortfolioCard key={p.slug} p={p} />
+            <PortfolioCard key={p.slug} p={p} from={active === ALL ? undefined : active} />
           ))}
         </div>
       ) : (

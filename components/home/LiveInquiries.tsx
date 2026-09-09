@@ -315,13 +315,13 @@ export default function LiveInquiries() {
           overflow: hidden;
           animation: liveRowOut 0.55s cubic-bezier(0.55, 0, 0.75, 0.6) forwards;
         }
-        /* 업종 칸 — 가장 긴 "역사 관련 업종"이 들어갈 만큼만.
-           넓게 잡으면 오른쪽 "랜딩형 홈페이지 문의"가 잘린다 */
+        /* 업종 칸 — 모바일은 "차량/모빌리티 업종"이 들어가도록 0.7cm 넓혔다.
+           그만큼 이름·제작 종류 칸도 오른쪽으로 밀린다. PC(아래 미디어 쿼리)는 원래 폭 그대로 */
         .live-industry {
           display: flex;
           align-items: center;
           gap: 0.35rem;
-          width: 5.9rem;
+          width: calc(5.9rem + 0.7cm);
           flex-shrink: 0;
         }
         .live-industry__text {
