@@ -136,6 +136,7 @@ function referrerChannel(referrer: string): string {
   if (host.includes('blog.naver')) return '네이버 블로그'
   if (host.includes('naver')) return '네이버 검색'
   if (host.includes('google')) return '구글 검색'
+  if (host.includes('threads')) return '스레드'
   if (host.includes('instagram')) return '인스타그램'
   if (host.includes('facebook')) return '페이스북'
   if (host.includes('youtube')) return '유튜브'
@@ -157,15 +158,17 @@ export function attributionLine(): string {
   let channel = ''
   if (a.n_media || a.n_keyword || a.n_query || a.n_ad) channel = '네이버 광고'
   else if (a.gclid) channel = '구글 광고'
-  else if (a.fbclid) channel = '메타 광고'
   else if (a.utm_source) {
     const KO: Record<string, string> = {
-      naver: '네이버', google: '구글', instagram: '인스타그램', facebook: '페이스북',
+      naver: '네이버', google: '구글', instagram: '인스타그램', facebook: '페이스북', threads: '스레드',
       meta: '메타', youtube: '유튜브', kakao: '카카오', band: '밴드', daangn: '당근',
     }
     const name = KO[a.utm_source.toLowerCase()] || a.utm_source
     channel = a.utm_medium === 'cpc' || a.utm_medium === 'paid' ? `${name} 광고` : name
-  } else if (a.referrer) channel = referrerChannel(a.referrer)
+  }
+  // fbclid 는 광고가 아니라 페이스북·인스타에서 링크를 누를 때 붙는 꼬리표 — 광고로 적지 않는다
+  else if (a.fbclid) channel = '페이스북'
+  else if (a.referrer) channel = referrerChannel(a.referrer)
   else channel = '직접 유입'
 
   if (!channel) channel = '직접 유입'

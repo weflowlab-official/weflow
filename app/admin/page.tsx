@@ -1625,13 +1625,16 @@ const SOURCE_KO: Record<string, string> = {
   twitter: "X(트위터)",
   youtube: "유튜브",
   band: "밴드",
+  threads: "스레드",
   direct: "직접 유입",
   // 유료 광고 클릭은 같은 채널의 검색·SNS 유입과 따로 센다
   "naver-ad": "네이버 광고",
   "google-ad": "구글 광고",
-  "facebook-ad": "메타 광고",
+  // 인스타·페이스북은 같은 메타 광고가 노출된 자리만 다른 것 — 어디서 눌렀는지 보이게 따로 적는다
+  "facebook-ad": "페이스북 광고",
   "instagram-ad": "인스타 광고",
   "kakao-ad": "카카오 광고",
+  "threads-ad": "스레드 광고",
 };
 const SOURCE_COLOR: Record<string, string> = {
   kakao: "#fae100",
@@ -1648,6 +1651,8 @@ const SOURCE_COLOR: Record<string, string> = {
   twitter: "#e7e9ea",
   youtube: "#ff0000",
   band: "#00c73c",
+  threads: "#e1e1e6",
+  "threads-ad": "#8e8e93",
   direct: "#94a3b8",
 };
 // utm 약자·별칭 소스 통합 (예: ig → instagram) — 같은 채널을 한 줄로 합침
@@ -1659,6 +1664,9 @@ const SOURCE_ALIAS: Record<string, string> = {
   yt: "youtube",
   x: "twitter",
   "band.us": "band",
+  // 스레드 — 링크 리다이렉트 도메인이 소스로 남은 예전 기록을 합친다
+  "l.threads.com": "threads",
+  threads_net: "threads",
 };
 // 소스 문자열 정규화 — 소문자화 + 별칭 흡수, 값이 없으면 직접 유입
 function normSource(s: string): string {

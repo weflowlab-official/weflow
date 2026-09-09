@@ -15,6 +15,7 @@ function normalizeSource(referrer: string, host: string): string {
   if (ownHost && (h === ownHost || h.endsWith('.' + ownHost))) return 'direct' // 내부 이동
   if (h.includes('kakao')) return 'kakao'
   if (h.includes('naver')) return 'naver'
+  if (h.includes('threads')) return 'threads' // l.threads.com — 스레드 링크 리다이렉트
   if (h.includes('instagram')) return 'instagram'
   if (h.includes('facebook')) return 'facebook'
   if (h.includes('google')) return 'google'
@@ -28,6 +29,7 @@ function normalizeSource(referrer: string, host: string): string {
 // (인스타/카톡/밴드/페북 등 앱 안에서 링크를 열면 UA에 앱 이름이 남는다)
 function detectAppSource(ua: string): string {
   const s = ua.toLowerCase()
+  if (s.includes('barcelona')) return 'threads' // 스레드 앱 인앱 브라우저 UA
   if (s.includes('instagram')) return 'instagram'
   if (/fban|fbav|fb_iab|fbios/.test(s)) return 'facebook'
   if (s.includes('kakaotalk')) return 'kakao'

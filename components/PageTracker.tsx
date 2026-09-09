@@ -74,16 +74,19 @@ export default function PageTracker() {
     flush()
     maxScroll.current = 0
 
-    // 광고 클릭은 UTM 이 없어도 소스·매체를 채워 준다 (네이버 파워링크 n_*, 구글 gclid, 메타 fbclid)
+    // 광고 클릭은 UTM 이 없어도 소스·매체를 채워 준다 (네이버 파워링크 n_*, 구글 gclid).
+    // fbclid 는 광고 표시가 아니다 — 페이스북·인스타에서 바깥 링크를 누르면 일반 게시물에도 붙는다.
+    // 그래서 소스만 페이스북으로 적고 유료(cpc)로는 세지 않는다.
     const isNaverAd = !!(params.get('n_media') || params.get('n_keyword') || params.get('n_query') || params.get('n_ad'))
-    const adSource = isNaverAd ? 'naver' : params.get('gclid') ? 'google' : params.get('fbclid') ? 'facebook' : ''
+    const adSource = isNaverAd ? 'naver' : params.get('gclid') ? 'google' : ''
+    const clickSource = adSource || (params.get('fbclid') ? 'facebook' : '')
     // n_query(사용자가 실제 친 검색어)를 우선 — n_keyword 는 캠페인에 따라 숫자 ID 로만 온다
     const keyword = params.get('n_query') || params.get('n_keyword') || params.get('utm_term') || params.get('kw') || ''
     const body = {
       sessionId: getSessionId(),
       path: pathname,
       referrer: document.referrer,
-      utmSource: params.get('utm_source') || adSource,
+      utmSource: params.get('utm_source') || clickSource,
       utmMedium: params.get('utm_medium') || (adSource ? 'cpc' : ''),
       // 광고 키워드는 캠페인 칸에 함께 남겨 관리자에서 "어떤 키워드로 왔는지" 집계한다
       utmCampaign: params.get('utm_campaign') || keyword,
