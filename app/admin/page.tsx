@@ -1930,6 +1930,7 @@ function BarRow({
   right,
   labelWidth = 92,
   wrapLabel = false,
+  rightWidth = 92,
 }: {
   label: string;
   color: string;
@@ -1940,6 +1941,8 @@ function BarRow({
   labelWidth?: number;
   /** true 면 말줄임 대신 줄바꿈으로 글자를 전부 보여준다 */
   wrapLabel?: boolean;
+  /** 오른쪽 숫자 칸 너비(px) — 모든 카드가 같은 값을 써서 숫자 시작선이 맞는다 */
+  rightWidth?: number;
 }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", minWidth: 0 }}>
@@ -1984,7 +1987,7 @@ function BarRow({
       </div>
       <span
         style={{
-          flex: "0 1 78px",
+          flex: `0 1 ${rightWidth}px`,
           minWidth: 0,
           textAlign: "right",
           fontSize: "0.88rem",
@@ -2122,6 +2125,8 @@ function TrafficView({
     .sort((a, b) => b[1] - a[1])
     .slice(0, 6);
   const maxExit = Math.max(1, ...exitRows.map((r) => r[1]));
+  // 이탈 페이지 합계 = 방문 수 (방문 한 건당 마지막 페이지 하나) — 퍼센트의 분모로 쓴다
+  const exitTotal = Object.values(exitCount).reduce((a, b) => a + b, 0);
   const adExitTotal = Object.values(adExitCount).reduce((a, b) => a + b, 0);
   const adExitRows = Object.entries(adExitCount)
     .sort((a, b) => b[1] - a[1])
@@ -2634,7 +2639,7 @@ function TrafficView({
                   color="#f87171"
                   value={cnt}
                   max={maxExit}
-                  right={`${cnt}회`}
+                  right={`${cnt}회 (${exitTotal ? Math.round((cnt / exitTotal) * 100) : 0}%)`}
                 />
               ))}
             </div>
