@@ -61,8 +61,8 @@ export default function DiffPromise() {
             07 · 일하는 방식
           </span>
           <h2 className="title-1" style={{ margin: '0.9rem 0 0', wordBreak: 'keep-all' }}>
-            <span className="title-lead">걱정하시는 건,</span> <br className="br-mobile" />
-            <span className="c-gold">대개 기능이 아니더라고요</span>
+            <span className="title-lead">걱정하셨던 그 부분,</span> <br className="br-mobile" />
+            <span className="c-gold">WEFLOW가 해결합니다</span>
           </h2>
           <p
             className="body c-muted"

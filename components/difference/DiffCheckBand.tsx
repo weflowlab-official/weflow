@@ -59,12 +59,14 @@ export default function DiffCheckBand() {
       </Reveal>
 
       <style>{`
-        /* 앞뒤 섹션(02 section-a #0e0e10 / 03 section-b #151517)보다 한참 밝은 면을 깔아
-           삽입물로 읽히게 한다. accent-light(#1b2840)는 남색 판이라 무겁게 가라앉았다 —
-           파란 기는 아이콘과 "연락처는 받지 않습니다" 글씨에만 남기고 면은 중립으로 띄운다.
+        /* 앞뒤 섹션(02 section-a #0e0e10 / 03 section-b #151517)보다 밝은 면을 깔아
+           삽입물로 읽히게 한다. accent-light(#1b2840)는 남색 판이라 무겁게 가라앉았고,
+           surface-container(#232326)·surface(#1c1c1f)는 차례로 너무 떠서 그보다 반 단 낮췄다.
+           section-b(#151517)까지 내리면 바로 아래 03 과 같은 색이 돼 띠로 안 읽히므로
+           둘 사이의 값을 직접 쓴다. 위아래 테두리가 경계를 마저 잡아 준다.
            높이는 낮게 — 화면 반쪽을 넘기면 정식 섹션처럼 보인다. */
         .dcb {
-          background: var(--surface-container);
+          background: #1a1a1d;
           border-top: 1px solid var(--border);
           border-bottom: 1px solid var(--border);
           padding: clamp(1.75rem, 4vw, 2.5rem) 1.25rem;
