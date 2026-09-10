@@ -347,7 +347,7 @@ export const portfolios: Portfolio[] = [
     category: '차량/모빌리티',
     plan: '홈페이지',
     desc: '경기·서울 전 지역 합리적인 가격의 렌터카',
-    url: 'https://1666-6304.vercel.app/',
+    url: 'https://1666-6304.com/',
     images: [
       '/images/cases/cases-hrentcar/cases-hrentcar-01.webp',
       '/images/cases/cases-hrentcar/cases-hrentcar-02.webp',

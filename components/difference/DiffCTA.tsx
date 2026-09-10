@@ -9,7 +9,7 @@ export default function DiffCTA() {
     <section
       style={{
         padding: "clamp(2.5rem, 5vw, 3.5rem) 1.5rem",
-        // 바로 위 05 비교 섹션이 section-b 라 여기는 section-a 로 번갈아 둔다
+        // 바로 위 07 일하는 방식이 section-b 라 여기는 section-a 로 번갈아 둔다
         background: "var(--section-a)",
         borderTop: "1px solid var(--border)",
       }}

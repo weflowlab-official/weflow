@@ -115,8 +115,11 @@ export default function CheckPage() {
     if (phase === 'error') errorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }, [phase])
 
-  const runCheck = async () => {
-    if (!url.trim() || phase === 'loading') return
+  // target 을 받는 이유 — 다른 페이지에서 ?url= 로 넘어온 주소는 setUrl 직후 곧바로
+  // 점검을 걸어야 하는데, 그 시점엔 url 상태가 아직 갱신 전이라 값을 직접 넘겨야 한다.
+  const runCheck = async (target?: string) => {
+    const value = (target ?? url).trim()
+    if (!value || phase === 'loading') return
     // 입력칸이 사라지며 페이지가 짧아질 때 제목이 화면 밖으로 밀리지 않게 맨 위로
     window.scrollTo({ top: 0, behavior: 'smooth' })
     setPhase('loading')
@@ -127,7 +130,7 @@ export default function CheckPage() {
       const res = await fetch('/api/diagnose', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url: value }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || '분석에 실패했습니다.')
@@ -138,6 +141,17 @@ export default function CheckPage() {
       setPhase('error')
     }
   }
+
+  // /difference 의 점검 배너 등에서 ?url= 로 주소를 들고 오면 바로 점검을 건다.
+  // useSearchParams 대신 window.location 을 읽는다 — 훅을 쓰면 이 페이지 전체를
+  // Suspense 로 감싸야 하고, PageTracker 도 같은 방식으로 쿼리를 읽는다.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get('url')
+    if (!q) return
+    setUrl(q)
+    void runCheck(q)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const phoneOk = lead.phone.replace(/\D/g, '').length === 11
 
@@ -245,13 +259,14 @@ export default function CheckPage() {
                       placeholder="사이트 주소 (예: example.co.kr)"
                       value={url}
                       onChange={e => setUrl(e.target.value)}
-                      onKeyDown={e => e.key === 'Enter' && runCheck()}
+                      onKeyDown={e => e.key === 'Enter' && void runCheck()}
                       inputMode="url"
                       autoComplete="url"
                     />
                   </div>
                   <button
-                    onClick={runCheck}
+                    // 화살표로 감싼다 — 그냥 넘기면 클릭 이벤트가 runCheck 의 target 으로 들어간다
+                    onClick={() => runCheck()}
                     className="btn-primary"
                     style={{ height: '54px', padding: '0 1.8rem', fontSize: '1.05rem', whiteSpace: 'nowrap', justifyContent: 'center' }}
                   >
