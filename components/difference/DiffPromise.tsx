@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { Ear, MessageCircle, Wrench } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import Reveal from '@/components/Reveal'
@@ -13,11 +14,16 @@ import Reveal from '@/components/Reveal'
  * "요구사항 다 들어드립니다" 라고 쓰면 다른 업체와 똑같은 말이 된다.
  * 그래서 걱정에 먼저 이름을 붙이고, 답은 짧게만 둔다.
  */
-const PROMISES: { Icon: LucideIcon; title: string; desc: string }[] = [
+const PROMISES: { Icon: LucideIcon; title: string; desc: ReactNode }[] = [
   {
     Icon: Ear,
     title: '다 듣고 시작합니다',
-    desc: '“이건 되나요?”에 안 된다는 답부터 드리지 않습니다. 무엇이 필요하신지 먼저 여쭙고, 되는 방법을 찾습니다.',
+    desc: (
+      <>
+        “이건 되나요?”에 안 된다는 답부터 드리지 않습니다. 무엇이 필요하신지 먼저 여쭙고, <br />
+        되는 방법을 찾습니다.
+      </>
+    ),
   },
   {
     Icon: MessageCircle,
@@ -27,7 +33,13 @@ const PROMISES: { Icon: LucideIcon; title: string; desc: string }[] = [
   {
     Icon: Wrench,
     title: '말씀하신 대로 돌아갑니다',
-    desc: '쓰시다 불편한 곳이 나오면 그때도 고칩니다. 몇 번인지는 세지 않습니다.',
+    // "몇 번인지는 세지 않습니다" 가 이 섹션에서 제일 센 약속이라 줄을 따로 준다
+    desc: (
+      <>
+        쓰시다 불편한 곳이 나오면 그때도 고칩니다. <br />
+        몇 번인지는 세지 않습니다.
+      </>
+    ),
   },
 ]
 
@@ -65,8 +77,10 @@ export default function DiffPromise() {
               <span className="dp-icon" aria-hidden="true">
                 <Icon size={22} strokeWidth={2} />
               </span>
-              <p className="subhead emphasized dp-name">{title}</p>
-              <p className="footnote c-muted dp-desc">{desc}</p>
+              {/* 크기는 dp-name / dp-desc 에서 직접 잡는다 — subhead·footnote 를 쓰면
+                  그 클래스의 크기와 겹쳐 어느 쪽이 이기는지가 로드 순서에 달린다 */}
+              <p className="emphasized dp-name">{title}</p>
+              <p className="c-muted dp-desc">{desc}</p>
             </div>
           ))}
         </Reveal>
@@ -77,7 +91,9 @@ export default function DiffPromise() {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: clamp(1.5rem, 3vw, 2.25rem);
-          max-width: 900px;
+          /* 글씨를 키운 만큼 폭도 넓혀야 제목이 두 줄로 접히지 않는다
+             ("말씀하신 대로 돌아갑니다" 가 제일 길다) */
+          max-width: 1000px;
           margin: clamp(2rem, 4vw, 2.75rem) auto 0;
         }
         .dp-item { text-align: center; }
@@ -85,26 +101,34 @@ export default function DiffPromise() {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 46px;
-          height: 46px;
+          width: 54px;
+          height: 54px;
           border-radius: 9999px;
           background: var(--accent-light);
           color: var(--accent);
-          margin-bottom: 0.8rem;
+          margin-bottom: 0.9rem;
         }
-        .dp-name { margin: 0; word-break: keep-all; }
-        .dp-desc {
-          margin: 0.45rem 0 0;
+        .dp-name {
+          margin: 0;
           word-break: keep-all;
+          font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+          font-weight: 600;
+          letter-spacing: -0.015em;
+          line-height: 1.4;
+        }
+        .dp-desc {
+          margin: 0.55rem 0 0;
+          word-break: keep-all;
+          font-size: clamp(0.92rem, 2vw, 1rem);
           line-height: 1.7;
         }
 
         @media (max-width: 768px) {
           /* 모바일은 3단이 좁아 글자가 깨진다 — 세로로 쌓고 아이콘을 왼쪽에 붙인다 */
-          .dp-list { grid-template-columns: 1fr; gap: 1.4rem; max-width: 460px; }
+          .dp-list { grid-template-columns: 1fr; gap: 1.5rem; max-width: 480px; }
           .dp-item {
             display: grid;
-            grid-template-columns: 46px 1fr;
+            grid-template-columns: 54px 1fr;
             column-gap: 0.9rem;
             text-align: left;
             align-items: start;

@@ -63,14 +63,18 @@ export default function DiffAdmin() {
             <span className="c-gold">원하시는 그대로 만듭니다</span>
           </h2>
           {/* PC 는 두 줄(첫 줄에 두 문장), 모바일은 세 줄.
-              maxWidth 를 700px 로 둬야 PC 첫 줄이 안 접힌다 — 560px 면 "다르니까요"가 넘어간다 */}
+              maxWidth 를 700px 로 둬야 PC 첫 줄이 안 접힌다 — 560px 면 "다르니까요"가 넘어간다.
+
+              마지막 줄이 원래 "그 일에 맞춰 만듭니다" 였는데, 섹션 맺음말의
+              "없던 것을 만들어 드릴 수 있습니다" 와 같은 말이라 시작과 끝에서 두 번 주장했다.
+              여기서는 아래 사례로 넘기는 안내만 하고, 주장은 맺음말 한 번으로 둔다. */}
           <p
             className="body c-muted"
             style={{ margin: '1rem auto 0', maxWidth: '700px', wordBreak: 'keep-all' }}
           >
             관리자 페이지는 정해진 틀이 없습니다. <br className="br-mobile" />
             사장님이 매일 하시는 일이 다르니까요. <br />
-            그래서 먼저 여쭤보고, 그 일에 맞춰 만듭니다.
+            실제로 이런 말씀을 듣고, 이렇게 만들어 드렸습니다.
           </p>
         </Reveal>
 
