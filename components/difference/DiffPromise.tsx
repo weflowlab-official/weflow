@@ -18,9 +18,11 @@ const PROMISES: { Icon: LucideIcon; title: string; desc: ReactNode }[] = [
   {
     Icon: Ear,
     title: '다 듣고 시작합니다',
+    // PC 에서만 끊는다 — 모바일은 칸이 좁아 어차피 접히므로 강제 줄바꿈이 어색해진다
     desc: (
       <>
-        “이건 되나요?”에 안 된다는 답부터 드리지 않습니다. 무엇이 필요하신지 먼저 여쭙고, <br />
+        “이건 되나요?”에 안 된다는 답부터 드리지 않습니다. 무엇이 필요하신지 먼저 여쭙고,{' '}
+        <br className="hide-mobile" />
         되는 방법을 찾습니다.
       </>
     ),
@@ -28,18 +30,19 @@ const PROMISES: { Icon: LucideIcon; title: string; desc: ReactNode }[] = [
   {
     Icon: MessageCircle,
     title: '연락이 끊기지 않습니다',
-    desc: '만들어 드리고 사라지지 않습니다. 궁금한 게 생기시면 그때 바로 물어보실 수 있습니다.',
+    // PC 에서만 끊는다 — 모바일은 칸이 좁아 어차피 접힌다
+    desc: (
+      <>
+        만들어 드리고 사라지지 않습니다. <br className="hide-mobile" />
+        궁금한 게 생기시면 <br className="hide-mobile" />
+        그때 바로 물어보실 수 있습니다.
+      </>
+    ),
   },
   {
     Icon: Wrench,
     title: '말씀하신 대로 돌아갑니다',
-    // "몇 번인지는 세지 않습니다" 가 이 섹션에서 제일 센 약속이라 줄을 따로 준다
-    desc: (
-      <>
-        쓰시다 불편한 곳이 나오면 그때도 고칩니다. <br />
-        몇 번인지는 세지 않습니다.
-      </>
-    ),
+    desc: '쓰시다 불편한 곳이 나오면 그때도 고칩니다. 몇 번인지는 세지 않습니다.',
   },
 ]
 
@@ -90,13 +93,22 @@ export default function DiffPromise() {
         .dp-list {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: clamp(1.5rem, 3vw, 2.25rem);
+          /* 박스가 생기면서 각자 안쪽 여백을 갖게 됐다 — 칸 사이는 그만큼 좁힌다 */
+          gap: clamp(0.9rem, 2vw, 1.3rem);
           /* 글씨를 키운 만큼 폭도 넓혀야 제목이 두 줄로 접히지 않는다
              ("말씀하신 대로 돌아갑니다" 가 제일 길다) */
           max-width: 1000px;
           margin: clamp(2rem, 4vw, 2.75rem) auto 0;
         }
-        .dp-item { text-align: center; }
+        /* 06 의 인용 카드와 같은 면·테두리를 쓰되 왼쪽 강조선은 두지 않는다 —
+           그 선은 "사장님이 하신 말"이라는 표시라서 여기 붙이면 뜻이 흐려진다 */
+        .dp-item {
+          text-align: center;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 14px;
+          padding: clamp(1.5rem, 3vw, 1.9rem) clamp(1.1rem, 2.5vw, 1.4rem);
+        }
         .dp-icon {
           display: inline-flex;
           align-items: center;
@@ -125,13 +137,14 @@ export default function DiffPromise() {
 
         @media (max-width: 768px) {
           /* 모바일은 3단이 좁아 글자가 깨진다 — 세로로 쌓고 아이콘을 왼쪽에 붙인다 */
-          .dp-list { grid-template-columns: 1fr; gap: 1.5rem; max-width: 480px; }
+          .dp-list { grid-template-columns: 1fr; gap: 0.9rem; max-width: 480px; }
           .dp-item {
             display: grid;
             grid-template-columns: 54px 1fr;
             column-gap: 0.9rem;
             text-align: left;
             align-items: start;
+            padding: 1.25rem 1.2rem;
           }
           .dp-icon { grid-row: span 2; margin-bottom: 0; }
           .dp-desc { grid-column: 2; }

@@ -35,8 +35,7 @@ export default function DiffCheckBand() {
 
         <p className="subhead c-muted dcb-sub">
           주소만 넣으면 로딩 속도 · 검색 노출 · 모바일 대응 · 문의 동선
-          <br className="br-mobile" /> 네 가지를 바로 점수로 보여드립니다.{' '}
-          <strong className="dcb-free">연락처는 받지 않습니다.</strong>
+          <br className="br-mobile" /> 네 가지를 바로 점수로 보여드립니다.
         </p>
 
         <div className="dcb-row">
@@ -50,8 +49,11 @@ export default function DiffCheckBand() {
             onChange={e => setUrl(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && go()}
           />
+          {/* 모바일은 주소칸이 좁아지므로 버튼 글자를 짧게 바꿔 자리를 내준다 */}
           <button type="button" className="btn-primary dcb-btn" onClick={go}>
-            무료로 점검하기 <ArrowRight size={17} strokeWidth={2.5} />
+            <span className="dcb-btn__long">무료로 점검하기</span>
+            <span className="dcb-btn__short">무료 점검</span>
+            <ArrowRight size={17} strokeWidth={2.5} />
           </button>
         </div>
       </Reveal>
@@ -88,18 +90,21 @@ export default function DiffCheckBand() {
           word-break: keep-all;
           line-height: 1.65;
         }
-        /* "연락처는 받지 않습니다" — 이 배너에서 가장 중요한 약속이라 색으로 집는다.
-           이 문장이 없으면 그냥 또 하나의 영업 버튼으로 읽힌다. */
-        .dcb-free { color: var(--accent); }
-
+        /* 주소칸과 버튼 높이는 여기서 한 값으로 못 박는다.
+           원래 높이가 다르다(주소칸 ≈41px / 버튼 ≈45px). flex 의 기본 stretch 가
+           주소칸을 늘려 주긴 하지만, Safari 는 flex 안의 <input> 을 안 늘리는 경우가 있어
+           눈으로 보이는 높이를 우연에 맡기게 된다. */
         .dcb-row {
           display: flex;
+          align-items: stretch;
           gap: 0.6rem;
           margin-top: 1.1rem;
           max-width: 520px;
           margin-left: auto;
           margin-right: auto;
         }
+        .dcb-input,
+        .dcb-btn { height: 48px; }
         .dcb-input { flex: 1 1 auto; min-width: 0; }
         .dcb-btn {
           flex-shrink: 0;
@@ -109,11 +114,27 @@ export default function DiffCheckBand() {
           gap: 0.4rem;
           white-space: nowrap;
           cursor: pointer;
+          /* 높이를 고정했으니 위아래 여백은 걷어낸다 — 남겨 두면 글자가 눌린다 */
+          padding-top: 0;
+          padding-bottom: 0;
         }
 
+        /* 버튼 글자 — 기본은 긴 쪽, 모바일에서 짧은 쪽으로 바꾼다 */
+        .dcb-btn__short { display: none; }
+
+        /* 모바일에서도 주소칸과 버튼을 한 줄에 둔다.
+           버튼은 flex-shrink:0 이라 줄지 않으므로, 좁은 화면에서는 글자와 좌우 여백을
+           줄여 자리를 만들고 남는 폭을 주소칸이 가져가게 한다
+           (주소칸은 min-width:0 이라 얼마든지 줄어든다). */
         @media (max-width: 560px) {
-          .dcb-row { flex-direction: column; }
-          .dcb-btn { width: 100%; }
+          .dcb-row { gap: 0.45rem; }
+          .dcb-btn__long { display: none; }
+          .dcb-btn__short { display: inline; }
+          .dcb-btn {
+            padding-left: 1.1rem;
+            padding-right: 1.1rem;
+            font-size: 0.9rem;
+          }
         }
       `}</style>
     </section>
