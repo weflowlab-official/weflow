@@ -35,14 +35,17 @@ export default function PlanCard({
   discount?: string
   originalPrice?: string
   price: string
-  /** 가격 오른쪽 단서 문구 (예: 'VAT 별도') */
-  foot?: string
+  /** 가격 아래 단서 줄 — 문자열 하나 또는 여러 줄 (예: ['VAT 별도', '월 유지보수 무제한']) */
+  foot?: string | string[]
   features: string[]
   highlight?: boolean
   tone?: 'accent' | 'violet'
   tagLabel?: string
   cta: ReactNode
 }) {
+  // 문자열 하나로 넘어와도 배열로 맞춰 둔다 — 빈 배열이면 단서 줄 자체를 접는다
+  const footLines = foot ? (Array.isArray(foot) ? foot : [foot]) : []
+
   return (
     <div
       className={`pricing-card${highlight ? ' is-highlight' : ''}${
@@ -82,8 +85,9 @@ export default function PlanCard({
         </div>
       </div>
 
-      {/* 가격 */}
-      <div style={{ margin: '1.1rem 0 1.25rem' }}>
+      {/* 가격 — 아래 여백(0.5rem)은 단서 줄 아래, 즉 기능 목록과의 간격이다.
+          단서 줄 위 여백(0.35rem)은 아래 foot 블록에 따로 있다. */}
+      <div style={{ margin: '1.1rem 0 0.5rem' }}>
         {discount && originalPrice && (
           <div
             style={{
@@ -111,11 +115,23 @@ export default function PlanCard({
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.25rem' }}>
           <span className="title-2 emphasized">{price}</span>
         </div>
-        {/* 가격 아래 단서 줄 (· VAT 별도) */}
-        {foot && (
-          <p className="caption-1 c-muted" style={{ margin: '0.35rem 0 0' }}>
-            · {foot}
-          </p>
+        {/* 가격 아래 단서 줄 (· VAT 별도 / · 월 유지보수 무제한) — 한 줄에 하나씩 */}
+        {footLines.length > 0 && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.3rem',
+              // 위 여백은 가격 블록의 아래 여백(0.35rem)과 같게 맞춰 둔다
+              margin: '0.35rem 0 0',
+            }}
+          >
+            {footLines.map(line => (
+              <p key={line} className="caption-1 c-muted" style={{ margin: 0 }}>
+                · {line}
+              </p>
+            ))}
+          </div>
         )}
       </div>
 

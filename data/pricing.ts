@@ -19,8 +19,8 @@ export interface Plan {
   originalPrice: string;
   // 실제 판매가
   price: string;
-  // 가격 아래 단서 문구 (VAT 별도 등)
-  note: string;
+  // 가격 아래 단서 줄 — 한 줄에 하나씩 "· " 를 붙여 찍는다 (VAT 별도, 월 유지보수 무제한 …)
+  note: string[];
 }
 
 /** 제작 플랜 — 기본 카드에 관리자 페이지 옵션 가격까지 얹은 형태 */
@@ -67,7 +67,7 @@ export const makePlans: MakePlan[] = [
     adminPrice: "190,000원",
     adminOriginalPrice: "380,000원",
     adminMaintenance: "19,000원",
-    note: "VAT 별도",
+    note: ["VAT 별도", "월 유지보수 무제한"],
   },
   {
     id: "grow",
@@ -90,7 +90,7 @@ export const makePlans: MakePlan[] = [
     adminPrice: "290,000원",
     adminOriginalPrice: "580,000원",
     adminMaintenance: "29,000원",
-    note: "VAT 별도",
+    note: ["VAT 별도", "월 유지보수 무제한"],
   },
   {
     id: "master",
@@ -114,7 +114,7 @@ export const makePlans: MakePlan[] = [
     adminPrice: "390,000원",
     adminOriginalPrice: "780,000원",
     adminMaintenance: "39,000원",
-    note: "VAT 별도",
+    note: ["VAT 별도", "월 유지보수 무제한"],
   },
 ];
 
@@ -160,7 +160,7 @@ export const renewPlan: MakePlan = {
   adminPrice: "가격 협의",
   adminOriginalPrice: "",
   adminMaintenance: "협의",
-  note: "VAT 별도",
+  note: ["VAT 별도", "월 유지보수 무제한"],
 };
 
 /* 케어플랜 전체 - 주석처리
@@ -178,7 +178,7 @@ export const carePlans: Plan[] = [
     ],
     originalPrice: '월 170,000원',
     price: '월 89,000원~',
-    note: 'VAT 별도',
+    note: ['VAT 별도'],
   },
   {
     name: 'FLOW CARE',
@@ -196,7 +196,7 @@ export const carePlans: Plan[] = [
     ],
     originalPrice: '월 378,000원~',
     price: '월 189,000원~',
-    note: 'VAT 별도',
+    note: ['VAT 별도'],
   },
   {
     name: 'WEFLOW CARE',
@@ -215,7 +215,7 @@ export const carePlans: Plan[] = [
     ],
     originalPrice: '월 678,000원~',
     price: '월 339,000원~',
-    note: 'VAT 별도',
+    note: ['VAT 별도'],
   },
 ]
 */
@@ -227,14 +227,14 @@ export const adPlans = [
     features: ['키워드 분석', '광고 세팅 지원', '광고 문구 제작', '문의 구조 연결', '채널 연동 지원', '성과 최적화'],
     originalPrice: '298,000원',
     price: '149,000원~',
-    note: 'VAT 별도',
+    note: ['VAT 별도'],
   },
   {
     name: '당근 플레이스 광고 (키워드 셋팅)',
     features: ['지역 키워드 분석', '광고 세팅 지원', '광고 문구 제작', '지역 타겟 설정', '랜딩 연결 지원', '성과 최적화'],
     originalPrice: '158,000원',
     price: '79,000원~',
-    note: 'VAT 별도',
+    note: ['VAT 별도'],
   },
 ]
 */
