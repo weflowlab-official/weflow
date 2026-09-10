@@ -64,6 +64,9 @@ export default function PageTracker() {
     // 방문 통계 opt-out 과 무관하게 문의 맥락용이므로 먼저 잡아 둔다.
     captureAttribution()
 
+    // 없는 주소(404)는 세지 않는다 — 봇·잘못 복사된 링크가 통계를 흐린다
+    if (document.querySelector('[data-weflow-404]')) return
+
     // 개발/본인 방문 제외: URL 플래그(?notrack=1 / ?track=1)로 opt-out 토글
     const params = new URLSearchParams(window.location.search)
     if (params.get('notrack') === '1') localStorage.setItem('weflow_notrack', '1')

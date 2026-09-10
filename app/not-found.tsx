@@ -7,6 +7,10 @@ import { Home, ArrowRight } from 'lucide-react'
  */
 export default function NotFound() {
   return (
+    <>
+      {/* 방문 기록에서 제외하는 표시 — PageTracker 가 이걸 보고 404 는 세지 않는다.
+          봇·잘못 복사된 링크가 남기던 이상한 주소가 통계에 섞이지 않는다 */}
+      <span data-weflow-404="1" hidden />
     <section
       style={{
         background: 'var(--section-a)',
@@ -101,5 +105,6 @@ export default function NotFound() {
         }
       `}</style>
     </section>
+    </>
   )
 }

@@ -1694,7 +1694,11 @@ const PAGE_KO: Record<string, string> = {
 // 경로 → 사람이 알아보는 한글 이름 (쿼리·해시 제거, 미등록 경로는 경로 그대로)
 function pageName(path: string): string {
   const clean = path.split(/[?#]/)[0].replace(/\/$/, "") || "/";
-  return PAGE_KO[clean] || clean;
+  if (PAGE_KO[clean]) return PAGE_KO[clean];
+  // 사례 상세는 주소 그대로 보여준다 (/cases/atelier 등)
+  if (/^\/cases\/[a-z0-9-]+$/i.test(clean)) return clean;
+  // 그 밖은 우리 사이트에 없는 주소 — 봇·잘못 복사된 링크가 남긴 기록이라 한 줄로 묶는다
+  return "없는 주소";
 }
 // 접속 기기 표기·색
 const DEVICE_KO: Record<string, string> = {
@@ -1938,12 +1942,14 @@ function BarRow({
   wrapLabel?: boolean;
 }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-      {/* 라벨 칸 너비를 고정해 막대 시작선이 전부 같은 자리에 온다 */}
+    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", minWidth: 0 }}>
+      {/* 라벨 칸 너비를 고정해 막대 시작선이 전부 같은 자리에 온다.
+          다만 화면이 아주 좁거나 확대된 상태에서는 줄어들 수 있게 해 칸 밖으로 밀려나지 않는다 */}
       <span
         title={label}
         style={{
-          flex: `0 0 ${labelWidth}px`,
+          flex: `0 1 ${labelWidth}px`,
+          minWidth: 0,
           fontSize: "0.86rem",
           color: "var(--text-secondary)",
           ...(wrapLabel
@@ -1959,7 +1965,8 @@ function BarRow({
       </span>
       <div
         style={{
-          flex: 1,
+          flex: "1 1 0",
+          minWidth: 0,
           height: 18,
           borderRadius: 5,
           background: "var(--bg-secondary)",
@@ -1977,11 +1984,13 @@ function BarRow({
       </div>
       <span
         style={{
-          flex: "0 0 78px",
+          flex: "0 1 78px",
+          minWidth: 0,
           textAlign: "right",
           fontSize: "0.88rem",
           fontWeight: 700,
           color: "var(--text)",
+          whiteSpace: "nowrap",
         }}
       >
         {right}
