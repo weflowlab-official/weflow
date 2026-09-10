@@ -62,11 +62,12 @@ export default function DiffAdmin() {
           <span className="footnote emphasized c-accent" style={{ letterSpacing: '0.04em' }}>
             06 · 관리자 페이지
           </span>
-          {/* WEFLOW 를 넣으면서 한 줄에 안 들어가 PC 에서도 항상 두 줄로 끊는다 */}
+          {/* WEFLOW 를 넣으면서 한 줄에 안 들어가 PC 에서도 항상 두 줄로 끊는다.
+              WEFLOW 는 title-lead(0.78em) 밖에 둬야 아랫줄 금색과 같은 크기가 된다 —
+              안에 넣으면 부모의 0.78em 을 물려받아 혼자 작아진다. */}
           <h2 className="title-1" style={{ margin: '0.9rem 0 0', wordBreak: 'keep-all' }}>
-            <span className="title-lead">
-              <span className="c-gold">WEFLOW</span>는 “안 됩니다” 대신,
-            </span>{' '}
+            <span className="c-gold">WEFLOW</span>
+            <span className="title-lead">는 “안 됩니다” 대신,</span>{' '}
             <br />
             <span className="c-gold">원하시는 그대로 만듭니다</span>
           </h2>
