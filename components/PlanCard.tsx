@@ -85,9 +85,9 @@ export default function PlanCard({
         </div>
       </div>
 
-      {/* 가격 — 아래 여백(0.5rem)은 단서 줄 아래, 즉 기능 목록과의 간격이다.
+      {/* 가격 — 아래 여백(1.25rem)은 단서 줄 아래, 즉 기능 목록과의 간격이다.
           단서 줄 위 여백(0.35rem)은 아래 foot 블록에 따로 있다. */}
-      <div style={{ margin: '1.1rem 0 0.5rem' }}>
+      <div style={{ margin: '1.1rem 0 1.25rem' }}>
         {discount && originalPrice && (
           <div
             style={{
@@ -115,7 +115,9 @@ export default function PlanCard({
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.25rem' }}>
           <span className="title-2 emphasized">{price}</span>
         </div>
-        {/* 가격 아래 단서 줄 (· VAT 별도 / · 월 유지보수 무제한) — 한 줄에 하나씩 */}
+        {/* 가격 아래 단서 줄 (월 유지보수 무제한 · VAT 별도).
+            구분점은 데이터 쪽 문자열에 들어 있다 — 여기서 "· " 를 붙이면
+            한 줄 안에서 점이 두 번 나와("· A · B") 목록인지 구분인지 흐려진다. */}
         {footLines.length > 0 && (
           <div
             style={{
@@ -128,7 +130,7 @@ export default function PlanCard({
           >
             {footLines.map(line => (
               <p key={line} className="caption-1 c-muted" style={{ margin: 0 }}>
-                · {line}
+                {line}
               </p>
             ))}
           </div>

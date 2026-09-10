@@ -67,7 +67,7 @@ export const makePlans: MakePlan[] = [
     adminPrice: "190,000원",
     adminOriginalPrice: "380,000원",
     adminMaintenance: "19,000원",
-    note: ["VAT 별도", "월 유지보수 무제한"],
+    note: ["월 유지보수 무제한 · VAT 별도"],
   },
   {
     id: "grow",
@@ -90,7 +90,7 @@ export const makePlans: MakePlan[] = [
     adminPrice: "290,000원",
     adminOriginalPrice: "580,000원",
     adminMaintenance: "29,000원",
-    note: ["VAT 별도", "월 유지보수 무제한"],
+    note: ["월 유지보수 무제한 · VAT 별도"],
   },
   {
     id: "master",
@@ -114,7 +114,7 @@ export const makePlans: MakePlan[] = [
     adminPrice: "390,000원",
     adminOriginalPrice: "780,000원",
     adminMaintenance: "39,000원",
-    note: ["VAT 별도", "월 유지보수 무제한"],
+    note: ["월 유지보수 무제한 · VAT 별도"],
   },
 ];
 
@@ -160,7 +160,7 @@ export const renewPlan: MakePlan = {
   adminPrice: "가격 협의",
   adminOriginalPrice: "",
   adminMaintenance: "협의",
-  note: ["VAT 별도", "월 유지보수 무제한"],
+  note: ["월 유지보수 무제한 · VAT 별도"],
 };
 
 /* 케어플랜 전체 - 주석처리
