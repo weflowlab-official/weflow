@@ -5,18 +5,31 @@
  * 어느 페이지에 뭐가 있는지"를 평문으로 적어 두면 인용이 정확해진다.
  * 가격은 data/pricing.ts 에서 직접 만들어 쓴다 — 따로 적어두면 값을 고칠 때 여기만 남는다.
  */
-import { makePlans } from '@/data/pricing'
+import { makePlans, renewPlan, type MakePlan } from '@/data/pricing'
 
 const BASE = 'https://weflowlab.kr'
 
-const planLines = makePlans
-  .map(
-    p =>
-      // 가격 전체를 숨김(?) 상태 — 금액 대신 상담 안내로 적는다. 공개로 돌아오면 원래 문구로 복구.
-      // note 는 줄 배열이라 그대로 넣으면 쉼표로 붙는다 — 가운뎃점으로 이어 붙인다
-      `- ${p.sub} (${p.name}): 가격·월 유지보수·관리자 페이지 옵션 모두 상담 문의 · ${p.note.join(' · ')}`,
-  )
-  .join('\n')
+/**
+ * 한 플랜을 한 줄로 — /pricing 카드에 적힌 금액을 그대로 옮긴다.
+ *
+ * 한동안 여기만 "상담 문의"로 가려 두었는데, 정작 /pricing 카드와 구조화 데이터(Offer)에는
+ * 금액이 그대로 나가고 있어 앞뒤가 맞지 않았다. "홈페이지 제작 얼마"는 이 업종 최대 질문이라
+ * AI 답변이 금액을 못 읽으면 그 답에서 통째로 빠진다 — 페이지에 공개한 값은 여기도 공개한다.
+ *
+ * note 는 줄 배열이라 그대로 넣으면 쉼표로 붙는다 — 가운뎃점으로 이어 붙인다.
+ */
+function planLine(p: MakePlan): string {
+  const discount = p.originalPrice ? ` (정가 ${p.originalPrice}, ${p.discount} 할인)` : ''
+  return [
+    `- ${p.sub} (${p.name}): ${p.price}${discount}`,
+    `월 유지보수 ${p.maintenance}`,
+    `관리자 페이지 옵션 ${p.adminPrice}(월 ${p.adminMaintenance})`,
+    ...p.note,
+  ].join(' · ')
+}
+
+// 리뉴얼은 /pricing 에서 3장 아래 한 장으로 따로 서 있다 — 여기서도 같이 싣는다
+const planLines = [...makePlans, renewPlan].map(planLine).join('\n')
 
 const BODY = `# WEFLOW (위플로우)
 
@@ -33,7 +46,9 @@ const BODY = `# WEFLOW (위플로우)
 ${planLines}
 
 관리자 페이지는 옵션이며, 문의·예약 확인과 회원 관리, 실시간 사이트 반영,
-방문·유입 통계를 직접 다룰 수 있게 해 준다. 모든 금액은 VAT 별도다.
+방문·유입 통계를 직접 다룰 수 있게 해 준다. 모든 금액은 VAT 별도이며,
+월 유지보수는 수정 횟수에 제한을 두지 않는다.
+홈페이지 리뉴얼(RENEW)은 기존 사이트 규모에 따라 금액을 협의한다.
 
 ## 주요 페이지
 
