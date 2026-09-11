@@ -23,7 +23,12 @@ const isNoindex = process.env.NOINDEX === '1'
 export const metadata: Metadata = {
   metadataBase: new URL('https://weflowlab.kr'),
   ...(isNoindex && { robots: { index: false, follow: false } }),
-  title: '위플로우(WEFLOW) — 내가 진짜 원하는 페이지, 우리만의 플로우를 담다',
+  // 검색 결과에 파란 제목 줄로 그대로 뜨는 문장이자, 검색엔진이 사이트 주제를 읽는 가장 강한 신호다.
+  // 앞에 목표 키워드("홈페이지 제작 업체")를 통째로 두고, 뒤에 우리 쪽 이유를 붙인다.
+  // 브랜드 슬로건("내가 진짜 원하는 페이지…")은 히어로 화면과 openGraph 에 그대로 있어
+  // 사람 눈에 보이는 자리에서는 사라지지 않는다. 여기는 검색용으로 쓴다.
+  // 네이버 권장이 40자라 그 안에서 맞춘다 (현재 35자).
+  title: '홈페이지 제작 업체 위플로우 — 최신 기술, 원하는 기능 그대로',
   description: '위플로우(WEFLOW)는 홈페이지 제작부터 광고 연동·운영 관리까지, 단순 제작이 아닌 문의 구조까지 설계합니다.',
   keywords: SEO_KEYWORDS.join(', '),
   // 쿼리스트링·www 변형이 별개 URL로 색인되지 않도록 대표 주소를 지정한다.
