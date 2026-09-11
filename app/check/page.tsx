@@ -7,6 +7,7 @@ import {
 import Reveal from '@/components/Reveal'
 import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
+import { trackSmartlogInquiry } from '@/lib/smartlog'
 
 /**
  * 자동 점검 도구 — 방문자가 자기 사이트 주소를 넣으면
@@ -183,8 +184,11 @@ export default function CheckPage() {
         }),
       })
       setUnlocked(true)
-      // 저장이 실제로 됐을 때만 네이버 광고에 "신청 완료" 전환을 알린다
-      if (res.ok) trackNaverLead()
+      // 저장이 실제로 됐을 때만 광고 쪽에 "신청 완료" 전환을 알린다
+      if (res.ok) {
+        trackNaverLead()
+        trackSmartlogInquiry()
+      }
     } catch {
       // 저장이 실패해도 방문자 경험을 막지 않는다 — 리포트는 열어 준다
       setUnlocked(true)
