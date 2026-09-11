@@ -22,11 +22,14 @@ const paths: {
   priority: number
   freq: MetadataRoute.Sitemap[number]['changeFrequency']
 }[] = [
-  { path: '', updated: '2026-07-31', priority: 1.0, freq: 'weekly' },
+  // 09-11: 제목을 검색 키워드 중심으로 교체 (검색 결과에 뜨는 줄이라 내용 변경으로 본다)
+  { path: '', updated: '2026-09-11', priority: 1.0, freq: 'weekly' },
   { path: '/service', updated: '2026-07-22', priority: 0.9, freq: 'weekly' },
-  { path: '/difference', updated: '2026-09-04', priority: 0.8, freq: 'monthly' },
+  // 09-11: 06 관리자 페이지·07 일하는 방식 섹션 신설, 사이트 점검 배너 추가
+  { path: '/difference', updated: '2026-09-11', priority: 0.8, freq: 'monthly' },
   { path: '/guide', updated: '2026-07-22', priority: 0.8, freq: 'monthly' },
-  { path: '/pricing', updated: '2026-07-22', priority: 0.9, freq: 'weekly' },
+  // 09-11: 플랜 카드 단서 줄에 "월 유지보수 무제한" 추가
+  { path: '/pricing', updated: '2026-09-11', priority: 0.9, freq: 'weekly' },
   { path: '/cases', updated: '2026-07-31', priority: 0.8, freq: 'weekly' },
   { path: '/about', updated: '2026-07-22', priority: 0.7, freq: 'monthly' },
   { path: '/benefits', updated: '2026-07-22', priority: 0.7, freq: 'monthly' },
