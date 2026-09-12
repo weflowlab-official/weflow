@@ -297,7 +297,7 @@ export default function CheckPage() {
                   </button>
                 </div>
                 {notice && (
-                  <p className="field-error" style={{ textAlign: 'left', marginTop: '0.6rem' }} role="alert">
+                  <p className="field-error ck-notice" role="alert">
                     {notice}
                   </p>
                 )}
@@ -561,6 +561,14 @@ export default function CheckPage() {
         /* 세로로 쌓일 땐 위 글 간격과 같은 1.25rem 으로 — 리듬을 맞춘다 */
         @media (max-width: 560px) {
           .ck-inputrow { flex-direction: column; gap: 1.25rem; }
+        }
+        /* 입력창 아래 빨간 안내 — 입력칸과 왼쪽 끝을 맞춘다.
+           .ck-inputrow 가 620px 로 가운데 정렬돼 있어서, 폭 제한 없이 두면
+           부모 폭 기준으로 붙어 입력칸보다 더 왼쪽에서 시작한다. 같은 폭·같은 정렬을 준다. */
+        .ck-notice {
+          max-width: 620px;
+          margin: 0.6rem auto 0;
+          text-align: left;
         }
 
         /* 분석 단계 — 입력칸 높이만큼 최소 높이를 잡아 화면이 덜컹거리지 않게 한다 */
