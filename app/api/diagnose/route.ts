@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { checkRateLimit, clientIp } from '@/lib/rateLimit'
 
 /**
  * 자동 진단 API — 방문자가 넣은 사이트 주소를 서버에서 직접 받아
@@ -143,6 +144,19 @@ export async function POST(req: Request) {
   const target = normalizeUrl(body.url || '')
   if (!target) {
     return NextResponse.json({ error: '올바른 사이트 주소를 입력해 주세요. (예: example.co.kr)' }, { status: 400 })
+  }
+
+  // 횟수 제한 — 주소 검사까지 끝난 뒤, 남의 사이트를 받아오기 직전에 본다.
+  // 이 아래부터가 돈이 드는 구간이다(사이트 1곳당 5~10초의 함수 실행 시간).
+  //
+  // 한 방문자가 자기 사이트를 보고 고친 뒤 다시 확인하는 흐름까지는 넉넉히 열어 둔다 —
+  // 1분 3회·1시간 10회면 실제 사용자는 걸릴 일이 없고, 자동 반복만 막힌다.
+  const limited = await checkRateLimit('diagnose', clientIp(req), { perMinute: 3, perHour: 10 })
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: '점검 요청이 너무 잦습니다. 잠시 후 다시 시도해 주세요.' },
+      { status: 429, headers: { 'Retry-After': String(limited.retryAfterSec) } },
+    )
   }
 
   let fetched: Awaited<ReturnType<typeof timedFetch>>
