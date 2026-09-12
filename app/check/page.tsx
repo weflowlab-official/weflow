@@ -267,7 +267,10 @@ export default function CheckPage() {
             {phase !== 'loading' ? (
               <>
                 <div className="ck-inputrow">
-                  <div style={{ position: 'relative', flex: 1 }}>
+                  {/* 입력칸과 그 아래 안내를 한 덩어리로 묶는다 — 안내가 입력칸 바로 밑에
+                      같은 왼쪽 끝에서 시작하고, 모바일에서 세로로 쌓일 때도 버튼보다 위에 온다 */}
+                  <div className="ck-inputcol">
+                  <div style={{ position: 'relative' }}>
                     <Globe
                       size={17}
                       strokeWidth={2}
@@ -287,6 +290,12 @@ export default function CheckPage() {
                       autoComplete="url"
                     />
                   </div>
+                    {notice && (
+                      <p className="field-error ck-notice" role="alert">
+                        {notice}
+                      </p>
+                    )}
+                  </div>
                   <button
                     // 화살표로 감싼다 — 그냥 넘기면 클릭 이벤트가 runCheck 의 target 으로 들어간다
                     onClick={() => runCheck()}
@@ -296,11 +305,6 @@ export default function CheckPage() {
                     무료 점검하기
                   </button>
                 </div>
-                {notice && (
-                  <p className="field-error ck-notice" role="alert">
-                    {notice}
-                  </p>
-                )}
               </>
             ) : (
               /* 분석 중 — 입력칸이 있던 자리에서 단계가 한 줄씩 나타난다 */
@@ -557,17 +561,24 @@ export default function CheckPage() {
           gap: 0.9rem;
           max-width: 620px;
           margin: 0 auto;
+          /* 안내가 붙어 왼쪽 칸이 길어져도 버튼은 입력칸 높이에 맞춰 위에 남는다 */
+          align-items: flex-start;
         }
-        /* 세로로 쌓일 땐 위 글 간격과 같은 1.25rem 으로 — 리듬을 맞춘다 */
+        /* 세로로 쌓일 땐 위 글 간격과 같은 1.25rem 으로 — 리듬을 맞춘다.
+           이때는 버튼이 가로를 꽉 채워야 하므로 stretch 로 되돌린다 */
         @media (max-width: 560px) {
-          .ck-inputrow { flex-direction: column; gap: 1.25rem; }
+          .ck-inputrow { flex-direction: column; gap: 1.25rem; align-items: stretch; }
         }
-        /* 입력창 아래 빨간 안내 — 입력칸과 왼쪽 끝을 맞춘다.
-           .ck-inputrow 가 620px 로 가운데 정렬돼 있어서, 폭 제한 없이 두면
-           부모 폭 기준으로 붙어 입력칸보다 더 왼쪽에서 시작한다. 같은 폭·같은 정렬을 준다. */
-        .ck-notice {
-          max-width: 620px;
-          margin: 0.6rem auto 0;
+        /* 입력칸 + 그 아래 안내 묶음 — 남는 가로를 전부 가져간다 */
+        .ck-inputcol {
+          flex: 1;
+          min-width: 0;
+        }
+        /* 입력칸 바로 아래 빨간 안내.
+           p 를 붙여 .field-error 보다 앞세운다 — 클래스 하나끼리는 파일에서 늦게 나온 쪽이
+           이기는데 .field-error 가 아래에 있어, 그냥 두면 여기 margin 이 덮인다. */
+        p.ck-notice {
+          margin: 0.55rem 0 0;
           text-align: left;
         }
 
