@@ -231,6 +231,10 @@ function PeriodSelect({
   // 렌더 중 Date.now() — react-hooks/purity 가 막는 패턴이지만 여기선 의도한 것이다.
   // 달력이 '오늘'을 칠할 기준 날짜라, 마운트 시각에 굳어 버리면 자정을 넘겨도 어제가
   // 오늘로 남는다. 아래 1200줄대의 기간 집계와 같은 이유로 매 렌더 다시 읽는다.
+  //
+  // ※ next.config.js 에 reactCompiler 를 켜면 이 줄은 실제로 깨진다 — 컴파일러가 렌더
+  //   결과를 메모이제이션해 now 가 옛 값에 얼어붙고, 자정이 지나도 '오늘'이 안 바뀐다.
+  //   켤 거라면 이 예외를 떼고 useEffect + setInterval 로 시각을 갱신하도록 먼저 고칠 것.
   // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
   const todayMs = dayFloor(now);
@@ -1254,6 +1258,10 @@ function AnalyticsView({
   // 현재 시각 — 자정을 지나면 '오늘' 집계가 다음 날로 넘어가야 하므로
   // 마운트에 고정하지 않고 매 렌더(폴링·포커스 갱신 시) 다시 읽는다.
   // react-hooks/purity 는 렌더 중 Date.now() 를 막지만, 위 이유로 여기선 그게 맞다.
+  //
+  // ※ next.config.js 에 reactCompiler 를 켜면 이 줄은 실제로 깨진다 — 컴파일러가 렌더
+  //   결과를 메모이제이션해 now 가 옛 값에 얼어붙고, 기간 집계가 옛 날짜에 멈춘다.
+  //   켤 거라면 이 예외를 떼고 useEffect + setInterval 로 시각을 갱신하도록 먼저 고칠 것.
   // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
   const range = periodRange(period, now);
