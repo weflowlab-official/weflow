@@ -22,8 +22,8 @@ const paths: {
   priority: number
   freq: MetadataRoute.Sitemap[number]['changeFrequency']
 }[] = [
-  // 09-11: 제목을 검색 키워드 중심으로 교체 (검색 결과에 뜨는 줄이라 내용 변경으로 본다)
-  { path: '', updated: '2026-09-11', priority: 1.0, freq: 'weekly' },
+  // 09-13: 제목을 브랜드 앞세운 형태로 교체, 설명도 제작 방식·1:1 전담 중심으로 다시 씀
+  { path: '', updated: '2026-09-13', priority: 1.0, freq: 'weekly' },
   { path: '/service', updated: '2026-07-22', priority: 0.9, freq: 'weekly' },
   // 09-11: 06 관리자 페이지·07 일하는 방식 섹션 신설, 사이트 점검 배너 추가
   { path: '/difference', updated: '2026-09-11', priority: 0.8, freq: 'monthly' },
