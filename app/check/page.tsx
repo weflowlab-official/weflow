@@ -91,6 +91,9 @@ export default function CheckPage() {
   const [phase, setPhase] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
   const [step, setStep] = useState(0)
   const [error, setError] = useState('')
+  // 입력창 바로 밑에 붙는 빨간 안내 — 횟수 제한처럼 "주소는 멀쩡한데 지금은 안 되는" 경우에 쓴다.
+  // 이때 화면을 통째로 실패 섹션으로 바꾸면 입력한 주소까지 사라져 다시 쳐야 한다.
+  const [notice, setNotice] = useState('')
   const [result, setResult] = useState<Result | null>(null)
 
   // 연락처를 남기면 전체 리포트가 열린다
@@ -131,6 +134,7 @@ export default function CheckPage() {
     setUnlocked(false)
     setLead({ name: '', phone: '', agree: false })
     setShowErrors(false)
+    setNotice('')
     try {
       const res = await fetch('/api/diagnose', {
         method: 'POST',
@@ -138,6 +142,14 @@ export default function CheckPage() {
         body: JSON.stringify({ url: value }),
       })
       const data = await res.json()
+      // 429 = 너무 자주 불렀다. 주소가 잘못된 것도, 그 사이트가 죽은 것도 아니라
+      // "분석하지 못했습니다" 로 넘기면 방문자가 제 사이트를 의심하게 된다.
+      // 입력칸은 그대로 두고 아래에 한 줄만 띄워, 잠시 뒤 그대로 다시 누르게 한다.
+      if (res.status === 429) {
+        setNotice(data.error || '점검 요청이 너무 잦습니다. 잠시 후 다시 시도해 주세요.')
+        setPhase('idle')
+        return
+      }
       if (!res.ok) throw new Error(data.error || '분석에 실패했습니다.')
       setResult(data)
       setPhase('done')
@@ -267,7 +279,9 @@ export default function CheckPage() {
                       style={{ paddingLeft: '2.6rem', height: '54px', scrollMarginTop: '140px' }}
                       placeholder="사이트 주소 (예: example.co.kr)"
                       value={url}
-                      onChange={e => setUrl(e.target.value)}
+                      // 주소를 고치기 시작하면 지난 안내는 치운다 — 남아 있으면 방금 친 주소가
+                      // 잘못된 것처럼 읽힌다
+                      onChange={e => { setUrl(e.target.value); if (notice) setNotice('') }}
                       onKeyDown={e => e.key === 'Enter' && void runCheck()}
                       inputMode="url"
                       autoComplete="url"
@@ -282,6 +296,11 @@ export default function CheckPage() {
                     무료 점검하기
                   </button>
                 </div>
+                {notice && (
+                  <p className="field-error" style={{ textAlign: 'left', marginTop: '0.6rem' }} role="alert">
+                    {notice}
+                  </p>
+                )}
               </>
             ) : (
               /* 분석 중 — 입력칸이 있던 자리에서 단계가 한 줄씩 나타난다 */
