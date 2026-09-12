@@ -83,6 +83,10 @@ export default function GlobalError({
             <button onClick={reset} style={{ ...btn, background: '#2563eb', color: '#fff', border: 'none' }}>
               다시 시도
             </button>
+            {/* 여기서는 next/link 가 아니라 <a> 가 맞다 — 이 화면은 루트 레이아웃까지 무너졌을 때
+                대신 뜨는 자리라, 클라이언트 이동으로는 고장난 상태를 그대로 들고 간다.
+                전체 새로고침으로 앱을 처음부터 다시 세워야 한다. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a href="/" style={{ ...btn, background: 'transparent', color: '#f1f3f6', border: '1.5px solid #2a3446' }}>
               메인으로 가기
             </a>

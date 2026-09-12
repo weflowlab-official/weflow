@@ -228,6 +228,10 @@ function PeriodSelect({
   const [dS, setDS] = useState<number | null>(null); // 드래프트 시작·종료일(자정 ms)
   const [dE, setDE] = useState<number | null>(null);
 
+  // 렌더 중 Date.now() — react-hooks/purity 가 막는 패턴이지만 여기선 의도한 것이다.
+  // 달력이 '오늘'을 칠할 기준 날짜라, 마운트 시각에 굳어 버리면 자정을 넘겨도 어제가
+  // 오늘로 남는다. 아래 1200줄대의 기간 집계와 같은 이유로 매 렌더 다시 읽는다.
+  // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
   const todayMs = dayFloor(now);
 
@@ -1248,7 +1252,9 @@ function AnalyticsView({
   // 기간 선택
   const [period, setPeriod] = useState<PeriodSel>({ key: "today" });
   // 현재 시각 — 자정을 지나면 '오늘' 집계가 다음 날로 넘어가야 하므로
-  // 마운트에 고정하지 않고 매 렌더(폴링·포커스 갱신 시) 다시 읽는다
+  // 마운트에 고정하지 않고 매 렌더(폴링·포커스 갱신 시) 다시 읽는다.
+  // react-hooks/purity 는 렌더 중 Date.now() 를 막지만, 위 이유로 여기선 그게 맞다.
+  // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
   const range = periodRange(period, now);
   const periodLabel = periodLabelOf(period, now);
