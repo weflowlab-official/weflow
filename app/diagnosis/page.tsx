@@ -5,9 +5,13 @@ import { projectTypes } from '@/data/common'
 import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
 import { trackSmartlogInquiry } from '@/lib/smartlog'
+import HoneypotField from '@/components/HoneypotField'
+import { HONEYPOT_FIELD } from '@/lib/leadInput'
 
 export default function DiagnosisPage() {
   const [form, setForm] = useState({ name: '', phone: '', type: '', industry: '', note: '', agree: false })
+  // 봇 거르개 — 사람은 못 보는 칸이라 정상 신청에서는 늘 빈 문자열로 나간다
+  const [honeypot, setHoneypot] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [showErrors, setShowErrors] = useState(false)
@@ -72,6 +76,7 @@ export default function DiagnosisPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...form,
+          [HONEYPOT_FIELD]: honeypot,
           note: [form.note, attr && `유입: ${attr}`].filter(Boolean).join('\n'),
         }),
       })
@@ -159,6 +164,8 @@ export default function DiagnosisPage() {
                   이름 · 전화번호만 남겨주시면 확인 후 빠르게 연락드립니다.
                 </p>
               </div>
+
+                <HoneypotField value={honeypot} onChange={setHoneypot} />
 
                 <div className="dg-field">
                   <label className="form-label">이름 <span style={{ color: '#ef4444' }}>*</span></label>

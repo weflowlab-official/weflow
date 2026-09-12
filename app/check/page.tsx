@@ -8,6 +8,8 @@ import Reveal from '@/components/Reveal'
 import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
 import { trackSmartlogInquiry } from '@/lib/smartlog'
+import HoneypotField from '@/components/HoneypotField'
+import { HONEYPOT_FIELD } from '@/lib/leadInput'
 
 /**
  * 자동 점검 도구 — 방문자가 자기 사이트 주소를 넣으면
@@ -94,6 +96,8 @@ export default function CheckPage() {
   // 연락처를 남기면 전체 리포트가 열린다
   const [unlocked, setUnlocked] = useState(false)
   const [lead, setLead] = useState({ name: '', phone: '', agree: false })
+  // 봇 거르개 — 사람은 못 보는 칸이라 정상 신청에서는 늘 빈 문자열로 나간다
+  const [honeypot, setHoneypot] = useState('')
   const [showErrors, setShowErrors] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const resultRef = useRef<HTMLDivElement>(null)
@@ -181,6 +185,7 @@ export default function CheckPage() {
           ].filter(Boolean).join('\n'),
           agree: true,
           source: 'auto-diagnosis',
+          [HONEYPOT_FIELD]: honeypot,
         }),
       })
       setUnlocked(true)
@@ -422,6 +427,8 @@ export default function CheckPage() {
                 <p className="c-muted" style={{ margin: '0.4rem 0 1.4rem', lineHeight: 1.65, wordBreak: 'keep-all', textAlign: 'center' }}>
                   연락처를 남기면 나머지 항목을 바로 확인할 수 있고, 전담 매니저가 개선 방향을 무료로 안내드립니다.
                 </p>
+                <HoneypotField value={honeypot} onChange={setHoneypot} />
+
                 <div className="ck-lead__row">
                   <div style={{ flex: 1, minWidth: '150px' }}>
                     <input className="form-input" placeholder="이름" value={lead.name} onChange={e => setLead(f => ({ ...f, name: e.target.value }))} />
