@@ -9,7 +9,7 @@ import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
 import { trackSmartlogInquiry } from '@/lib/smartlog'
 import HoneypotField from '@/components/HoneypotField'
-import { HONEYPOT_FIELD } from '@/lib/leadInput'
+import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
 
 /**
  * 자동 점검 도구 — 방문자가 자기 사이트 주소를 넣으면
@@ -200,9 +200,13 @@ export default function CheckPage() {
           [HONEYPOT_FIELD]: honeypot,
         }),
       })
+      // 허니팟에 걸린 요청에도 성공으로 답하므로 res.ok 만으로는 저장 여부를 알 수 없다 —
+      // 실제로 저장된 응답에만 문의 id 가 들어 있다 (lib/leadInput.ts 의 wasSaved 설명 참고)
+      const saved = res.ok && wasSaved(await res.json().catch(() => null))
       setUnlocked(true)
-      // 저장이 실제로 됐을 때만 광고 쪽에 "신청 완료" 전환을 알린다
-      if (res.ok) {
+      // 저장이 실제로 됐을 때만 광고 쪽에 "신청 완료" 전환을 알린다 —
+      // 저장되지 않은 요청까지 세면 광고 성과가 부풀려져 집행 판단이 틀어진다
+      if (saved) {
         trackNaverLead()
         trackSmartlogInquiry()
       }

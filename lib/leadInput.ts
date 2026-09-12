@@ -39,6 +39,25 @@ export type LeadParse =
   | { kind: 'trap' }
   | { kind: 'reject'; error: string }
 
+/**
+ * 접수가 실제로 저장됐는지 — 응답 본문에 문의 id 가 있는지로 가른다.
+ *
+ * 허니팟에 걸린 요청에도 성공(201)으로 답한다. 거절로 답하면 상대가 그 칸을 알아채고
+ * 비워서 다시 오기 때문이다. 그래서 화면 쪽에서는 res.ok 만으로 저장 여부를 알 수 없다.
+ *
+ * 이걸 가려야 하는 이유 — 폼이 접수 성공 시 네이버·스마트로그에 전환을 쏜다.
+ * 실제 브라우저를 띄워 자동 조작하는 봇이 오면 문의는 안 남는데 전환만 쌓여,
+ * 광고 성과가 부풀려진 채로 집행 판단의 근거가 된다.
+ *
+ * 저장된 응답은 만들어진 문의 한 건을 그대로 돌려주므로 id 가 있고, 덫에 걸린 응답에는 없다.
+ * 따로 표시를 넣지 않고 이 차이를 쓰는 이유는, 표시를 두면 그것부터 읽고 우회하기 때문이다.
+ */
+export function wasSaved(body: unknown): boolean {
+  if (typeof body !== 'object' || body === null) return false
+  const id = (body as { id?: unknown }).id
+  return typeof id === 'string' && id !== ''
+}
+
 /** 값이 무엇으로 오든 문자열로 만들어 앞뒤 공백을 떼고 정해진 길이에서 자른다 */
 function clamp(v: unknown, max: number): string {
   if (v == null) return ''

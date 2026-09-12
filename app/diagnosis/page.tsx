@@ -6,7 +6,7 @@ import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
 import { trackSmartlogInquiry } from '@/lib/smartlog'
 import HoneypotField from '@/components/HoneypotField'
-import { HONEYPOT_FIELD } from '@/lib/leadInput'
+import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
 
 export default function DiagnosisPage() {
   const [form, setForm] = useState({ name: '', phone: '', type: '', industry: '', note: '', agree: false })
@@ -81,11 +81,17 @@ export default function DiagnosisPage() {
         }),
       })
       if (!res.ok) throw new Error('request failed')
+      // 허니팟에 걸린 요청에도 성공으로 답하므로 res.ok 만으로는 저장 여부를 알 수 없다 —
+      // 실제로 저장된 응답에만 문의 id 가 들어 있다 (lib/leadInput.ts 의 wasSaved 설명 참고)
+      const saved = wasSaved(await res.json().catch(() => null))
       setLoading(false)
       setShowErrors(false)
-      // 네이버 광고·스마트로그에 "신청 완료" 전환을 알린다 (각 스크립트가 켜져 있을 때만 동작)
-      trackNaverLead()
-      trackSmartlogInquiry()
+      // 네이버 광고·스마트로그에 "신청 완료" 전환을 알린다 (각 스크립트가 켜져 있을 때만 동작).
+      // 저장되지 않은 요청까지 세면 광고 성과가 부풀려져 집행 판단이 틀어진다.
+      if (saved) {
+        trackNaverLead()
+        trackSmartlogInquiry()
+      }
       // 완료 화면이 그려지기 전에 미리 상단으로 (스크롤이 움직이는 게 안 보이도록)
       window.scrollTo(0, 0)
       setSubmitted(true)
