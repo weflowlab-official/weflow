@@ -18,8 +18,8 @@ export const metadata: Metadata = {
 /** "390,000원" → 390000. 표시용 문자열 하나만 고치면 아래 구조화 데이터도 같이 따라오게 한다 */
 const won = (s: string) => Number(s.replace(/[^0-9]/g, ''))
 
-// 판매가를 숨긴 플랜(price: "?")은 숫자가 안 나오므로 걸러낸다 —
-// 전부 숨김이면 구조화 데이터에 금액을 아예 싣지 않는다
+// 금액이 미확정인 플랜("가격 협의" 등)은 숫자가 안 나오므로 걸러낸다 —
+// 전부 미확정이면 구조화 데이터에 금액을 아예 싣지 않는다
 const prices = makePlans.map(p => won(p.price)).filter(n => Number.isFinite(n) && n > 0)
 
 /**
@@ -49,9 +49,20 @@ const PRICING_JSON_LD = {
     offers: makePlans.map(p => ({
       '@type': 'Offer',
       name: p.sub,
-      category: p.name,
-      // 가격을 숨긴 상태라 금액이 들어가던 자리는 상담 안내로 둔다
-      description: [p.features.join(' · '), '가격·유지보수·관리자 페이지 옵션은 상담 문의'].join(' / '),
+      // category 에는 플랜 코드명(START·GROW…)을 넣었었는데, 화면에서 안 쓰는 내부 이름이
+      // 검색·AI 쪽으로만 나가고 있어 뺐다. 플랜 이름은 위 name 이 이미 들고 있다.
+      category: '홈페이지 제작',
+      // 아래 priceSpecification 에 실금액이 들어가므로, 설명 글도 같은 말을 해야 한다.
+      // (한동안 여기만 "상담 문의"로 남아 한 Offer 안에서 숫자와 글이 서로 어긋나 있었다)
+      //
+      // 단, 화면에 있는 값만 쓴다 — 월 유지보수 금액(maintenance·adminMaintenance)은
+      // 그 값을 쓰던 "유지보수 & 운영" 섹션이 false && 로 꺼져 있어 페이지 어디에도 안 나온다.
+      // 카드에 실제로 찍히는 건 note 의 "월 유지보수 무제한 · VAT 별도" 뿐이라 그것만 옮긴다.
+      // 섹션을 다시 켜면 그때 금액도 여기 넣으면 된다.
+      description: [
+        p.features.join(' · '),
+        `관리자 페이지 옵션 ${p.adminPrice} · ${p.note.join(' · ')}`,
+      ].join(' / '),
       url: 'https://weflowlab.kr/pricing',
       availability: 'https://schema.org/InStock',
       ...(Number.isFinite(won(p.price)) && won(p.price) > 0

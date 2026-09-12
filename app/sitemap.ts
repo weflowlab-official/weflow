@@ -27,9 +27,10 @@ const paths: {
   { path: '/service', updated: '2026-07-22', priority: 0.9, freq: 'weekly' },
   // 09-11: 06 관리자 페이지·07 일하는 방식 섹션 신설, 사이트 점검 배너 추가
   { path: '/difference', updated: '2026-09-11', priority: 0.8, freq: 'monthly' },
-  { path: '/guide', updated: '2026-07-22', priority: 0.8, freq: 'monthly' },
-  // 09-11: 플랜 카드 단서 줄에 "월 유지보수 무제한" 추가
-  { path: '/pricing', updated: '2026-09-11', priority: 0.9, freq: 'weekly' },
+  // 09-12: FAQ "제작 비용" 답변을 플랜별 실금액으로 교체 (화면 문구 + FAQPage 구조화 데이터)
+  { path: '/guide', updated: '2026-09-12', priority: 0.8, freq: 'monthly' },
+  // 09-12: Offer 설명이 "상담 문의" → 유지보수·관리자 옵션 실금액 (검색·AI 가 인용해 가는 내용)
+  { path: '/pricing', updated: '2026-09-12', priority: 0.9, freq: 'weekly' },
   { path: '/cases', updated: '2026-07-31', priority: 0.8, freq: 'weekly' },
   { path: '/about', updated: '2026-07-22', priority: 0.7, freq: 'monthly' },
   { path: '/benefits', updated: '2026-07-22', priority: 0.7, freq: 'monthly' },

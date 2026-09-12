@@ -13,7 +13,7 @@ import { CTA_BTN, CTA_BTN_FILLED } from "@/lib/ctaButton";
  * /pricing — 제작 플랜 & 가격 안내 페이지.
  * 제작 플랜 카드 3장 → 관리자 페이지 옵션 카드 3장 → 안내사항 순으로 이어진다.
  * 가격은 data/pricing.ts 의 makePlans 를 그대로 쓰고, 스타일은 파일 하단 <style> 에 모아뒀다.
- * 케어플랜·광고 세팅·유지보수 섹션은 주석 또는 false && 로 꺼둔 상태.
+ * 광고 세팅·유지보수 섹션은 주석 또는 false && 로 꺼둔 상태.
  */
 
 // 플랜 카드 좌측 3D 아이콘 — makePlans 순서대로 짝지어 쓴다
@@ -36,7 +36,6 @@ const CTA_QUOTE_RENEW = CTA_QUOTE;
 export default function PricingPage() {
   // 제작 플랜 섹션 — 닷 네비의 스크롤 목적지 겸 활성 감지 대상
   const s1 = useRef<HTMLElement>(null);
-  // const s2 = useRef<HTMLElement>(null) // 플랜 섹션 주석처리
   // const s3 = useRef<HTMLElement>(null) // 광고 세팅 섹션 주석처리
 
   const [activeSection, setActiveSection] = useState(0);
@@ -473,55 +472,6 @@ export default function PricingPage() {
           </div>
         </Reveal>
       </section>
-
-      {/* 케어플랜 섹션 - 주석처리
-      <section ref={s2} className="pricing-section" style={{ background: '#f9fafb' }}>
-        <div className="pricing-inner">
-          <div className="pricing-header">
-            <p className="pricing-eyebrow">STEP 2 · 필수 선택</p>
-            <h2 className="pricing-heading">WEFLOW 케어플랜</h2>
-            <p className="pricing-sub">제작 후 지속적인 운영·관리 플랜을 선택하세요</p>
-          </div>
-          <div className="pricing-grid-3">
-            {carePlans.map((plan, i) => (
-              <div key={plan.name}
-                className={`pcard${plan.highlight ? ' pcard--featured' : ''}${v2 ? ' pcard--in' : ''}`}
-                style={{ animationDelay: `${i * 0.1}s` }}
-              >
-                {plan.highlight && (
-                  <div className="pcard-badge"><Crown size={11} strokeWidth={2.5} /> 인기 플랜</div>
-                )}
-                <div className="pcard-body">
-                  <div className="pcard-icon-wrap">
-                    {i === 0 && <BarChart2 size={18} color={plan.highlight ? '#fff' : 'var(--accent)'} strokeWidth={1.75} />}
-                    {i === 1 && <Zap size={18} color={plan.highlight ? '#fff' : 'var(--accent)'} strokeWidth={1.75} />}
-                    {i === 2 && <Crown size={18} color={plan.highlight ? '#fff' : 'var(--accent)'} strokeWidth={1.75} />}
-                  </div>
-                  <h3 className="pcard-name">{plan.name}</h3>
-                  <p className="pcard-sub-text">{plan.sub}</p>
-                  <ul className="pcard-features">
-                    {plan.features.map(f => (
-                      <li key={f}><Check size={13} strokeWidth={2.5} /><span>{f}</span></li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="pcard-foot">
-                  <div className="pcard-orig-row">
-                    <span className="pcard-original">{plan.originalPrice}</span>
-                    <span className="pcard-discount">{plan.discount}↓</span>
-                  </div>
-                  <p className="pcard-price">{plan.price}</p>
-                  <p className="pcard-note">{plan.note}</p>
-                  <Link href="/diagnosis" className={`pcard-cta${plan.highlight ? ' pcard-cta--inv' : ''}`}>
-                    무료 상담 신청 →
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      */}
 
       {/* 광고 세팅 플랜 섹션 - 주석처리
       <section ref={s3} className="pricing-section" style={{ background: '#fff' }}>

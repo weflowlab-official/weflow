@@ -16,14 +16,19 @@ const BASE = 'https://weflowlab.kr'
  * 금액이 그대로 나가고 있어 앞뒤가 맞지 않았다. "홈페이지 제작 얼마"는 이 업종 최대 질문이라
  * AI 답변이 금액을 못 읽으면 그 답에서 통째로 빠진다 — 페이지에 공개한 값은 여기도 공개한다.
  *
+ * 반대로 "페이지에 없는 값"은 여기에도 싣지 않는다. 월 유지보수 금액(maintenance·
+ * adminMaintenance)이 그런 경우다 — 그 값을 쓰던 /pricing 의 "유지보수 & 운영" 섹션이
+ * false && 로 꺼져 있어, 카드에는 note 의 "월 유지보수 무제한"만 찍힌다.
+ * AI 가 화면에 없는 금액을 답해 버리면 방문자가 확인할 데가 없어 문의에서 말이 엇갈린다.
+ * 섹션을 다시 켜면 그때 금액도 이 줄에 넣으면 된다.
+ *
  * note 는 줄 배열이라 그대로 넣으면 쉼표로 붙는다 — 가운뎃점으로 이어 붙인다.
  */
 function planLine(p: MakePlan): string {
   const discount = p.originalPrice ? ` (정가 ${p.originalPrice}, ${p.discount} 할인)` : ''
   return [
-    `- ${p.sub} (${p.name}): ${p.price}${discount}`,
-    `월 유지보수 ${p.maintenance}`,
-    `관리자 페이지 옵션 ${p.adminPrice}(월 ${p.adminMaintenance})`,
+    `- ${p.sub}: ${p.price}${discount}`,
+    `관리자 페이지 옵션 ${p.adminPrice}`,
     ...p.note,
   ].join(' · ')
 }
@@ -48,14 +53,14 @@ ${planLines}
 관리자 페이지는 옵션이며, 문의·예약 확인과 회원 관리, 실시간 사이트 반영,
 방문·유입 통계를 직접 다룰 수 있게 해 준다. 모든 금액은 VAT 별도이며,
 월 유지보수는 수정 횟수에 제한을 두지 않는다.
-홈페이지 리뉴얼(RENEW)은 기존 사이트 규모에 따라 금액을 협의한다.
+홈페이지 리뉴얼은 기존 사이트 규모에 따라 금액을 협의한다.
 
 ## 주요 페이지
 
 - [홈](${BASE}/): 서비스 전체 요약과 제작 사례·가격 안내
 - [서비스 안내](${BASE}/service): 기획·디자인·개발부터 광고 연동·운영까지 6단계 제작 과정
 - [왜 WEFLOW?](${BASE}/difference): 템플릿 제작 업체와 최신 기술(React·Next.js)로 직접 만드는 WEFLOW의 차이 — 기능 제약·보안·속도·검색 노출·디자인
-- [제작 플랜·가격](${BASE}/pricing): 플랜별 구성과 금액, 관리자 페이지 옵션, 관리 플랜
+- [제작 플랜·가격](${BASE}/pricing): 플랜별 구성과 금액, 관리자 페이지 옵션, 홈페이지 리뉴얼
 - [제작 사례](${BASE}/cases): 실제로 제작한 사이트를 업종·플랜별로 정리한 포트폴리오
 - [이용 가이드](${BASE}/guide): 제작 의뢰 전에 알아 두면 좋은 내용
 - [혜택 안내](${BASE}/benefits): 제작 시 함께 제공하는 항목

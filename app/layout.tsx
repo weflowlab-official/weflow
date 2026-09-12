@@ -69,6 +69,18 @@ export const metadata: Metadata = {
   },
 }
 
+/**
+ * 사업체 전체의 가격대 — 검색엔진이 "이 업체는 얼마쯤" 으로 읽는 칸이다.
+ * 규격이 금액 범위나 ₩ 기호라, '상담 문의' 같은 문장을 넣으면 그냥 버려진다.
+ * /pricing 카드 금액(data/pricing.ts)에서 직접 만들어, 값을 고치면 여기도 따라오게 한다.
+ */
+const planPrices = makePlans
+  .map(p => Number(p.price.replace(/[^0-9]/g, '')))
+  .filter(n => Number.isFinite(n) && n > 0)
+const PRICE_RANGE = planPrices.length
+  ? `${Math.min(...planPrices).toLocaleString('ko-KR')}원~${Math.max(...planPrices).toLocaleString('ko-KR')}원`
+  : '상담 문의'
+
 // 검색엔진에 넘기는 사업자 정보 (구글 지식 패널·리치 결과용).
 // 화면에 보이는 /about 의 사업자 정보와 값을 맞춰야 한다.
 const ORGANIZATION_JSON_LD = {
@@ -85,9 +97,7 @@ const ORGANIZATION_JSON_LD = {
   telephone: '+82-10-2971-7280',
   founder: { '@type': 'Person', name: '신서준' },
   taxID: '884-07-03480',
-  // 판매가를 화면에서 숨긴 상태(price: "?")라 금액 범위 대신 상담 안내로 둔다.
-  // 가격을 다시 공개하면 원래대로 makePlans 에서 조합해 넣는다.
-  priceRange: '상담 문의',
+  priceRange: PRICE_RANGE,
   areaServed: { '@type': 'Country', name: '대한민국' },
   serviceType: ['홈페이지 제작', '랜딩페이지 제작', '광고 운영 대행'],
 }

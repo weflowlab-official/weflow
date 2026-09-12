@@ -24,7 +24,7 @@ export type KeywordMatch = {
 }
 
 // ── 서비스 키워드 → 폼 제작 종류 + 헤드라인 표기 ──
-// /pricing 플랜(랜딩페이지·랜딩형 홈페이지·홈페이지·RENEW·관리자 페이지·CARE)과 FAQ 에 나오는 서비스 기준.
+// /pricing 플랜(랜딩페이지·랜딩형 홈페이지·홈페이지·홈페이지 리뉴얼·관리자 페이지)과 FAQ 에 나오는 서비스 기준.
 // 순서는 무관 (긴 단어 우선 매칭). match 는 공백 없이 적는다.
 const SERVICES: { label: string; type: ProjectType; match: string[] }[] = [
   {
