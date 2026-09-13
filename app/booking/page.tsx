@@ -4,7 +4,6 @@ import { ChevronLeft, ChevronRight, Check, CalendarDays, Clock, User, XCircle } 
 import { projectTypes } from '@/data/common'
 import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
-import { trackSmartlogInquiry } from '@/lib/smartlog'
 import { wasSaved } from '@/lib/leadInput'
 import Reveal from '@/components/Reveal'
 import SplitText from '@/components/SplitText'
@@ -116,12 +115,9 @@ export default function BookingPage() {
       const saved = wasSaved(await res.json().catch(() => null))
       setLoading(false)
       setShowErrors(false)
-      // 네이버 광고·스마트로그에 "예약 완료" 전환을 알린다 (각 스크립트가 켜져 있을 때만 동작).
+      // 네이버 광고에 "예약 완료" 전환을 알린다 (스크립트가 켜져 있을 때만 동작).
       // 저장되지 않은 요청까지 세면 광고 성과가 부풀려져 집행 판단이 틀어진다.
-      if (saved) {
-        trackNaverLead()
-        trackSmartlogInquiry()
-      }
+      if (saved) trackNaverLead()
       // 완료 화면이 그려지기 전에 미리 상단으로 (스크롤이 움직이는 게 안 보이도록)
       window.scrollTo(0, 0)
       setSubmitted(true)
