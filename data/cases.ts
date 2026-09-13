@@ -163,7 +163,7 @@ export const portfolios: Portfolio[] = [
     category: '기업/비즈니스',
     plan: '홈페이지',
     desc: '지속 가능한 미래 에너지 생태계 구축',
-    url: 'https://kpschelpus.vercel.app/',
+    url: 'https://helplus.kr/',
     images: [
       '/images/cases/cases-kpsc/cases-kpsc-01.webp',
       '/images/cases/cases-kpsc/cases-kpsc-02.webp',

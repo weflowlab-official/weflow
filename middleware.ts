@@ -23,6 +23,10 @@ const BROKEN = /[[\]()]/
  */
 const MOVED: Record<string, string> = {
   '/booking': '/diagnosis',
+  // /reviews 는 메뉴에서 내린 뒤로 쓰지 않는데, 주소로는 열려서 두 달에 100명 넘게 들어왔다.
+  // 후기가 한 건뿐인 채로 방치된 페이지를 보여 주느니, 성격이 가장 가까운 제작 사례로 보낸다.
+  // 되살리려면 이 줄만 지우면 된다 (app/reviews/page.tsx 는 그대로 둔다).
+  '/reviews': '/cases',
 }
 
 // 경로를 디코딩해 깨진 문자가 있는지 보고, 있으면 홈으로 보낸다

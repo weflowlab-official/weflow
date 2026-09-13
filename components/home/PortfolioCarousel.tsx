@@ -9,7 +9,7 @@ const SLIDES = [
   {
     src: '/images/cases/cases-kpsc-01.webp',
     alt: 'KPSC 미래 에너지 기업 홈페이지 제작 사례',
-    url: 'https://kpschelpus.vercel.app/',
+    url: 'https://helplus.kr/',
     blur: 'data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAABwBACdASoYAAsAPrVMnkonJCKhsAgA4BaJbACdMoMljEnE5nI/h+OjDRiDAAD+743PnTLOoI6ZGasVek/kGRwaV/+X4fyhUfLFoPiYQ7HZ7Uj4dOHt41gFOrNsYMhYG/0cRQqJoUidzsaraI5AYeHZXG5joM7pUfkZhW8/UqGnKfR+MYHAJNUC3iKSbzw8tUAAAA==',
   },
   {
