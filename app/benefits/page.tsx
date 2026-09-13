@@ -8,7 +8,9 @@ import BenefitDetails from '@/components/home/BenefitDetails'
 
 export const metadata: Metadata = {
   title: 'WEFLOW 혜택 · WEFLOW',
-  description: '제작만 하고 끝나지 않습니다 — SEO 관리, 관리자 페이지, 제휴 마케팅까지 함께 제공하는 혜택을 확인하세요.',
+  // 짧으면 네이버가 버리고 본문을 긁어 온다 — 그대로 쓰이는 /difference(88자) 수준으로 맞춘다
+  description:
+    '홈페이지는 만들고 나면 끝이 아닙니다. 통계 관리자 페이지, 1:1 관리 시스템, 상품별 전용 유지보수까지 제작과 함께 제공하는 것들을 정리했습니다.',
   alternates: { canonical: '/benefits' },
 }
 

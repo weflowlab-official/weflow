@@ -17,8 +17,9 @@ import { CTA_BTN, CTA_BTN_FILLED } from "@/lib/ctaButton";
 
 export const metadata: Metadata = {
   title: "홈페이지 가이드 · WEFLOW",
+  // 짧으면 네이버가 버리고 본문을 긁어 온다 — 그대로 쓰이는 /difference(88자) 수준으로 맞춘다
   description:
-    "홈페이지와 랜딩페이지는 뭐가 다른지, 관리자 페이지는 왜 필요한지 — 제작을 알아보는 단계에서 궁금한 것들을 정리했습니다.",
+    "홈페이지와 랜딩페이지는 뭐가 다른지, 관리자 페이지는 왜 필요한지 정리했습니다. 제작 비용과 진행 절차에 대해 자주 묻는 질문도 함께 담았습니다.",
   alternates: { canonical: "/guide" },
   openGraph: {
     title: "홈페이지 가이드 · WEFLOW",

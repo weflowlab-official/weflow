@@ -24,18 +24,19 @@ const paths: {
 }[] = [
   // 09-13: 제목을 브랜드 앞세운 형태로 교체, 설명도 제작 방식·1:1 전담 중심으로 다시 씀
   { path: '', updated: '2026-09-13', priority: 1.0, freq: 'weekly' },
-  { path: '/service', updated: '2026-07-22', priority: 0.9, freq: 'weekly' },
+  // 09-13: 아래 여섯 페이지는 검색 결과에 붙는 설명을 다시 썼다.
+  // 네이버가 짧은 설명은 버리고 본문을 긁어 오는 게 확인돼(UI 라벨이 세미콜론으로 이어 붙어 나왔다),
+  // 그대로 쓰이고 있는 /difference(88자) 수준의 완결된 두 문장으로 맞췄다.
+  { path: '/service', updated: '2026-09-13', priority: 0.9, freq: 'weekly' },
   // 09-11: 06 관리자 페이지·07 일하는 방식 섹션 신설, 사이트 점검 배너 추가
   { path: '/difference', updated: '2026-09-11', priority: 0.8, freq: 'monthly' },
-  // 09-12: FAQ "제작 비용" 답변을 플랜별 실금액으로 교체 (화면 문구 + FAQPage 구조화 데이터)
-  { path: '/guide', updated: '2026-09-12', priority: 0.8, freq: 'monthly' },
-  // 09-12: Offer 설명이 "상담 문의" → 유지보수·관리자 옵션 실금액 (검색·AI 가 인용해 가는 내용)
-  { path: '/pricing', updated: '2026-09-12', priority: 0.9, freq: 'weekly' },
-  { path: '/cases', updated: '2026-07-31', priority: 0.8, freq: 'weekly' },
-  { path: '/about', updated: '2026-07-22', priority: 0.7, freq: 'monthly' },
-  { path: '/benefits', updated: '2026-07-22', priority: 0.7, freq: 'monthly' },
-  { path: '/diagnosis', updated: '2026-07-22', priority: 0.8, freq: 'monthly' },
-  { path: '/check', updated: '2026-08-26', priority: 0.8, freq: 'monthly' },
+  { path: '/guide', updated: '2026-09-13', priority: 0.8, freq: 'monthly' },
+  { path: '/pricing', updated: '2026-09-13', priority: 0.9, freq: 'weekly' },
+  { path: '/cases', updated: '2026-09-13', priority: 0.8, freq: 'weekly' },
+  { path: '/about', updated: '2026-09-13', priority: 0.7, freq: 'monthly' },
+  { path: '/benefits', updated: '2026-09-13', priority: 0.7, freq: 'monthly' },
+  { path: '/diagnosis', updated: '2026-09-13', priority: 0.8, freq: 'monthly' },
+  { path: '/check', updated: '2026-09-13', priority: 0.8, freq: 'monthly' },
   // /booking 은 메뉴에서 내리면서 검색 노출도 뺐다 — 페이지는 주소로만 접근 가능
 ]
 

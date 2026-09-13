@@ -13,8 +13,10 @@ import { CTA_BTN, CTA_BTN_FILLED } from "@/lib/ctaButton";
 
 export const metadata: Metadata = {
   title: "회사소개 · WEFLOW",
+  // 짧으면 네이버가 이 문장을 버리고 본문에서 아무 데나 긁어 온다 (UI 라벨이 세미콜론으로
+  // 이어 붙은 채로 나오기도 한다). 그대로 쓰이는 /difference 가 88자라 그 수준으로 맞춘다.
   description:
-    "사람과 기술이 함께 흘러가며 더 좋은 방향을 만드는 회사, WEFLOW.",
+    'WEFLOW는 사람과 기술이 함께 흘러가며 더 좋은 방향을 만듭니다. 회사 이름에 담은 뜻과 일하는 방식, 사업자 정보를 함께 안내합니다.',
 };
 
 // 사명 풀이 — WE · FLOW 두 카드

@@ -2,10 +2,20 @@
 import type { Metadata } from 'next'
 import { makePlans } from '@/data/pricing'
 
+/**
+ * 검색 결과에 붙는 설명.
+ *
+ * 짧으면 네이버가 이 문장을 버리고 본문에서 아무 데나 긁어 온다 — 화면의 항목 이름들이
+ * 세미콜론으로 이어 붙은 채 나오기도 한다. 그대로 쓰이는 /difference 가 88자라 그 수준으로 맞춘다.
+ *
+ * 최저가는 data/pricing.ts 에서 뽑는다. 금액을 고칠 때 여기만 옛날 값으로 남지 않도록.
+ */
+const LOWEST_PRICE = makePlans[0].price
+
 export const metadata: Metadata = {
   title: '제작 플랜 · 가격 안내 · WEFLOW',
   description:
-    '랜딩페이지부터 기업형 홈페이지까지, WEFLOW의 제작 플랜별 구성과 가격을 확인하세요.',
+    `랜딩페이지 ${LOWEST_PRICE}부터 시작하는 제작 플랜과 관리자 페이지 옵션 가격을 한눈에 비교하세요. 월 유지보수는 수정 횟수에 제한을 두지 않습니다.`,
   alternates: { canonical: '/pricing' },
   openGraph: {
     title: '제작 플랜 · 가격 안내 · WEFLOW',

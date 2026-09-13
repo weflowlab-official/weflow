@@ -12,7 +12,9 @@ import { CTA_BTN } from "@/lib/ctaButton";
 
 export const metadata: Metadata = {
   title: "제작 사례 · WEFLOW",
-  description: "WEFLOW가 직접 제작한 홈페이지 사례를 업종별로 확인하세요.",
+  // 짧으면 네이버가 버리고 본문을 긁어 온다 — 그대로 쓰이는 /difference(88자) 수준으로 맞춘다
+  description:
+    "WEFLOW가 직접 제작한 홈페이지를 업종과 플랜별로 모았습니다. 완성 화면만이 아니라 어떤 요청을 어떻게 풀었는지까지 사례마다 정리했습니다.",
   alternates: { canonical: "/cases" },
   openGraph: {
     title: "제작 사례 · WEFLOW",
