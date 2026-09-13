@@ -1,12 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { RiKakaoTalkFill } from 'react-icons/ri'
+import { OFFICIAL_CHANNELS } from '@/data/common'
 
-// 외부 채널 주소 (플로팅 버튼과 동일한 곳을 가리킨다)
-const KAKAO_URL = 'http://pf.kakao.com/_xntCbX'
-const BLOG_URL = 'https://m.blog.naver.com/weflowlab'
-const INSTAGRAM_URL = 'https://www.instagram.com/weflowlab.kr?igsh=b2c1eTdwbHo2bWRt'
-const YOUTUBE_URL = 'https://www.youtube.com/channel/UCc3SKVxpHSLeIoZJ5IE6fcA'
+// 외부 채널 주소 — data/common.ts 의 공용 상수를 쓴다.
+// 예전에는 여기서 따로 적어 두었는데, 같은 주소를 사업자 구조화 데이터(sameAs)도 써야 해서
+// 한곳으로 모았다. 두 군데 적어 두면 채널이 바뀔 때 한쪽만 고치고 지나가게 된다.
+const { kakao: KAKAO_URL, blog: BLOG_URL, instagram: INSTAGRAM_URL, youtube: YOUTUBE_URL } =
+  OFFICIAL_CHANNELS
 
 /* 헤더(Navbar) 메뉴와 동일하게 맞춤 */
 const SERVICE_LINKS = [

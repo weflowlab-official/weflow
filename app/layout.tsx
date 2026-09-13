@@ -9,6 +9,7 @@ import NaverAds from '@/components/NaverAds'
 import PageTracker from '@/components/PageTracker'
 import FontLoader from '@/components/FontLoader'
 import { makePlans } from '@/data/pricing'
+import { OFFICIAL_CHANNELS } from '@/data/common'
 import { SEO_KEYWORDS } from '@/lib/keywords'
 
 /**
@@ -17,6 +18,19 @@ import { SEO_KEYWORDS } from '@/lib/keywords'
  * 이 코드가 main 에 합쳐져도 운영 사이트(weflowlab.kr)는 영향받지 않는다.
  */
 const isNoindex = process.env.NOINDEX === '1'
+
+/**
+ * 회사를 한 문단으로 설명하는 문장 — 검색 결과 설명과 사업자 구조화 데이터가 같이 쓴다.
+ *
+ * 두 군데에 따로 적어 두었더니 한쪽만 고치고 지나가, 같은 회사를 두 가지로 설명하고 있었다.
+ * 사람이 읽는 자리(검색 스니펫)와 기계가 읽는 자리(구조화 데이터)가 다른 말을 할 이유가 없다.
+ *
+ * 길이 기준 — 네이버는 글자 수(모바일 약 90자), 구글은 픽셀 폭으로 자른다.
+ * 아래 문장은 97자라 마지막 "진행합니다." 한 어절만 잘리고,
+ * 핵심(최신 기술 · 속도/보안/검색 노출 · 1:1 전담)은 그 앞에서 끝난다.
+ */
+const SITE_DESCRIPTION =
+  'WEFLOW(위플로우)는 최신 기술로 홈페이지를 제작해 속도와 보안, 검색 노출까지 잡습니다. 원하시는 기능을 그대로 구현하며, 기획부터 오픈까지 1:1 전담으로 진행합니다.'
 
 // 사이트 공통 메타 — 개별 페이지에서 title 등을 덮어쓴다
 export const metadata: Metadata = {
@@ -28,12 +42,8 @@ export const metadata: Metadata = {
   // 그럴 바엔 브랜드를 먼저 읽히게 두는 편이 낫다고 보고 정한 것이다 (2026-09-13).
   // 네이버 권장이 40자라 그 안에서 맞춘다 (현재 22자).
   title: 'WEFLOW | 홈페이지 제작 위플로우',
-  // 검색 결과에서 제목 아래 붙는 설명. 잘리는 기준이 엔진마다 다르다 —
-  // 네이버는 글자 수(모바일 약 90자, PC 는 140자대도 통과), 구글은 픽셀 폭으로 자른다.
-  // 아래 문장은 97자라 네이버 모바일·구글에서 마지막 "진행합니다." 한 어절만 잘린다.
-  // 핵심(최신 기술 · 속도/보안/검색 노출 · 1:1 전담)은 그 앞에서 끝나므로 그대로 둔다.
-  description:
-    'WEFLOW(위플로우)는 최신 기술로 홈페이지를 제작해 속도와 보안, 검색 노출까지 잡습니다. 원하시는 기능을 그대로 구현하며, 기획부터 오픈까지 1:1 전담으로 진행합니다.',
+  // 검색 결과에서 제목 아래 붙는 설명 (길이·잘림 기준은 SITE_DESCRIPTION 주석 참고)
+  description: SITE_DESCRIPTION,
   keywords: SEO_KEYWORDS.join(', '),
   // 쿼리스트링·www 변형이 별개 URL로 색인되지 않도록 대표 주소를 지정한다.
   // './' 는 각 페이지 경로에 맞춰 자동으로 해석된다.
@@ -95,15 +105,31 @@ const ORGANIZATION_JSON_LD = {
   url: 'https://weflowlab.kr',
   logo: 'https://weflowlab.kr/logo.png',
   image: 'https://weflowlab.kr/images/main/og-logo-2.webp',
-  description:
-    '홈페이지 제작부터 광고 연동·운영 관리까지, 단순 제작이 아닌 문의 구조까지 설계하는 홈페이지 제작 전문 업체.',
+  // 이 채널들의 주인이 weflowlab.kr 이라는 선언.
+  // 브랜드명을 검색하면 카카오채널·기업정보 사이트·채용 사이트가 제각각 잡히는데,
+  // 이게 없으면 검색엔진에는 서로 무관한 문서로 보인다. 채널이 늘면 data/common.ts 만 고친다.
+  sameAs: Object.values(OFFICIAL_CHANNELS),
+  description: SITE_DESCRIPTION,
   email: 'contact@weflowlab.kr',
   telephone: '+82-10-2971-7280',
   founder: { '@type': 'Person', name: '신서준' },
   taxID: '884-07-03480',
   priceRange: PRICE_RANGE,
   areaServed: { '@type': 'Country', name: '대한민국' },
-  serviceType: ['홈페이지 제작', '랜딩페이지 제작', '광고 운영 대행'],
+  // 실제로 파는 서비스만 적는다 — 이름은 lib/keywords.ts 의 SERVICES label 과 맞췄다.
+  // 같은 서비스를 두 군데서 다르게 부르지 않기 위함이다.
+  //
+  // 그 파일의 match 배열(리뉴얼·어드민·오래된홈페이지 …)은 여기 넣지 않는다.
+  // 그건 서비스 이름이 아니라 방문자가 검색할 때 쓰는 말 조각이고,
+  // 구조화 데이터에 검색어를 나열해도 순위에는 기여하지 않는다(스팸으로 잡힐 위험만 있다).
+  serviceType: [
+    '홈페이지 제작',
+    '랜딩페이지 제작',
+    '홈페이지 리뉴얼',
+    '관리자 페이지 제작',
+    '홈페이지 유지보수',
+    '광고 운영 대행',
+  ],
 }
 
 // html·body 뼈대 — 공통 UI로 감싸고 방문 추적기를 함께 실행한다
