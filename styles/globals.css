@@ -838,6 +838,138 @@
       animation: none;
     }
   }
+  /* ── 금속 테두리 플로팅 버튼 ──
+     .fab-metal 이 모양(테두리·광택·아이콘 채우기)을 만들고, .fab-gold / .fab-silver 는
+     색만 정한다. 색을 쓰는 자리가 다섯 군데라 값을 나눠 두지 않으면 한 곳만 고치고 지나치기 쉽다.
+     .fab 의 배경·글자색을 덮어야 하므로 반드시 .fab 뒤에 온다.
+     PC 전용 — 모바일에서는 .floating-cta 자체가 숨겨지고 하단 바가 대신 뜬다. */
+  .fab-gold {
+    /* 사이트 금색 규격 (.c-gold · 신뢰 라인 · TrustBand 와 같은 값) */
+    --metal-dark: #b8976b;
+    --metal-mid: #c9a262;
+    --metal-hi: #fff6da;
+    --metal-hi-rgb: 255, 246, 218;
+    --metal-glow: rgba(227, 201, 158, 0.22);
+  }
+  .fab-silver {
+    /* 사이트 무채색 토큰에서 가져왔다 — --outline · --text-muted · --text */
+    --metal-dark: #5a5a63;
+    --metal-mid: #a3a3aa;
+    --metal-hi: #f2f2f4;
+    --metal-hi-rgb: 242, 242, 244;
+    --metal-glow: rgba(196, 196, 204, 0.22);
+  }
+  .fab-metal {
+    position: relative;
+    backdrop-filter: blur(4px);
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.22),
+      0 0 22px var(--metal-glow);
+  }
+  /* 테두리 — border 는 그라데이션을 못 받고 border-image 는 둥근 모서리를 못 따라가므로,
+     원 전체를 칠한 뒤 mask 로 가운데를 뚫어 테두리만 남긴다.
+     ::before 가 테두리, ::after 가 그 위를 지나는 광택이다 (뒤에 오는 쪽이 위에 그려진다). */
+  .fab-metal::before,
+  .fab-metal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 3px;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .fab-metal::before {
+    background: linear-gradient(
+      115deg,
+      var(--metal-dark) 0%,
+      var(--metal-mid) 38%,
+      var(--metal-hi) 50%,
+      var(--metal-mid) 62%,
+      var(--metal-dark) 100%
+    );
+  }
+  /* 광택 — 밝은 띠 하나만 담은 그림을 버튼보다 세 배 넓게 깔고 좌→우로 민다.
+     양 끝에서는 띠가 화면 밖이라 투명해서, 되감기는 순간이 눈에 안 띈다.
+     (테두리와 같은 그라데이션을 통째로 미는 방식은 repeat 이음매가 세로줄로 드러난다) */
+  .fab-metal::after {
+    background: linear-gradient(
+      115deg,
+      rgba(var(--metal-hi-rgb), 0) 42%,
+      rgba(var(--metal-hi-rgb), 0.95) 50%,
+      rgba(var(--metal-hi-rgb), 0) 58%
+    );
+    background-size: 300% 100%;
+    background-repeat: no-repeat;
+    animation: fabMetalGlint 2.8s linear infinite;
+  }
+  @keyframes fabMetalGlint {
+    from {
+      background-position: 0% center;
+    }
+    to {
+      background-position: 100% center;
+    }
+  }
+  /* 라벨은 글씨라서 다른 금색 글씨(.c-gold·TrustBand)와 완전히 같은 방식이 그대로 먹는다.
+     cGoldSheen 은 배경 위치만 미는 키프레임이라 색과 무관하다 — 은색도 그대로 쓴다 */
+  .fab-metal .fab-label {
+    background: linear-gradient(
+      115deg,
+      var(--metal-dark) 0%,
+      var(--metal-mid) 38%,
+      var(--metal-hi) 50%,
+      var(--metal-mid) 62%,
+      var(--metal-dark) 100%
+    );
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: cGoldSheen 2.8s linear infinite;
+  }
+  /* 아이콘은 선으로 그린 SVG 라 글씨 방식(배경을 글자 모양으로 오려내기)이 안 먹는다.
+     대신 테두리 광택이 한가운데를 지나는 순간(주기의 50%)에 맞춰 같이 밝아지게 해
+     빛이 버튼 위를 훑고 가는 것처럼 보이게 한다. */
+  .fab-metal .fab-icon {
+    animation: fabMetalIcon 2.8s linear infinite;
+  }
+  /* 아이콘은 lucide 기본대로 선으로만 그린다 (fill="none" stroke="currentColor").
+     안쪽에 파낼 모양이 없는 아이콘(전화 수화기처럼 실루엣 하나뿐)만 반대로 뒤집어
+     채우기만 남긴다 — 선으로 그리면 가늘고, 선을 색까지 입히면 한 겹 두꺼워진다.
+     CSS 가 svg 속성보다 우선해서 컴포넌트를 안 건드리고 여기서 바꿀 수 있다. */
+  .fab-icon-solid .fab-icon svg {
+    fill: currentColor;
+    stroke: none;
+  }
+  /* 그라데이션의 양 끝(--metal-dark)과 한가운데(--metal-hi)를 그대로 오간다 —
+     폭을 좁히면 가장 어두운 순간에도 테두리보다 밝아 아이콘만 떠 보인다 */
+  @keyframes fabMetalIcon {
+    0%,
+    100% {
+      color: var(--metal-dark);
+    }
+    50% {
+      color: var(--metal-hi);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fab-metal::after {
+      animation: none;
+      opacity: 0;
+    }
+    .fab-metal .fab-label,
+    .fab-metal .fab-icon {
+      animation: none;
+    }
+  }
   .fab-icon {
     width: 56px;
     height: 56px;
