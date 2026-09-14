@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   // 홈 주소는 가망 고객에게 카톡으로 보내는 링크라, 두 줄 안에 "홈페이지 만드는 곳" 이
   // 읽혀야 한다. 슬로건은 들어오면 히어로에서 바로 보이므로 여기 싣지 않는다.
   openGraph: {
-    title: '홈페이지 제작 WEFLOW 위플로우',
+    title: 'WEFLOW | 홈페이지 제작 위플로우',
     description: '최신 기술로 만드는 홈페이지 속도·보안·검색 노출까지, 원하는 기능 그대로 1:1 전담 제작합니다.',
     url: 'https://weflowlab.kr',
     siteName: 'WEFLOW',
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '홈페이지 제작 WEFLOW 위플로우',
+    title: 'WEFLOW | 홈페이지 제작 위플로우',
     description: '최신 기술로 만드는 홈페이지 속도·보안·검색 노출까지, 원하는 기능 그대로 1:1 전담 제작합니다.',
     images: ['/images/main/og-logo-2.webp'],
   },
