@@ -26,6 +26,9 @@ export const metadata: Metadata = {
     description:
       '템플릿 제작 업체와 최신 기술로 직접 만드는 WEFLOW, 무엇이 다른지 짧게 정리했습니다.',
     url: '/difference',
+    // 전용 og 그림이 아직 없다. 적지 않으면 루트 것까지 덮여 미리보기가 빈칸이 되므로
+    // 루트와 같은 그림을 명시해 둔다 — 전용 그림이 생기면 이 줄만 갈아 끼우면 된다
+    images: [{ url: '/images/main/og-logo-2.webp', width: 1200, height: 630 }],
   },
 }
 

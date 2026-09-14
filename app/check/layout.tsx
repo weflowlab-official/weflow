@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     description:
       '사이트 주소만 입력하면 로딩 속도·검색엔진 노출·모바일 대응·문의 동선을 바로 분석해 드립니다.',
     url: '/check',
+    // openGraph 를 정의하면 루트의 것을 통째로 덮어쓴다 — 이미지도 여기서 다시 지정해야 한다
+    images: [{ url: '/images/og/check.webp', width: 1200, height: 630 }],
   },
 }
 

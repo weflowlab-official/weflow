@@ -1,4 +1,4 @@
-// /guide — 홈페이지 가이드.
+// /guide — 제작 라인업 (메뉴 이름). 주소는 예전 이름대로 /guide 를 유지한다.
 // 메인에 길게 깔려 있던 "홈페이지란 무엇인가" 설명 섹션들을 이리로 옮겼다.
 // 메인은 이미 제작을 마음먹은 사람을 위한 자리로 두고, 알아보는 단계의 방문자는 여기서 읽는다.
 import type { Metadata } from "next";
@@ -16,16 +16,21 @@ import FaqSection from "@/components/FaqSection";
 import { CTA_BTN, CTA_BTN_FILLED } from "@/lib/ctaButton";
 
 export const metadata: Metadata = {
-  title: "홈페이지 가이드 · WEFLOW",
+  // 메뉴·푸터에 "제작 라인업" 으로 적혀 있으므로 검색 제목도 같은 이름을 쓴다.
+  // 네이버 사이트링크는 메뉴 글자를 그대로 가져가는데, 검색 제목이 다른 이름이면
+  // 같은 페이지가 두 이름으로 돌아다니게 된다.
+  title: "제작 라인업 · WEFLOW",
   // 짧으면 네이버가 버리고 본문을 긁어 온다 — 그대로 쓰이는 /difference(88자) 수준으로 맞춘다
   description:
     "홈페이지와 랜딩페이지는 뭐가 다른지, 관리자 페이지는 왜 필요한지 정리했습니다. 제작 비용과 진행 절차에 대해 자주 묻는 질문도 함께 담았습니다.",
   alternates: { canonical: "/guide" },
   openGraph: {
-    title: "홈페이지 가이드 · WEFLOW",
+    title: "제작 라인업 · WEFLOW",
     description:
       "홈페이지와 랜딩페이지는 뭐가 다른지, 관리자 페이지는 왜 필요한지 정리했습니다.",
     url: "/guide",
+    // openGraph 를 정의하면 루트의 것을 통째로 덮어쓴다 — 이미지도 여기서 다시 지정해야 한다
+    images: [{ url: "/images/og/guide.webp", width: 1200, height: 630 }],
   },
 };
 

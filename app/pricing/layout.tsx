@@ -22,6 +22,8 @@ export const metadata: Metadata = {
     description:
       '랜딩페이지부터 기업형 홈페이지까지, WEFLOW의 제작 플랜별 구성과 가격을 확인하세요.',
     url: '/pricing',
+    // openGraph 를 정의하면 루트의 것을 통째로 덮어쓴다 — 이미지도 여기서 다시 지정해야 한다
+    images: [{ url: '/images/og/pricing.webp', width: 1200, height: 630 }],
   },
 }
 

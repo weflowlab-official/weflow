@@ -17,6 +17,14 @@ export const metadata: Metadata = {
   // 이어 붙은 채로 나오기도 한다). 그대로 쓰이는 /difference 가 88자라 그 수준으로 맞춘다.
   description:
     'WEFLOW는 사람과 기술이 함께 흘러가며 더 좋은 방향을 만듭니다. 회사 이름에 담은 뜻과 일하는 방식, 사업자 정보를 함께 안내합니다.',
+  // openGraph 를 여기서 정의하는 순간 루트(app/layout.tsx)의 것이 통째로 덮인다.
+  // 이미지까지 다시 적어야 카톡·네이버 미리보기에 그림이 나온다.
+  openGraph: {
+    title: '회사소개 · WEFLOW',
+    description: '사람과 기술이 함께 흘러가는 WEFLOW, 이름에 담은 뜻과 일하는 방식을 소개합니다.',
+    url: '/about',
+    images: [{ url: '/images/og/about.webp', width: 1200, height: 630 }],
+  },
 };
 
 // 사명 풀이 — WE · FLOW 두 카드

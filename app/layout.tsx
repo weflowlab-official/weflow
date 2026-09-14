@@ -60,10 +60,12 @@ export const metadata: Metadata = {
     ],
     apple: '/favicon-192.png',
   },
-  // 카톡·SNS 링크 미리보기 — 제목은 짧게, 설명에 히어로 문구를 그대로 싣는다
+  // 카톡·SNS 링크 미리보기.
+  // 홈 주소는 가망 고객에게 카톡으로 보내는 링크라, 두 줄 안에 "홈페이지 만드는 곳" 이
+  // 읽혀야 한다. 슬로건은 들어오면 히어로에서 바로 보이므로 여기 싣지 않는다.
   openGraph: {
-    title: '위플로우 WEFLOW',
-    description: '내가 진짜 원하는 페이지 - 우리만의 플로우를 담다, WEFLOW',
+    title: '홈페이지 제작 WEFLOW 위플로우',
+    description: '최신 기술로 직접 만드는 홈페이지, 기획부터 오픈까지 1:1 전담으로 진행합니다.',
     url: 'https://weflowlab.kr',
     siteName: 'WEFLOW',
     images: [{ url: '/images/main/og-logo-2.webp', width: 1200, height: 630 }],
@@ -72,8 +74,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '위플로우 WEFLOW',
-    description: '내가 진짜 원하는 페이지 - 우리만의 플로우를 담다, WEFLOW',
+    title: '홈페이지 제작 WEFLOW 위플로우',
+    description: '최신 기술로 직접 만드는 홈페이지, 기획부터 오픈까지 1:1 전담으로 진행합니다.',
     images: ['/images/main/og-logo-2.webp'],
   },
   verification: {

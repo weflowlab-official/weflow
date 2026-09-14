@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     description:
       '기획·디자인·개발부터 운영 관리까지, WEFLOW의 홈페이지 제작 서비스 전 과정을 안내합니다.',
     url: '/service',
+    // 전용 og 그림이 아직 없다. 적지 않으면 루트 것까지 덮여 미리보기가 빈칸이 되므로
+    // 루트와 같은 그림을 명시해 둔다 — 전용 그림이 생기면 이 줄만 갈아 끼우면 된다
+    images: [{ url: '/images/main/og-logo-2.webp', width: 1200, height: 630 }],
   },
 }
 
