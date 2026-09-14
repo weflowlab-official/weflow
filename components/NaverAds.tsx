@@ -15,8 +15,15 @@ import Script from 'next/script'
 declare global {
   interface Window {
     wcs_add?: Record<string, string>
-    wcs?: { cnv: (type: string, value: string) => unknown }
+    wcs?: {
+      cnv: (type: string, value: string) => unknown
+      /** 유입 경로(검색어·리퍼러) 기록 — 첫 로드 때 한 번만 부른다 */
+      inflow?: (domain?: string) => void
+      /** 전환 신호 — 신청 완료처럼 목표에 도달한 페이지에서 부른다 */
+      trans?: (conv: { type: string }) => void
+    }
     wcs_do?: (arg?: Record<string, unknown>) => void
+    _nasa?: Record<string, unknown>
   }
 }
 
@@ -39,6 +46,10 @@ export default function NaverAds() {
       onLoad={() => {
         window.wcs_add = window.wcs_add || {}
         window.wcs_add['wa'] = WA
+        window._nasa = window._nasa || {}
+        // inflow 는 처음 들어온 경로를 기록하는 것이라 첫 로드 때만 부른다.
+        // 경로가 바뀔 때마다 다시 부르면 사이트 안에서의 이동이 새 유입으로 잡힌다.
+        window.wcs?.inflow?.()
         window.wcs_do?.()
       }}
     />
