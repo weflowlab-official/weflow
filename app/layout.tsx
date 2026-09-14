@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   // 읽혀야 한다. 슬로건은 들어오면 히어로에서 바로 보이므로 여기 싣지 않는다.
   openGraph: {
     title: '홈페이지 제작 WEFLOW 위플로우',
-    description: '최신 기술로 직접 만드는 홈페이지, 기획부터 오픈까지 1:1 전담으로 진행합니다.',
+    description: '최신 기술로 만드는 홈페이지 속도·보안·검색 노출까지, 원하는 기능 그대로 1:1 전담 제작합니다.',
     url: 'https://weflowlab.kr',
     siteName: 'WEFLOW',
     images: [{ url: '/images/main/og-logo-2.webp', width: 1200, height: 630 }],
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: '홈페이지 제작 WEFLOW 위플로우',
-    description: '최신 기술로 직접 만드는 홈페이지, 기획부터 오픈까지 1:1 전담으로 진행합니다.',
+    description: '최신 기술로 만드는 홈페이지 속도·보안·검색 노출까지, 원하는 기능 그대로 1:1 전담 제작합니다.',
     images: ['/images/main/og-logo-2.webp'],
   },
   verification: {
