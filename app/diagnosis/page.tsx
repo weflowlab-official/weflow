@@ -1,17 +1,18 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Check, Phone, XCircle } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { XCircle } from 'lucide-react'
 import { projectTypes } from '@/data/common'
 import { attributionLine } from '@/lib/attribution'
-import { trackNaverLead } from '@/lib/naverConversion'
+import { markNaverLead } from '@/lib/naverConversion'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
 
 export default function DiagnosisPage() {
+  const router = useRouter()
   const [form, setForm] = useState({ name: '', phone: '', type: '', industry: '', note: '', agree: false })
   // 봇 거르개 — 사람은 못 보는 칸이라 정상 신청에서는 늘 빈 문자열로 나간다
   const [honeypot, setHoneypot] = useState('')
-  const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [showErrors, setShowErrors] = useState(false)
   const [submitError, setSubmitError] = useState(false)
@@ -83,66 +84,23 @@ export default function DiagnosisPage() {
       // 허니팟에 걸린 요청에도 성공으로 답하므로 res.ok 만으로는 저장 여부를 알 수 없다 —
       // 실제로 저장된 응답에만 문의 id 가 들어 있다 (lib/leadInput.ts 의 wasSaved 설명 참고)
       const saved = wasSaved(await res.json().catch(() => null))
-      setLoading(false)
       setShowErrors(false)
-      // 네이버 광고에 "신청 완료" 전환을 알린다 (스크립트가 켜져 있을 때만 동작).
-      // 저장되지 않은 요청까지 세면 광고 성과가 부풀려져 집행 판단이 틀어진다.
-      if (saved) trackNaverLead()
-      // 완료 화면이 그려지기 전에 미리 상단으로 (스크롤이 움직이는 게 안 보이도록)
-      window.scrollTo(0, 0)
-      setSubmitted(true)
+      // 이탈 모달(뒤로가기 트랩)을 먼저 푼다
       sessionStorage.removeItem('weflow_form_intent')
+      // 네이버 전환은 완료 주소(/diagnosis/success)에서 쏜다. 여기서는 표시만 남긴다 —
+      // 허니팟에 걸려 저장되지 않은 요청에도 완료 화면은 똑같이 보여 주되,
+      // 광고 전환으로는 세지 않기 위해서다.
+      if (saved) markNaverLead()
+      // loading 은 끄지 않는다 — 화면이 바뀔 때까지 버튼이 다시 눌리지 않게 둔다
+      router.push('/diagnosis/success')
     } catch {
       setLoading(false)
       setSubmitError(true)
     }
   }
 
-  if (submitted) {
-    return (
-      <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-        <style>{`
-          @keyframes done-in {
-            from { opacity: 0; transform: translateY(8px); }
-            to   { opacity: 1; transform: none; }
-          }
-          @media (prefers-reduced-motion: reduce) {
-            .done-panel { animation: none !important; }
-          }
-        `}</style>
-        <div className="done-panel" style={{ textAlign: 'center', maxWidth: '420px', animation: 'done-in 0.45s ease-out both' }}>
-          <div style={{
-            width: 72, height: 72, borderRadius: '50%', background: '#dcfce7',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.75rem',
-          }}>
-            <Check size={34} color="#16a34a" strokeWidth={2.5} />
-          </div>
-          <h2 className="title-1 emphasized" style={{ marginBottom: '1rem' }}>
-            무료 상담 신청 완료!
-          </h2>
-          <p className="c-muted" style={{ lineHeight: 1.8, marginBottom: '1.75rem', fontSize: '1.1rem' }}>
-            담당자가 확인 후 <strong style={{ color: 'var(--text)' }}>24시간 내</strong>에 연락드리겠습니다.<br />
-            연중무휴 상담 가능합니다.
-          </p>
-          <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="tel:010-2971-7280" style={{
-              flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
-              background: 'var(--accent)', color: 'var(--on-accent)', border: '1.5px solid var(--accent)',
-              padding: '0.8rem 1.5rem', borderRadius: '8px', fontSize: '1rem',
-              textDecoration: 'none', whiteSpace: 'nowrap',
-            }} className="emphasized">
-              <Phone size={16} strokeWidth={2.5} /> 바로 전화하기
-            </a>
-            <button onClick={() => { setSubmitted(false); setForm({ name: '', phone: '', type: '', industry: '', note: '', agree: false }); setShowErrors(false); setSubmitError(false) }}
-              className="semibold"
-              style={{ flex: 1, background: 'var(--surface)', border: '1.5px solid var(--accent)', color: 'var(--accent)', borderRadius: '8px', padding: '0.8rem 1.5rem', fontSize: '1rem', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-              다시 신청하기
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  // 완료 화면은 /diagnosis/success 로 옮겼다 — 주소가 따로 있어야 뒤로가기·새로고침이
+  // 자연스럽게 돌고, 광고·분석에서 "완료까지 간 사람"을 주소 하나로 셀 수 있다.
 
   return (
     <div style={{ background: 'var(--section-a)' }}>
