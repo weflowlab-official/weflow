@@ -1,48 +1,102 @@
-// WEFLOW 강점 캐러셀 구조화 데이터 — 네이버 검색광고 '웹사이트정보' 확장소재용.
+// 캐러셀 구조화 데이터 — 네이버 검색 결과와 검색광고 '웹사이트정보' 확장소재에 쓰인다.
 //
-// 네이버는 광고 연결 URL 페이지에서 구조화 데이터(캐러셀 ListItem)를 수집해 광고 아래 슬라이드로 붙인다.
+// 네이버는 페이지에서 ItemList(ListItem)를 읽어 가로 카드 띠로 그린다.
 // 서치어드바이저 캐러셀 가이드 기준:
-//  - ItemList > ListItem, 각 항목에 image 필수 (원본 이미지, 로고 금지, 항목끼리 겹치지 않게)
-//  - name·url 은 선택 — 강점 타일엔 링크를 넣지 않고(광고 연결 URL 로만 가게), 메인 타일만 메인으로 연결
-//  - image 는 절대 URL, position 은 정수, 한 페이지에 ItemList 하나만
-// 이미지는 public/images/ads/strength-0N.webp — 강점 문구를 큼직하게 넣은 600×600 타일 9장.
-// 문구·이미지를 바꾸려면 타일을 다시 만들어 같은 파일명으로 올리고 아래 name 만 맞춘다.
+//  - ItemList > ListItem, 각 항목에 image 필수(절대 URL). name·url·position 은 선택
+//  - 한 페이지에 ItemList 하나만
+//  - 개수가 적은 listItem 은 쓰지 않는다
+//  - 이미지는 원본을 쓰고, 항목끼리 겹치지 않게. 로고·기본 이미지는 쓰지 않는다
+//  - 노출 여부와 형식은 보장하지 않는다 (가이드에 명시)
+//
+// 실측해 둔 것 — 실제 검색 결과에서 확인한 값이라 타일 순서를 정할 때 기준이 된다:
+//  - 보이는 칸이 PC 5개, 모바일 3개다. 뒤쪽 항목은 만들어도 화면에 안 나온다
+//  - 가로 스크롤이 안 되므로 앞 칸이 전부다
+//  - 홈은 사이트링크가 붙어서인지 캐러셀이 안 나오고, 하위 페이지에만 나온다
+//
+// 캐러셀은 강점 페이지 세 곳에만 단다. 나머지는 페이지 전용 og 이미지를 만들어 달았는데,
+// 검색 결과에서 캐러셀 띠와 og 그림이 같은 자리를 두고 다투므로 한쪽만 남긴다.
 
 const BASE = 'https://weflowlab.kr'
 
-/** 타일 순서대로(메인 다음 흰·남색 번갈아) — 파일명 strength-01 ~ 09 와 짝 */
-const STRENGTHS = [
-  '최신 기술 활용 — 고퀄리티 기술 직접 개발',
-  '전문 개발자 직접 제작 — 템플릿 없이 처음부터',
-  '1:1 집중 관리 — 전담 담당자 배정',
-  '희망 오픈일 맞춤 — 일정에 맞춰 완성',
-  'PC·모바일 최적화 — 모바일에서도 빠른 로딩',
-  '고객 맞춤 제작 — 원하는 기능은 무엇이든',
-  '네이버·구글 상위 노출 — 검색에 잡히는 구조 설계',
-  '나만의 관리자 페이지 — 문의·예약·유입 통계',
-  '무료 상담 — 연중무휴 24시간 상담',
+/** 타일 한 장 — 이미지는 필수, 나머지는 선택 */
+interface Tile {
+  name: string
+  /** public 기준 경로. 절대 URL 로 바꿔서 내보낸다 */
+  img: string
+  /** 누를 곳이 있는 항목만 */
+  url?: string
+}
+
+/**
+ * 강점 페이지 세 곳 전용 카드 — 페이지마다 다섯 장씩 찍었다.
+ *
+ * 배열 순서가 곧 검색 결과에 깔리는 순서다. 파일명 끝 번호도 같은 순서로 붙어 있어
+ * (service-01 … service-05) 순서를 바꾸려면 줄과 파일을 함께 옮겨야 한다.
+ *
+ * 카드 문구가 그림 안에 글자로 박혀 있다. 그래서 name 은 카드에 적힌 제목·설명을
+ * 그대로 옮긴 것이다 — 여기만 고치면 검색 결과의 글자와 그림이 어긋난다.
+ *
+ * 카드 배색이 남·흰으로 번갈아 간다. 순서를 바꾸면 같은 색이 붙을 수 있다.
+ * 열다섯 장이 페이지끼리 한 장도 겹치지 않는다.
+ */
+const SERVICE_TILES: Tile[] = [
+  /* 남 */ { name: '희망 오픈일 맞춤 — 일정에 맞춰 완성', img: '/images/ads/service-01.webp' },
+  /* 흰 */ { name: '1:1 집중 관리 — 전담 담당자 배정', img: '/images/ads/service-02.webp' },
+  /* 남 */ { name: '고객의 소리 — 진짜 원하는 것을 먼저 반영', img: '/images/ads/service-03.webp' },
+  /* 흰 */ { name: 'PC·모바일 최적화 — 모바일에서도 빠른 로딩', img: '/images/ads/service-04.webp' },
+  /* 남 */ { name: 'SNS 연동 — 카카오톡·인스타 자유롭게 연결', img: '/images/ads/service-05.webp' },
 ]
 
-export const AD_CAROUSEL_JSON_LD = {
-  '@context': 'https://schema.org',
-  '@type': 'ItemList',
-  name: 'WEFLOW 홈페이지 제작 강점',
-  description: 'WEFLOW 홈페이지 제작 서비스의 강점 9가지.',
-  numberOfItems: STRENGTHS.length + 1,
-  itemListElement: [
-    // 1번은 메인 — 이것만 링크를 단다 (public/images/ads/main.webp)
-    {
+const DIFFERENCE_TILES: Tile[] = [
+  /* 남 */ { name: '전문 개발자 직접 개발 — 템플릿 없이 처음부터', img: '/images/ads/difference-01.webp' },
+  /* 흰 */ { name: '최신 기술 활용 — 고퀄리티 기술 직접 개발', img: '/images/ads/difference-02.webp' },
+  /* 남 */ { name: '고객 맞춤 제작 — 원하는 기능은 무엇이든', img: '/images/ads/difference-03.webp' },
+  /* 흰 */ { name: '네이버·구글 상위 노출 — 검색에 잡히는 구조 설계', img: '/images/ads/difference-04.webp' },
+  /* 남 */ { name: '나만의 관리자 페이지 — 문의·예약 유입 통계', img: '/images/ads/difference-05.webp' },
+]
+
+const BENEFITS_TILES: Tile[] = [
+  /* 남 */ { name: '50% 특가 프로모션 — 전상품 50% 할인', img: '/images/ads/benefits-01.webp' },
+  /* 흰 */ { name: '월 유지보수 무제한 — 고객 맞춤 이미지·문구 수정', img: '/images/ads/benefits-02.webp' },
+  /* 남 */ { name: '무료 상담 — 연중무휴 24시간 상담', img: '/images/ads/benefits-03.webp' },
+  /* 흰 */ { name: '합리적 가성비 — 필요한 기능만 부담 없이 시작', img: '/images/ads/benefits-04.webp' },
+  /* 남 */ { name: '제휴 마케팅 연결 — 블로그·인스타 플레이스까지', img: '/images/ads/benefits-05.webp' },
+]
+
+/**
+ * 경로 → 그 페이지가 쓸 타일. 여기 없는 페이지는 캐러셀을 달지 않는다.
+ *
+ * 다섯 장씩만 싣는다. PC 다섯 칸·모바일 세 칸에서 끊기고 가로 스크롤이 안 되니,
+ * 뒤에 더 붙여 봐야 화면에 못 나온다.
+ */
+const BY_PATH: { prefix: string; tiles: Tile[]; name: string }[] = [
+  { prefix: '/service', tiles: SERVICE_TILES, name: 'WEFLOW 홈페이지 제작 서비스' },
+  { prefix: '/difference', tiles: DIFFERENCE_TILES, name: 'WEFLOW 제작 방식의 차이' },
+  { prefix: '/benefits', tiles: BENEFITS_TILES, name: 'WEFLOW 홈페이지 제작 혜택' },
+]
+
+/** 타일 묶음을 네이버가 읽는 ItemList 로 바꾼다 */
+function toItemList(tiles: Tile[], name: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name,
+    numberOfItems: tiles.length,
+    itemListElement: tiles.map((t, i) => ({
       '@type': 'ListItem',
-      position: 1,
-      name: 'WEFLOW 홈페이지 제작 — 내가 진짜 원하는 페이지',
-      image: `${BASE}/images/ads/main.webp`,
-      url: `${BASE}/`,
-    },
-    ...STRENGTHS.map((name, i) => ({
-      '@type': 'ListItem',
-      position: i + 2,
-      name,
-      image: `${BASE}/images/ads/strength-0${i + 1}.webp`,
+      position: i + 1,
+      name: t.name,
+      image: t.img.startsWith('http') ? t.img : `${BASE}${t.img}`,
+      ...(t.url ? { url: t.url } : {}),
     })),
-  ],
+  }
+}
+
+/**
+ * 현재 경로에 맞는 캐러셀 하나 — 한 페이지에 ItemList 는 하나만 둔다.
+ * 캐러셀을 달지 않는 페이지에서는 null 을 준다.
+ */
+export function adCarouselJsonLd(pathname: string) {
+  const match = BY_PATH.find(x => pathname === x.prefix || pathname.startsWith(`${x.prefix}/`))
+  return match ? toItemList(match.tiles, match.name) : null
 }
