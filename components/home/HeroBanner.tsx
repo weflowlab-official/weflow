@@ -1,6 +1,5 @@
 import Link from "next/link";
 import HeroBackground from "./HeroBackground";
-import HeroLine1 from "./HeroLine1";
 
 // 글자 단위 등장 — 자리는 유지하고 투명→나타남 (start: 앞선 글자 수, step: 글자 간격)
 function Chars({
@@ -161,8 +160,7 @@ export default function HeroBanner() {
               fontSize: "clamp(1.4rem, 4.8vw, 2.9rem)",
             }}
           >
-            {/* 유입 키워드가 있으면 클라이언트에서 맞춤 문구로 교체 (예: "인테리어 홈페이지 제작") */}
-            <HeroLine1 fallback={LINE1} />
+            <Chars text={LINE1} />
           </span>
           <span
             className="hero-line2"
