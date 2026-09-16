@@ -13,14 +13,9 @@
  */
 export function looksLikePhone(v: string): boolean {
   const digits = v.replace(/\D/g, '')
-  // 8자리부터 받는 이유 — 1588-1234 같은 대표번호가 여덟 자리다.
-  // 사업자 문의에서 회사 대표번호를 적는 경우가 있어 막지 않는다.
-  return digits.length >= 8 && digits.length <= 15
-}
-
-/** 1588·1600·1800 처럼 네 자리 국번으로 시작하는 대표번호 */
-function isServiceNumber(d: string): boolean {
-  return /^1[5-9]\d\d$/.test(d.slice(0, 4))
+  // 7자리부터 받는다. 지역번호를 빼고 적는 시내번호(123-4567)가 일곱 자리고,
+  // 대표번호(1588-1234)가 여덟 자리다. 조이면 진짜 고객이 막힌다.
+  return digits.length >= 7 && digits.length <= 15
 }
 
 /**
@@ -38,11 +33,15 @@ export function formatPhone(v: string): string {
 
   const d = v.replace(/\D/g, '').slice(0, 11)
 
-  // 대표번호는 4-4 로 끊는다 (1588-1234). 아래 규칙에 넣으면 158-812-34 가 된다
-  if (isServiceNumber(d)) {
-    return d.length <= 4 ? d : `${d.slice(0, 4)}-${d.slice(4, 8)}`
+  // 0 으로 시작하지 않으면 지역번호가 없는 번호다 —
+  // 대표번호(1588-1234)거나 지역번호를 빼고 적은 시내번호(123-4567).
+  // 여기에 지역번호 규칙(3-3-4)을 대면 333-333-33 처럼 깨진다.
+  if (!d.startsWith('0')) {
+    if (d.length <= 4) return d
+    return `${d.slice(0, d.length <= 7 ? 3 : 4)}-${d.slice(d.length <= 7 ? 3 : 4)}`
   }
 
+  // 서울만 지역번호가 두 자리다
   if (d.startsWith('02')) {
     if (d.length <= 2) return d
     if (d.length <= 5) return `${d.slice(0, 2)}-${d.slice(2)}`
@@ -50,6 +49,7 @@ export function formatPhone(v: string): string {
     return `${d.slice(0, 2)}-${d.slice(2, 6)}-${d.slice(6, 10)}`
   }
 
+  // 휴대폰(010)과 나머지 지역번호는 셋 다 세 자리로 시작한다
   if (d.length <= 3) return d
   if (d.length <= 7) return `${d.slice(0, 3)}-${d.slice(3)}`
   if (d.length <= 10) return `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}`
