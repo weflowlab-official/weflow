@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { readStore, writeStore } from '@/lib/safeStorage'
 
 // "오늘 하루 보지 않기"를 누른 시각을 저장 — 그 값(자정 타임스탬프)이 지나기 전엔 다시 안 뜬다
 const HIDE_KEY = 'weflow_popup_hide_until'
@@ -29,7 +30,7 @@ export default function EventPopup() {
     if (closedRef.current) return // 이번 세션에 닫음
     let hideUntil = 0
     try {
-      hideUntil = Number(localStorage.getItem(HIDE_KEY) || 0)
+      hideUntil = Number(readStore('local', HIDE_KEY) || 0)
     } catch {
       /* localStorage 접근 불가(프라이빗 모드 등)면 그냥 노출 */
     }
@@ -64,7 +65,7 @@ export default function EventPopup() {
     try {
       const now = new Date()
       const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0)
-      localStorage.setItem(HIDE_KEY, String(midnight.getTime()))
+      writeStore('local', HIDE_KEY, String(midnight.getTime()))
     } catch {
       /* 저장 실패해도 닫기만 */
     }

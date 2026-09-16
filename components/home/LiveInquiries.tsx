@@ -5,6 +5,7 @@
 // 첫 도착은 보드가 보인 뒤 5~10초, 그 뒤로는 40초~2분 간격. 안 보는 동안 밀린 건 쌓아두지 않고 건너뛴다.
 // 목록은 sessionStorage 에 남겨 같은 세션에서 다시 들어와도 아까 본 문의가 그만큼 나이 먹은 채로 이어진다.
 import { useEffect, useRef, useState } from 'react'
+import { readStore, writeStore } from '@/lib/safeStorage'
 import {
   LIVE_INDUSTRIES,
   LIVE_INQUIRY_TYPES,
@@ -55,7 +56,7 @@ function makeInitialRows(now: number): Row[] {
 // 세션 저장소 — 시크릿 창·차단 설정에서는 접근 자체가 터질 수 있어 전부 try 로 감싼다
 function loadRows(now: number): Row[] | null {
   try {
-    const raw = sessionStorage.getItem(STORAGE_KEY)
+    const raw = readStore('session', STORAGE_KEY)
     if (!raw) return null
     const rows = JSON.parse(raw) as Row[]
     if (!Array.isArray(rows) || rows.length === 0) return null
@@ -67,7 +68,7 @@ function loadRows(now: number): Row[] | null {
 }
 function saveRows(rows: Row[]) {
   try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(rows.slice(0, VISIBLE)))
+    writeStore('session', STORAGE_KEY, JSON.stringify(rows.slice(0, VISIBLE)))
   } catch {
     /* 저장 못 해도 화면엔 지장 없다 */
   }

@@ -1,16 +1,17 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
+import { readStore, writeStore, removeStore } from '@/lib/safeStorage'
 import { captureAttribution } from '@/lib/attribution'
 
 // 방문자 ID — 기기당 하루 1회만 카운트 (영구 기기ID[localStorage] + 한국시간 날짜)
 // 같은 기기·같은 날의 여러 방문/탭은 하나로 묶여 방문자 1명으로 집계된다.
 function getSessionId(): string {
   const KEY = 'weflow_did'
-  let did = localStorage.getItem(KEY)
+  let did = readStore('local', KEY)
   if (!did) {
     did = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
-    localStorage.setItem(KEY, did)
+    writeStore('local', KEY, did)
   }
   // 한국시간(KST, UTC+9) 기준 날짜(YYYY-MM-DD)
   const day = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10)
@@ -22,7 +23,7 @@ function trackingDisabled(): boolean {
   const host = window.location.hostname
   if (host === 'localhost' || host === '127.0.0.1' || host.endsWith('.local')) return true
   if (host.endsWith('.vercel.app')) return true // vercel 기본·미리보기 도메인 제외 (실제 방문은 커스텀 도메인)
-  return localStorage.getItem('weflow_notrack') === '1'
+  return readStore('local', 'weflow_notrack') === '1'
 }
 
 export default function PageTracker() {
@@ -69,8 +70,8 @@ export default function PageTracker() {
 
     // 개발/본인 방문 제외: URL 플래그(?notrack=1 / ?track=1)로 opt-out 토글
     const params = new URLSearchParams(window.location.search)
-    if (params.get('notrack') === '1') localStorage.setItem('weflow_notrack', '1')
-    if (params.get('track') === '1') localStorage.removeItem('weflow_notrack')
+    if (params.get('notrack') === '1') writeStore('local', 'weflow_notrack', '1')
+    if (params.get('track') === '1') removeStore('local', 'weflow_notrack')
     if (trackingDisabled()) return
 
     // 이전 페이지 체류시간 마감 후 새 페이지용으로 스크롤 초기화

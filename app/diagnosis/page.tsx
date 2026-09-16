@@ -7,6 +7,7 @@ import { attributionLine } from '@/lib/attribution'
 import { markNaverLead } from '@/lib/naverConversion'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
+import { readStore, writeStore, removeStore } from '@/lib/safeStorage'
 
 export default function DiagnosisPage() {
   const router = useRouter()
@@ -22,7 +23,7 @@ export default function DiagnosisPage() {
   // 폼 자동 채움 — 맞춤 플랜 위젯에서 넘어온 값만 (방문자가 직접 고른 답).
   // 유입 키워드로는 채우지 않는다 — 검색어만으로 제작 종류를 단정할 수 없다.
   useEffect(() => {
-    const raw = sessionStorage.getItem('weflow_quiz_prefill')
+    const raw = readStore('session', 'weflow_quiz_prefill')
     if (!raw) return
     try {
       const p = JSON.parse(raw)
@@ -35,7 +36,7 @@ export default function DiagnosisPage() {
         note: p.note || f.note,
       }))
     } catch {}
-    sessionStorage.removeItem('weflow_quiz_prefill')
+    removeStore('session', 'weflow_quiz_prefill')
   }, [])
 
   // 작성 "중간"인 사람만 이탈 모달 대상: 뭔가 입력했지만 필수항목은 아직 미완성
@@ -43,10 +44,10 @@ export default function DiagnosisPage() {
     const touched = !!(form.name || form.phone || form.type || form.industry || form.note || form.agree)
     const complete = !!(form.name && form.phone && form.type && form.agree)
     if (touched && !complete) {
-      sessionStorage.setItem('weflow_form_intent', '1')
+      writeStore('session', 'weflow_form_intent', '1')
       window.dispatchEvent(new Event('weflow-intent'))  // 뒤로가기 트랩 무장
     } else {
-      sessionStorage.removeItem('weflow_form_intent')
+      removeStore('session', 'weflow_form_intent')
     }
   }, [form])
 
@@ -86,7 +87,7 @@ export default function DiagnosisPage() {
       const saved = wasSaved(await res.json().catch(() => null))
       setShowErrors(false)
       // 이탈 모달(뒤로가기 트랩)을 먼저 푼다
-      sessionStorage.removeItem('weflow_form_intent')
+      removeStore('session', 'weflow_form_intent')
       // 네이버 전환은 완료 주소(/diagnosis/success)에서 쏜다. 여기서는 표시만 남긴다 —
       // 허니팟에 걸려 저장되지 않은 요청에도 완료 화면은 똑같이 보여 주되,
       // 광고 전환으로는 세지 않기 위해서다.

@@ -5,6 +5,7 @@ import { projectTypes } from '@/data/common'
 import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
 import { wasSaved } from '@/lib/leadInput'
+import { writeStore, removeStore } from '@/lib/safeStorage'
 import Reveal from '@/components/Reveal'
 import SplitText from '@/components/SplitText'
 
@@ -37,10 +38,10 @@ export default function BookingPage() {
     const complete = !!(selectedDay && (selectedSlot || customTime) &&
       form.name && form.phone && form.type && form.agree)
     if (touched && !complete) {
-      sessionStorage.setItem('weflow_form_intent', '1')
+      writeStore('session', 'weflow_form_intent', '1')
       window.dispatchEvent(new Event('weflow-intent'))  // 뒤로가기 트랩 무장
     } else {
-      sessionStorage.removeItem('weflow_form_intent')
+      removeStore('session', 'weflow_form_intent')
     }
   }, [selectedDay, selectedSlot, customTime, form])
 
@@ -121,7 +122,7 @@ export default function BookingPage() {
       // 완료 화면이 그려지기 전에 미리 상단으로 (스크롤이 움직이는 게 안 보이도록)
       window.scrollTo(0, 0)
       setSubmitted(true)
-      sessionStorage.removeItem('weflow_form_intent')
+      removeStore('session', 'weflow_form_intent')
     } catch {
       setLoading(false)
       setSubmitError(true)
