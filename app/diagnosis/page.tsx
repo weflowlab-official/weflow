@@ -54,13 +54,21 @@ export default function DiagnosisPage() {
     }
   }, [form])
 
+  // 서버(lib/leadInput.ts 의 looksLikePhone)와 같은 기준으로 먼저 거른다.
+  // 화면에서 안 막으면 서버까지 갔다가 400 으로 돌아오는데,
+  // 그러면 "연락처가 짧다" 가 아니라 "전송 실패" 로 보여 고객이 원인을 모른다.
+  const phoneOk = (v: string) => {
+    const digits = v.replace(/\D/g, '')
+    return digits.length >= 9 && digits.length <= 15
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.name || !form.phone || !form.type || !form.agree) {
+    if (!form.name || !phoneOk(form.phone) || !form.type || !form.agree) {
       setShowErrors(true)
       const firstId =
         !form.name ? 'dg-name'
-        : !form.phone ? 'dg-phone'
+        : !phoneOk(form.phone) ? 'dg-phone'
         : !form.type ? 'dg-type'
         : 'dg-agree'
       const el = document.getElementById(firstId)
@@ -84,8 +92,12 @@ export default function DiagnosisPage() {
           note: [form.note, attr && `유입: ${attr}`].filter(Boolean).join('\n'),
         }),
       })
-      // 상태 코드를 그대로 들고 나간다 — 아래 catch 에서 사유별 안내를 고른다
-      if (!res.ok) throw new Error(String(res.status))
+      // 서버가 사유를 적어 보내면(400 등) 그 문장을 그대로 쓴다.
+      // 없으면 상태 코드만 들고 나가 아래 catch 에서 안내를 고른다.
+      if (!res.ok) {
+        const reason = await res.json().then(d => d?.error).catch(() => null)
+        throw new Error(typeof reason === 'string' && reason ? reason : String(res.status))
+      }
       // 허니팟에 걸린 요청에도 성공으로 답하므로 res.ok 만으로는 저장 여부를 알 수 없다 —
       // 실제로 저장된 응답에만 문의 id 가 들어 있다 (lib/leadInput.ts 의 wasSaved 설명 참고)
       const saved = wasSaved(await res.json().catch(() => null))
@@ -103,10 +115,14 @@ export default function DiagnosisPage() {
       const code = e instanceof Error ? e.message : ''
       // 429 는 고장이 아니라 "너무 자주 눌렀다" 는 뜻이다. 실패로 안내하면
       // 고객이 계속 다시 누르고, 그러면 제한이 더 길어진다.
+      // 숫자면 상태 코드(사유 없음), 문장이면 서버가 적어 보낸 사유다
+      const isStatus = /^\d{3}$/.test(code)
       setSubmitError(
         code === '429'
           ? '요청이 몰려 잠시 막혔어요. 1분 뒤에 다시 눌러 주세요.'
-          : `전송에 실패했어요. 잠시 후 다시 시도해 주세요.${code ? ` (${code})` : ''}`,
+          : !isStatus && code
+            ? code
+            : `전송에 실패했어요. 잠시 후 다시 시도해 주세요.${code ? ` (${code})` : ''}`,
       )
     }
   }
@@ -149,6 +165,9 @@ export default function DiagnosisPage() {
                   <label className="form-label">연락처 <span style={{ color: '#ef4444' }}>*</span></label>
                   <input id="dg-phone" className="form-input" placeholder="010-0000-0000" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
                   {showErrors && !form.phone && <p className="field-error">연락처를 입력해 주세요</p>}
+                  {showErrors && !!form.phone && !phoneOk(form.phone) && (
+                    <p className="field-error">연락처를 다시 확인해 주세요</p>
+                  )}
                 </div>
 
                 <div className="dg-field">
