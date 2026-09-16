@@ -151,7 +151,7 @@ export default function DiagnosisPage() {
                 <div className="dg-field">
                   <label className="form-label">이름 <span style={{ color: '#ef4444' }}>*</span></label>
                   <input id="dg-name" className="form-input" placeholder="홍길동" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
-                  {showErrors && !form.name && <p className="field-error">이름을 입력해 주세요</p>}
+                  {showErrors && !form.name && <p className="field-error">* 이름을 입력해 주세요</p>}
                 </div>
 
                 <div className="dg-field">
@@ -159,9 +159,9 @@ export default function DiagnosisPage() {
                   <input id="dg-phone" className="form-input" type="tel" inputMode="tel" autoComplete="tel"
                     placeholder="010-0000-0000" maxLength={13} value={form.phone}
                     onChange={e => setForm(f => ({ ...f, phone: formatPhone(e.target.value) }))} />
-                  {showErrors && !form.phone && <p className="field-error">연락처를 입력해 주세요</p>}
+                  {showErrors && !form.phone && <p className="field-error">* 연락처를 입력해 주세요</p>}
                   {showErrors && !!form.phone && !isMobilePhone(form.phone) && (
-                    <p className="field-error">연락처 형식으로 입력해주세요</p>
+                    <p className="field-error">* 연락처 형식으로 입력해주세요</p>
                   )}
                 </div>
 
@@ -171,7 +171,7 @@ export default function DiagnosisPage() {
                     <option value="">선택해 주세요</option>
                     {projectTypes.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
-                  {showErrors && !form.type && <p className="field-error">제작 종류를 선택해 주세요</p>}
+                  {showErrors && !form.type && <p className="field-error">* 제작 종류를 선택해 주세요</p>}
                 </div>
 
                 {/* 자유 입력 — 원하는 것을 미리 적어 두면 상담이 빨라진다 (선택) */}
@@ -214,7 +214,7 @@ export default function DiagnosisPage() {
                     </div>
                   </div>
                   {showErrors && !form.agree && (
-                    <p className="field-error">개인정보 수집에 동의해 주세요</p>
+                    <p className="field-error">* 개인정보 수집에 동의해 주세요</p>
                   )}
                 </div>
 
