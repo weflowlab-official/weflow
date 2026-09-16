@@ -7,6 +7,7 @@ import { attributionLine } from '@/lib/attribution'
 import { markNaverLead } from '@/lib/naverConversion'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
+import { formatPhone, looksLikePhone } from '@/lib/phone'
 import { readStore, writeStore, removeStore } from '@/lib/safeStorage'
 
 export default function DiagnosisPage() {
@@ -54,21 +55,13 @@ export default function DiagnosisPage() {
     }
   }, [form])
 
-  // 서버(lib/leadInput.ts 의 looksLikePhone)와 같은 기준으로 먼저 거른다.
-  // 화면에서 안 막으면 서버까지 갔다가 400 으로 돌아오는데,
-  // 그러면 "연락처가 짧다" 가 아니라 "전송 실패" 로 보여 고객이 원인을 모른다.
-  const phoneOk = (v: string) => {
-    const digits = v.replace(/\D/g, '')
-    return digits.length >= 9 && digits.length <= 15
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.name || !phoneOk(form.phone) || !form.type || !form.agree) {
+    if (!form.name || !looksLikePhone(form.phone) || !form.type || !form.agree) {
       setShowErrors(true)
       const firstId =
         !form.name ? 'dg-name'
-        : !phoneOk(form.phone) ? 'dg-phone'
+        : !looksLikePhone(form.phone) ? 'dg-phone'
         : !form.type ? 'dg-type'
         : 'dg-agree'
       const el = document.getElementById(firstId)
@@ -163,9 +156,11 @@ export default function DiagnosisPage() {
 
                 <div className="dg-field">
                   <label className="form-label">연락처 <span style={{ color: '#ef4444' }}>*</span></label>
-                  <input id="dg-phone" className="form-input" placeholder="010-0000-0000" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
+                  <input id="dg-phone" className="form-input" type="tel" inputMode="tel" autoComplete="tel"
+                    placeholder="010-0000-0000" value={form.phone}
+                    onChange={e => setForm(f => ({ ...f, phone: formatPhone(e.target.value) }))} />
                   {showErrors && !form.phone && <p className="field-error">연락처를 입력해 주세요</p>}
-                  {showErrors && !!form.phone && !phoneOk(form.phone) && (
+                  {showErrors && !!form.phone && !looksLikePhone(form.phone) && (
                     <p className="field-error">연락처를 다시 확인해 주세요</p>
                   )}
                 </div>

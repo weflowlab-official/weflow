@@ -1,11 +1,15 @@
 // 문의·예약 폼으로 들어온 값을 저장 전에 한 번 거르는 곳.
 //
+// 연락처 검사는 lib/phone.ts 를 쓴다 — 입력칸도 같은 함수를 쓰므로 판단이 갈리지 않는다.
+//
 // 폼 화면에서도 검사하지만 그건 브라우저 안에서만 도는 것이라, 주소만 알면
 // 그 검사를 통째로 건너뛰고 API 를 직접 부를 수 있다. 실제로 지켜지는 건 여기뿐이다.
 //
 // 원칙 하나 — 길면 자르고, 없으면 막는다.
 // 글자 수가 넘쳤다고 문의를 반려하면 진짜 고객을 잃는다. 저장이 목적이므로 잘라서 받는다.
 // 반대로 이름·연락처가 비었거나 개인정보 동의가 없으면 그건 받으면 안 되는 것이라 막는다.
+
+import { looksLikePhone } from './phone'
 
 /** 필드별 최대 글자 수 — 화면 입력칸이 쓰는 범위보다 넉넉하되 무한정은 아니게 */
 const LIMITS = {
@@ -75,16 +79,6 @@ function clamp(v: unknown, max: number): string {
  * 자동완성 후보에 없는 이름을 쓰고, 입력칸에도 autoComplete="off" 를 건다.
  */
 export const HONEYPOT_FIELD = 'contact_reference'
-
-/**
- * 연락처에 숫자가 최소 몇 개는 있어야 한다.
- * 형식을 엄격하게 잡지 않는 이유 — 010-1234-5678, 01012345678, +82 10 …
- * 쓰시는 표기가 제각각이라 지나치게 조이면 멀쩡한 번호가 막힌다.
- */
-function looksLikePhone(v: string): boolean {
-  const digits = v.replace(/\D/g, '')
-  return digits.length >= 9 && digits.length <= 15
-}
 
 /** 폼 본문 한 덩어리를 검사해 저장할 값으로 바꾼다 */
 export function parseLead(body: unknown): LeadParse {
