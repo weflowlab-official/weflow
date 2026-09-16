@@ -7,7 +7,7 @@ import { attributionLine } from '@/lib/attribution'
 import { markNaverLead } from '@/lib/naverConversion'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
-import { formatPhone, looksLikePhone } from '@/lib/phone'
+import { formatPhone, isMobilePhone } from '@/lib/phone'
 import { readStore, writeStore, removeStore } from '@/lib/safeStorage'
 
 export default function DiagnosisPage() {
@@ -57,11 +57,11 @@ export default function DiagnosisPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.name || !looksLikePhone(form.phone) || !form.type || !form.agree) {
+    if (!form.name || !isMobilePhone(form.phone) || !form.type || !form.agree) {
       setShowErrors(true)
       const firstId =
         !form.name ? 'dg-name'
-        : !looksLikePhone(form.phone) ? 'dg-phone'
+        : !isMobilePhone(form.phone) ? 'dg-phone'
         : !form.type ? 'dg-type'
         : 'dg-agree'
       const el = document.getElementById(firstId)
@@ -157,11 +157,11 @@ export default function DiagnosisPage() {
                 <div className="dg-field">
                   <label className="form-label">연락처 <span style={{ color: '#ef4444' }}>*</span></label>
                   <input id="dg-phone" className="form-input" type="tel" inputMode="tel" autoComplete="tel"
-                    placeholder="010-0000-0000" value={form.phone}
+                    placeholder="010-0000-0000" maxLength={13} value={form.phone}
                     onChange={e => setForm(f => ({ ...f, phone: formatPhone(e.target.value) }))} />
                   {showErrors && !form.phone && <p className="field-error">연락처를 입력해 주세요</p>}
-                  {showErrors && !!form.phone && !looksLikePhone(form.phone) && (
-                    <p className="field-error">연락처를 다시 확인해 주세요</p>
+                  {showErrors && !!form.phone && !isMobilePhone(form.phone) && (
+                    <p className="field-error">연락처 형식으로 입력해주세요</p>
                   )}
                 </div>
 

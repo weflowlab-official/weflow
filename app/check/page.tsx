@@ -9,6 +9,7 @@ import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
+import { formatPhone, isMobilePhone } from '@/lib/phone'
 
 /**
  * 자동 점검 도구 — 방문자가 자기 사이트 주소를 넣으면
@@ -60,13 +61,6 @@ function gradeWord(n: number) {
 }
 
 /** 숫자만 남겨 11자리로 자르고 010-0000-0000 꼴로 하이픈을 넣는다 */
-function formatPhone(v: string) {
-  const d = v.replace(/\D/g, '').slice(0, 11)
-  if (d.length < 4) return d
-  if (d.length < 8) return `${d.slice(0, 3)}-${d.slice(3)}`
-  return `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`
-}
-
 /** 결과 점수가 0 → 목표값으로 차오르는 연출 */
 function useCountUp(target: number, run: boolean) {
   const [value, setValue] = useState(0)
@@ -169,7 +163,7 @@ export default function CheckPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const phoneOk = lead.phone.replace(/\D/g, '').length === 11
+  const phoneOk = isMobilePhone(lead.phone)
 
   const submitLead = async (e: React.FormEvent) => {
     e.preventDefault()
