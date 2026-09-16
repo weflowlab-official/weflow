@@ -9,7 +9,7 @@ import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
-import { formatPhone, isMobilePhone } from '@/lib/phone'
+import { formatPhone, isValidPhone } from '@/lib/phone'
 
 /**
  * 자동 점검 도구 — 방문자가 자기 사이트 주소를 넣으면
@@ -163,7 +163,7 @@ export default function CheckPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const phoneOk = isMobilePhone(lead.phone)
+  const phoneOk = isValidPhone(lead.phone)
 
   const submitLead = async (e: React.FormEvent) => {
     e.preventDefault()
