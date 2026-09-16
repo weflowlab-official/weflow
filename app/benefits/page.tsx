@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: '/benefits',
     // 전용 og 그림이 아직 없다 — 루트와 같은 그림을 명시해 미리보기가 비지 않게 한다
-    images: [{ url: '/images/main/og-logo-2.webp', width: 1200, height: 630 }],
+    images: [{ url: '/images/main/og-logo-2.jpg', width: 1200, height: 630 }],
   },
 }
 

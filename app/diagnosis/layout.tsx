@@ -13,7 +13,7 @@ export const metadata: Metadata = {
       '지금 쓰는 홈페이지를 무료로 검토받고, 업종에 맞는 개선 방향을 상담받으세요.',
     url: '/diagnosis',
     // openGraph 를 정의하면 루트의 것을 통째로 덮어쓴다 — 이미지도 여기서 다시 지정해야 한다
-    images: [{ url: '/images/og/diagnosis.webp', width: 1200, height: 630 }],
+    images: [{ url: '/images/og/diagnosis.jpg', width: 1200, height: 630 }],
   },
 }
 

@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     description: '최신 기술로 만드는 홈페이지 속도·보안·검색 노출까지, 원하는 기능 그대로 1:1 전담 제작합니다.',
     url: 'https://weflowlab.kr',
     siteName: 'WEFLOW',
-    images: [{ url: '/images/main/og-logo-2.webp', width: 1200, height: 630 }],
+    images: [{ url: '/images/main/og-logo-2.jpg', width: 1200, height: 630 }],
     type: 'website',
     locale: 'ko_KR',
   },
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'WEFLOW | 홈페이지 제작 위플로우',
     description: '최신 기술로 만드는 홈페이지 속도·보안·검색 노출까지, 원하는 기능 그대로 1:1 전담 제작합니다.',
-    images: ['/images/main/og-logo-2.webp'],
+    images: ['/images/main/og-logo-2.jpg'],
   },
   verification: {
     other: {
@@ -106,7 +106,7 @@ const ORGANIZATION_JSON_LD = {
   alternateName: '위플로우',
   url: 'https://weflowlab.kr',
   logo: 'https://weflowlab.kr/logo.png',
-  image: 'https://weflowlab.kr/images/main/og-logo-2.webp',
+  image: 'https://weflowlab.kr/images/main/og-logo-2.jpg',
   // 이 채널들의 주인이 weflowlab.kr 이라는 선언.
   // 브랜드명을 검색하면 카카오채널·기업정보 사이트·채용 사이트가 제각각 잡히는데,
   // 이게 없으면 검색엔진에는 서로 무관한 문서로 보인다. 채널이 늘면 data/common.ts 만 고친다.

@@ -32,7 +32,7 @@ export async function generateMetadata({
       description: p.detail!.summary,
       // 사례 스크린샷 대신 /cases 목록과 같은 og 그림을 쓴다.
       // 스크린샷은 세로로 긴 페이지 전체 캡처라 1200×630 으로 잘리면 윗부분만 남는다.
-      images: [{ url: '/images/og/cases.webp', width: 1200, height: 630 }],
+      images: [{ url: '/images/og/cases.jpg', width: 1200, height: 630 }],
     },
   }
 }

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title: '회사소개 · WEFLOW',
     description: '사람과 기술이 함께 흘러가는 WEFLOW, 이름에 담은 뜻과 일하는 방식을 소개합니다.',
     url: '/about',
-    images: [{ url: '/images/og/about.webp', width: 1200, height: 630 }],
+    images: [{ url: '/images/og/about.jpg', width: 1200, height: 630 }],
   },
 };
 

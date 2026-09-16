@@ -30,7 +30,7 @@ export const metadata: Metadata = {
       "홈페이지와 랜딩페이지는 뭐가 다른지, 관리자 페이지는 왜 필요한지 정리했습니다.",
     url: "/guide",
     // openGraph 를 정의하면 루트의 것을 통째로 덮어쓴다 — 이미지도 여기서 다시 지정해야 한다
-    images: [{ url: "/images/og/guide.webp", width: 1200, height: 630 }],
+    images: [{ url: "/images/og/guide.jpg", width: 1200, height: 630 }],
   },
 };
 

@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     url: "/cases",
     // openGraph 를 정의하면 루트(app/layout.tsx)의 것을 통째로 덮어쓴다.
     // 이미지를 여기 적지 않으면 카톡·네이버 미리보기에 그림이 아예 안 나온다.
-    images: [{ url: "/images/og/cases.webp", width: 1200, height: 630 }],
+    images: [{ url: "/images/og/cases.jpg", width: 1200, height: 630 }],
   },
 };
 

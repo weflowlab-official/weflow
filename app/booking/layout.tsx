@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     description: '원하는 날짜와 시간을 골라 WEFLOW 홈페이지 제작 상담을 예약하세요.',
     url: '/booking',
     // 전용 og 그림이 아직 없다. 적지 않으면 루트 것까지 덮여 미리보기가 빈칸이 된다
-    images: [{ url: '/images/main/og-logo-2.webp', width: 1200, height: 630 }],
+    images: [{ url: '/images/main/og-logo-2.jpg', width: 1200, height: 630 }],
   },
 }
 
