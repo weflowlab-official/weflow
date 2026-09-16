@@ -16,7 +16,10 @@ export default function DiagnosisPage() {
   const [honeypot, setHoneypot] = useState('')
   const [loading, setLoading] = useState(false)
   const [showErrors, setShowErrors] = useState(false)
-  const [submitError, setSubmitError] = useState(false)
+  // 실패 사유를 담는다. 빈 문자열이면 실패 없음.
+  // 예전엔 true/false 라 어떤 이유로 막혔는지 화면에서 알 수 없었고,
+  // 고객이 "안 돼요" 라고만 알려 주면 원인을 추측할 수밖에 없었다.
+  const [submitError, setSubmitError] = useState('')
   // 개인정보 동의 안내문 펼침 — 커튼장인 폼과 같은 '내용 보기 / 닫기' 토글
   const [privacyOpen, setPrivacyOpen] = useState(false)
 
@@ -68,7 +71,7 @@ export default function DiagnosisPage() {
       return
     }
     setLoading(true)
-    setSubmitError(false)
+    setSubmitError('')
     try {
       // 유입 경로(광고 키워드·검색·리퍼러)를 메모에 붙여 관리자에서 문의별로 보이게 한다
       const attr = attributionLine()
@@ -81,7 +84,8 @@ export default function DiagnosisPage() {
           note: [form.note, attr && `유입: ${attr}`].filter(Boolean).join('\n'),
         }),
       })
-      if (!res.ok) throw new Error('request failed')
+      // 상태 코드를 그대로 들고 나간다 — 아래 catch 에서 사유별 안내를 고른다
+      if (!res.ok) throw new Error(String(res.status))
       // 허니팟에 걸린 요청에도 성공으로 답하므로 res.ok 만으로는 저장 여부를 알 수 없다 —
       // 실제로 저장된 응답에만 문의 id 가 들어 있다 (lib/leadInput.ts 의 wasSaved 설명 참고)
       const saved = wasSaved(await res.json().catch(() => null))
@@ -94,9 +98,16 @@ export default function DiagnosisPage() {
       if (saved) markNaverLead()
       // loading 은 끄지 않는다 — 화면이 바뀔 때까지 버튼이 다시 눌리지 않게 둔다
       router.push('/diagnosis/success')
-    } catch {
+    } catch (e) {
       setLoading(false)
-      setSubmitError(true)
+      const code = e instanceof Error ? e.message : ''
+      // 429 는 고장이 아니라 "너무 자주 눌렀다" 는 뜻이다. 실패로 안내하면
+      // 고객이 계속 다시 누르고, 그러면 제한이 더 길어진다.
+      setSubmitError(
+        code === '429'
+          ? '요청이 몰려 잠시 막혔어요. 1분 뒤에 다시 눌러 주세요.'
+          : `전송에 실패했어요. 잠시 후 다시 시도해 주세요.${code ? ` (${code})` : ''}`,
+      )
     }
   }
 
@@ -200,7 +211,7 @@ export default function DiagnosisPage() {
                 {submitError && (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', color: '#ef4444', fontSize: '0.95rem', fontWeight: 500 }}>
                     <XCircle size={17} strokeWidth={2.2} style={{ flexShrink: 0 }} />
-                    전송에 실패했어요. 잠시 후 다시 시도해 주세요.
+                    {submitError}
                   </div>
                 )}
                 {/* 대체 연락 수단 — 폼이 부담스러우면 전화로 */}
