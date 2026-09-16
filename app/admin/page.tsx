@@ -2815,17 +2815,14 @@ export default function AdminPage() {
       .finally(() => setPvLoading(false));
   }, [authed, tab]);
 
-  // 자동 갱신: 20초 폴링 + 탭 재포커스 시 (조용히 갱신)
-  useEffect(() => {
-    if (!authed) return;
-    const id = setInterval(() => load(true), 20000);
-    const onFocus = () => load(true);
-    window.addEventListener("focus", onFocus);
-    return () => {
-      clearInterval(id);
-      window.removeEventListener("focus", onFocus);
-    };
-  }, [authed, load]);
+  // 자동 갱신은 두지 않는다 — 목록은 새로고침 버튼으로만 다시 불러온다.
+  //
+  // 예전에는 20초 폴링 + 탭 재포커스 갱신이 있었는데, 관리자 탭을 열어두기만 해도
+  // 백그라운드에서 계속 /api/inquiries 를 쳤다. 하루 4,320회·한 달 13만 회라
+  // 방문자 수(월 1,500 세션)와 무관하게 Vercel 함수 사용량을 혼자 다 먹었다.
+  // 2026-09-16 에 Fluid Active CPU 무료 한도(4시간)를 100% 채워 프로젝트 자동 정지
+  // 경고를 받은 원인이다. 실시간성이 꼭 필요해지면 폴링을 되살리기보다
+  // document.visibilityState 가 'visible' 일 때만 도는 형태로 넣을 것.
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
