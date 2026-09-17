@@ -185,7 +185,9 @@ export const portfolios: Portfolio[] = [
     detail: {
       summary: '타이어 가격을 묻지 않아도 알 수 있게 만들었습니다.',
       duration: '1주',
-      poster: { from: '#0f1113', to: '#1c4a44', ink: '#eefbf7', mark: 'TIRECAMP' },
+      // 사이트 포인트 색(#447C8E)을 한 단계 밝힌 청록. 글자가 앉는 좌상단(from)은
+      // 흰 글씨가 읽히도록 조금 진하게 두고, 오른쪽 아래로 가며 밝아지게 한다
+      poster: { from: '#4E8CA0', to: '#6FB4C6', ink: '#ffffff', mark: 'TIRECAMP' },
       quotes: [
         '차종이나 사이즈로 타이어를 검색할 수 있으면 좋겠어요',
         '관리자 페이지에서 차량 데이터랑 타이어 정보·가격을 직접 바꾸고 싶어요',
