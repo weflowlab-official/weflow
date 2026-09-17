@@ -226,7 +226,7 @@ export const portfolios: Portfolio[] = [
         '문의 접수',
       ],
       results: [
-        '/images/cases/cases-tirecamp/cases-tirecamp-02.webp',
+        '/images/cases/cases-tirecamp/cases-tirecamp-01.webp',
         '/images/cases/cases-tirecamp/cases-tirecamp-03.webp',
         '/images/cases/cases-tirecamp/cases-tirecamp-07.webp',
         '/images/cases/cases-tirecamp/cases-tirecamp-10.webp',
