@@ -86,7 +86,7 @@ export interface Portfolio {
  */
 // 칩 목록 — 아직 사례가 없는 업종도 포함해 보여준다 (사례는 채워지는 대로 추가)
 export const categoryOrder = [
-  '기업/비즈니스', '쇼핑몰/결제', '인테리어', '캠핑/레저', '차량/모빌리티', '보험',
+  '기업/비즈니스', '쇼핑몰/결제', '인테리어', '캠핑/레저', '차량/타이어', '보험',
   '의료/병원', '뷰티/미용', '학원/교육', '음식점/카페', '법률/세무', '부동산',
   '펜션/숙박', '헬스/피트니스', '반려동물', '제조/공장', '웨딩/스튜디오', '청소/이사',
 ]
@@ -154,6 +154,83 @@ export const portfolios: Portfolio[] = [
         '/images/cases/cases-atelier/cases-atelier-08.webp',
         '/images/cases/cases-atelier/cases-atelier-09.webp',
         '/images/cases/cases-atelier/cases-atelier-10.webp',
+      ],
+    },
+  },
+  {
+    slug: 'tirecamp',
+    name: '타이어캠프',
+    category: '차량/타이어',
+    plan: '홈페이지',
+    desc: '차종·사이즈로 찾고 가격까지 바로 보는 타이어 교체 전문',
+    url: 'https://tirecamp365.co.kr/',
+    images: [
+      '/images/cases/cases-tirecamp/cases-tirecamp-01.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-02.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-03.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-04.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-05.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-06.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-07.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-08.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-09.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-10.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-11.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-12.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-13.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-14.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-15.webp',
+      '/images/cases/cases-tirecamp/cases-tirecamp-16.webp',
+    ],
+    detail: {
+      summary: '타이어 가격을 묻지 않아도 알 수 있게 만들었습니다.',
+      duration: '1주',
+      poster: { from: '#0f1113', to: '#1c4a44', ink: '#eefbf7', mark: 'TIRECAMP' },
+      quotes: [
+        '차종이나 사이즈로 타이어를 검색할 수 있으면 좋겠어요',
+        '관리자 페이지에서 차량 데이터랑 타이어 정보·가격을 직접 바꾸고 싶어요',
+        '가격표가 한눈에 들어오고 읽기 쉬웠으면 해요',
+        '공지사항이랑 FAQ, 팝업도 쉽게 바꿀 수 있게요',
+        '블랙&화이트로 깔끔하고 고급스럽게, 포인트는 청록빛으로',
+      ],
+      background:
+        '타이어는 내 차에 맞는 규격을 모르면 고르기 어렵고, 가격은 전화해 봐야 아는 경우가 많습니다. 그 두 가지를 화면에서 먼저 해결해 달라는 요청이었습니다.',
+      points: [
+        {
+          title: '차종으로도, 사이즈로도',
+          body:
+            '규격을 아는 분은 사이즈로, 모르는 분은 차종과 연식으로 찾습니다. 두 길을 나란히 두어 어느 쪽에서 시작하든 같은 결과에 닿습니다.',
+        },
+        {
+          title: '가격표를 그림이 아니라 표로',
+          body:
+            '이미지로 만든 가격표는 확대해야 읽히고 값을 고칠 때마다 다시 만들어야 합니다. 표로 짜서 휴대폰에서도 그대로 읽히고, 관리자 페이지에서 숫자만 바꾸면 됩니다.',
+        },
+        {
+          title: '재고와 가격을 직접',
+          body:
+            '차량 데이터, 타이어 정보, 공임까지 사장님이 관리자 페이지에서 고칩니다. 값이 바뀔 때마다 연락하지 않아도 됩니다.',
+        },
+        {
+          title: '검정과 흰색, 청록 한 점',
+          body:
+            '색을 절제해 타이어와 숫자가 앞에 서게 하고, 누를 곳에만 청록을 남겼습니다. 어디를 눌러야 하는지 헤매지 않습니다.',
+        },
+      ],
+      features: [
+        '차종·사이즈 타이어 검색',
+        '관리자 페이지',
+        '가격·재고 직접 수정',
+        '공지·FAQ·팝업 관리',
+        '고객 후기',
+        '문의 접수',
+      ],
+      results: [
+        '/images/cases/cases-tirecamp/cases-tirecamp-02.webp',
+        '/images/cases/cases-tirecamp/cases-tirecamp-03.webp',
+        '/images/cases/cases-tirecamp/cases-tirecamp-07.webp',
+        '/images/cases/cases-tirecamp/cases-tirecamp-10.webp',
+        '/images/cases/cases-tirecamp/cases-tirecamp-12.webp',
       ],
     },
   },
@@ -277,7 +354,7 @@ export const portfolios: Portfolio[] = [
   {
     slug: 'ksmobility',
     name: 'OO맨',
-    category: '차량/모빌리티',
+    category: '차량/타이어',
     plan: '랜딩페이지',
     desc: '프리미엄 특장 카니발 전문',
     url: 'https://teukjangman.kr/',
@@ -344,7 +421,7 @@ export const portfolios: Portfolio[] = [
   {
     slug: 'hrentcar',
     name: 'H렌터카',
-    category: '차량/모빌리티',
+    category: '차량/타이어',
     plan: '홈페이지',
     desc: '경기·서울 전 지역 합리적인 가격의 렌터카',
     url: 'https://1666-6304.com/',
@@ -575,7 +652,7 @@ export const portfolios: Portfolio[] = [
   {
     slug: 'ruricompany',
     name: 'OO컴퍼니',
-    category: '차량/모빌리티',
+    category: '차량/타이어',
     plan: '랜딩페이지',
     desc: '신차 할부 · 리스 · 장기렌트 상담',
     url: 'https://ruricompany.vercel.app/',
@@ -709,16 +786,6 @@ export const portfolios: Portfolio[] = [
     desc: '시공 사례 갤러리 중심의 인테리어 홈페이지',
     url: '',
     images: ['/images/cases/samples/sample-interior-1.webp'],
-    placeholder: true,
-  },
-  {
-    slug: 'sample-car-1',
-    name: 'OO오토케어',
-    category: '차량/모빌리티',
-    plan: '홈페이지',
-    desc: '수입차 정비·디테일링 예약 문의 홈페이지',
-    url: '',
-    images: ['/images/cases/samples/sample-car-1.webp'],
     placeholder: true,
   },
   {
