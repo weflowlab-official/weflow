@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { portfolios, categoryOrder, type Portfolio } from '@/data/cases'
@@ -12,16 +12,35 @@ const PHOTO_ASPECT = '2.05 / 1'
 function PortfolioCard({ p, from }: { p: Portfolio; from?: string }) {
   const [index, setIndex] = useState(0)
   const [hovered, setHovered] = useState(false)
+  const [onScreen, setOnScreen] = useState(false)
+  const boxRef = useRef<HTMLDivElement>(null)
 
-  // 사진 자동 전환 (마우스를 올리면 멈춘다)
+  // 화면에 들어왔는지 — 안 보이는 카드는 돌리지 않는다.
+  //
+  // 목록에 카드가 마흔 개인데 전부 동시에 돌면, 스크롤해서 보지도 않은 카드까지
+  // 3.5초마다 다음 사진을 받아 온다. 열어 두기만 해도 사진이 계속 내려오는 셈이다.
   useEffect(() => {
-    if (hovered || p.images.length < 2) return
+    const el = boxRef.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([e]) => setOnScreen(e.isIntersecting),
+      // 화면에 닿기 조금 전부터 준비시켜 스크롤하다 멈췄을 때 끊겨 보이지 않게 한다
+      { rootMargin: '200px' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  // 사진 자동 전환 (마우스를 올리거나 화면 밖이면 멈춘다)
+  useEffect(() => {
+    if (hovered || !onScreen || p.images.length < 2) return
     const t = setInterval(() => setIndex(i => (i + 1) % p.images.length), ROTATE_MS)
     return () => clearInterval(t)
-  }, [hovered, p.images.length])
+  }, [hovered, onScreen, p.images.length])
 
   return (
     <div
+      ref={boxRef}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
