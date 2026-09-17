@@ -5,6 +5,20 @@ import Image from 'next/image'
 const ROTATE_MS = 3500
 
 /**
+ * 지금 그려 둘 사진인지 — 보이는 것과 앞뒤 한 장까지만.
+ *
+ * 사진을 전부 겹쳐 놓으면 브라우저가 화면에 있다고 보고 한꺼번에 다 받는다.
+ * 사례 하나에 사진이 열여섯 장이면 페이지를 여는 데 그게 통째로 내려온다.
+ *
+ * 다음 장을 미리 붙여 두는 이유는 전환이 끊기지 않게 하기 위해서다 —
+ * 보이지 않을 뿐 이미 받아 둔 상태라 넘어갈 때 기다림이 없다.
+ * 한 바퀴 돌고 나면 전부 브라우저 캐시에 남아 다시 받지 않는다.
+ */
+export function isNearby(i: number, index: number, total: number): boolean {
+  return i === index || i === (index + 1) % total || i === (index - 1 + total) % total
+}
+
+/**
  * 사례 사진 슬라이드쇼 — 목록 카드(PortfolioShowcase)와 같은 방식으로
  * 사진을 겹쳐 놓고 페이드로 전환한다. 상세 페이지의 상단과 본문에서 함께 쓰는데,
  * start 로 시작 사진을 다르게 주면 두 슬라이드쇼가 같은 사진으로 겹치지 않는다.
@@ -47,7 +61,8 @@ export default function CaseSlideshow({
         overflow: 'hidden',
       }}
     >
-      {images.map((src, i) => (
+      {images.map((src, i) =>
+        !isNearby(i, index, images.length) ? null : (
         <Image
           key={src}
           src={src}
@@ -61,7 +76,8 @@ export default function CaseSlideshow({
             transition: 'opacity 0.6s ease',
           }}
         />
-      ))}
+      ),
+      )}
 
       {/* 현재 사진 표시 — 눌러서 바로 넘길 수도 있다.
           상단 슬라이드쇼는 링크(a) 안에 있어서, 점을 눌렀을 때 밖으로 나가지 않게 막는다 */}

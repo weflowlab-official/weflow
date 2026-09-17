@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { portfolios, categoryOrder, type Portfolio } from '@/data/cases'
+import { isNearby } from './CaseSlideshow'
 
 const ROTATE_MS = 3500
 // 사진마다 비율이 조금씩 달라(약 2.0~2.2:1) 중간값으로 고정하고 cover 로 채운다
@@ -34,21 +35,23 @@ function PortfolioCard({ p, from }: { p: Portfolio; from?: string }) {
     >
       {/* 사진 자리 — 겹쳐놓고 페이드로 전환 */}
       <div style={{ position: 'relative', width: '100%', aspectRatio: PHOTO_ASPECT, background: 'var(--surface-container)' }}>
-        {p.images.map((src, i) => (
-          <Image
-            key={src}
-            src={src}
-            alt={`${p.name} ${i + 1}번째 화면`}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority={i === 0}
-            style={{
-              objectFit: 'cover',
-              opacity: i === index ? 1 : 0,
-              transition: 'opacity 0.6s ease',
-            }}
-          />
-        ))}
+        {p.images.map((src, i) =>
+          !isNearby(i, index, p.images.length) ? null : (
+            <Image
+              key={src}
+              src={src}
+              alt={`${p.name} ${i + 1}번째 화면`}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority={i === 0}
+              style={{
+                objectFit: 'cover',
+                opacity: i === index ? 1 : 0,
+                transition: 'opacity 0.6s ease',
+              }}
+            />
+          ),
+        )}
 
         {/* 어떤 플랜으로 만든 사례인지 — 가격표와 같은 이름을 쓴다.
             띄우지만 z-index는 올리지 않는다 (위를 덮은 카드 링크가 계속 눌려야 한다) */}
