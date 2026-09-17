@@ -1,12 +1,14 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { BadgeCheck, FileText } from 'lucide-react'
+import { BadgeCheck, FileText, type LucideIcon } from 'lucide-react'
 
-// 우측 상단 신뢰 카드 — 대표 제작 사례 (엠블럼 로고)
-const TRUST_ROWS: { label: string; img?: string }[] = [
+// 우측 상단 신뢰 카드 — 대표 제작 사례.
+// 엠블럼 로고가 있으면 img, 없으면 업종을 나타내는 아이콘(Icon)을 쓴다.
+const TRUST_ROWS: { label: string; img?: string; Icon?: LucideIcon }[] = [
   { label: 'KPSC', img: '/images/trust/emblem-kpsc.png' },
   { label: '새두레', img: '/images/trust/emblem-saedure.png' },
+  { label: '타이어캠프', img: '/images/trust/emblem-tirecamp.png' },
   { label: '커튼장인 아뜰리에', img: '/images/trust/emblem-curtainjangin.png' },
   { label: 'H 렌트카', img: '/images/trust/emblem-hrentcar.svg' },
   { label: '특장맨', img: '/images/trust/emblem-teukjangman.svg' },
@@ -57,13 +59,13 @@ export default function PcPromoWidgets() {
       <div className="pc-side-widget">
         <button onClick={closeSide} aria-label="닫기" className="pc-side-widget__x">✕</button>
         <div className="pc-side-widget__card">
-          {TRUST_ROWS.map(({ label, img }) => (
+          {TRUST_ROWS.map(({ label, img, Icon = BadgeCheck }) => (
             <div key={label} className="pc-side-widget__row">
               {img ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={img} alt={label} className="pc-side-widget__thumb" />
               ) : (
-                <BadgeCheck size={15} strokeWidth={2.2} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+                <Icon size={15} strokeWidth={2.2} style={{ color: 'var(--accent)', flexShrink: 0 }} />
               )}
               <span>{label}</span>
             </div>
