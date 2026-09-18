@@ -2,14 +2,9 @@ import { Calculator, Zap, Search, LayoutDashboard } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Reveal from "@/components/Reveal";
 
-// 최신 기술로 직접 만들면 달라지는 것 4가지 — 도입부에서 거절당한 요청들과 짝을 맞춘다
-const RESULTS: { Icon: LucideIcon; title: string; desc: string }[] = [
-  {
-    Icon: Calculator,
-    title: "원하는 기능은 무엇이든",
-    // "틀이 없으니" 는 바로 위 보조 문단에 이미 있다 — 카드에서 또 쓰면 같은 말이 두 번 된다
-    desc: "자동 견적 계산기, 스마트스토어·네이버 플레이스로 이어지는 연결 구조 설계, 예약·결제까지 필요한 기능을 코드로 직접 만듭니다.",
-  },
+// 최신 기술로 직접 만들면 달라지는 것 4가지 — 도입부에서 거절당한 요청들과 짝을 맞춘다.
+// 배열 순서 = PC 배치 순서다. 모바일에서는 금테 두 장(검색·기능)이 먼저 오도록 CSS order 로 바꾼다.
+const RESULTS: { Icon: LucideIcon; title: string; desc: string; gold?: boolean }[] = [
   {
     Icon: Zap,
     title: "모바일에서도 빠른 로딩",
@@ -18,7 +13,15 @@ const RESULTS: { Icon: LucideIcon; title: string; desc: string }[] = [
   {
     Icon: Search,
     title: "검색에 잡히는 구조",
-    desc: "페이지마다 제목·설명·구조화 데이터를 직접 설계합니다. 네이버·구글 상단 노출을 ‘관리할 수 있는’ 사이트가 됩니다.",
+    desc: "페이지마다 제목·설명·구조화 데이터를 직접 설계합니다. 검색엔진은 물론 AI 답변까지 겨냥한 SEO·AEO·GEO 구조로, 네이버·구글 상단 노출을 ‘관리할 수 있는’ 사이트가 됩니다.",
+    gold: true,
+  },
+  {
+    Icon: Calculator,
+    title: "원하는 기능은 무엇이든",
+    // "틀이 없으니" 는 바로 위 보조 문단에 이미 있다 — 카드에서 또 쓰면 같은 말이 두 번 된다
+    desc: "자동 견적 계산기, 스마트스토어·네이버 플레이스로 이어지는 연결 구조 설계, 예약·결제까지 필요한 기능을 코드로 직접 만듭니다.",
+    gold: true,
   },
   {
     Icon: LayoutDashboard,
@@ -63,8 +66,8 @@ export default function DiffModern() {
         </Reveal>
 
         <Reveal stagger className="dm-grid" style={{ marginTop: "clamp(2rem, 5vw, 3rem)" }}>
-          {RESULTS.map(({ Icon, title, desc }) => (
-            <div key={title} className="dm-card">
+          {RESULTS.map(({ Icon, title, desc, gold }) => (
+            <div key={title} className={`dm-card${gold ? " dm-card--gold" : ""}`}>
               <span className="dm-icon">
                 <Icon size={22} strokeWidth={2} />
               </span>
@@ -93,6 +96,29 @@ export default function DiffModern() {
           border-radius: var(--radius-2xl);
           padding: 1.6rem;
         }
+        /* 두 장만 금테 — 제목의 금색 글씨(.c-gold)와 같은 그라데이션이 좌→우로 훑고 지나간다.
+           테두리를 굵히면 그 카드만 안쪽이 좁아져 글 시작점이 어긋나므로,
+           테두리는 투명하게 두고 겹쳐 그린다(::before 는 자리를 차지하지 않는다) */
+        .dm-card--gold { position: relative; border-color: transparent; }
+        .dm-card--gold::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          padding: 2px; /* 금테 두께 */
+          background: linear-gradient(115deg, #b8976b 0%, #c9a262 38%, #fff6da 50%, #c9a262 62%, #b8976b 100%);
+          background-size: 250% auto;
+          /* 가장자리만 남기고 가운데를 도려낸다 — 테두리처럼 보이게 하는 표준 수법 */
+          -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask-composite: exclude;
+          animation: cGoldSheen 2.8s linear infinite;
+          pointer-events: none;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .dm-card--gold::before { animation: none; }
+        }
         .dm-icon {
           width: 46px;
           height: 46px;
@@ -104,8 +130,22 @@ export default function DiffModern() {
           justify-content: center;
           margin-bottom: 1rem;
         }
+        /* 2열·1열로 접히면 금테 두 장(검색·기능)을 앞으로 끌어올린다 —
+           PC 는 배열 순서 그대로(로딩 · 검색 · 기능 · 관리자) */
         @media (max-width: 1000px) {
-          .dm-grid { grid-template-columns: repeat(2, 1fr); }
+          /* 칸을 접으면 카드 높이도 글 양만큼만 쓴다 — PC 의 1fr 을 그대로 두면
+             제일 긴 카드에 맞춰 나머지 밑에 빈 자리가 길게 남는다 */
+          .dm-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: auto; }
+          .dm-card:nth-child(1) { order: 3; } /* 모바일에서도 빠른 로딩 */
+          .dm-card:nth-child(2) { order: 1; } /* 검색에 잡히는 구조 */
+          .dm-card:nth-child(3) { order: 2; } /* 원하는 기능은 무엇이든 */
+          .dm-card:nth-child(4) { order: 4; } /* 나만의 관리자 페이지 */
+          /* 등장 순서도 화면 순서에 맞춘다 — globals 의 .reveal-stagger 지연값은
+             DOM 차례대로라, order 로 자리를 바꾸면 세 번째 칸부터 떠오른다 */
+          .dm-grid.is-visible > *:nth-child(2) { transition-delay: 0.04s; }
+          .dm-grid.is-visible > *:nth-child(3) { transition-delay: 0.12s; }
+          .dm-grid.is-visible > *:nth-child(1) { transition-delay: 0.20s; }
+          .dm-grid.is-visible > *:nth-child(4) { transition-delay: 0.28s; }
         }
         @media (max-width: 560px) {
           .dm-grid { grid-template-columns: 1fr; }

@@ -5,11 +5,11 @@ import { RotateCcw, Ban } from "lucide-react";
 // 고객 ↔ 템플릿 업체 대화 — 요청할 때마다 "안 됩니다"가 돌아온다
 type Msg = { from: "me" | "them"; text: string };
 const SCRIPT: Msg[] = [
-  { from: "me", text: "자동 견적 계산기 넣을 수 있나요?" },
+  { from: "me", text: "SEO·AEO·GEO 구조 설계도 되나요?" },
   { from: "them", text: "죄송하지만 그 기능은 안 됩니다." },
-  { from: "me", text: "스마트스토어로 이어지는 구조는요?" },
+  { from: "me", text: "자동 견적 계산기는 넣을 수 있나요?" },
   { from: "them", text: "그것도 지원이 안 돼요…" },
-  { from: "me", text: "네이버 플레이스 연결 설계는요?" },
+  { from: "me", text: "스마트스토어로 이어지는 구조는요?" },
   { from: "them", text: "템플릿에 없는 기능이라서요." },
   { from: "me", text: "예약·결제 기능은요?" },
   { from: "them", text: "추가 개발은 불가능합니다." },

@@ -1,40 +1,53 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { Layers, Users, Tag } from "lucide-react";
+import { Search, Layers, Tag } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Reveal from "@/components/Reveal";
 
-// 템플릿이 무엇인지 — 틀 · 공용 관리자 · 가격, 세 가지로 풀어낸다
-const POINTS: { Icon: LucideIcon; title: string; desc: ReactNode }[] = [
+// 템플릿이 무엇인지 — 검색 구조 · 틀(+공용 관리자) · 가격, 세 가지로 풀어낸다.
+// 01 을 검색 구조로 둔 이유 — 앞 섹션 채팅의 첫 질문("SEO·AEO·GEO 구조 설계도 되나요?")을
+// 곧바로 받아 주는 자리라서다. 원래 01·02 였던 틀·공용 관리자는 같은 이야기라 02 로 합쳤다.
+const POINTS: { id: string; Icon: LucideIcon; title: ReactNode; desc: ReactNode }[] = [
   {
-    Icon: Layers,
-    title: "미리 만들어진 틀",
+    id: "seo",
+    Icon: Search,
+    title: "SEO·AEO·GEO 설계가 안 됩니다",
+    // 줄바꿈은 PC 에서만 — 모바일은 칸이 좁아 어차피 접히므로 강제로 끊으면 줄이 들쭉날쭉해진다
     desc: (
       <>
-        완성된 디자인에 사진과 문구만 갈아 끼웁니다.
-        <br />
+        {/* 줄 끝 공백은 JSX 가 지운다 — 줄바꿈이 사라지는 모바일에서 문장이 붙지 않게 {" "} 를 둔다 */}
+        검색·AI 노출은 페이지 구조에서 갈립니다.{" "}
+        <br className="hide-mobile" />
+        그 구조가 이미 고정돼 있어 손댈 자리가 없습니다.
+      </>
+    ),
+  },
+  {
+    id: "frame",
+    Icon: Layers,
+    // 모바일에서만 두 줄 — PC 는 한 줄에 들어간다
+    title: (
+      <>
+        미리 만들어진 틀을 <br className="br-mobile" />
+        수백 곳이 나눠 씁니다
+      </>
+    ),
+    desc: (
+      <>
+        완성된 디자인에 사진과 문구만 갈아 끼웁니다.{" "}
+        <br className="hide-mobile" />
         구조·기능은 물론 모바일 반응형까지 예전 기술의 틀 그대로입니다.
       </>
     ),
   },
   {
-    Icon: Users,
-    title: "다 같이 쓰는 관리자 페이지",
-    desc: (
-      <>
-        수백 개 사이트가 같은 관리자 페이지를 나눠 씁니다.
-        <br />
-        항목 하나 바꾸는 것도 ‘지원하지 않는 기능’입니다.
-      </>
-    ),
-  },
-  {
+    id: "price",
     Icon: Tag,
     title: "그래서 저렴합니다",
     desc: (
       <>
-        한 번 만든 틀을 수백 곳에 다시 팔기 때문입니다.
-        <br />
+        한 번 만든 틀을 수백 곳에 다시 팔기 때문입니다.{" "}
+        <br className="hide-mobile" />
         그 값에 ‘내 요구사항’은 들어 있지 않습니다.
       </>
     ),
@@ -97,8 +110,8 @@ export default function DiffTemplate() {
           </Reveal>
 
           <Reveal stagger className="dt-list">
-            {POINTS.map(({ Icon, title, desc }, i) => (
-              <div key={title} className="dt-card">
+            {POINTS.map(({ id, Icon, title, desc }, i) => (
+              <div key={id} className="dt-card">
                 <span className="dt-icon">
                   <Icon size={20} strokeWidth={2} />
                 </span>
