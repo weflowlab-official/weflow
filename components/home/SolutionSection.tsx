@@ -83,7 +83,7 @@ export default function SolutionSection() {
             const mpos = MOBILE_SEQ.indexOf(i)
             return (
             <li key={t.label || String(t.end)} className={`trust-cell${t.highlight ? ' trust-cell--hl' : ''}${mpos < 4 ? ' trust-cell--mtop' : ''}${mpos % 2 === 1 ? ' trust-cell--mleft' : ''}`}>
-              {/* 문자 값(희망 오픈일 등)은 숫자보다 길어서 한 단계 작은 크기로, 별점 값은 더 작게.
+              {/* 문자 값(SEO·AEO·GEO 등)은 숫자보다 길어서 한 단계 작은 크기로, 별점 값은 더 작게.
                   별 한 줄은 값 상자 안(문구 바로 위)에 넣어 다른 칸과 값·라벨 라인이 맞는다 */}
               <span className={`trust-num${typeof t.end === 'string' ? ' trust-num--text' : ''}${t.end === '★★★★★' ? ' trust-num--stars' : ''}`}>
                 {t.stars && (
@@ -373,12 +373,12 @@ export default function SolutionSection() {
         @media (min-width: 1025px) {
           .trust-grid { grid-template-columns: repeat(6, 1fr); max-width: 1320px; }
           .trust-cell--mtop { border-bottom: none; }
-          /* PC 전용 배치 — 최적화 · 프로모션 · 선택 이유 · 제작 시기 · 맞춤 제작 · 상담 비용.
+          /* PC 전용 배치 — 최적화 · 프로모션 · 선택 이유 · 검색 노출 · 맞춤 제작 · 상담 비용.
              배열(=모바일 순서)은 그대로 두고 order 로만 재배치한다 */
           .trust-cell:nth-child(1) { order: 2; } /* 50% 특별 프로모션 */
           .trust-cell:nth-child(2) { order: 5; } /* 100% 고객 맞춤 제작 */
           .trust-cell:nth-child(3) { order: 3; } /* 최신 기술 활용 */
-          .trust-cell:nth-child(4) { order: 4; } /* 희망 오픈일 맞춤 */
+          .trust-cell:nth-child(4) { order: 4; } /* SEO·AEO·GEO */
           .trust-cell:nth-child(5) { order: 1; } /* 100% PC·모바일 최적화 */
           .trust-cell:nth-child(6) { order: 6; } /* 0원 무료 상담 비용 */
           /* 구분선 — order 로 섞였으니 DOM 이웃 대신 전 칸에 긋고 시각상 첫 칸만 뺀다 */

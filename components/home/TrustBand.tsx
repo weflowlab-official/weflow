@@ -67,7 +67,7 @@ export default function TrustBand() {
           <p className="trustband-headline">
             최신 기술 활용<span className="hide-mobile"> · </span>
             <br className="br-mobile" />
-            희망 오픈일 맞춤
+            SEO·AEO·GEO 구조 설계
           </p>
           <p className="body trustband-sub">
             고객의 브랜드를 가장 효과적으로 완성합니다
