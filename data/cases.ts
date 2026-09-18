@@ -86,7 +86,7 @@ export interface Portfolio {
  */
 // 칩 목록 — 아직 사례가 없는 업종도 포함해 보여준다 (사례는 채워지는 대로 추가)
 export const categoryOrder = [
-  '기업/비즈니스', '쇼핑몰/결제', '인테리어', '캠핑/레저', '차량/타이어', '보험',
+  '기업/비즈니스', '쇼핑몰/결제', '인테리어', '캠핑/레저', '차량/타이어', '금융/보험',
   '의료/병원', '뷰티/미용', '학원/교육', '음식점/카페', '법률/세무', '부동산',
   '펜션/숙박', '헬스/피트니스', '반려동물', '제조/공장', '웨딩/스튜디오', '청소/이사',
 ]
@@ -548,7 +548,7 @@ export const portfolios: Portfolio[] = [
   {
     slug: 'incar',
     name: 'OO 금융서비스',
-    category: '보험',
+    category: '금융/보험',
     plan: '랜딩형 홈페이지',
     desc: '보험설계사 신입 · 경력 공개채용',
     url: 'https://incarr.vercel.app/',
@@ -603,7 +603,7 @@ export const portfolios: Portfolio[] = [
   {
     slug: 'leesiyeon',
     name: 'OOO 설계사',
-    category: '보험',
+    category: '금융/보험',
     plan: '랜딩형 홈페이지',
     desc: '보장분석 · 연금 · 자산관리 보험 설계',
     url: 'https://leesiyeon.vercel.app/',
@@ -705,7 +705,7 @@ export const portfolios: Portfolio[] = [
   {
     slug: 'parknara',
     name: 'OOO 컨설턴트',
-    category: '보험',
+    category: '금융/보험',
     plan: '랜딩형 홈페이지',
     desc: '보장분석 · 연금 · 자산관리 보험 설계',
     url: 'https://parknara.vercel.app/',
@@ -803,7 +803,7 @@ export const portfolios: Portfolio[] = [
   {
     slug: 'sample-insure-1',
     name: 'OO보험설계',
-    category: '보험',
+    category: '금융/보험',
     plan: '홈페이지',
     desc: '보장 분석 상담 신청 홈페이지',
     url: '',
