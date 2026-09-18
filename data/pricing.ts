@@ -57,6 +57,7 @@ export const makePlans: MakePlan[] = [
     discount: "50%",
     features: [
       "랜딩페이지 1섹션 ~",
+      "SEO·AEO·GEO 구조 설계",
       "반응형 PC & 모바일 최적화",
       "희망 SNS 문의폼 연동",
     ],
@@ -78,6 +79,7 @@ export const makePlans: MakePlan[] = [
     discount: "50%",
     features: [
       "원페이지 형식 홈페이지 1섹션 & 페이지 ~",
+      "SEO·AEO·GEO 구조 설계",
       "반응형 PC & 모바일 최적화",
       "희망 SNS 문의폼 연동",
       "헤더 앵커 이동 구성",
@@ -100,6 +102,7 @@ export const makePlans: MakePlan[] = [
     discount: "50%",
     features: [
       "홈페이지 1페이지 ~",
+      "SEO·AEO·GEO 구조 설계",
       "반응형 PC & 모바일 최적화",
       "희망 SNS 문의폼 연동",
       "페이지 로딩 속도 최적화",
@@ -145,6 +148,7 @@ export const renewPlan: MakePlan = {
   // 당분간 홈페이지 플랜과 동일 구성으로 안내한다
   features: [
     "홈페이지 1페이지 ~",
+    "SEO·AEO·GEO 구조 설계",
     "반응형 PC & 모바일 최적화",
     "희망 SNS 문의폼 연동",
     "페이지 로딩 속도 최적화",

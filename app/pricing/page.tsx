@@ -105,14 +105,22 @@ export default function PricingPage() {
             <SplitText
               as="h1"
               className="pricing-heading"
+              // 아래 관리자 페이지 섹션과 제목↔부제 간격을 맞춘다 (0.35rem → 0.5rem)
+              style={{ margin: "0 0 0.5rem" }}
               segments={[
                 { text: "제작 플랜 & " },
                 { text: "가격 안내", className: "c-accent" },
               ]}
             />
             <Reveal variant="up" delay={0.1}>
-              <p className="pricing-sub">
-                홈페이지 규모에 맞는 플랜을 선택하세요
+              {/* 부제도 아래 섹션과 같은 .callout 으로 맞춘다 (.pricing-sub 는 한 단계 작다) */}
+              <p className="callout pricing-lead">
+                {/* 금장 광택은 .c-gold 가 색·애니메이션을 다 들고 있다.
+                    p 에 직접 걸면 부모 클래스의 color·font-weight 가 이겨서 광택이 죽는다 —
+                    한 겹 span 을 둬서 직접 선언으로 이기게 한다 */}
+                <span className="c-gold emphasized">
+                  최신 기술로 만드는 홈페이지, 규모에 맞는 플랜을 선택하세요
+                </span>
               </p>
             </Reveal>
           </div>
@@ -172,7 +180,7 @@ export default function PricingPage() {
           <div
             style={{
               textAlign: "center",
-              marginBottom: "clamp(1.75rem, 4vw, 2.5rem)",
+              marginBottom: "clamp(1.4rem, 3vw, 1.9rem)",
             }}
           >
             <Reveal variant="up">
@@ -185,10 +193,13 @@ export default function PricingPage() {
               segments={[{ text: "관리자 페이지" }]}
             />
             <Reveal variant="up" delay={0.1}>
-              <p className="callout c-muted">
-                내 페이지를 직접 관리할 수 있는 관리자 페이지를{" "}
-                <br className="br-mobile" />
-                이용해보세요
+              <p className="callout pricing-lead">
+                {/* 두 줄을 한 span 안에 담아야 광택 띠가 줄마다 끊기지 않고 한 번에 지나간다 */}
+                <span className="c-gold emphasized">
+                  최신 기술로 만든 관리자 페이지에서{" "}
+                  <br className="br-mobile" />
+                  내 홈페이지를 직접 관리해보세요
+                </span>
               </p>
             </Reveal>
           </div>
@@ -246,7 +257,7 @@ export default function PricingPage() {
             <div
               style={{
                 textAlign: "center",
-                marginBottom: "clamp(1.75rem, 4vw, 2.5rem)",
+                marginBottom: "clamp(1.4rem, 3vw, 1.9rem)",
               }}
             >
               <p className="footnote emphasized c-accent">
@@ -540,7 +551,8 @@ export default function PricingPage() {
           padding: clamp(3rem, 6vw, 5rem) 1.5rem;
         }
         .pricing-inner { max-width: 1100px; margin: 0 auto; width: 100%; }
-        .pricing-header { text-align: center; margin-bottom: 1.75rem; }
+        /* 아래 관리자 페이지 섹션 헤더와 같은 값 — 카드까지의 간격을 맞춘다 */
+        .pricing-header { text-align: center; margin-bottom: clamp(1.4rem, 3vw, 1.9rem); }
         .pricing-badge-pill {
           display: inline-flex; align-items: center; gap: 0.35rem;
           background: var(--accent-light); color: var(--accent);
@@ -557,6 +569,8 @@ export default function PricingPage() {
           color: var(--text); letter-spacing: -0.025em; line-height: 1.2; margin: 0 0 0.35rem;
         }
         .pricing-sub { font-size: 1rem; font-weight: 400; color: var(--text-muted); margin: 0; }
+        /* 두 섹션 부제 — .callout(0.9375rem)보다 한 단계 크게 */
+        .pricing-lead { font-size: clamp(0.96rem, 2vw, 1.05rem); margin: 0; }
 
         /* ── 플랜 카드 (메인페이지와 동일) ── */
         .pricing-grid {
