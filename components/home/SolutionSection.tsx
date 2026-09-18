@@ -188,10 +188,33 @@ export default function SolutionSection() {
         /* 모바일 구분선 — 1·2번째 줄 아래, 2열 왼쪽 */
         .trust-cell--mtop { border-bottom: 1px solid var(--border-subtle); }
         .trust-cell--mleft { border-left: 1px solid var(--border-subtle); }
-        /* 색 부각 칸 — 강점 카드와 같은 파란 면, 모바일에서는 첫 줄로 */
-        .trust-cell--hl { order: -1; background: var(--accent-strong); }
-        .trust-cell--hl .trust-num { color: #fff; }
-        .trust-cell--hl .trust-label { color: rgba(255,255,255,0.8); }
+        /* 색 부각 칸 — 파란 면 대신 금테를 두른다 (차별점 03섹션 카드와 같은 방식).
+           모바일에서는 order 로 첫 줄에 온다 */
+        .trust-cell--hl { order: -1; position: relative; }
+        /* 칸 바깥선을 그대로 따라 그린다 — 겹쳐 그리는 층이라 글자 자리는 밀지 않는다 */
+        .trust-cell--hl::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 0;
+          padding: 2px; /* 금테 두께 */
+          background: linear-gradient(115deg, #b8976b 0%, #c9a262 38%, #fff6da 50%, #c9a262 62%, #b8976b 100%);
+          background-size: 250% auto;
+          -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask-composite: exclude;
+          animation: trustGoldSheen 2.8s linear infinite;
+          pointer-events: none;
+        }
+        /* 두 강조 칸은 PC·모바일 모두 나란히 붙는다(3번째=왼쪽, 4번째=오른쪽).
+           그대로 두면 맞닿는 자리에 선이 두 겹으로 겹치므로, 서로 1px 씩 넘겨 그려
+           같은 자리에 포개지게 한다 — 눈에는 한 줄로 보인다 */
+        .trust-cell:nth-child(3).trust-cell--hl::before { right: -1px; }
+        .trust-cell:nth-child(4).trust-cell--hl::before { left: -1px; }
+        @media (prefers-reduced-motion: reduce) {
+          .trust-cell--hl::before { animation: none; }
+        }
         .trust-num {
           display: block;
           text-align: center;
@@ -216,8 +239,7 @@ export default function SolutionSection() {
           align-items: center;
           justify-content: center;
         }
-        /* 별점 값 칸(최신 기술 활용) — 문구 값과 같은 크기의 노란 별.
-           .trust-cell--hl .trust-num 의 흰색보다 우선해야 하므로 셀 클래스까지 붙인다 */
+        /* 별점 값 칸(최신 기술 활용) — 문구 값과 같은 크기의 노란 별 */
         .trust-num--stars,
         .trust-cell--hl .trust-num--stars {
           letter-spacing: 0.12em;
