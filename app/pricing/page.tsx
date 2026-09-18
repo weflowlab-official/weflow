@@ -119,7 +119,7 @@ export default function PricingPage() {
                     p 에 직접 걸면 부모 클래스의 color·font-weight 가 이겨서 광택이 죽는다 —
                     한 겹 span 을 둬서 직접 선언으로 이기게 한다 */}
                 <span className="c-gold emphasized">
-                  최신 기술로 만드는 홈페이지, 규모에 맞는 플랜을 선택하세요
+                  최신 기술로 만드는 홈페이지 플랜
                 </span>
               </p>
             </Reveal>
@@ -196,7 +196,7 @@ export default function PricingPage() {
               <p className="callout pricing-lead">
                 {/* 위 플랜 부제와 글자 수를 비슷하게 맞춘다 — 강제 줄바꿈 없이 화면 폭에 맡긴다 */}
                 <span className="c-gold emphasized">
-                  최신 기술로 만드는 관리자 페이지에서 직접 관리해보세요
+                  직접 관리하는 최신 기술 관리자 페이지
                 </span>
               </p>
             </Reveal>
