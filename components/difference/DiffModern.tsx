@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { Calculator, Zap, Search, LayoutDashboard } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import CharReveal from "@/components/CharReveal";
 
 // 최신 기술로 직접 만들면 달라지는 것 4가지 — 도입부에서 거절당한 요청들과 짝을 맞춘다.
 // 배열 순서 = PC 배치 순서다. 모바일에서는 금테 두 장(검색·기능)이 먼저 오도록 CSS order 로 바꾼다.
@@ -80,12 +79,6 @@ export default function DiffModern() {
               <span className="dm-icon">
                 <Icon size={22} strokeWidth={2} />
               </span>
-              {/* 별 다섯 개 — 메인 신뢰 지표(.trust-stars)와 같은 모양·같은 등장 방식 */}
-              {gold && (
-                <span className="dm-stars" aria-hidden="true">
-                  <CharReveal text="★★★★★" />
-                </span>
-              )}
               <h3 className="headline dm-title" style={{ margin: "0 0 0.45rem", wordBreak: "keep-all" }}>
                 {gold ? <span className="c-gold">{title}</span> : title}
               </h3>
@@ -134,19 +127,22 @@ export default function DiffModern() {
         @media (prefers-reduced-motion: reduce) {
           .dm-card--gold::before { animation: none; }
         }
-        /* 별 한 줄 — 메인 신뢰 지표와 같은 색(#ffd166)·자간·크기 */
-        .dm-stars {
-          display: block;
-          margin-bottom: 0.3rem;
-          font-size: clamp(0.7rem, 1.8vw, 0.82rem);
-          letter-spacing: 0.12em;
-          color: #ffd166;
+        /* 우상단 별 다섯 개 — 읽는 글이 아니라 배경 장식이라 아주 흐리게 깐다.
+           06 인용 카드의 따옴표(.da-item::after)와 같은 성격이다 */
+        .dm-card--gold::after {
+          content: "★★★★★";
+          position: absolute;
+          top: 0.9rem;
+          right: 1rem;
+          font-size: 1.35rem;
+          letter-spacing: 0.1em;
           line-height: 1;
+          color: #ffd166;
+          opacity: 0.2;
+          pointer-events: none;
         }
-        /* 금색 두 장만 PC 에서 제목을 한 단계 키운다 (.headline 1.0625rem) */
-        @media (min-width: 769px) {
-          .dm-card--gold .dm-title { font-size: 1.22rem; }
-        }
+        /* 금색 두 장은 제목을 한 단계 키운다 (.headline 1.0625rem) — PC·모바일 같이 */
+        .dm-card--gold .dm-title { font-size: 1.22rem; }
         .dm-icon {
           width: 46px;
           height: 46px;
