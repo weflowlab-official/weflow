@@ -138,8 +138,12 @@ export default function DiffModern() {
           letter-spacing: 0.1em;
           line-height: 1;
           color: #ffd166;
-          opacity: 0.2;
+          opacity: 1;
           pointer-events: none;
+        }
+        /* PC 는 카드가 좁아(4열) 별이 크면 제목 쪽으로 밀고 들어온다 — 한 단계 줄인다 */
+        @media (min-width: 769px) {
+          .dm-card--gold::after { font-size: 1rem; }
         }
         /* 금색 두 장은 제목을 한 단계 키운다 (.headline 1.0625rem) — PC·모바일 같이 */
         .dm-card--gold .dm-title { font-size: 1.22rem; }
