@@ -190,7 +190,10 @@ export default function SolutionSection() {
         .trust-cell--mleft { border-left: 1px solid var(--border-subtle); }
         /* 색 부각 칸 — 파란 면 대신 금테를 두른다 (차별점 03섹션 카드와 같은 방식).
            모바일에서는 order 로 첫 줄에 온다 */
-        .trust-cell--hl { order: -1; position: relative; }
+        /* 파란 면은 그대로 두고 금테만 얹는다 */
+        .trust-cell--hl { order: -1; position: relative; background: var(--accent-strong); }
+        .trust-cell--hl .trust-num { color: #fff; }
+        .trust-cell--hl .trust-label { color: rgba(255,255,255,0.8); }
         /* 칸 바깥선을 그대로 따라 그린다 — 겹쳐 그리는 층이라 글자 자리는 밀지 않는다 */
         .trust-cell--hl::before {
           content: '';
