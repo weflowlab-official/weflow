@@ -30,7 +30,7 @@ export const TRUST: TrustStat[] = [
   { end: 50, suffix: '%', tail: '할인', label: '특별 프로모션', animate: true, stars: true },
   { end: 100, suffix: '%', label: '고객 맞춤 제작', animate: true, stars: true, pen: true },
   { end: '최신 기술 활용', suffix: '', label: '위플로우를 선택해야 하는 이유', animate: true, highlight: true, stars: true },
-  { end: 'SEO·AEO·GEO', suffix: '', label: '검색·AI 노출 설계', animate: true, highlight: true, stars: true },
+  { end: 'SEO·AEO·GEO', suffix: '', label: '구조에 맞춘 설계 후 제작', animate: true, highlight: true, stars: true },
   { end: 100, suffix: '%', label: 'PC·모바일 최적화', animate: true },
   { end: 0, suffix: '원', label: '무료 상담 비용' },
 ]
