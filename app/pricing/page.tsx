@@ -196,7 +196,7 @@ export default function PricingPage() {
               <p className="callout pricing-lead">
                 {/* 두 줄을 한 span 안에 담아야 광택 띠가 줄마다 끊기지 않고 한 번에 지나간다 */}
                 <span className="c-gold emphasized">
-                  최신 기술로 만드는 관리자 페이지, 내가 직접 관리하는 플랜
+                  최신 기술로 만드는 관리자, 내가 직접 관리하는 플랜
                 </span>
               </p>
             </Reveal>
