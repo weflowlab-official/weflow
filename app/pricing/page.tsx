@@ -119,7 +119,8 @@ export default function PricingPage() {
                     p 에 직접 걸면 부모 클래스의 color·font-weight 가 이겨서 광택이 죽는다 —
                     한 겹 span 을 둬서 직접 선언으로 이기게 한다 */}
                 <span className="c-gold emphasized">
-                  최신 기술로 만드는 홈페이지, 규모에 맞는 플랜을 선택하세요
+                  최신 기술로 만드는 홈페이지, <br className="br-mobile" />
+                  규모에 맞는 플랜을 선택하세요
                 </span>
               </p>
             </Reveal>
@@ -196,7 +197,7 @@ export default function PricingPage() {
               <p className="callout pricing-lead">
                 {/* 두 줄을 한 span 안에 담아야 광택 띠가 줄마다 끊기지 않고 한 번에 지나간다 */}
                 <span className="c-gold emphasized">
-                  최신 기술로 만든 관리자 페이지에서{" "}
+                  최신 기술로 만드는 관리자 페이지에서{" "}
                   <br className="br-mobile" />
                   내 홈페이지를 직접 관리해보세요
                 </span>

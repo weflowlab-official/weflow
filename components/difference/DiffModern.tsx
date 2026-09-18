@@ -1,10 +1,13 @@
+import type { ReactNode } from "react";
 import { Calculator, Zap, Search, LayoutDashboard } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import CharReveal from "@/components/CharReveal";
 
 // 최신 기술로 직접 만들면 달라지는 것 4가지 — 도입부에서 거절당한 요청들과 짝을 맞춘다.
 // 배열 순서 = PC 배치 순서다. 모바일에서는 금테 두 장(검색·기능)이 먼저 오도록 CSS order 로 바꾼다.
-const RESULTS: { Icon: LucideIcon; title: string; desc: string; gold?: boolean }[] = [
+// gold 를 단 두 장은 금테·금색 제목·별 다섯 개까지 한 세트로 붙는다.
+const RESULTS: { Icon: LucideIcon; title: string; desc: ReactNode; gold?: boolean }[] = [
   {
     Icon: Zap,
     title: "모바일에서도 빠른 로딩",
@@ -13,7 +16,13 @@ const RESULTS: { Icon: LucideIcon; title: string; desc: string; gold?: boolean }
   {
     Icon: Search,
     title: "검색에 잡히는 구조",
-    desc: "페이지마다 제목·설명·구조화 데이터를 직접 설계합니다. 검색엔진은 물론 AI 답변까지 겨냥한 SEO·AEO·GEO 구조로, 네이버·구글 상단 노출을 ‘관리할 수 있는’ 사이트가 됩니다.",
+    desc: (
+      <>
+        페이지마다 제목·설명·구조화 데이터를 직접 설계합니다. 검색엔진은 물론 AI 답변까지 겨냥한{" "}
+        <span className="c-gold emphasized">SEO·AEO·GEO</span> 구조로, 네이버·구글 상단 노출을 ‘관리할 수 있는’
+        사이트가 됩니다.
+      </>
+    ),
     gold: true,
   },
   {
@@ -71,8 +80,14 @@ export default function DiffModern() {
               <span className="dm-icon">
                 <Icon size={22} strokeWidth={2} />
               </span>
-              <h3 className="headline" style={{ margin: "0 0 0.45rem", wordBreak: "keep-all" }}>
-                {title}
+              {/* 별 다섯 개 — 메인 신뢰 지표(.trust-stars)와 같은 모양·같은 등장 방식 */}
+              {gold && (
+                <span className="dm-stars" aria-hidden="true">
+                  <CharReveal text="★★★★★" />
+                </span>
+              )}
+              <h3 className="headline dm-title" style={{ margin: "0 0 0.45rem", wordBreak: "keep-all" }}>
+                {gold ? <span className="c-gold">{title}</span> : title}
               </h3>
               <p className="callout c-muted" style={{ margin: 0, wordBreak: "keep-all" }}>
                 {desc}
@@ -118,6 +133,19 @@ export default function DiffModern() {
         }
         @media (prefers-reduced-motion: reduce) {
           .dm-card--gold::before { animation: none; }
+        }
+        /* 별 한 줄 — 메인 신뢰 지표와 같은 색(#ffd166)·자간·크기 */
+        .dm-stars {
+          display: block;
+          margin-bottom: 0.3rem;
+          font-size: clamp(0.7rem, 1.8vw, 0.82rem);
+          letter-spacing: 0.12em;
+          color: #ffd166;
+          line-height: 1;
+        }
+        /* 금색 두 장만 PC 에서 제목을 한 단계 키운다 (.headline 1.0625rem) */
+        @media (min-width: 769px) {
+          .dm-card--gold .dm-title { font-size: 1.22rem; }
         }
         .dm-icon {
           width: 46px;

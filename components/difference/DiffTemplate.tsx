@@ -15,9 +15,9 @@ const POINTS: { id: string; Icon: LucideIcon; title: ReactNode; desc: ReactNode 
     // 줄바꿈은 PC 에서만 — 모바일은 칸이 좁아 어차피 접히므로 강제로 끊으면 줄이 들쭉날쭉해진다
     desc: (
       <>
-        {/* 줄 끝 공백은 JSX 가 지운다 — 줄바꿈이 사라지는 모바일에서 문장이 붙지 않게 {" "} 를 둔다 */}
-        검색·AI 노출은 페이지 구조에서 갈립니다.{" "}
-        <br className="hide-mobile" />
+        {/* 이 카드만 모바일에서도 줄을 끊는다 (hide-mobile 이 아니라 그냥 br) */}
+        검색·AI 노출은 페이지 구조에서 갈립니다.
+        <br />
         그 구조가 이미 고정돼 있어 손댈 자리가 없습니다.
       </>
     ),
