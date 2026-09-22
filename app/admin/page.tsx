@@ -2129,12 +2129,13 @@ function TrafficView({
   const deviceRows = Object.entries(deviceCount).sort((a, b) => b[1] - a[1]);
   const adDeviceRows = Object.entries(adDeviceCount).sort((a, b) => b[1] - a[1]);
   const adSessionTotal = adDeviceRows.reduce((s, r) => s + r[1], 0);
-  // 매체·키워드별은 세션 많은 순, 키워드는 상위 8개만
+  // 매체·키워드별은 세션 많은 순. 키워드는 잘라내지 않는다 —
+  // 아래 "어떤 키워드로 왔나요" 카드가 전부 보여 주는데 여기만 8개로 끊으면
+  // 같은 키워드인데 한쪽에만 있어 개수가 어긋나 보인다.
   const sumDev = (m: Record<string, number>) => Object.values(m).reduce((a, b) => a + b, 0);
   const adDeviceSourceRows = Object.entries(adDeviceBySource).sort((a, b) => sumDev(b[1]) - sumDev(a[1]));
   const adDeviceKeywordRows = Object.entries(adDeviceByKeyword)
-    .sort((a, b) => sumDev(b[1]) - sumDev(a[1]))
-    .slice(0, 8);
+    .sort((a, b) => sumDev(b[1]) - sumDev(a[1]));
   const exitRows = Object.entries(exitCount)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 6);
