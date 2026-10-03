@@ -4,6 +4,7 @@
 import { useEffect, useRef } from "react";
 import HeroBanner from "@/components/home/HeroBanner";
 import TrustBand from "@/components/home/TrustBand";
+import HomeCasesSection from "@/components/home/HomeCasesSection";
 import SolutionSection from "@/components/home/SolutionSection";
 import LineupSection from "@/components/home/LineupSection";
 import PartnershipSection from "@/components/home/PartnershipSection";
@@ -70,6 +71,9 @@ export default function HomePage() {
 
       {/* 2. 신뢰 밴드 — 첫 화면 아래로 내렸다 */}
       <TrustBand />
+
+      {/* 제작 사례 — 자체 도메인으로 운영 중인 실제 사례 여섯 개 (스크롤하면 가로로 흐른다) */}
+      <HomeCasesSection />
 
       {/* 3. 솔루션 — 통계 밴드 + 실시간 문의 + 강점 6종.
              제작 사례·고객 인터뷰 섹션을 대신한다 (사례는 /cases 로, 히어로 CTA가 연결) */}

@@ -44,8 +44,8 @@ export default function TrustBand() {
     <section
       aria-label="WEFLOW 신뢰 지표"
       style={{
-        background: 'var(--section-b)',
-        borderBottom: '1px solid var(--border-subtle)',
+        background: '#fff',
+        borderBottom: '1px solid rgba(17,17,17,0.08)',
       }}
     >
       <div className="trustband-inner">
@@ -58,7 +58,8 @@ export default function TrustBand() {
             className="caption-1"
             style={{
               margin: 0,
-              color: 'var(--accent)',
+              color: '#111',
+              fontWeight: 600,
               letterSpacing: '0.14em',
             }}
           >
@@ -99,7 +100,8 @@ export default function TrustBand() {
         }
         .trustband-sub {
           margin: 0.75rem 0 0;
-          color: var(--text-secondary);
+          color: #111;
+          font-weight: 600;
         }
         /* 모바일: 월계수 두 개가 좌우를 먹어 폭이 좁다 —
            글씨를 화면 폭에 맞춰 줄여 한 줄로 떨어지게 한다 */
@@ -126,13 +128,13 @@ export default function TrustBand() {
           line-height: 1.4;
           word-break: keep-all;
           /* 양옆 월계수와 같은 금장 톤 그라데이션 + 좌→우로 훑고 지나가는 광택.
-             좁고 밝은 띠(#fff6da)가 있어야 광택이 눈에 띈다 */
-          background: linear-gradient(115deg, #b8976b 0%, #c9a262 38%, #fff6da 50%, #c9a262 62%, #b8976b 100%);
+             흰 바탕이라 광택 띠를 흰색에 가깝게 두면 글자가 끊겨 보인다 — 밝은 금색(#dcbc7c)까지만 올린다 */
+          background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #dcbc7c 50%, #b8914e 62%, #a8823e 100%);
           background-size: 250% auto;
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
-          filter: drop-shadow(0 1px 8px rgba(201, 162, 98, 0.3));
+          filter: drop-shadow(0 1px 6px rgba(201, 162, 98, 0.18));
           animation: tbSheen 2.8s linear infinite;
         }
         /* 배경 위치가 줄어들수록 광택 띠는 왼쪽 → 오른쪽으로 이동한다
