@@ -1,5 +1,5 @@
 import Link from "next/link";
-import HeroBackground from "./HeroBackground";
+import HeroVideo from "./HeroVideo";
 
 // 글자 단위 등장 — 자리는 유지하고 투명→나타남 (start: 앞선 글자 수, step: 글자 간격)
 function Chars({
@@ -42,7 +42,7 @@ function AwardWreath() {
       {/* 줄기 — 원둘레(268°→108°)를 따라 도는 얇은 호 */}
       <path
         d="M48.6 91.98 A40 40 0 0 1 34.5 15.4"
-        stroke="currentColor"
+        stroke="url(#heroAwardGold)"
         strokeWidth="1.6"
         strokeLinecap="round"
         fill="none"
@@ -54,7 +54,7 @@ function AwardWreath() {
           cy={y}
           rx="5.6"
           ry="2.2"
-          fill="currentColor"
+          fill="url(#heroAwardGold)"
           transform={`rotate(${a} ${x} ${y})`}
         />
       ))}
@@ -62,6 +62,31 @@ function AwardWreath() {
   );
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true" className="hero-award__wreath">
+      {/* 밝은 금색 바탕에 흰 빛줄기가 대각선으로 지나간다 — 한 번 훑고 잠깐 쉰다 */}
+      <defs>
+        <linearGradient
+          id="heroAwardGold"
+          gradientUnits="userSpaceOnUse"
+          x1="0"
+          y1="0"
+          x2="100"
+          y2="100"
+        >
+          <stop offset="0" stopColor="#d9bd8a" />
+          <stop offset="0.4" stopColor="#d9bd8a" />
+          <stop offset="0.5" stopColor="#f7e8c6" />
+          <stop offset="0.6" stopColor="#d9bd8a" />
+          <stop offset="1" stopColor="#d9bd8a" />
+          <animateTransform
+            attributeName="gradientTransform"
+            type="translate"
+            values="-70 -70; 70 70; 70 70"
+            keyTimes="0; 0.6; 1"
+            dur="3s"
+            repeatCount="indefinite"
+          />
+        </linearGradient>
+      </defs>
       {branch}
       <g transform="scale(-1 1) translate(-100 0)">{branch}</g>
     </svg>
@@ -84,7 +109,7 @@ export default function HeroBanner() {
       style={{
         position: "relative",
         overflow: "hidden",
-        background: "var(--section-a)",
+        background: "#111",
         scrollSnapAlign: "start",
         display: "flex",
         flexDirection: "column",
@@ -92,19 +117,10 @@ export default function HeroBanner() {
         textAlign: "center",
       }}
     >
-      {/* 배경 애니메이션 (네트워크 + 와이어프레임) */}
-      <HeroBackground />
-      {/* 가독성 오버레이 — 위아래를 살짝 눌러 헤더·하단 캐러셀 글씨를 보호한다 */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "linear-gradient(to bottom, rgba(6,10,20,0.5) 0%, rgba(6,10,20,0) 40%, rgba(6,10,20,0) 60%, rgba(6,10,20,0.55) 100%)",
-          zIndex: 1,
-        }}
-      />
+      {/* 배경 영상 — 블러는 .hero-media, 어둡기는 아래 막에서 조절한다 */}
+      <HeroVideo />
+      {/* 가독성 어두운 막 — 영상 위에 깔아 흰 글씨가 읽히게 한다 */}
+      <div className="hero-veil" aria-hidden="true" />
 
       {/* 고객만족도 1위 엠블럼 — 원형 월계수 리스 + 보석 왕관, 히어로 좌상단 고정 */}
       <span className="hero-award" aria-hidden="true">
@@ -113,9 +129,9 @@ export default function HeroBanner() {
           {/* 본체 — 세 봉우리 */}
           <path d="M4 18 L7 7.5 L12 12.5 L16 4.5 L20 12.5 L25 7.5 L28 18 Z" fill="currentColor" />
           {/* 꼭짓점 보석 — 가운데가 가장 크고 밝게 */}
-          <circle cx="7" cy="5.6" r="1.7" fill="#edd9ae" />
-          <circle cx="16" cy="2.6" r="2" fill="#f5e6c4" />
-          <circle cx="25" cy="5.6" r="1.7" fill="#edd9ae" />
+          <circle cx="7" cy="5.6" r="1.7" fill="#f0dfb8" />
+          <circle cx="16" cy="2.6" r="2" fill="#f7e8c6" />
+          <circle cx="25" cy="5.6" r="1.7" fill="#f0dfb8" />
           {/* 밑단 밴드 + 박힌 보석 */}
           <rect x="3.4" y="19.6" width="25.2" height="3.4" rx="1.7" fill="currentColor" />
           <circle cx="9.5" cy="21.3" r="1" fill="#6d5427" />
@@ -140,7 +156,7 @@ export default function HeroBanner() {
       >
         {/* 아이브로우 — 데스크탑은 두 칩을 나란히, 모바일은 신규 칩을 위로 쌓는다 */}
         <div className="hero-eyebrow">
-          <span className="tag-badge hero-chip--new">리뉴얼 · 신규 제작</span>
+          <span className="tag-badge">리뉴얼 · 신규 제작</span>
           <span className="tag-badge">홈페이지 메인 제작 솔루션</span>
         </div>
 
@@ -188,8 +204,6 @@ export default function HeroBanner() {
                 letterSpacing: "0.02em",
                 marginLeft: "0.12em",
                 verticalAlign: "-0.06em",
-                textShadow:
-                  "0 0 30px rgba(88,138,226,0.9), 0 0 12px rgba(88,138,226,0.7), 0 3px 12px rgba(0,0,0,0.3)",
               }}
             >
               <Chars text={LINE2B} start={LINE1.length + LINE2A.length} />
@@ -225,86 +239,79 @@ export default function HeroBanner() {
         >
           <Link
             href="/diagnosis"
-            className="btn-primary hero-btn hero-btn--gold hero-btn--accent"
+            className="btn-primary hero-btn"
             style={{ width: "min(240px, 80vw)" }}
           >
-            <span className="hero-btn__label">홈페이지 제작 문의</span>
+            홈페이지 제작 문의
           </Link>
 
           <Link
             href="/difference"
-            className="btn-primary hero-btn hero-btn--gold"
+            className="btn-primary hero-btn"
             style={{ width: "min(240px, 80vw)" }}
           >
-            <span className="hero-btn__label">우리가 특별한 이유</span>
+            우리가 특별한 이유
           </Link>
         </div>
 
       </div>
 
       <style>{`
-        /* 히어로 버튼 — 영상 위 어두운 화면이라 제목과 같은 흰 글씨로 맞춘다.
-           사이트 기본 파랑(--accent)은 밝아서 흰 글씨가 안 읽히므로 여기서만 진한 파랑을 쓴다. */
+        /* 배경 영상 — 살짝 흐리게 깔고, 블러로 번진 가장자리는 조금 키워서 화면 밖으로 민다.
+           상자 배경의 대표 이미지는 영상이 뜨기 전·모션 최소화 설정에서 보인다 */
+        .hero-media {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          background: url(/videos/hero-poster.jpg) center / cover no-repeat;
+          filter: blur(var(--hero-blur));
+          transform: scale(1.04);
+        }
+        .hero-video {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-video { display: none; }
+        }
+        .hero-veil {
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          background: rgba(0, 0, 0, var(--hero-veil));
+        }
+
+        /* 히어로 버튼 — 어두운 막 위라 흰 면·검정 글씨로 맞춘다 */
         .hero-btn {
           font-size: 1.3rem;
           border-radius: 9999px;
           padding: 1.15rem 1rem;
           white-space: nowrap;
           justify-content: center;
-          background: var(--accent-strong);   /* 상단 프로모션 띠와 같은 파랑 */
-          color: var(--on-accent-strong);
-          border: 1.5px solid transparent;
+          background: #fff;
+          color: #111;
+          border: 1.5px solid #fff;
+          box-shadow: none;
+          transition: background 0.08s, color 0.08s;
         }
-        .hero-btn:hover { background: #2262cc; }
-
-        /* 보조 버튼 — 영상이 비쳐 보이도록 반투명 테두리형 */
-        .hero-btn--ghost {
-          background: rgba(255, 255, 255, 0.10);
-          border-color: rgba(255, 255, 255, 0.7);
-          backdrop-filter: blur(4px);
-        }
-        .hero-btn--ghost:hover {
-          background: rgba(255, 255, 255, 0.2);
-          border-color: #ffffff;
-        }
-
-        /* 금색 버튼 — 헤더 상담 버튼과 같은 처리: 유리 질감 바탕에 밝은 금색 테두리,
-           글씨는 금장 광택. (면을 금색으로 채우면 영상 위에서 탁해 보여 테두리·글씨에만 쓴다) */
-        .hero-btn--gold {
-          background: rgba(227, 201, 158, 0.10);
-          border-color: rgba(240, 220, 174, 0.95);
-          backdrop-filter: blur(4px);
-          box-shadow: 0 0 22px rgba(227, 201, 158, 0.22);
-        }
-        .hero-btn--gold:hover {
-          background: rgba(227, 201, 158, 0.2);
-          border-color: #fff8e6;
-        }
-        /* 주 버튼(제작 사례) — 금색 테두리·글씨는 그대로 두고 바탕만 원래의 반투명 파랑(68%)으로 채운다.
-           금색 규칙 뒤에 선언해야 배경이 파랑으로 이긴다 */
-        .hero-btn--gold.hero-btn--accent {
-          background: rgba(37, 99, 235, 0.68);
-        }
-        .hero-btn--gold.hero-btn--accent:hover {
-          background: rgba(37, 99, 235, 0.82);
-        }
-        .hero-btn__label {
-          display: inline-block;
-          background: linear-gradient(115deg, #d9bc88 0%, #e9d3a6 38%, #fff8e6 50%, #e9d3a6 62%, #d9bc88 100%);
-          background-size: 250% auto;
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-          animation: cGoldSheen 2.8s linear infinite;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .hero-btn__label { animation: none; }
+        /* 호버 — 영상이 비쳐 보이는 반투명 면에 흰 테두리·흰 글씨로 뒤집힌다.
+           공통 버튼의 호버(살짝 투명 + 파란 그림자)는 흰검 톤과 안 맞아 끈다 */
+        .hero-btn:hover {
+          background: rgba(255, 255, 255, 0.12);
+          color: #fff;
+          opacity: 1;
+          box-shadow: none;
         }
 
         /* 높이는 부모(.first-screen)가 정한다 — 히어로는 신뢰 밴드를 뺀 나머지를
            flex 로 받아 채운다. 여백을 8vh → 3vh 로 줄여 밴드가 올라올 자리를 만든다
            (글자 크기는 그대로 두고 낭비되던 빈 공간만 걷어냈다). */
         .hero-section {
+          /* 영상 가독성 조절 — 어두운 막 진하기(0~1)와 블러 세기 */
+          --hero-veil: 0.4;
+          --hero-blur: 0px;
           justify-content: center;
           padding: clamp(1rem, 3vh, 2.5rem) 1.25rem;
         }
@@ -313,8 +320,9 @@ export default function HeroBanner() {
            원형 리스는 배경으로 깔고 왕관·문구를 그 중앙에 쌓는다 */
         .hero-award {
           position: absolute;
-          top: clamp(0.9rem, 3vh, 1.8rem);
-          left: clamp(1.2rem, 3vw, 2.6rem);
+          /* 카드 둘레 여백(--hero-gap)만큼 안쪽으로 — 카드가 펼쳐지면 함께 바깥으로 나간다 */
+          top: calc(clamp(0.9rem, 3vh, 1.8rem) + var(--hero-gap-top, 0px));
+          left: calc(clamp(1.2rem, 3vw, 2.6rem) + var(--hero-gap, 0px));
           z-index: 5;
           width: 108px;
           height: 108px;
@@ -323,8 +331,10 @@ export default function HeroBanner() {
           align-items: center;
           justify-content: center;
           gap: 2px;
-          color: #c9a878;
-          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+          /* 밝은 영상 위에서도 묻히지 않게 밝은 금색 + 어두운 그림자로 띄우고 금빛을 두른다 */
+          color: #d9bd8a;
+          filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45))
+            drop-shadow(0 0 6px rgba(227, 201, 158, 0.25));
         }
         .hero-award__wreath {
           position: absolute;
@@ -340,7 +350,28 @@ export default function HeroBanner() {
           transform: translateX(-50%);
           width: 27px;
           height: 22px;
-          filter: drop-shadow(0 0 4px rgba(227, 201, 158, 0.45));
+          filter: drop-shadow(0 0 4px rgba(227, 201, 158, 0.5));
+          animation: heroAwardTwinkle 3s ease-in-out infinite;
+        }
+        /* 왕관 반짝임 — 리스의 빛줄기가 지나가는 박자에 맞춰 한 번 밝아진다 */
+        @keyframes heroAwardTwinkle {
+          0%, 60%, 100% { filter: drop-shadow(0 0 4px rgba(227, 201, 158, 0.5)) brightness(1); }
+          30% { filter: drop-shadow(0 0 6px rgba(240, 220, 174, 0.75)) brightness(1.12); }
+        }
+        /* 글씨 — 밝은 금색 사이로 광택이 흐른다 */
+        .hero-award__label,
+        .hero-award__rank {
+          background: linear-gradient(115deg, #d9bd8a 0%, #e3c99e 38%, #f7e8c6 50%, #e3c99e 62%, #d9bd8a 100%);
+          background-size: 250% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: cGoldSheen 2.8s linear infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-award__crown,
+          .hero-award__label,
+          .hero-award__rank { animation: none; }
         }
         .hero-award__label {
           margin-top: 6px; /* 글씨 묶음을 원 중앙에서 살짝 아래로 */
@@ -348,21 +379,19 @@ export default function HeroBanner() {
           font-weight: 600;
           letter-spacing: 0.04em;
           white-space: nowrap;
-          color: #d7bd94;
         }
         .hero-award__rank {
           font-size: 1.5rem;
           font-weight: 800;
           line-height: 1;
-          color: #e3c99e;
         }
         /* 모바일 — 작게 줄여 좌상단 유지, 맨 앞(z-index 5)이라 안 가려진다 */
         @media (max-width: 768px) {
           .hero-award {
             width: 56px;
             height: 56px;
-            top: 0.6rem;
-            left: 0.8rem;
+            top: calc(0.6rem + var(--hero-gap-top, 0px));
+            left: calc(0.8rem + var(--hero-gap, 0px));
           }
           .hero-award__crown { width: 13px; height: 10.5px; top: 0; }
           .hero-award__label { margin-top: 2px; font-size: 0.4rem; }
@@ -386,6 +415,10 @@ export default function HeroBanner() {
           white-space: nowrap;
           padding-top: 0;
           padding-bottom: 0;
+          /* 흰검 톤 — 두 칩 모두 반투명 면에 흰 글씨 */
+          color: #fff;
+          background: rgba(255, 255, 255, 0.14);
+          border: 1px solid rgba(255, 255, 255, 0.55);
         }
 
         /* 모바일은 타이틀이 세 줄이라 PC(1.2)보다는 넉넉하게 둔다.

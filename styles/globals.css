@@ -64,7 +64,7 @@
   html {
     scroll-behavior: smooth;
     overflow-x: clip;
-    scroll-padding-top: 116px;
+    scroll-padding-top: 70px;
   }
 
   body {
@@ -479,21 +479,6 @@
     .bento-grid {
       grid-template-columns: 1fr;
       grid-template-areas: "lead" "sub" "ch1" "ch2" "ch3" "ch4";
-    }
-  }
-
-  /* ── 프로모션 띠배너 ── */
-  .promo-banner:hover {
-    opacity: 0.94;
-  }
-  /* PC: 띠를 낮추고 본문 크기를 옆 괄호(footnote 0.8125rem)와 맞춘다
-     (모바일 크기는 맨 아래 480px 규칙이 정한다) */
-  @media (min-width: 769px) {
-    .promo-banner > div {
-      min-height: 34px;
-    }
-    .promo-banner strong {
-      font-size: 0.8125rem;
     }
   }
 
@@ -1043,14 +1028,5 @@
   }
   .hide-sm {
     display: none !important;
-  }
-  /* 프로모 배너: 좁은 폰에서도 한 줄 유지 */
-  .promo-banner .caption-1 {
-    font-size: 0.6rem;
-    padding: 2px 8px;
-  }
-  .promo-banner strong {
-    font-size: 0.72rem;
-    white-space: nowrap;
   }
 }

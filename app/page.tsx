@@ -1,7 +1,7 @@
 // 메인 페이지 (/) — 히어로부터 마지막 CTA까지 16개 섹션을 순서대로 쌓는다.
 // 각 섹션의 실제 내용은 components/home/* 에 있고, 여기선 순서와 임시 문구만 잡는다.
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import HeroBanner from "@/components/home/HeroBanner";
 import TrustBand from "@/components/home/TrustBand";
 import SolutionSection from "@/components/home/SolutionSection";
@@ -38,15 +38,38 @@ export default function HomePage() {
     return () => observer.disconnect();
   }, []);
 
+  // 히어로 카드 펼침 — 스크롤 진행도(0~1)를 --hero-p 로 넘기면
+  // CSS 가 카드 둘레 여백과 모서리 둥글기를 그만큼 줄여 화면을 꽉 채운다
+  const firstScreenRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = firstScreenRef.current;
+    if (!el) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const p = Math.min(1, window.scrollY / (window.innerHeight * 0.3));
+      el.style.setProperty("--hero-p", p.toFixed(3));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
     <>
-      {/* 1~2. 첫 화면 — 히어로와 신뢰 밴드를 한 덩어리로 묶어 화면 높이를 나눠 갖는다.
-             밴드 높이를 픽셀로 빼면 기종·브라우저마다 글씨·여백이 달라 어긋나므로,
-             밴드는 제 높이만 쓰고 히어로가 남은 공간을 채우게 한다 (flex: 1). */}
-      <div className="first-screen">
+      {/* 1. 첫 화면 — 히어로가 둥근 카드로 떠 있다가 스크롤하면 화면 폭을 꽉 채운다 */}
+      <div className="first-screen" ref={firstScreenRef}>
         <HeroBanner />
-        <TrustBand />
       </div>
+
+      {/* 2. 신뢰 밴드 — 첫 화면 아래로 내렸다 */}
+      <TrustBand />
 
       {/* 3. 솔루션 — 통계 밴드 + 실시간 문의 + 강점 6종.
              제작 사례·고객 인터뷰 섹션을 대신한다 (사례는 /cases 로, 히어로 CTA가 연결) */}
@@ -80,28 +103,39 @@ export default function HomePage() {
       <FinalCTA />
 
       <style>{`
-        /* 히어로 + 신뢰 밴드를 한 화면에 묶는다.
-           첫 화면 = 뷰포트 - 헤더(프로모션 띠 46 + 네비 64). svh 라 주소창 변화에 안전하다.
-           히어로가 남은 높이를 전부 가져가고(flex:1) 밴드는 제 높이만 쓰므로,
-           밴드 높이가 기기마다 달라도 항상 첫 화면에 함께 들어온다. */
+        /* 첫 화면 = 뷰포트 - 헤더(64). svh 라 주소창 변화에 안전하다.
+           히어로는 이 높이를 전부 채운다.
+
+           카드 모양은 히어로를 clip-path 로 오려서 만든다 — 실제 크기는 그대로라
+           스크롤 중에 글자가 다시 배치되지 않는다. --hero-p(0→1)가 커질수록
+           둘레 여백(--hero-gap)과 둥글기가 0 으로 줄어 화면을 꽉 채운다. */
         .first-screen {
+          --hero-p: 0;
+          --hero-gap-max: 24px;
+          --hero-radius-max: 28px;
+          --hero-gap: calc((1 - var(--hero-p)) * var(--hero-gap-max));
+          /* 위쪽 여백 — 흰 헤더가 이미 여백 노릇을 해서 옆·아래보다 훨씬 좁게 잡는다
+             (같은 값이면 카드가 화면 아래로 처져 보인다) */
+          --hero-gap-top: calc((1 - var(--hero-p)) * 4px);
           display: flex;
           flex-direction: column;
-          min-height: calc(100svh - 110px);
+          min-height: calc(100svh - 64px);
+          background: #fff;
         }
         .first-screen > .hero-section {
           flex: 1 1 0;
           min-height: 0;
+          clip-path: inset(
+            var(--hero-gap-top) var(--hero-gap) var(--hero-gap)
+            round calc((1 - var(--hero-p)) * var(--hero-radius-max))
+          );
         }
-        /* 모바일: 하단 고정 바(56px)가 화면 아래를 덮으므로, 히어로 높이를 직접 잡아
-           신뢰 밴드는 첫 줄("N년차 홈페이지 제작")까지만 바 위로 보이고
-           둘째 줄("누적 제작 N건 이상")은 스크롤해야 나오게 한다.
-           150px = 밴드 위 여백 + 안내 문구 + 첫 줄 높이(여유 포함) */
+        /* 모바일: 하단 고정 바(56px)가 화면 아래를 덮으므로 그만큼 뺀다 */
         @media (max-width: 768px) {
-          .first-screen > .hero-section {
-            flex: 0 0 auto;
-            /* + 1cm = 위·아래 0.5cm 씩 늘린 히어로 패딩 몫 */
-            min-height: calc(100svh - 110px - 56px - 150px + 1cm);
+          .first-screen {
+            --hero-gap-max: 12px;
+            --hero-radius-max: 20px;
+            min-height: calc(100svh - 64px - 56px);
           }
         }
       `}</style>

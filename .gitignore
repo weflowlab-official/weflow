@@ -53,3 +53,6 @@ coverage/
 CLAUDE.md
 .vercel
 .env*
+
+# 히어로 영상 원본 — 배포에는 public/videos 의 압축본만 올린다
+public/hero.mp4

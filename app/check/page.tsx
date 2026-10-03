@@ -232,7 +232,7 @@ export default function CheckPage() {
           borderBottom: '1px solid var(--border)',
           padding: 'clamp(3rem, 7vw, 5rem) 1.5rem',
           // 첫 화면에서 푸터가 보이지 않도록 상단 고정 헤더를 뺀 화면 높이만큼 채운다
-          minHeight: 'calc(100svh - 110px)',
+          minHeight: 'calc(100svh - 64px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -273,7 +273,7 @@ export default function CheckPage() {
                     <input
                       ref={inputRef}
                       className="form-input"
-                      style={{ paddingLeft: '2.6rem', height: '54px', scrollMarginTop: '140px' }}
+                      style={{ paddingLeft: '2.6rem', height: '54px', scrollMarginTop: '94px' }}
                       placeholder="사이트 주소 (예: example.co.kr)"
                       value={url}
                       // 주소를 고치기 시작하면 지난 안내는 치운다 — 남아 있으면 방금 친 주소가
@@ -333,7 +333,7 @@ export default function CheckPage() {
       {/* ── 접속 실패 ── */}
       {phase === 'error' && (
         <section style={{ padding: 'clamp(3rem, 6vw, 4rem) 1.5rem' }}>
-          <div ref={errorRef} style={{ maxWidth: '560px', margin: '0 auto', textAlign: 'center', scrollMarginTop: '128px' }}>
+          <div ref={errorRef} style={{ maxWidth: '560px', margin: '0 auto', textAlign: 'center', scrollMarginTop: '82px' }}>
             <p className="emphasized c-primary" style={{ margin: '0 0 0.7rem', fontSize: 'clamp(1.4rem, 3.5vw, 1.8rem)', wordBreak: 'keep-all' }}>
               분석하지 못했습니다
             </p>

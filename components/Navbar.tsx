@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 // 상단 메뉴 목록 (데스크탑 가로 메뉴 / 모바일 드로어가 같이 쓴다).
@@ -20,8 +20,8 @@ const NAV_LINKS: { href: string; label: string; gold?: boolean }[] = [
   { href: "/check", label: "사이트 점검", gold: true },
 ];
 
-// 강조 메뉴 색 — 히어로 '고객만족도 1위' 엠블럼과 같은 금색
-const NAV_GOLD = "#e3c99e";
+// 강조 메뉴 색 — 흰 헤더·드로어 위에서 읽히는 중간 톤 금색 (상담 버튼 글씨와 같은 계열)
+const NAV_GOLD = "#ad8640";
 
 // 같은 페이지에서 다시 눌렀을 때 폼을 새로 시작해야 하는 경로
 const RESETTABLE = new Set(["/booking", "/diagnosis", "/check"]);
@@ -33,6 +33,27 @@ const RESETTABLE = new Set(["/booking", "/diagnosis", "/check"]);
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  // 스크롤을 내리면 헤더를 위로 숨기고, 올리면 다시 내린다
+  const [hidden, setHidden] = useState(false);
+  // 페이지 맨 위에서는 헤더 아래 선을 감춘다
+  const [atTop, setAtTop] = useState(true);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setAtTop(y <= 2);
+      // 맨 위 근처에서는 항상 보이게, 그 외엔 6px 넘게 움직였을 때만 방향을 따른다 (미세한 떨림 무시)
+      if (y <= 64) setHidden(false);
+      else if (y - lastY > 6) setHidden(true);
+      else if (lastY - y > 6) setHidden(false);
+      else return;
+      lastY = y;
+    };
+    setAtTop(lastY <= 2);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
 
   // 예약·상담 메뉴를 이미 그 페이지에서 다시 누르면 통째로 새로고침 — 입력 중이던 폼이 초기화된다
@@ -58,18 +79,24 @@ export default function Navbar() {
     <>
       <header
         style={{
-          position: "relative",
-          zIndex: 100,
-          background: "rgba(14,14,16,0.92)",
-          backdropFilter: "blur(12px)",
-          borderBottom: "1px solid var(--border)",
+          position: "sticky",
+          top: 0,
+          zIndex: 201,
+          background: "#fff",
+          borderBottom: `1px solid ${atTop ? "transparent" : "rgba(17,17,17,0.08)"}`,
+          // 드로어가 열려 있는 동안에는 숨기지 않는다
+          transform: hidden && !open ? "translateY(-100%)" : "none",
+          transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1), border-color 0.2s",
         }}
       >
         <div
           style={{
             maxWidth: "1200px",
             margin: "0 auto",
-            padding: "0 1.5rem",
+            // 위 4px — 내용을 2px 내린다. 헤더 아래 흰 여백과 한글 글꼴 특성 때문에
+            // 정확한 가운데는 눈에 살짝 위로 치우쳐 보인다
+            padding: "4px 1.5rem 0",
+            boxSizing: "border-box",
             height: "64px",
             display: "flex",
             alignItems: "center",
@@ -91,11 +118,12 @@ export default function Navbar() {
               alt="WEFLOW"
               width={27}
               height={27}
-              style={{ width: 27, height: 27, objectFit: "contain" }}
+              // 로고 원본이 흰색이라 흰 헤더에서는 검정으로 뒤집는다
+              style={{ width: 27, height: 27, objectFit: "contain", filter: "brightness(0)" }}
             />
             <span
               className="title-3 emphasized"
-              style={{ color: "var(--text)", letterSpacing: "-0.02em" }}
+              style={{ color: "#111", letterSpacing: "-0.02em" }}
             >
               WEFLOW
             </span>
@@ -124,8 +152,8 @@ export default function Navbar() {
                   color: l.gold
                     ? NAV_GOLD
                     : pathname === l.href
-                      ? "var(--accent)"
-                      : "var(--text-muted)",
+                      ? "#111"
+                      : "#555",
                   textDecoration: "none",
                   whiteSpace: "nowrap",
                   transition: "color 0.15s",
@@ -136,11 +164,11 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* 데스크탑 상담 CTA — 문구가 위로 흐르는 마퀴 + 그라데이션 애니메이션 */}
+          {/* 데스크탑 상담 CTA — 문구가 위로 흐르는 마퀴 + 금색 광택 */}
           <Link
             href="/diagnosis"
             aria-label="지금 바로 무료 상담 받기"
-            className="btn-primary cta-marquee cta-gradient hide-mobile"
+            className="btn-primary cta-marquee cta-gradient cta-header hide-mobile"
             style={{
               width: "132px",
               height: "40px",
@@ -166,7 +194,7 @@ export default function Navbar() {
               border: "none",
               cursor: "pointer",
               padding: "0.5rem",
-              color: "var(--text)",
+              color: "#111",
               display: "none",
             }}
           >
@@ -181,7 +209,7 @@ export default function Navbar() {
         style={{
           position: "fixed",
           inset: 0,
-          zIndex: 200,
+          zIndex: 202,
           background: "rgba(0,0,0,0.6)",
           opacity: open ? 1 : 0,
           pointerEvents: open ? "auto" : "none",
@@ -196,10 +224,10 @@ export default function Navbar() {
           top: 0,
           left: 0,
           bottom: 0,
-          zIndex: 201,
+          zIndex: 203,
           width: "min(280px, 80vw)",
-          background: "var(--surface)",
-          boxShadow: "4px 0 24px rgba(0,0,0,0.5)",
+          background: "#fff",
+          boxShadow: "4px 0 24px rgba(0,0,0,0.18)",
           display: "flex",
           flexDirection: "column",
           transform: open ? "translateX(0)" : "translateX(-100%)",
@@ -214,7 +242,7 @@ export default function Navbar() {
             justifyContent: "space-between",
             padding: "0 1.25rem",
             height: "64px",
-            borderBottom: "1px solid var(--border)",
+            borderBottom: "1px solid rgba(17,17,17,0.08)",
           }}
         >
           <Link
@@ -235,11 +263,11 @@ export default function Navbar() {
               alt="WEFLOW"
               width={22}
               height={22}
-              style={{ width: 22, height: 22, objectFit: "contain" }}
+              style={{ width: 22, height: 22, objectFit: "contain", filter: "brightness(0)" }}
             />
             <span
               className="headline emphasized"
-              style={{ color: "var(--text)", letterSpacing: "-0.02em" }}
+              style={{ color: "#111", letterSpacing: "-0.02em" }}
             >
               WEFLOW
             </span>
@@ -250,7 +278,7 @@ export default function Navbar() {
               background: "none",
               border: "none",
               cursor: "pointer",
-              color: "var(--text-muted)",
+              color: "#555",
               padding: "0.4rem",
             }}
           >
@@ -272,19 +300,15 @@ export default function Navbar() {
               style={{
                 display: "block",
                 padding: "0.9rem 1.5rem",
-                color: l.gold
-                  ? NAV_GOLD
-                  : pathname === l.href
-                    ? "var(--accent)"
-                    : "var(--text)",
+                color: l.gold ? NAV_GOLD : "#111",
                 textDecoration: "none",
                 fontWeight: pathname === l.href || l.gold ? 700 : 500,
                 borderLeft:
                   pathname === l.href
-                    ? "3px solid var(--accent)"
+                    ? "3px solid #111"
                     : "3px solid transparent",
                 background:
-                  pathname === l.href ? "var(--accent-light)" : "transparent",
+                  pathname === l.href ? "rgba(17,17,17,0.05)" : "transparent",
                 transition: "background 0.15s",
               }}
             >
@@ -297,12 +321,12 @@ export default function Navbar() {
         <div
           style={{
             padding: "1rem 1.25rem",
-            borderTop: "1px solid var(--border)",
+            borderTop: "1px solid rgba(17,17,17,0.08)",
           }}
         >
           <Link
             href="/diagnosis"
-            className="btn-primary cta-gradient"
+            className="btn-primary cta-gradient cta-header"
             style={{ justifyContent: "center", width: "100%" }}
             onClick={close}
           >
@@ -313,9 +337,22 @@ export default function Navbar() {
 
       <style>{`
         @media (max-width: 768px) { .show-mobile-flex { display: flex !important; } }
-        /* 어두운 헤더 위 CTA — 바탕은 어둡게, 밝은 금색 테두리, 글씨는 금장 광택(c-gold 계열).
+        /* 흰 헤더·드로어 위 CTA — 바탕 없이 금색 테두리·금색 글씨만 남긴다 */
+        .cta-gradient.cta-header {
+          background: transparent !important;
+          border-color: #b8914e !important;
+          box-shadow: 0 0 14px rgba(184, 145, 78, 0.18) !important;
+        }
+        /* 글씨 — 어두운 바탕용 밝은 금색은 흰 헤더에서 안 읽혀, 중간 톤 금색 사이에서 광택이 흐르게 한다 */
+        .cta-gradient.cta-header .cta-marquee-item,
+        .cta-gradient.cta-header .cta-label {
+          background-image: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #dcbc7c 50%, #b8914e 62%, #a8823e 100%);
+        }
+        .cta-gradient.cta-header:hover { background: rgba(227, 201, 158, 0.14) !important; }
+
+        /* 금색 CTA — 바탕은 어둡게, 밝은 금색 테두리, 글씨는 금장 광택(c-gold 계열).
            금색을 면으로 채우면 어두운 UI 위에서 탁해 보여 글씨·테두리에만 쓴다.
-           모바일 드로어의 상담 버튼도 같은 클래스를 쓴다. */
+           헤더 상담 버튼과 모바일 드로어의 상담 버튼이 같이 쓴다. */
         .cta-gradient {
           position: relative;
           overflow: hidden;
