@@ -5,7 +5,8 @@ import type { LucideIcon } from "lucide-react";
 
 // WEFLOW의 일하는 방식 6가지 — 상담(듣기) → 기획·설계 → 동선 → 워딩 → 전담 케어 → 운영 순.
 // 회사 소개에 따로 있던 "WEFLOW가 일하는 방식" 3장을 여기로 합쳤다.
-const POINTS: { Icon: LucideIcon; title: string; desc: string; img: string }[] =
+// 메인의 일하는 방식 카드(HomeCardSections)도 같은 목록을 쓴다
+export const POINTS: { Icon: LucideIcon; title: string; desc: string; img: string }[] =
   [
     {
       Icon: MessageCircle,
@@ -16,7 +17,7 @@ const POINTS: { Icon: LucideIcon; title: string; desc: string; img: string }[] =
     {
       Icon: PencilRuler,
       title: "직접 기획·설계",
-      desc: "템플릿이 아니라, 사람이 목표부터 구조까지 전략을 세웁니다.",
+      desc: "템플릿에 맞추지 않고, 목표부터 구조까지 직접 기획합니다.",
       img: "/images/about/about6.webp",
     },
     {
@@ -28,19 +29,19 @@ const POINTS: { Icon: LucideIcon; title: string; desc: string; img: string }[] =
     {
       Icon: PenLine,
       title: "맞춤형 워딩",
-      desc: "업종과 브랜드 톤에 맞는 문구를 직접 설계해, 방문자에게 전달력 있게 다가갑니다.",
+      desc: "업종과 브랜드 톤에 맞춰, 문구 하나까지 직접 다듬습니다.",
       img: "/images/main/main-listen-02.webp",
     },
     {
       Icon: Users,
       title: "1:1 맞춤 시스템",
-      desc: "전담 담당자가 고객 한 분을 전담하는 1:1 케어로 디테일까지 챙깁니다.",
+      desc: "담당자 한 명이 1:1 케어로 처음부터 끝까지 관리해, 디테일까지 챙깁니다.",
       img: "/images/main/main-listen-03.webp",
     },
     {
       Icon: Wrench,
       title: "지속 가능한 운영",
-      desc: "제작 이후에도 광고 연동·유지보수·운영까지 함께합니다.",
+      desc: "제작 이후에도 장애 대응과 유지보수를 끝까지 책임집니다.",
       img: "/images/about/about8.webp",
     },
   ];
