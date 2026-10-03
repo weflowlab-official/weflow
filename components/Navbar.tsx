@@ -50,9 +50,13 @@ export default function Navbar() {
       else return;
       lastY = y;
     };
-    setAtTop(lastY <= 2);
+    // 처음 한 번 — 스크롤된 채로 새로고침했을 때도 선이 바로 맞게 보이도록 다음 프레임에 맞춘다
+    const raf = requestAnimationFrame(() => setAtTop(window.scrollY <= 2));
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
 

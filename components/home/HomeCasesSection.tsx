@@ -180,7 +180,7 @@ export default function HomeCasesSection() {
   return (
     <section ref={sectionRef} className="hc-section" aria-labelledby="hc-title">
       <div ref={pinRef} className="hc-pin">
-        {/* 화면 좌하단 모서리에 붙은 큰 글씨 — 처음엔 아무것도 없다가, 넘길수록 금색 테두리 글씨가 왼쪽부터 드러난다.
+        {/* 화면 좌하단 모서리에 붙은 큰 글씨 — 처음엔 아무것도 없다가, 넘길수록 하늘색 테두리 글씨가 왼쪽부터 드러난다.
             맨 앞에 두어 제목·카드보다 뒤에 깔리게 한다 */}
         <div ref={markRef} className="hc-mark" aria-hidden="true">
           WEFLOW
@@ -293,7 +293,7 @@ export default function HomeCasesSection() {
           will-change: transform;
         }
 
-        /* ── 뒤에 깔리는 큰 글씨 — 금색 테두리만 있는 글씨가 왼쪽에서 오른쪽으로 써지듯 드러난다 ── */
+        /* ── 뒤에 깔리는 큰 글씨 — 하늘색 테두리만 있는 글씨가 왼쪽에서 오른쪽으로 써지듯 드러난다 ── */
         .hc-mark {
           position: absolute;
           /* 화면 좌하단 모서리에 붙여 오른쪽 끝까지 꽉 채운다.
@@ -305,7 +305,7 @@ export default function HomeCasesSection() {
           line-height: 1;
           white-space: nowrap;
           color: transparent;
-          -webkit-text-stroke: 2px #e0c27f;
+          -webkit-text-stroke: 2px #7fbcf7;
           /* 오른쪽을 (1 - 진행도)만큼 가린다 — 넘길수록 왼쪽부터 보인다 */
           clip-path: inset(0 calc((1 - var(--hc-p, 0)) * 100%) 0 0);
           pointer-events: none;
