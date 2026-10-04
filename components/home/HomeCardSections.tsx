@@ -80,7 +80,7 @@ const SOLUTIONS: Card[] = [
     title: '1:1 집중 관리',
     img: '/images/main/solution/service11.webp',
     desc: '전담 담당자가 처음부터 끝까지 함께',
-    more: { href: '/service', label: '서비스 보기' },
+    more: { href: '/benefits', label: '혜택 보기' },
   },
   {
     Icon: ShieldCheck,

@@ -1,5 +1,5 @@
 /**
- * /service 페이지 데이터 — 제작 6단계와 광고·마케팅 서비스 목록.
+ * /service 페이지 데이터 — 제작 5단계.
  * steps 는 components/service/ServiceSteps.tsx 가 단계 카드로 뿌린다.
  */
 
@@ -12,7 +12,7 @@ export interface Step {
   image: string;
 }
 
-/** 제작 6단계 — 배열 순서가 곧 화면에 뜨는 순서 (num 과 짝을 맞춰 둘 것) */
+/** 제작 5단계 — 배열 순서가 곧 화면에 뜨는 순서 (num 과 짝을 맞춰 둘 것) */
 export const steps: Step[] = [
   {
     num: "01",
@@ -52,12 +52,5 @@ export const steps: Step[] = [
     detail:
       "PC·모바일 반응형과 속도·오류·크로스브라우저까지 최종 점검한 뒤, 실제 도메인에 배포해 사이트를 오픈합니다.",
     image: "/images/process/process-05-responsive.webp",
-  },
-  {
-    num: "06",
-    title: "제휴 마케팅 연결 (선택형)",
-    desc: "블로그·인스타·유튜브 숏폼·네이버 플레이스",
-    detail: "제작 이후 홍보와 유입까지 이어질 수 있도록 돕습니다.",
-    image: "/images/process/process-06-marketing.webp",
   },
 ];

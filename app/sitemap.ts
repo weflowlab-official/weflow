@@ -31,13 +31,14 @@ const paths: {
   //  - 나머지 여섯 페이지는 페이지별 og 이미지 (그전에는 og:image 가 아예 없었다)
   // 검색 결과에 보이는 것이 실제로 바뀐 페이지들이라 날짜를 올린다.
   //
-  { path: '/service', updated: '2026-09-14', priority: 0.9, freq: 'weekly' },
+  // 10-04: 서비스 안내(/service)를 WEFLOW 혜택(/benefits)으로 합쳤다 — /service 는 /benefits 로 넘어가므로
+  // 목록에서 빼고, 그 자리(우선순위 0.9 · 주 단위)를 /benefits 가 이어받는다
+  { path: '/benefits', updated: '2026-10-04', priority: 0.9, freq: 'weekly' },
   { path: '/difference', updated: '2026-09-14', priority: 0.8, freq: 'monthly' },
   { path: '/guide', updated: '2026-09-14', priority: 0.8, freq: 'monthly' },
   { path: '/pricing', updated: '2026-09-14', priority: 0.9, freq: 'weekly' },
   { path: '/cases', updated: '2026-09-14', priority: 0.8, freq: 'weekly' },
   { path: '/about', updated: '2026-09-14', priority: 0.7, freq: 'monthly' },
-  { path: '/benefits', updated: '2026-09-14', priority: 0.7, freq: 'monthly' },
   { path: '/diagnosis', updated: '2026-09-14', priority: 0.8, freq: 'monthly' },
   { path: '/check', updated: '2026-09-14', priority: 0.8, freq: 'monthly' },
   // /booking 은 메뉴에서 내리면서 검색 노출도 뺐다 — 페이지는 주소로만 접근 가능

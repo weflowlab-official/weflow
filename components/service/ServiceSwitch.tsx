@@ -3,38 +3,30 @@ import Reveal from "@/components/Reveal";
 import SplitText from "@/components/SplitText";
 
 /**
- * 서비스 페이지 "타 서비스에서 전환하신다면?" 섹션 — 다른 업체에서 만든 사이트를
+ * "타 서비스에서 전환하신다면?" 섹션 — 다른 업체에서 만든 사이트를
  * WEFLOW로 갈아타도록 문의를 유도한다. (동작하는 토글 스위치가 아니라 안내용 섹션이다)
+ * (서비스 안내 탭에 있던 섹션 — 그 탭을 혜택 탭으로 합치면서 /benefits 에서 쓴다)
+ * 머리말 모양은 혜택 탭 공용 스타일(.svc-*, app/benefits/page.tsx)을 쓴다.
  */
 export default function ServiceSwitch() {
   return (
-    <section
-      style={{
-        background: "var(--section-b)",
-        padding: "clamp(4rem, 9vw, 7rem) 1.25rem",
-        textAlign: "center",
-      }}
-    >
-      <div style={{ maxWidth: "860px", margin: "0 auto" }}>
-        <Reveal variant="up">
-          <p
-            className="footnote emphasized c-accent"
-            style={{ margin: "0 0 0.85rem" }}
-          >
-            여기서 하나 더
-          </p>
-        </Reveal>
-        <SplitText
-          as="h2"
-          className="title-1 svc-switch-title"
-          style={{ margin: 0, wordBreak: "keep-all", lineHeight: 1.4 }}
-          step={0.024}
-          segments={[
-            { text: "타 서비스에서 전환하신다면?\n" },
-            { text: "고민 전 " },
-            { text: "문의 요망!", className: "c-accent emphasized" },
-          ]}
-        />
+    <section className="svc-section">
+      <div className="svc-inner">
+        <header className="svc-head">
+          <Reveal variant="up">
+            <p className="svc-eyebrow">ONE MORE THING</p>
+          </Reveal>
+          <SplitText
+            as="h2"
+            className="svc-title svc-switch-title"
+            step={0.024}
+            segments={[
+              { text: "타 서비스에서 전환하신다면?\n" },
+              { text: "고민 전 " },
+              { text: "문의 요망!", className: "svc-hl" },
+            ]}
+          />
+        </header>
 
         {/* 이미지 박스 2개 */}
         <Reveal as="div" stagger className="svc-switch-boxes">
@@ -53,32 +45,29 @@ export default function ServiceSwitch() {
       </div>
 
       <style>{`
-        .svc-switch-title {
-          font-size: clamp(2.2rem, 5.5vw, 3.5rem);
-        }
         .svc-switch-boxes {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 1.1rem;
-          margin-top: clamp(2rem, 4vw, 3rem);
+          gap: clamp(0.85rem, 1.8vw, 1.4rem);
+          max-width: 860px;
+          margin: 0 auto;
         }
         .svc-switch-img {
           position: relative;
           overflow: hidden;
           width: 100%;
           aspect-ratio: 16 / 9;
-          border-radius: var(--radius-2xl);
-          background: var(--surface-container);
-          border: 1px solid var(--border);
+          border-radius: clamp(18px, 2.2vw, 28px);
+          background: #e9ebee;
         }
         @media (max-width: 760px) {
-          .svc-switch-boxes { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+          .svc-switch-boxes { grid-template-columns: 1fr; max-width: 420px; }
         }
         @media (max-width: 600px) {
           /* "타 서비스에서 전환하신다면?" 을 한 줄에 —
              SplitText 가 공백을 줄바꿈 없는 공백으로 바꿔 통째로 한 덩어리라,
              폭이 모자라면 글자 중간에서 잘린다. 폭에 맞춰 글씨를 줄여 막는다 */
-          .svc-switch-title { font-size: min(2.2rem, 6.6vw); }
+          .svc-switch-title { font-size: min(1.75rem, 6.4vw); }
         }
       `}</style>
     </section>

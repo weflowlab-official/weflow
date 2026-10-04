@@ -15,11 +15,10 @@ const NAV_ITEMS: (NavLink | NavGroup)[] = [
   {
     label: "WEFLOW 혜택",
     children: [
-      { href: "/service", label: "서비스" },
+      // 묶음 이름과 겹치지 않게 '혜택 안내'로 부른다 (서비스 안내는 이 페이지로 합쳤다)
+      { href: "/benefits", label: "혜택 안내" },
       { href: "/pricing", label: "가격 안내" },
       { href: "/difference", label: "왜 WEFLOW?" },
-      // 묶음 이름과 겹치지 않게 '혜택 안내'로 부른다
-      { href: "/benefits", label: "혜택 안내" },
     ],
   },
   {

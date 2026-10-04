@@ -12,10 +12,9 @@ const { kakao: KAKAO_URL, blog: BLOG_URL, instagram: INSTAGRAM_URL, youtube: YOU
 /* 헤더(Navbar) 메뉴와 동일하게 맞춤 */
 const SERVICE_LINKS = [
   { label: '회사소개',        href: '/about' },
-  { label: '서비스',          href: '/service' },
+  { label: 'WEFLOW 혜택',     href: '/benefits' },
   { label: '가격 안내',        href: '/pricing' },
   { label: '왜 WEFLOW?',       href: '/difference' },
-  { label: 'WEFLOW 혜택',     href: '/benefits' },
   { label: '제작 라인업',       href: '/guide' },
 ]
 

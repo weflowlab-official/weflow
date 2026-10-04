@@ -11,6 +11,14 @@ const nextConfig = {
     ],
   },
 
+  // 없앤 페이지의 옛 주소 — 검색 결과·광고·즐겨찾기로 들어오는 사람이 끊기지 않게 새 자리로 넘긴다.
+  async redirects() {
+    return [
+      // 서비스 안내는 WEFLOW 혜택과 내용이 겹쳐 혜택 페이지로 합쳤다
+      { source: '/service', destination: '/benefits', permanent: true },
+    ]
+  },
+
   // 모든 페이지에 붙는 보안 헤더.
   // HTTPS 강제(strict-transport-security)는 Vercel 이 자동으로 넣어주므로 여기선 생략.
   async headers() {

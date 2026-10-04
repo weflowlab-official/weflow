@@ -1,53 +1,39 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Check, ArrowRight, Crown } from "lucide-react";
-import Reveal from "@/components/Reveal";
-import SplitText from "@/components/SplitText";
-import { CTA_BTN } from "@/lib/ctaButton";
-
-// 아이콘 배치 순서 (혜택 카드별) — 3-2-1-2-3-1
-const ICON_ORDER = [3, 2, 1, 2, 3, 1];
+import { Check, ArrowRight } from "lucide-react";
 
 type Benefit = {
   title: string;
   points: string[];
-  icon: string;
-  /** 오른쪽 큰 사진 번호(/images/benefits/benefits{img}.webp) — 카드 순서를 바꿔도 사진이 따라오게 */
-  img: number;
+  /** 옆에 놓이는 큰 사진 — 카드 순서를 바꿔도 사진이 따라오게 카드마다 적어 둔다.
+   *  사람(얼굴·몸)이 나오지 않는 사진만 쓴다 — 화면·기기만 나오거나, 나와도 손까지만 */
+  img: string;
   cta?: { label: string; href: string };
 };
 
+// 혜택 일곱 가지 — 실제 제작 순서대로 놓는다: 상담 → 견적 → 디자인 → 개발(연동·관리자 페이지) → 유지보수,
+// 그리고 언제든 열려 있는 24시간 상담을 마지막에 둔다.
+// 예전 '강점' 카드 섹션(ServiceFeatures)과 내용이 겹쳐 그 섹션을 내리고,
+// 거기에만 있던 '관리자 페이지 제공 (선택형)' 이름과 'SNS 연동' · '24시간 상담 대기'를 여기로 옮겨 왔다
 const BENEFITS: Benefit[] = [
-  {
-    title: "제휴 마케팅 연결 (선택형)",
-    points: [
-      "네이버 블로그 — 정보성 콘텐츠 정기 업로드",
-      "인스타그램 — 메타 광고로 브랜드 도달",
-      "유튜브 숏폼 — 짧은 영상으로 바이럴 확산",
-      "네이버 플레이스 — 지역 검색·지도 노출",
-      "원하시는 채널만 골라 제휴 업체와 연결",
-    ],
-    icon: "/images/3d-icon/benefit001.svg",
-    img: 1,
-  },
   {
     title: "고객의 소리 · 1:1 관리 시스템",
     points: [
       "충분한 소통으로 고객의 니즈 파악",
       "전담 담당자가 고객 한 분을 1:1로 전담",
     ],
-    icon: "/images/3d-icon/benefit004.svg",
-    img: 5,
+    img: "/images/service/service12.webp",
   },
   {
-    title: "통계 관리자 페이지",
+    title: "합리적 가성비",
     points: [
-      "관리자 DB로 고객 정보 자산화",
-      "문의·예약 접수 내역을 한곳에서 관리",
-      "통계로 유입·전환 추이를 한눈에 파악",
+      "꼭 필요한 기능만 골라 담는 맞춤 구성",
+      "부담 없이 시작하는 합리적인 비용",
     ],
-    icon: "/images/3d-icon/benefit003.svg",
-    img: 2,
+    img: "/images/service/service8.webp",
+    cta: { label: "제작 플랜 보기", href: "/pricing" },
   },
   {
     title: "반응형 디자인 (PC / MO)",
@@ -55,330 +41,328 @@ const BENEFITS: Benefit[] = [
       "PC·모바일 등 모든 기기에서 최적화",
       "화면 잘림 없는 깔끔한 반응형 전환",
     ],
-    icon: "/images/3d-icon/benefit006.svg",
-    img: 3,
+    img: "/images/service/service3.webp",
   },
   {
-    title: "합리적 가성비",
+    title: "SNS 연동",
     points: [
-      "정가 대비 100만원 이내로 제작 가능",
-      "필요한 기능만 구성한 합리적인 비용",
+      "카카오톡, 인스타그램 등 원하는 플랫폼 연동",
+      "필요한 채널만 골라 자유롭게 구성",
     ],
-    icon: "/images/3d-icon/benefit002.svg",
-    img: 4,
-    cta: { label: "제작 플랜 보기", href: "/pricing" },
+    img: "/images/service/service4.webp",
+  },
+  {
+    title: "관리자 페이지 제공 (선택형)",
+    points: [
+      "관리자 DB로 고객 정보 자산화",
+      "문의·예약 접수 내역을 한곳에서 관리",
+      "통계로 유입·전환 추이를 한눈에 파악",
+    ],
+    img: "/images/service/service22.webp",
   },
   {
     title: "각 상품별 전용 유지보수",
     points: [
       "3가지 상품별 맞춤 유지보수 제공",
-      "도메인·서버 관리 지원",
+      "서버·보안 관리 지원",
       "텍스트 문구 / 이미지 수정 지원",
     ],
-    icon: "/images/3d-icon/benefit005.svg",
-    img: 6,
+    img: "/images/benefits/benefits6.webp",
+  },
+  {
+    title: "24시간 상담 대기",
+    points: [
+      "연중무휴 24시간 상담 대기",
+      "언제 문의하셔도 빠르게 응답",
+    ],
+    img: "/images/benefits/benefits8.webp",
   },
 ];
 
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/**
+ * 혜택 상세 — 혜택 일곱 가지를 스크롤하며 하나씩 읽는 화면. 바로 위 인트로(BENEFITS)가 제목 노릇을 하므로
+ * 따로 머리말을 두지 않는다.
+ *
+ * 넓은 화면: 왼쪽에 하늘색 판(사진)이 화면 가운데쯤에 붙어 따라오고, 오른쪽에 일곱 항목이 세로로 지나간다.
+ * 항목 하나의 높이를 사진 판과 똑같이 잡고 글을 그 안의 위아래 가운데에 두어서, 항목이 판 옆에 나란히 올 때
+ * 글이 사진의 한가운데에 놓인다. 판에 가장 가까운 항목이 '지금 읽는 항목'이 되어 또렷해지고(나머지는 흐려진다),
+ * 왼쪽 사진·번호·진행 막대가 그 항목에 맞춰 바뀐다.
+ * 좁은 화면: 붙는 판 없이, 항목마다 제 사진을 위에 달고 차례로 쌓인다.
+ *
+ * ('제휴 마케팅 연결'과, 아래에 붙어 있던 '24시간 상담 대기' 띠는 내렸다)
+ * 섹션 여백은 혜택 탭 공용 스타일(.svc-*, app/benefits/page.tsx)을 쓴다.
+ */
 export default function BenefitDetails() {
+  const [active, setActive] = useState(0);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+
+  // 사진 판의 가운데 높이에 가장 가까운 항목을 고른다
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const frame = frameRef.current;
+      if (!frame) return;
+      const fr = frame.getBoundingClientRect();
+      // 좁은 화면에서는 판이 감춰져 있다 (높이 0) — 고를 것이 없다
+      if (!fr.height) return;
+      const mid = fr.top + fr.height / 2;
+      let best = 0;
+      let bestD = Infinity;
+      itemRefs.current.forEach((el, i) => {
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const d = Math.abs(r.top + r.height / 2 - mid);
+        if (d < bestD) {
+          bestD = d;
+          best = i;
+        }
+      });
+      setActive(best);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
-    <>
-      <section
-        style={{
-          background: "var(--section-b)",
-          padding: "clamp(3rem, 6vw, 5rem) 1.25rem",
-        }}
-      >
-        <div style={{ maxWidth: "1100px", margin: "0 auto", width: "100%" }}>
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "clamp(2.5rem, 6vw, 4rem)",
-            }}
-          >
-            <Reveal variant="up">
-              <span className="footnote emphasized c-accent">혜택 상세</span>
-            </Reveal>
-            <SplitText
-              as="h2"
-              className="title-1 bd-heading"
-              style={{ margin: "0.75rem 0 0", wordBreak: "keep-all" }}
-              segments={[
-                { text: "WEFLOW의 혜택, " },
-                { text: "하나하나 풀어봤습니다", className: "c-accent", br: "mobile" },
-              ]}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "clamp(2.25rem, 5vw, 3.75rem)",
-            }}
-          >
-            {BENEFITS.map((b, i) => (
-              <Reveal
-                key={b.title}
-                variant={i % 2 === 1 ? "right" : "left"}
-                className={`bd-row${i % 2 === 1 ? " bd-row--rev" : ""}`}
-              >
-                {/* 텍스트 */}
-                <div className="bd-text">
-                  <div style={{ width: 54, display: "flex", justifyContent: "center", marginBottom: "0.25rem" }}>
-                    <Crown
-                      strokeWidth={2}
-                      color="#f5b301"
-                      fill="#f5b301"
-                      style={{ width: "1.35rem", height: "1.35rem" }}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      position: "relative",
-                      width: 54,
-                      height: 54,
-                      marginBottom: "0.8rem",
-                    }}
-                  >
-                    <Image
-                      src={`/images/benefits/benefits-icon-0${ICON_ORDER[i]}.webp`}
-                      alt=""
-                      fill
-                      sizes="54px"
-                      style={{ objectFit: "contain" }}
-                    />
-                  </div>
-                  <h3
-                    className="title-2 emphasized"
-                    style={{
-                      margin: "0 0 0.8rem",
-                      fontSize: "clamp(1.15rem, 2.4vw, 1.3rem)",
-                      wordBreak: "keep-all",
-                    }}
-                  >
-                    {b.title}
-                  </h3>
-                  <ul
-                    style={{
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "0.55rem",
-                    }}
-                  >
-                    {b.points.map((p) => (
-                      <li
-                        key={p}
-                        style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: "0.6rem",
-                        }}
-                      >
-                        <Check
-                          size={15}
-                          strokeWidth={2.5}
-                          color="var(--accent)"
-                          style={{ flexShrink: 0, marginTop: "2px" }}
-                        />
-                        <span
-                          className="footnote c-secondary"
-                          style={{ wordBreak: "keep-all", lineHeight: 1.6 }}
-                        >
-                          {p}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                  {b.cta && (
-                    <Link
-                      href={b.cta.href}
-                      className="btn-primary"
-                      style={{ marginTop: "1.1rem", fontSize: "0.88rem", padding: "0.65rem 1.4rem" }}
-                    >
-                      {b.cta.label} →
-                    </Link>
-                  )}
+    <section className="svc-section bd-section">
+      <div className="svc-inner bd-wrap">
+        {/* 왼쪽 — 붙어 따라오는 사진 판. 같은 사진·글이 오른쪽 목록에 있으므로 보조 기술에는 숨긴다 */}
+        <div className="bd-stage" aria-hidden="true">
+          <div ref={frameRef} className="bd-frame">
+            <div className="bd-shots">
+              {BENEFITS.map((b, i) => (
+                <div key={b.title} className={i === active ? "bd-shot is-on" : "bd-shot"}>
+                  <Image
+                    src={b.img}
+                    alt=""
+                    fill
+                    sizes="(max-width: 860px) 1px, 520px"
+                    style={{ objectFit: "cover" }}
+                  />
                 </div>
-
-                {/* 이미지 — 텍스트 카드와 같은 높이의 칸 안에서 가운데 정렬 */}
-                <div className="bd-img">
-                  <div className="bd-img-inner">
-                    <Image
-                      src={`/images/benefits/benefits${b.img}.webp`}
-                      alt={b.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 520px"
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                </div>
-              </Reveal>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* 24시간 상담 대기 — 좌우 풀-블리드 밴드 */}
-      <section
-        style={{
-          background: "var(--accent-dim)",
-          padding: "clamp(2.5rem, 5vw, 4.25rem) clamp(1.25rem, 4vw, 3rem)",
-          textAlign: "center",
-        }}
-      >
-        <div style={{ maxWidth: "1100px", margin: "0 auto", width: "100%" }}>
-          <Reveal variant="up">
-            <span className="footnote emphasized" style={{ color: "var(--accent)" }}>
-              24시간 상담 대기
-            </span>
-          </Reveal>
-          <SplitText
-            as="h3"
-            className="title-1 bd-heading"
-            style={{
-              margin: "0.75rem 0 0",
-              color: "var(--text)",
-              wordBreak: "keep-all",
-              lineHeight: 1.4,
-            }}
-            step={0.024}
-            segments={[
-              { text: "모두가 잠든 이 시간에도,\nWEFLOW는 " },
-              { text: "고객을 기다립니다", className: "bd-band-accent", br: "mobile" },
-            ]}
-          />
-          <Reveal variant="up" delay={0.1}>
-            <p
-              className="callout"
-              style={{
-                margin: "1rem 0 1.75rem",
-                color: "var(--text-secondary)",
-              }}
-            >
-              연중무휴 24시간, 언제 문의하셔도 빠르게 응답합니다.
+          <div className="bd-meter">
+            <p className="bd-count">
+              <b>{pad(active + 1)}</b> / {pad(BENEFITS.length)}
             </p>
-          </Reveal>
-          <Reveal as="div" stagger className="bd-band-imgs">
-            <div className="bd-band-img">
-              <Image
-                src="/images/benefits/benefits7.webp"
-                alt="24시간 상담 대기"
-                fill
-                sizes="(max-width: 768px) 100vw, 360px"
-                style={{ objectFit: "cover" }}
-              />
-            </div>
-            <div className="bd-band-img">
-              <Image
-                src="/images/benefits/benefits8.webp"
-                alt="24시간 상담 대기"
-                fill
-                sizes="(max-width: 768px) 100vw, 360px"
-                style={{ objectFit: "cover" }}
-              />
-            </div>
-          </Reveal>
-          <Reveal variant="up">
-            <div
-              style={{
-                display: "flex",
-                gap: "0.8rem",
-                justifyContent: "center",
-                flexWrap: "wrap",
-                marginTop: "3rem",
-              }}
-            >
-              <a href="tel:010-2971-7280" className="btn-gold" style={CTA_BTN}>
-                <span className="btn-gold__label">전화 상담하기</span> <ArrowRight size={18} strokeWidth={2.5} />
-              </a>
-              <Link href="/diagnosis" className="btn-gold btn-gold--fill" style={CTA_BTN}>
-                <span className="btn-gold__label">무료 상담 신청</span> <ArrowRight size={18} strokeWidth={2.5} />
-              </Link>
-            </div>
-          </Reveal>
+            <span className="bd-bar">
+              <span style={{ width: `${((active + 1) / BENEFITS.length) * 100}%` }} />
+            </span>
+          </div>
         </div>
-      </section>
+
+        {/* 오른쪽 — 혜택 목록 */}
+        <ol className="bd-list">
+          {BENEFITS.map((b, i) => (
+            <li
+              key={b.title}
+              ref={(node) => {
+                itemRefs.current[i] = node;
+              }}
+              className={i === active ? "bd-item is-on" : "bd-item"}
+            >
+              {/* 좁은 화면에서만 보이는 사진 */}
+              <div className="bd-item__photo">
+                <Image
+                  src={b.img}
+                  alt={b.title}
+                  fill
+                  sizes="(max-width: 860px) 100vw, 1px"
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+              <p className="bd-num">{pad(i + 1)}</p>
+              <h2>{b.title}</h2>
+              <ul>
+                {b.points.map((p) => (
+                  <li key={p}>
+                    <Check size={18} strokeWidth={2.6} aria-hidden="true" />
+                    {p}
+                  </li>
+                ))}
+              </ul>
+              {b.cta && (
+                <Link href={b.cta.href} className="bd-btn">
+                  {b.cta.label}
+                  <ArrowRight size={16} />
+                </Link>
+              )}
+            </li>
+          ))}
+        </ol>
+      </div>
 
       <style>{`
-        /* 전체를 한 단계 줄인다 — 폭을 좁히면 사진·텍스트가 함께 작아진다 */
-        .bd-row {
+        /* 두 칸의 폭이 같아야 한다 — 오른쪽 항목이 왼쪽 판과 같은 폭에서 같은 비율로 높이를 잡는다 */
+        .bd-wrap {
+          --bd-gap: clamp(2rem, 6vw, 6rem);
+          /* 사진 판의 높이 ÷ 폭 — 위아래 여백 3.5% × 2 + 사진(폭의 93%, 16:9).
+             .bd-frame 의 padding 을 바꾸면 이 값도 같이 바꿔야 글이 사진 가운데에 맞는다 */
+          --bd-ratio: 0.593125;
+          /* 사진 판의 높이(어림값) — 판을 화면 가운데쯤에 붙일 때만 쓴다 */
+          --bd-h: calc((min(100vw - 3rem, 1120px) - var(--bd-gap)) / 2 * var(--bd-ratio));
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: clamp(1.2rem, 3vw, 2.5rem);
-          align-items: stretch;
-          max-width: 880px;
-          margin: 0 auto;
-          width: 100%;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          gap: var(--bd-gap);
+          align-items: start;
         }
-        /* 텍스트 측 푸른 박스 패널 */
-        .bd-text {
-          background: var(--surface);
-          border: 1px solid var(--accent-light);
-          border-radius: var(--radius-2xl);
-          padding: clamp(1.1rem, 2.2vw, 1.6rem);
+
+        /* ── 왼쪽 판 — 화면 위아래 가운데쯤에 붙는다 (아래 번호 줄 몫만큼 조금 올린다) ── */
+        .bd-stage { position: sticky; top: calc(50vh - var(--bd-h) / 2 - 1.5rem); }
+        /* 파스텔 하늘색 판 위에 사진을 띄운다 (메인 '왜 WEFLOW' 시연 카드와 같은 색) */
+        .bd-frame {
+          padding: 3.5%;
+          border-radius: clamp(18px, 2.2vw, 28px);
+          background: linear-gradient(135deg, #d6ebff 0%, #9ccbf7 100%);
         }
-        .bd-row--rev .bd-text { order: 2; }
-        .bd-row--rev .bd-img { order: 1; }
-        /* 사진 칸 — 텍스트 카드와 같은 높이로 늘어나고, 사진은 그 안에서 가운데 */
-        .bd-img {
-          border-radius: var(--radius-2xl);
-          overflow: hidden;
-          background: var(--surface-container);
-          border: 1px solid var(--border);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: clamp(0.6rem, 1.5vw, 1rem);
-          color: var(--text-secondary);
-          font-size: 0.82rem;
-          font-weight: 600;
-          letter-spacing: 0.02em;
-        }
-        /* 사진 자체 — 원본이 16:9 라 같은 비율로 둬야 잘리지 않는다 */
-        .bd-img-inner {
+        /* 사진 자리 — 원본이 16:9 라 같은 비율로 둬야 잘리지 않는다. 일곱 장을 겹쳐 두고 하나만 보인다 */
+        .bd-shots {
           position: relative;
-          width: 100%;
           aspect-ratio: 16 / 9;
-          border-radius: var(--radius-xl);
+          border-radius: clamp(10px, 1.4vw, 16px);
           overflow: hidden;
+          background: #e9ebee;
+          box-shadow: 0 10px 40px rgba(20, 60, 110, 0.28);
         }
-        .bd-heading { font-size: clamp(2rem, 4.5vw, 3rem); }
-        .bd-band-accent { color: var(--accent); }
-        .bd-band-imgs {
+        .bd-shot {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          transform: scale(1.06);
+          transition:
+            opacity 0.6s ease,
+            transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .bd-shot.is-on { opacity: 1; transform: none; }
+        /* 번호와 진행 막대 */
+        .bd-meter { display: flex; align-items: center; gap: 1rem; margin-top: 1.25rem; }
+        .bd-count {
+          margin: 0;
+          font-size: 1rem;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          color: #b9bdc4;
+        }
+        .bd-count b { font-weight: 800; color: #111; }
+        .bd-bar { flex: 1; height: 2px; border-radius: 2px; overflow: hidden; background: #e3e5e8; }
+        .bd-bar span {
+          display: block;
+          height: 100%;
+          background: #111;
+          transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* ── 오른쪽 목록 — 항목 높이 = 사진 판 높이, 글은 그 안의 위아래 가운데.
+              항목이 판 옆에 나란히 오면 글이 사진 한가운데에 놓인다 ── */
+        /* 아래 여백은 판 밑의 번호 줄 높이만큼 — 마지막 항목도 판과 나란히 선 채로 끝나게 한다 */
+        .bd-list {
+          list-style: none;
+          margin: 0;
+          padding: 0 0 2.9rem;
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-          max-width: 720px;
-          margin: 0 auto;
+          gap: 14vh;
         }
-        .bd-band-img {
-          aspect-ratio: 16 / 10;
-          border-radius: var(--radius-xl);
-          position: relative;
-          overflow: hidden;
-        }
-        .bd-band-ph {
+        .bd-item {
+          aspect-ratio: 1 / var(--bd-ratio);
           display: flex;
-          align-items: center;
+          flex-direction: column;
           justify-content: center;
-          background: var(--surface);
-          border: 1px dashed var(--border);
-          color: var(--text-muted);
-          font-size: 0.82rem;
-          font-weight: 600;
-          letter-spacing: 0.02em;
+          opacity: 0.25;
+          transition: opacity 0.45s ease;
         }
-        @media (max-width: 768px) {
-          .bd-row { grid-template-columns: 1fr; }
-          .bd-row--rev .bd-text { order: 1; }
-          .bd-row--rev .bd-img { order: 2; }
-          .bd-band-imgs { grid-template-columns: 1fr; }
+        .bd-item.is-on { opacity: 1; }
+        .bd-item__photo { display: none; }
+        .bd-num {
+          margin: 0 0 0.9rem;
+          font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          color: #3f8fe0;
+        }
+        .bd-item h2 {
+          margin: 0;
+          color: #111;
+          font-size: clamp(1.6rem, 3.2vw, 2.5rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1.3;
+          word-break: keep-all;
+        }
+        .bd-item ul {
+          list-style: none;
+          margin: clamp(1.1rem, 2.4vw, 1.6rem) 0 0;
+          padding: 0;
+          display: grid;
+          gap: 0.7rem;
+        }
+        .bd-item li {
+          display: flex;
+          gap: 0.6rem;
+          font-size: clamp(1rem, 1.5vw, 1.2rem);
+          line-height: 1.6;
+          color: #5c6066;
+          word-break: keep-all;
+        }
+        .bd-item li svg { flex: none; margin-top: 0.3em; color: #3f8fe0; }
+
+        /* 버튼 — 검은 알약, 마우스를 올리면 테두리만 남는다 */
+        .bd-btn {
+          display: inline-flex;
+          /* 항목이 세로 flex 라 그냥 두면 가로로 꽉 늘어난다 — 글자 폭만큼만 차지하게 한다 */
+          align-self: flex-start;
+          align-items: center;
+          gap: 0.4rem;
+          margin-top: 1.5rem;
+          padding: 0.75rem 1.4rem;
+          border: 1.5px solid #111;
+          border-radius: 9999px;
+          background: #111;
+          color: #fff;
+          font-size: 0.95rem;
+          font-weight: 700;
+          text-decoration: none;
+          white-space: nowrap;
+          transition: background 0.15s, color 0.15s;
+        }
+        .bd-btn:hover { background: transparent; color: #111; }
+        .bd-btn svg { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .bd-btn:hover svg { transform: translateX(4px); }
+
+        /* 좁은 화면 — 붙는 판을 감추고, 항목마다 제 사진을 달아 차례로 쌓는다 */
+        @media (max-width: 860px) {
+          .bd-wrap { grid-template-columns: 1fr; }
+          .bd-stage { display: none; }
+          .bd-list { padding-bottom: 0; gap: clamp(3rem, 9vw, 4.5rem); }
+          .bd-item { aspect-ratio: auto; display: block; opacity: 1; }
+          .bd-item__photo {
+            display: block;
+            position: relative;
+            aspect-ratio: 16 / 9;
+            margin-bottom: 1.5rem;
+            border-radius: clamp(18px, 2.2vw, 28px);
+            overflow: hidden;
+            background: #e9ebee;
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .bd-shot, .bd-item, .bd-bar span { transition: none; }
         }
       `}</style>
-    </>
+    </section>
   );
 }

@@ -381,7 +381,7 @@ export default function AboutPage() {
         .ab-cta__title {
           margin: 0;
           color: #fff;
-          font-size: clamp(2rem, 5vw, 3.25rem);
+          font-size: clamp(2.25rem, 5.8vw, 3.9rem);
           font-weight: 800;
           letter-spacing: -0.02em;
           line-height: 1.25;
