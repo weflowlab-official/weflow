@@ -1,8 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { XCircle } from 'lucide-react'
-import { projectTypes } from '@/data/common'
+import { Check, FileText, LayoutTemplate, XCircle } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { attributionLine } from '@/lib/attribution'
 import { markNaverLead } from '@/lib/naverConversion'
 import HoneypotField from '@/components/HoneypotField'
@@ -10,9 +10,31 @@ import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
 import { formatPhone, isValidPhone } from '@/lib/phone'
 import { readStore, writeStore, removeStore } from '@/lib/safeStorage'
 
+/** 지출 예산 선택지 — 고른 문장이 그대로 문의 메모에 "예산: …" 줄로 남는다 */
+const BUDGETS = ['0~100만원', '100~200만원', '200~300만원', '300~400만원', '400만원 이상']
+
+/**
+ * 진행 방식 — 둘 중 하나를 카드로 고른다. 고른 이름이 문의의 type 칸에 저장된다
+ * (예전에 '제작 종류'가 들어가던 칸이라, 관리자 목록의 그 열에 이 값이 보인다).
+ */
+const MODES: { value: string; Icon: LucideIcon; desc: string; badge?: string }[] = [
+  { value: '시안 먼저 받기', Icon: LayoutTemplate, desc: '메인 1페이지 시안을 먼저 보고 결정합니다.', badge: '추천' },
+  { value: '견적만 받기', Icon: FileText, desc: '시안 없이 견적만 받습니다.' },
+]
+
 export default function DiagnosisPage() {
   const router = useRouter()
-  const [form, setForm] = useState({ name: '', phone: '', type: '', industry: '', note: '', agree: false })
+  const [form, setForm] = useState({
+    name: '',
+    phone: '',
+    budget: '',
+    // 추천하는 쪽을 미리 골라 둔다 — 바꾸지 않아도 그대로 신청된다
+    mode: MODES[0].value,
+    ref: '',
+    industry: '',
+    note: '',
+    agree: false,
+  })
   // 봇 거르개 — 사람은 못 보는 칸이라 정상 신청에서는 늘 빈 문자열로 나간다
   const [honeypot, setHoneypot] = useState('')
   const [loading, setLoading] = useState(false)
@@ -25,7 +47,6 @@ export default function DiagnosisPage() {
   const [privacyOpen, setPrivacyOpen] = useState(false)
 
   // 폼 자동 채움 — 맞춤 플랜 위젯에서 넘어온 값만 (방문자가 직접 고른 답).
-  // 유입 키워드로는 채우지 않는다 — 검색어만으로 제작 종류를 단정할 수 없다.
   useEffect(() => {
     const raw = readStore('session', 'weflow_quiz_prefill')
     if (!raw) return
@@ -35,7 +56,6 @@ export default function DiagnosisPage() {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm(f => ({
         ...f,
-        type: p.type || f.type,
         industry: p.industry || f.industry,
         note: p.note || f.note,
       }))
@@ -45,8 +65,9 @@ export default function DiagnosisPage() {
 
   // 작성 "중간"인 사람만 이탈 모달 대상: 뭔가 입력했지만 필수항목은 아직 미완성
   useEffect(() => {
-    const touched = !!(form.name || form.phone || form.type || form.industry || form.note || form.agree)
-    const complete = !!(form.name && form.phone && form.type && form.agree)
+    // 진행 방식은 처음부터 골라져 있으므로 '손댔는지'를 볼 때는 세지 않는다
+    const touched = !!(form.name || form.phone || form.budget || form.ref || form.industry || form.note || form.agree)
+    const complete = !!(form.name && form.phone && form.budget && form.agree)
     if (touched && !complete) {
       writeStore('session', 'weflow_form_intent', '1')
       window.dispatchEvent(new Event('weflow-intent'))  // 뒤로가기 트랩 무장
@@ -57,12 +78,12 @@ export default function DiagnosisPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.name || !isValidPhone(form.phone) || !form.type || !form.agree) {
+    if (!form.name || !isValidPhone(form.phone) || !form.budget || !form.agree) {
       setShowErrors(true)
       const firstId =
         !form.name ? 'dg-name'
         : !isValidPhone(form.phone) ? 'dg-phone'
-        : !form.type ? 'dg-type'
+        : !form.budget ? 'dg-budget'
         : 'dg-agree'
       const el = document.getElementById(firstId)
       el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -79,10 +100,23 @@ export default function DiagnosisPage() {
       const res = await fetch('/api/inquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        // 문의 테이블에는 예산·참고 사이트 칸이 따로 없다 — 메모 맨 위에 줄로 붙여 보낸다
+        // (관리자 상세의 '추가요청사항'과 엑셀에 그대로 보인다). 진행 방식은 type 칸에 싣는다.
         body: JSON.stringify({
-          ...form,
+          name: form.name,
+          phone: form.phone,
+          type: form.mode,
+          industry: form.industry,
+          agree: form.agree,
           [HONEYPOT_FIELD]: honeypot,
-          note: [form.note, attr && `유입: ${attr}`].filter(Boolean).join('\n'),
+          note: [
+            `예산: ${form.budget}`,
+            form.ref.trim() && `참고 사이트: ${form.ref.trim()}`,
+            form.note,
+            attr && `유입: ${attr}`,
+          ]
+            .filter(Boolean)
+            .join('\n'),
         }),
       })
       // 서버가 사유를 적어 보내면(400 등) 그 문장을 그대로 쓴다.
@@ -124,8 +158,9 @@ export default function DiagnosisPage() {
   // 자연스럽게 돌고, 광고·분석에서 "완료까지 간 사람"을 주소 하나로 셀 수 있다.
 
   return (
-    <div style={{ background: 'var(--section-a)' }}>
-      {/* ── 본문 — PC·모바일 모두 폼만 보인다 (h1 은 폼 제목 '무료 상담 신청') ── */}
+    // 메인과 같은 흰 바탕 — .theme-light 가 색 변수를 밝은 값으로 바꾼다 (styles/globals.css).
+    <div className="theme-light" style={{ background: 'var(--section-a)' }}>
+      {/* ── 본문 — PC·모바일 모두 폼만 보인다 (h1 은 폼 제목 '맞춤 견적 받기') ── */}
       <section style={{ padding: 'clamp(2rem, 5vw, 3rem) 1.5rem' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div className="diag-grid">
@@ -140,9 +175,9 @@ export default function DiagnosisPage() {
               {/* 카드 헤더 — 무엇을 신청하는지와 부담이 없다는 것을 먼저 말한다 */}
               <div style={{ textAlign: 'center' }}>
                 <p className="caption-1 emphasized c-accent" style={{ letterSpacing: '0.25em', textTransform: 'uppercase', margin: 0 }}>CALL TO ACTION</p>
-                <h1 className="dg-form-title">무료 상담 신청</h1>
+                <h1 className="dg-form-title">맞춤 견적 받기</h1>
                 <p className="c-muted" style={{ margin: '0.6rem 0 0', lineHeight: 1.6, fontSize: '1.02rem', wordBreak: 'keep-all' }}>
-                  이름 · 전화번호만 남겨주시면 확인 후 빠르게 연락드립니다.
+                  간단한 정보만 남겨주시면 확인 후 빠르게 연락드립니다.
                 </p>
               </div>
 
@@ -165,13 +200,65 @@ export default function DiagnosisPage() {
                   )}
                 </div>
 
+                {/* 진행 방식 — 카드 둘 중 하나. 안쪽은 라디오 버튼이라 키보드(방향키)로도 고를 수 있다 */}
+                <div className="dg-field" role="radiogroup" aria-labelledby="dg-mode-label">
+                  <span id="dg-mode-label" className="form-label">진행 방식 <span style={{ color: '#ef4444' }}>*</span></span>
+                  <div className="dg-modes">
+                    {MODES.map(({ value, Icon, desc, badge }) => {
+                      const on = form.mode === value
+                      return (
+                        <label key={value} className={on ? 'dg-mode is-on' : 'dg-mode'}>
+                          <input
+                            type="radio"
+                            name="dg-mode"
+                            className="dg-mode__input"
+                            value={value}
+                            checked={on}
+                            onChange={() => setForm(f => ({ ...f, mode: value }))}
+                          />
+                          <span className="dg-mode__top">
+                            <span className="dg-mode__icon"><Icon size={20} strokeWidth={2} aria-hidden="true" /></span>
+                            <span className="dg-mode__check" aria-hidden="true">
+                              {on && <Check size={14} strokeWidth={3} />}
+                            </span>
+                          </span>
+                          <span className="dg-mode__name">
+                            {value}
+                            {badge && <span className="dg-mode__badge">{badge}</span>}
+                          </span>
+                          <span className="dg-mode__desc">{desc}</span>
+                        </label>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* 참고 사이트 — 선택. type="url" 은 쓰지 않는다: 'naver.com' 처럼 앞머리 없이 적으면
+                    브라우저가 제출을 막아 버린다 */}
                 <div className="dg-field">
-                  <label className="form-label">제작 종류 <span style={{ color: '#ef4444' }}>*</span></label>
-                  <select id="dg-type" className="form-input" value={form.type} onChange={e => setForm(f => ({ ...f, type: e.target.value }))} style={{ cursor: 'pointer' }}>
+                  <label className="form-label" htmlFor="dg-ref">참고 사이트 주소 <span className="dg-optional">(선택)</span></label>
+                  <input
+                    id="dg-ref"
+                    className="form-input"
+                    type="text"
+                    inputMode="url"
+                    autoCapitalize="off"
+                    autoCorrect="off"
+                    spellCheck={false}
+                    maxLength={300}
+                    placeholder="참고하고 싶은 사이트가 있다면 주소를 적어주세요."
+                    value={form.ref}
+                    onChange={e => setForm(f => ({ ...f, ref: e.target.value }))}
+                  />
+                </div>
+
+                <div className="dg-field">
+                  <label className="form-label" htmlFor="dg-budget">지출 예산 <span style={{ color: '#ef4444' }}>*</span></label>
+                  <select id="dg-budget" className="form-input" value={form.budget} onChange={e => setForm(f => ({ ...f, budget: e.target.value }))} style={{ cursor: 'pointer' }}>
                     <option value="">선택해 주세요</option>
-                    {projectTypes.map(t => <option key={t} value={t}>{t}</option>)}
+                    {BUDGETS.map(b => <option key={b} value={b}>{b}</option>)}
                   </select>
-                  {showErrors && !form.type && <p className="field-error">* 제작 종류를 선택해 주세요</p>}
+                  {showErrors && !form.budget && <p className="field-error">* 지출 예산을 선택해 주세요</p>}
                 </div>
 
                 {/* 자유 입력 — 원하는 것을 미리 적어 두면 상담이 빨라진다 (선택) */}
@@ -208,7 +295,7 @@ export default function DiagnosisPage() {
                   <div id="dg-privacy-text" className={`dg-consent__body${privacyOpen ? ' is-open' : ''}`}>
                     <div style={{ overflow: 'hidden' }}>
                       <div className="dg-consent__text">
-                        <p>1. 수집 항목 및 목적: 성함, 연락처, 제작 종류, 문의 내용을 무료 상담 및 확인 전화 안내를 위해 수집하며, 명시된 목적 외의 용도로 이용하지 않습니다.</p>
+                        <p>1. 수집 항목 및 목적: 성함, 연락처, 지출 예산, 진행 방식, 참고 사이트 주소, 문의 내용을 맞춤 견적·상담 및 확인 전화 안내를 위해 수집하며, 명시된 목적 외의 용도로 이용하지 않습니다.</p>
                         <p>2. 보유 및 이용 기간: 상담 종료 후 1년까지</p>
                       </div>
                     </div>
@@ -220,7 +307,7 @@ export default function DiagnosisPage() {
 
                 <button type="submit" className="btn-primary dg-wide" disabled={loading}
                   style={{ fontSize: '1.15rem', padding: '1.1rem', justifyContent: 'center', width: '100%' }}>
-                  {loading ? '제출 중...' : '무료 상담 신청 →'}
+                  {loading ? '제출 중...' : '맞춤 견적 받아보기 →'}
                 </button>
                 {submitError && (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', color: '#ef4444', fontSize: '0.95rem', fontWeight: 500 }}>
@@ -244,9 +331,11 @@ export default function DiagnosisPage() {
       <style>{`
         /* 상담 폼은 예약 페이지(/booking)의 .booking-card 와 같은 여백·글씨 크기를 쓴다 */
         .dg-card {
-          background: var(--surface);
+          /* 카드도 흰색 — 바탕과 같은 색이라, 옅은 테두리와 넓게 퍼지는 그림자로 띄운다 */
+          background: var(--bg);
           border: 1.5px solid var(--border);
           border-radius: 16px;
+          box-shadow: 0 18px 50px rgba(17, 17, 17, 0.08), 0 2px 8px rgba(17, 17, 17, 0.04);
           /* 위(CALL TO ACTION)와 아래(전화 안내) 여백이 같게 */
           padding: 1.75rem 1.5rem;
         }
@@ -262,13 +351,86 @@ export default function DiagnosisPage() {
         .dg-form-title {
           margin: 0.6rem 0 0;
           font-size: clamp(1.7rem, 5vw, 2.1rem);
-          font-weight: 700;
+          font-weight: 800;
           letter-spacing: -0.02em;
           color: var(--text);
           word-break: keep-all;
         }
         .br-mobile { display: none; }
         @media (max-width: 640px) { .br-mobile { display: inline; } }
+
+        /* ── 진행 방식 — 카드 두 장 중 하나를 고른다 ── */
+        .dg-optional { font-weight: 400; color: var(--text-muted); }
+        .dg-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+        .dg-mode {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          padding: 0.95rem 0.95rem 1rem;
+          border: 1.5px solid var(--border);
+          border-radius: 14px;
+          background: var(--bg);
+          cursor: pointer;
+          transition: border-color 0.15s, background 0.15s;
+        }
+        .dg-mode:hover { border-color: var(--outline); }
+        .dg-mode.is-on { border-color: var(--accent); background: var(--accent-light); }
+        /* 라디오 버튼은 화면에서만 감춘다 — 탭·방향키로는 그대로 잡힌다 */
+        .dg-mode__input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+        .dg-mode:has(.dg-mode__input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .dg-mode__top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem; }
+        .dg-mode__icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 11px;
+          background: var(--surface-container);
+          color: var(--text-secondary);
+          transition: background 0.15s, color 0.15s;
+        }
+        .dg-mode.is-on .dg-mode__icon { background: var(--accent); color: #fff; }
+        /* 오른쪽 위 동그라미 — 고르면 강조색으로 채워지고 체크가 들어온다 */
+        .dg-mode__check {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 22px;
+          height: 22px;
+          border-radius: 9999px;
+          border: 1.5px solid var(--outline-variant);
+          color: #fff;
+          transition: background 0.15s, border-color 0.15s;
+        }
+        .dg-mode.is-on .dg-mode__check { background: var(--accent); border-color: var(--accent); }
+        .dg-mode__name {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.4rem;
+          font-size: 1.05rem;
+          font-weight: 700;
+          letter-spacing: -0.01em;
+          color: var(--text);
+          word-break: keep-all;
+        }
+        .dg-mode.is-on .dg-mode__name { color: var(--accent); }
+        .dg-mode__badge {
+          padding: 1px 8px;
+          border-radius: 6px;
+          background: var(--accent);
+          color: #fff;
+          font-size: 0.72rem;
+          font-weight: 700;
+        }
+        .dg-mode__desc {
+          margin-top: 0.3rem;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: var(--text-muted);
+          word-break: keep-all;
+        }
 
         /* 개인정보 동의 박스 */
         .dg-consent {

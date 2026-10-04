@@ -40,7 +40,8 @@ const paths: {
   { path: '/pricing', updated: '2026-09-14', priority: 0.9, freq: 'weekly' },
   { path: '/cases', updated: '2026-09-14', priority: 0.8, freq: 'weekly' },
   { path: '/about', updated: '2026-09-14', priority: 0.7, freq: 'monthly' },
-  { path: '/diagnosis', updated: '2026-09-14', priority: 0.8, freq: 'monthly' },
+  // 10-04: 이름을 '무료 상담 신청'에서 '맞춤 견적 받기'로 바꾸면서 검색 제목·설명도 같이 바꿨다
+  { path: '/diagnosis', updated: '2026-10-04', priority: 0.8, freq: 'monthly' },
   { path: '/check', updated: '2026-09-14', priority: 0.8, freq: 'monthly' },
   // /booking 은 메뉴에서 내리면서 검색 노출도 뺐다 — 페이지는 주소로만 접근 가능
 ]

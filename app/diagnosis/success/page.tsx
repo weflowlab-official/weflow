@@ -1,4 +1,4 @@
-// /diagnosis/success — 무료 상담 신청 완료 화면.
+// /diagnosis/success — 맞춤 견적 신청 완료 화면.
 //
 // 예전에는 /diagnosis 안에서 상태만 바꿔 같은 주소에 완료 문구를 띄웠다.
 // 주소를 따로 두면 뒤로가기·새로고침이 자연스럽게 동작하고,
@@ -11,15 +11,16 @@ import { Check, Phone } from 'lucide-react'
 import NaverLeadConversion from '@/components/NaverLeadConversion'
 
 export const metadata: Metadata = {
-  title: '무료 상담 신청 완료 · WEFLOW',
-  description: '무료 상담 신청이 접수되었습니다. 담당자가 24시간 이내에 연락드립니다.',
+  title: '맞춤 견적 신청 완료 · WEFLOW',
+  description: '맞춤 견적 신청이 접수되었습니다. 담당자가 24시간 이내에 연락드립니다.',
   // 검색에 뜰 이유가 없는 페이지다. 신청서(/diagnosis)가 대신 잡혀야 한다
   robots: { index: false, follow: false },
 }
 
 export default function DiagnosisSuccessPage() {
   return (
-    <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+    // 신청 폼과 같은 흰 바탕 — .theme-light 가 색 변수를 밝은 값으로 바꾼다 (styles/globals.css)
+    <div className="theme-light" style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', background: 'var(--section-a)' }}>
       {/* 네이버 전환(lead) — 이 주소에 도달한 것 자체가 신청 완료 신호다 */}
       <NaverLeadConversion />
       <style>{`
@@ -39,7 +40,7 @@ export default function DiagnosisSuccessPage() {
           <Check size={34} color="#16a34a" strokeWidth={2.5} />
         </div>
         <h1 className="title-1 emphasized" style={{ marginBottom: '1rem' }}>
-          무료 상담 신청 완료!
+          맞춤 견적 신청 완료!
         </h1>
         <p className="c-muted" style={{ lineHeight: 1.8, marginBottom: '1.75rem', fontSize: '1.1rem' }}>
           담당자가 확인 후 <strong style={{ color: 'var(--text)' }}>24시간 내</strong>에 연락드리겠습니다.<br />
