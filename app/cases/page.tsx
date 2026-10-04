@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import PortfolioShowcase from "@/components/cases/PortfolioShowcase";
-import { CTA_BTN } from "@/lib/ctaButton";
 
 /**
  * 제작 사례 페이지(/cases) — 실제 제작 사례만 보여준다.
  * 업종별 예시 사례(칩 필터 + 카드 그리드)는 실제 사례가 아니어서 걷어냈고,
  * 필터는 PortfolioShowcase가 자체적으로 갖고 있다.
+ * 메인과 같은 흰 바탕이다 — .theme-light 가 색 변수를 밝은 값으로 바꾼다 (styles/globals.css).
  */
 
 const DESCRIPTION =
@@ -54,6 +54,7 @@ export default async function CasesPage({
   return (
     <div>
       <section
+        className="theme-light"
         style={{
           background: "var(--section-a)",
           padding: "clamp(3rem, 7vw, 4.5rem) 1.5rem clamp(3rem, 6vw, 4rem)",
@@ -89,25 +90,30 @@ export default async function CasesPage({
           {/* 실제 제작 사례 목록 */}
           <PortfolioShowcase initialCategory={cat} />
 
-          {/* 마무리 CTA — 다른 탭과 같은 두 버튼 한 쌍 */}
-          <div
-            style={{
-              display: "flex",
-              gap: "0.75rem",
-              justifyContent: "center",
-              flexWrap: "wrap",
-              marginTop: "clamp(2.5rem, 5vw, 3.5rem)",
-            }}
-          >
-            <a href="tel:010-2971-7280" className="btn-gold" style={CTA_BTN}>
-              <span className="btn-gold__label">전화 상담하기</span> <ArrowRight size={18} strokeWidth={2.5} />
+          {/* 마무리 CTA — 혜택·가격 탭 맨 아래와 같은 하늘색 버튼 한 쌍 */}
+          <div className="cases-cta">
+            <a href="tel:010-2971-7280" className="btn-sky">
+              전화 상담하기 <ArrowRight size={18} strokeWidth={2.5} />
             </a>
-            <Link href="/diagnosis" className="btn-gold btn-gold--fill" style={CTA_BTN}>
-              <span className="btn-gold__label">무료 상담 신청</span> <ArrowRight size={18} strokeWidth={2.5} />
+            <Link href="/diagnosis" className="btn-sky btn-sky--solid">
+              무료 상담 신청 <ArrowRight size={18} strokeWidth={2.5} />
             </Link>
           </div>
         </div>
       </section>
+
+      <style>{`
+        .cases-cta {
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-top: clamp(2.5rem, 5vw, 3.5rem);
+        }
+        @media (max-width: 480px) {
+          .cases-cta { flex-direction: column; align-items: stretch; }
+        }
+      `}</style>
     </div>
   );
 }

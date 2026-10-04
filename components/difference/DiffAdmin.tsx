@@ -51,7 +51,7 @@ const REQUESTS: { id: string; quote: ReactNode; answer: ReactNode }[] = [
 export default function DiffAdmin() {
   return (
     <section
-      className="diff-light"
+      className="theme-light"
       style={{
         // 흰 섹션 — 앞뒤(05·07)가 검은 바탕이라 번갈아 둔다
         background: 'var(--section-a)',

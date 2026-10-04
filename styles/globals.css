@@ -1086,3 +1086,59 @@
     display: none !important;
   }
 }
+
+/* ── 흰 바탕 영역 (.theme-light) — 메인과 같은 규격 (바탕 #fff · 글씨 #111 · 본문 회색 #5c6066 · 카드 #f5f6f8) ──
+   사이트 기본 색 변수는 어두운 바탕용이다. 이 클래스를 단 섹션(또는 페이지 전체)은 변수만 밝은 값으로 바뀌어,
+   색 변수로 그린 안쪽 내용이 그대로 흰 바탕용으로 따라온다. --accent(파란 글씨)와 금색은 손대지 않는다.
+   왜 WEFLOW · 제작 사례 · 제작 라인업 탭이 쓴다. */
+.theme-light {
+  --bg: #fff;
+  --section-a: #fff;
+  --section-b: #fff;
+  --surface: #f5f6f8;
+  --surface-container: #eceef1;
+  --surface-container-high: #e2e5e9;
+  --text: #111;
+  --text-secondary: #44474d;
+  --text-muted: #5c6066;
+  --border: #e3e5e8;
+  --border-subtle: #eef0f2;
+  --outline: #9aa0a8;
+  --outline-variant: #cfd3d8;
+  /* 배지·칩·아이콘 타일의 바탕 — 어두운 남색 면이던 것을 옅은 하늘색 면으로 */
+  --accent-light: #e9f0fb;
+  /* 파란 버튼 위 글씨 — 메인의 채운 버튼처럼 흰색 */
+  --on-accent: #fff;
+  --shadow-card: 0 1px 4px rgba(17, 17, 17, 0.08);
+  /* 글씨색은 body 에서 이미 계산된 값이 내려오므로 여기서 다시 잡아 준다 */
+  color: var(--text);
+}
+/* 흰 바탕의 검은 글씨는 같은 굵기여도 가늘어 보인다 — 제목은 메인과 같은 800 으로 올린다 */
+.theme-light .title-1 { font-weight: 800; }
+
+/* ── 하늘색 알약 버튼 — 흰 바탕용. 혜택·가격 탭 맨 아래 CTA(ServiceCTA)의 버튼과 같은 값 ──
+   기본은 하늘색 테두리, --solid 는 하늘색 채움에 흰 글씨 */
+.btn-sky {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  color: #6a92d7;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: rgba(106, 146, 215, 0.08);
+  border: 1.5px solid #6a92d7;
+  border-radius: 9999px;
+  padding: 0.95rem 2.2rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.12s;
+}
+.btn-sky:hover { background: rgba(106, 146, 215, 0.18); }
+.btn-sky:active { transform: scale(0.97); }
+.btn-sky--solid {
+  background: #6a92d7;
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(106, 146, 215, 0.35);
+}
+.btn-sky--solid:hover { background: #8aabe3; border-color: #8aabe3; }

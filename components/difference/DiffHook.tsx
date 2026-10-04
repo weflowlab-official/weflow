@@ -11,7 +11,7 @@ import DiffChat from "@/components/difference/DiffChat";
 export default function DiffHook() {
   return (
     <section
-      className="diff-light"
+      className="theme-light"
       style={{
         background: "var(--section-b)",
         padding: "clamp(3.5rem, 8vw, 5.5rem) 1.25rem clamp(3rem, 7vw, 5rem)",

@@ -35,7 +35,7 @@ export default function DiffCheckBand() {
   }
 
   return (
-    <section className="dcb diff-light">
+    <section className="dcb theme-light">
       <Reveal variant="up" className="dcb-inner">
         <span className="dcb-badge">자동 사이트 점검</span>
 

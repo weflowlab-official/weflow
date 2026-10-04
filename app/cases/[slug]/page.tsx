@@ -3,10 +3,10 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import CaseSlideshow from '@/components/cases/CaseSlideshow'
-import { CTA_BTN, CTA_BTN_FILLED } from '@/lib/ctaButton'
+import ServiceCTA from '@/components/service/ServiceCTA'
 import { portfolios } from '@/data/cases'
 
 /** detail 이 채워진 사례만 상세 페이지를 갖는다 */
@@ -64,7 +64,9 @@ export default async function CaseDetailPage({
   const midStart = Math.floor(n / 2)
 
   return (
-    <div style={{ background: 'var(--section-a)' }}>
+    // 메인과 같은 흰 바탕 — .theme-light 가 색 변수를 밝은 값으로 바꾼다 (styles/globals.css).
+    // 맨 위 포스터만 사례의 브랜드 색을 그대로 쓴다
+    <div className="theme-light" style={{ background: 'var(--section-a)' }}>
       {/* ── 1. 개요 — 사례 브랜드 색을 깐 포스터형 첫 화면 ──
              스크린샷만 놓으면 밋밋해서, 배경·워터마크·글자를 브랜드 색으로 합성해
              프로젝트마다 다른 "포스터"가 되게 한다. */}
@@ -260,67 +262,14 @@ export default async function CaseDetailPage({
         </div>
       </section>
 
-      {/* ── 5. CTA — 다른 페이지 하단 CTA 와 같은 전체 폭 섹션 ── */}
-      <section
-        style={{
-          padding: 'clamp(2.5rem, 5vw, 3.5rem) 1.5rem',
-          background: 'var(--section-b)',
-          borderTop: '1px solid var(--border)',
-        }}
-      >
-        <Reveal
-          variant="zoom"
-          /* 제목이 한 줄로 떨어지도록 640 → 900 으로 넓혔다 */
-          style={{ maxWidth: '900px', margin: '0 auto', width: '100%', textAlign: 'center' }}
-        >
-          <p
-            className="caption-1 emphasized c-accent"
-            style={{ letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.85rem' }}
-          >
-            GET STARTED
-          </p>
+      {/* ── 5. CTA — 혜택·가격 탭 맨 아래와 같은 것 (설명은 기본 문구 그대로) ── */}
+      <ServiceCTA title="비슷한 홈페이지가 필요하신가요?" />
 
-          <h2
-            className="emphasized"
-            style={{
-              marginBottom: '1rem',
-              wordBreak: 'keep-all',
-              fontSize: 'clamp(2.2rem, 5.5vw, 3.5rem)',
-              lineHeight: 1.25,
-            }}
-          >
-            비슷한 홈페이지가 필요하신가요?
-          </h2>
-
-          <p
-            className="c-muted"
-            style={{
-              marginBottom: '2rem',
-              wordBreak: 'keep-all',
-              fontSize: 'clamp(1.1rem, 2.6vw, 1.35rem)',
-              lineHeight: 1.7,
-            }}
-          >
-            무료 상담으로 제작 방향과 비용을 확인하고, 찾아오는 고객을 늘려보세요.
-          </p>
-
-          <div className="case-cta__row">
-            <a href="tel:010-2971-7280" className="btn-gold" style={CTA_BTN}>
-              <span className="btn-gold__label">전화 상담하기</span> <ArrowRight size={18} strokeWidth={2.5} />
-            </a>
-            <Link href="/diagnosis" className="btn-gold btn-gold--fill" style={CTA_BTN}>
-              <span className="btn-gold__label">무료 상담 신청</span> <ArrowRight size={18} strokeWidth={2.5} />
-            </Link>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* ── 6. 관련 사례 — CTA 와 배경을 달리해 섹션이 구분되게 ── */}
+      {/* ── 6. 관련 사례 — CTA 맨 아래의 가는 선이 위쪽 경계 노릇을 한다 ── */}
       {related.length > 0 && (
         <section
           style={{
             background: 'var(--section-a)',
-            borderTop: '1px solid var(--border-subtle)',
             padding: 'clamp(2.5rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 3rem)',
           }}
         >
@@ -378,9 +327,12 @@ export default async function CaseDetailPage({
           pointer-events: none;
           user-select: none;
         }
+        /* 목록으로 돌아가는 링크 — 작고 흐리면 못 찾는다. 본문 크기에 굵게 둔다 */
         .case-poster__back {
           color: var(--po-ink);
-          opacity: 0.7;
+          font-size: 1rem;
+          font-weight: 700;
+          opacity: 0.85;
           text-decoration: none;
           transition: opacity 0.2s;
         }
@@ -622,7 +574,7 @@ export default async function CaseDetailPage({
         .case-point:hover {
           transform: translateY(-3px);
           border-color: var(--accent);
-          box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+          box-shadow: 0 10px 28px rgba(17, 17, 17, 0.1);
         }
         .case-point__no {
           flex-shrink: 0;
@@ -679,13 +631,13 @@ export default async function CaseDetailPage({
           border: 1px solid var(--border);
           border-radius: var(--radius-xl);
           background: var(--surface);
-          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+          box-shadow: 0 12px 32px rgba(17, 17, 17, 0.1);
           transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
         }
         .case-shot:hover {
           transform: translateY(-4px);
           border-color: var(--accent);
-          box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 18px 44px rgba(17, 17, 17, 0.16);
         }
         .case-shot__bar {
           display: flex;
@@ -704,18 +656,6 @@ export default async function CaseDetailPage({
         .case-shot__dot--red { background: #ff5f57; }
         .case-shot__dot--yellow { background: #febc2e; }
         .case-shot__dot--green { background: #28c840; }
-        /* 다른 페이지 하단 CTA 와 같은 배치 — 왼쪽 전화 상담, 오른쪽 진단 신청 */
-        .case-cta__row {
-          display: flex;
-          gap: 0.75rem;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
-        .br-mobile { display: none; }
-        @media (max-width: 560px) {
-          .br-mobile { display: inline; }
-        }
-
         .case-related {
           display: grid;
           grid-template-columns: 1fr;
@@ -724,7 +664,11 @@ export default async function CaseDetailPage({
           padding: 0;
           list-style: none;
         }
+        /* 설명이 한 줄인 카드와 두 줄인 카드의 높이를 맞춘다 — 칸(li)이 줄 높이만큼 늘어나고 카드가 그 칸을 채운다 */
+        .case-related > li { display: flex; }
         .case-related__card {
+          flex: 1;
+          min-width: 0;
           display: block;
           overflow: hidden;
           border: 1px solid var(--border);
