@@ -29,7 +29,7 @@ const WORRIES: { Icon: LucideIcon; worry: string; template: string; weflow: stri
 
 /**
  * 05 · 템플릿 대신 최신 기술을 써야 하는 이유 — 템플릿을 고를 때 걱정되는 세 가지를
- * 템플릿 / WEFLOW 로 나란히 비교한다. (04 갤러리와 배경색을 번갈아 둔다)
+ * 템플릿 / WEFLOW 로 나란히 비교한다. (검은 바탕 — 앞뒤 04·06 은 흰 바탕이다)
  */
 export default function DiffWorries() {
   return (

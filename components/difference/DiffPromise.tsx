@@ -50,7 +50,7 @@ export default function DiffPromise() {
   return (
     <section
       style={{
-        // 06 이 section-a 라 여기는 section-b — 뒤따르는 CTA 가 다시 section-a 다
+        // 검은 섹션 — 바로 위 06 과 뒤따르는 CTA 는 흰 바탕이다
         background: 'var(--section-b)',
         padding: 'clamp(3rem, 7vw, 5rem) 1.25rem',
       }}

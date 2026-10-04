@@ -45,6 +45,7 @@ function MarqueeRow({ items, reverse = false }: { items: typeof ROW_A; reverse?:
 export default function DiffGallery() {
   return (
     <section
+      className="diff-light"
       style={{
         background: "var(--section-a)",
         padding: "clamp(3rem, 7vw, 5rem) 0",

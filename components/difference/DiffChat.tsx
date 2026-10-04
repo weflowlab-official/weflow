@@ -196,7 +196,8 @@ export default function DiffChat() {
         }
         .dc-bubble--me {
           align-self: flex-end;
-          background: var(--accent-strong);
+          /* 사이트 하늘색(#6a92d7) — CTA 의 채운 버튼과 같은 색 */
+          background: var(--accent);
           color: #fff;
           border-bottom-right-radius: 6px;
           transform-origin: bottom right;

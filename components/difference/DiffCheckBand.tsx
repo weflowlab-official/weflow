@@ -35,7 +35,7 @@ export default function DiffCheckBand() {
   }
 
   return (
-    <section className="dcb">
+    <section className="dcb diff-light">
       <Reveal variant="up" className="dcb-inner">
         <span className="dcb-badge">자동 사이트 점검</span>
 
@@ -75,7 +75,7 @@ export default function DiffCheckBand() {
       </Reveal>
 
       <style>{`
-        /* 앞뒤 섹션(02·03 모두 흰 바탕)과 다른 옅은 회색 면을 깔아 삽입물로 읽히게 한다.
+        /* 앞뒤 섹션(02·03 모두 검은 바탕) 사이에 옅은 회색 면을 깔아 삽입물로 읽히게 한다.
            면이 평평하면 허전해서, 위에서 아래로 옅어지는 파란 빛을 한 겹 얹었다. */
         .dcb {
           background:

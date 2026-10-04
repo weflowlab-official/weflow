@@ -6,9 +6,10 @@
 // 페이지가 거절("안 됩니다")로 열려 초대("원하시는 그대로 만듭니다")로 닫히는 구조다.
 // 중간의 사이트 점검 배너는 유일한 중간 전환 지점 — 번호 없는 삽입물로 둔다.
 //
-// 메인과 같은 흰 바탕으로 그린다 — 섹션 파일은 그대로 두고, 감싸는 .diff-light 에서
-// 색 변수만 밝은 값으로 덮어쓴다 (맨 아래 <style>). 금색과 파란 글씨는 건드리지 않는다.
-// 맨 아래 CTA 만 감싸지 않아 검은 바탕으로 남는다 — 금색 버튼이 흰 바탕에서는 안 보인다.
+// 메인처럼 흰 바탕과 검은 바탕을 섞어 쓴다 — 01·04·06 과 사이트 점검 띠는 흰 바탕, 02·03·05·07 은 검은 바탕.
+// 흰 섹션은 .diff-light 를 달아 색 변수만 밝은 값으로 덮어쓴다 (맨 아래 <style>).
+// 검은 섹션은 사이트 기본값 그대로다. 금색과 파란 글씨는 어느 쪽에서도 건드리지 않는다.
+// 맨 아래 CTA 는 가격 탭과 같은 것(ServiceCTA)을 쓴다.
 import type { Metadata } from 'next'
 import DiffHook from '@/components/difference/DiffHook'
 import DiffTemplate from '@/components/difference/DiffTemplate'
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
 export default function DifferencePage() {
   return (
     <>
-      <div className="diff-light">
+      <div className="diff-page">
         <DiffHook />
         <DiffTemplate />
         {/* 02 를 막 읽어 "그럼 내 사이트는?" 이 가장 세게 떠오르는 자리 */}
@@ -51,14 +52,13 @@ export default function DifferencePage() {
         <DiffAdmin />
         {/* 05 가 기술 걱정을 풀었다면 여기는 사람 걱정 — 연락처를 여쭙기 직전에 둔다 */}
         <DiffPromise />
+        <DiffCTA />
       </div>
-      <DiffCTA />
 
       <style>{`
-        /* ── 흰 바탕 — 메인과 같은 규격 (바탕 #fff · 글씨 #111 · 본문 회색 #5c6066 · 카드 #f5f6f8) ──
-           안쪽 섹션들은 전부 색 변수로 그려져 있어서, 여기서 변수만 바꾸면 따라온다.
-           --accent(파란 글씨)와 금색(.c-gold · 금테)은 손대지 않는다.
-           섹션 바탕은 a·b 모두 흰색이다 — 메인처럼 색 대신 여백으로 섹션을 나눈다. */
+        /* ── 흰 섹션 — 메인과 같은 규격 (바탕 #fff · 글씨 #111 · 본문 회색 #5c6066 · 카드 #f5f6f8) ──
+           섹션들은 전부 색 변수로 그려져 있어서, 이 클래스를 단 섹션은 변수만 바뀌어 따라온다.
+           --accent(파란 글씨)와 금색(.c-gold · 금테)은 손대지 않는다. */
         .diff-light {
           --bg: #fff;
           --section-a: #fff;
@@ -80,6 +80,16 @@ export default function DifferencePage() {
           /* 글씨색은 body 에서 이미 계산된 값이 내려오므로 여기서 다시 잡아 준다 */
           color: var(--text);
         }
+
+        /* ── 제목 굵기 — 메인과 같은 800 ──
+           이 탭의 제목은 사이트 공용 규격(.title-1 500 · .headline 600)이라 메인(800) 옆에서 가늘어 보인다.
+           크기와 줄 간격은 그대로 두고 굵기만 올린다 — 크기를 건드리면 맞춰 둔 줄바꿈이 틀어진다. */
+        .diff-page .title-1,
+        .diff-page h3.headline,
+        .diff-page .dcb-hook,
+        .diff-page .da-quote,
+        .diff-page .da-close__main,
+        .diff-page .dp-name { font-weight: 800; }
       `}</style>
     </>
   )

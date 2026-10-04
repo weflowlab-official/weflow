@@ -51,8 +51,9 @@ const REQUESTS: { id: string; quote: ReactNode; answer: ReactNode }[] = [
 export default function DiffAdmin() {
   return (
     <section
+      className="diff-light"
       style={{
-        // 바로 위 05 가 section-b 라 여기는 section-a 로 번갈아 둔다
+        // 흰 섹션 — 앞뒤(05·07)가 검은 바탕이라 번갈아 둔다
         background: 'var(--section-a)',
         padding: 'clamp(3rem, 7vw, 5rem) 1.25rem',
       }}

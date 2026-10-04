@@ -5,7 +5,7 @@ import Reveal from "@/components/Reveal";
 
 /**
  * 페이지 맨 아래 전환 유도 섹션 — 전화상담 · 무료 상담 신청 두 버튼으로 보낸다.
- * 혜택 탭과 가격 탭이 같이 쓴다 (제목·설명만 바꿔 넘긴다. 안 넘기면 혜택 탭 문구가 나온다).
+ * 혜택 탭 · 가격 탭 · 왜 WEFLOW 탭이 같이 쓴다 (제목·설명만 바꿔 넘긴다. 안 넘기면 혜택 탭 문구가 나온다).
  * 메인 마지막 CTA(파란 띠 + 흰 글씨)의 색을 뒤집은 모양이다 — 흰 바탕에 검은 글씨·하늘색 버튼,
  * 오른쪽 아래 장식 원도 옅은 하늘색으로 그대로 둔다.
  * 아래 푸터도 흰 바탕이라, 맨 아래에 가는 선을 그어 푸터와 나눈다.
@@ -18,10 +18,14 @@ export default function ServiceCTA({
       <br className="svc-cta__br" /> 찾아오는 고객을 늘려보세요.
     </>
   ),
+  solidLabel = "무료 상담 신청",
 }: {
-  title?: string;
+  /** 제목 — 설명과 같은 방법으로 좁은 화면에서만 줄을 바꿀 수 있다 */
+  title?: ReactNode;
   /** 제목 아래 설명 — 좁은 화면에서만 줄을 바꾸려면 <br className="svc-cta__br" /> 를 넣는다 */
   sub?: ReactNode;
+  /** 채운 버튼(상담 신청)의 글자 */
+  solidLabel?: string;
 }) {
   return (
     <section className="svc-cta">
@@ -40,7 +44,7 @@ export default function ServiceCTA({
             전화 상담하기 <ArrowRight size={18} strokeWidth={2.5} />
           </a>
           <Link href="/diagnosis" className="svc-cta__btn svc-cta__btn--solid">
-            무료 상담 신청 <ArrowRight size={18} strokeWidth={2.5} />
+            {solidLabel} <ArrowRight size={18} strokeWidth={2.5} />
           </Link>
         </div>
       </Reveal>
@@ -90,16 +94,17 @@ export default function ServiceCTA({
           margin-top: clamp(2rem, 5vw, 3rem);
         }
         /* 버튼 — 기본은 하늘색 테두리, --solid 는 하늘색 채움에 흰 글씨.
-           페이지의 다른 강조색(#3f8fe0)으로 맞춰 봤는데 너무 진해서, 한 톤 부드러운 하늘색(--accent)을 쓴다 */
+           페이지의 다른 강조색(#3f8fe0)으로 맞춰 봤는데 너무 진해서, 한 톤 부드러운 하늘색(#6a92d7)을 쓴다.
+           색 변수(--accent)로 쓰지 않고 값을 직접 적는다 — 가격 탭처럼 변수를 덮어쓰는 페이지에서도 같은 색이 나와야 한다 */
         .svc-cta__btn {
           display: inline-flex;
           align-items: center;
           gap: 0.6rem;
-          color: var(--accent);
+          color: #6a92d7;
           font-size: 1.1rem;
           font-weight: 700;
           background: rgba(106, 146, 215, 0.08);
-          border: 1.5px solid var(--accent);
+          border: 1.5px solid #6a92d7;
           border-radius: 9999px;
           padding: 0.95rem 2.2rem;
           text-decoration: none;
@@ -108,11 +113,11 @@ export default function ServiceCTA({
         .svc-cta__btn:hover { background: rgba(106, 146, 215, 0.18); }
         .svc-cta__btn:active { transform: scale(0.97); }
         .svc-cta__btn--solid {
-          background: var(--accent);
+          background: #6a92d7;
           color: #fff;
           box-shadow: 0 10px 24px rgba(106, 146, 215, 0.35);
         }
-        .svc-cta__btn--solid:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+        .svc-cta__btn--solid:hover { background: #8aabe3; border-color: #8aabe3; }
         @media (max-width: 480px) {
           .svc-cta__btns { flex-direction: column; align-items: stretch; }
           .svc-cta__btn { justify-content: center; }
