@@ -54,8 +54,6 @@ export default function PricingSection() {
               icon={plan.img}
               title={plan.sub}
               subtitle={plan.tagline}
-              discount={plan.discount}
-              originalPrice={plan.originalPrice}
               price={plan.price}
               foot={plan.note}
               features={plan.features}

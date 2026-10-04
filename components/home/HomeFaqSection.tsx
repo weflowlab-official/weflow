@@ -18,7 +18,7 @@ const FAQ_JSON_LD = {
 
 /**
  * 메인의 자주 묻는 질문 — 솔루션 섹션 아래, 흰 바탕.
- * 왼쪽에 제목과 '찾으시는 질문이 없나요?' + 1:1로 물어보기 버튼(스크롤해도 따라온다), 오른쪽에 질문 목록.
+ * 왼쪽에 제목과 '찾으시는 질문이 없나요?' + 1:1로 물어보기 버튼(위쪽에 붙어 있고 스크롤을 따라오지 않는다), 오른쪽에 질문 목록.
  *
  * 질문을 누르면 답이 부드럽게 펼쳐지고, 한 번에 하나만 열린다.
  * 접혀 있어도 답변 글은 HTML 에 그대로 실린다 (높이만 0 으로 접는다) —
@@ -49,7 +49,7 @@ export default function HomeFaqSection() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }} />
 
       <div className="hf-inner">
-        {/* 왼쪽 묶음 — 넓은 화면에서는 통째로 붙어 따라오고, 좁은 화면에서는 풀려서
+        {/* 왼쪽 묶음 — 넓은 화면에서는 목록 옆 위쪽에 놓이고, 좁은 화면에서는 풀려서
             제목은 목록 위로, '찾으시는 질문이 없나요?' 는 목록 아래로 간다 */}
         <div className="hf-side">
           <header className="hf-head">
@@ -114,8 +114,7 @@ export default function HomeFaqSection() {
           align-items: start;
         }
 
-        /* ── 왼쪽 묶음 — 목록을 읽는 동안 화면에 붙어 따라온다 ── */
-        .hf-side { position: sticky; top: 96px; }
+        /* ── 왼쪽 묶음 — 목록 옆 위쪽에 그대로 있다 (스크롤을 따라오지 않는다) ── */
         .hf-head, .hf-ask {
           opacity: 0;
           transform: translateY(28px);

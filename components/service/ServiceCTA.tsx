@@ -1,14 +1,28 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import type { ReactNode } from "react";
 import Reveal from "@/components/Reveal";
 
 /**
- * 혜택 탭 맨 아래 전환 유도 섹션 — 전화상담 · 무료 상담 신청 두 버튼으로 보낸다.
+ * 페이지 맨 아래 전환 유도 섹션 — 전화상담 · 무료 상담 신청 두 버튼으로 보낸다.
+ * 혜택 탭과 가격 탭이 같이 쓴다 (제목·설명만 바꿔 넘긴다. 안 넘기면 혜택 탭 문구가 나온다).
  * 메인 마지막 CTA(파란 띠 + 흰 글씨)의 색을 뒤집은 모양이다 — 흰 바탕에 검은 글씨·하늘색 버튼,
  * 오른쪽 아래 장식 원도 옅은 하늘색으로 그대로 둔다.
  * 아래 푸터도 흰 바탕이라, 맨 아래에 가는 선을 그어 푸터와 나눈다.
  */
-export default function ServiceCTA() {
+export default function ServiceCTA({
+  title = "지금 바로 시작하세요",
+  sub = (
+    <>
+      무료 상담으로 제작 방향과 비용을 확인하고,
+      <br className="svc-cta__br" /> 찾아오는 고객을 늘려보세요.
+    </>
+  ),
+}: {
+  title?: string;
+  /** 제목 아래 설명 — 좁은 화면에서만 줄을 바꾸려면 <br className="svc-cta__br" /> 를 넣는다 */
+  sub?: ReactNode;
+}) {
   return (
     <section className="svc-cta">
       {/* 장식 원 */}
@@ -17,11 +31,8 @@ export default function ServiceCTA() {
 
       <Reveal variant="zoom" className="svc-cta__in">
         <p className="svc-cta__eyebrow">GET STARTED</p>
-        <h2 className="svc-cta__title">지금 바로 시작하세요</h2>
-        <p className="svc-cta__sub">
-          무료 상담으로 제작 방향과 비용을 확인하고,
-          <br className="svc-cta__br" /> 찾아오는 고객을 늘려보세요.
-        </p>
+        <h2 className="svc-cta__title">{title}</h2>
+        <p className="svc-cta__sub">{sub}</p>
 
         {/* CTA 버튼 */}
         <div className="svc-cta__btns">
