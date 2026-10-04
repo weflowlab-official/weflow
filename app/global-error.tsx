@@ -28,8 +28,9 @@ export default function GlobalError({
       <body
         style={{
           margin: 0,
-          background: '#0a0f1c',
-          color: '#f1f3f6',
+          // 사이트와 같은 흰 바탕 — 색 변수를 못 쓰는 자리라 같은 값을 직접 적는다
+          background: '#fff',
+          color: '#111',
           fontFamily:
             "'Pretendard Variable', Pretendard, 'Apple SD Gothic Neo', system-ui, sans-serif",
           minHeight: '100vh',
@@ -47,7 +48,7 @@ export default function GlobalError({
               fontSize: '0.75rem',
               fontWeight: 700,
               letterSpacing: '0.1em',
-              color: '#5f8ee6',
+              color: '#6a92d7',
             }}
           >
             500 ERROR
@@ -60,7 +61,6 @@ export default function GlobalError({
               fontWeight: 900,
               lineHeight: 1.1,
               letterSpacing: '0.02em',
-              textShadow: '0 0 30px rgba(88, 138, 226, 0.55)',
             }}
           >
             500
@@ -68,7 +68,7 @@ export default function GlobalError({
           <h1 style={{ margin: '1rem 0 0', fontSize: '1.4rem', fontWeight: 700, wordBreak: 'keep-all' }}>
             일시적인 오류가 발생했습니다
           </h1>
-          <p style={{ margin: '0.8rem 0 0', color: '#98a0ae', lineHeight: 1.7, wordBreak: 'keep-all' }}>
+          <p style={{ margin: '0.8rem 0 0', color: '#5c6066', lineHeight: 1.7, wordBreak: 'keep-all' }}>
             잠시 후 다시 시도해 주세요. 문제가 계속되면 메인에서 다시 시작해 보세요.
           </p>
           <div
@@ -80,14 +80,14 @@ export default function GlobalError({
               marginTop: '2rem',
             }}
           >
-            <button onClick={reset} style={{ ...btn, background: '#2563eb', color: '#fff', border: 'none' }}>
+            <button onClick={reset} style={{ ...btn, background: '#6a92d7', color: '#fff', border: 'none' }}>
               다시 시도
             </button>
             {/* 여기서는 next/link 가 아니라 <a> 가 맞다 — 이 화면은 루트 레이아웃까지 무너졌을 때
                 대신 뜨는 자리라, 클라이언트 이동으로는 고장난 상태를 그대로 들고 간다.
                 전체 새로고침으로 앱을 처음부터 다시 세워야 한다. */}
             {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-            <a href="/" style={{ ...btn, background: 'transparent', color: '#f1f3f6', border: '1.5px solid #2a3446' }}>
+            <a href="/" style={{ ...btn, background: 'transparent', color: '#111', border: '1.5px solid #cfd3d8' }}>
               메인으로 가기
             </a>
           </div>

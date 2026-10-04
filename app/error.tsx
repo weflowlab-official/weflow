@@ -14,6 +14,8 @@ export default function Error({
 }) {
   return (
     <section
+      // 메인과 같은 흰 바탕 — .theme-light 가 색 변수를 밝은 값으로 바꾼다 (styles/globals.css)
+      className="theme-light"
       style={{
         background: 'var(--section-a)',
         display: 'flex',
@@ -41,7 +43,6 @@ export default function Error({
             lineHeight: 1.1,
             letterSpacing: '0.02em',
             color: 'var(--text)',
-            textShadow: '0 0 30px rgba(88, 138, 226, 0.55), 0 0 12px rgba(88, 138, 226, 0.35)',
           }}
         >
           500
@@ -97,9 +98,10 @@ export default function Error({
         .er-btn--ghost {
           background: transparent;
           color: var(--text);
-          border: 1.5px solid var(--border);
+          border: 1.5px solid var(--outline-variant);
+          box-shadow: none;
         }
-        .er-btn--ghost:hover { border-color: var(--text-muted); background: rgba(255, 255, 255, 0.05); }
+        .er-btn--ghost:hover { border-color: var(--text-muted); background: rgba(17, 17, 17, 0.04); }
         .er-br { display: none; }
         @media (max-width: 768px) {
           .er-br { display: block; }

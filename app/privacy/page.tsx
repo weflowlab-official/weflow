@@ -28,7 +28,8 @@ const ul: React.CSSProperties = { margin: "0.4rem 0 0", paddingLeft: "1.2rem" };
 
 export default function PrivacyPage() {
   return (
-    <div style={{ background: "var(--section-a)" }}>
+    // 메인과 같은 흰 바탕 — .theme-light 가 색 변수를 밝은 값으로 바꾼다 (styles/globals.css)
+    <div className="theme-light" style={{ background: "var(--section-a)" }}>
       <div style={{ maxWidth: "820px", margin: "0 auto", padding: "clamp(3rem, 6vw, 4.5rem) 1.5rem" }}>
         <h1 className="title-1" style={{ margin: "0 0 0.75rem" }}>개인정보처리방침</h1>
         <p className="callout c-muted" style={{ margin: "0 0 2.5rem" }}>
@@ -37,11 +38,11 @@ export default function PrivacyPage() {
 
         <Section title="1. 수집하는 개인정보와 수집 방법">
           <p style={{ margin: 0 }}>
-            홈페이지의 무료 상담 신청·상담 예약 폼, 그리고 SNS 광고의 신청 양식을 통해 이용자가 직접 입력한 정보를 수집합니다.
+            홈페이지의 맞춤 견적 신청·상담 예약 폼, 그리고 SNS 광고의 신청 양식을 통해 이용자가 직접 입력한 정보를 수집합니다.
           </p>
           <ul style={ul}>
             <li>필수: 이름, 연락처</li>
-            <li>선택: 제작 종류, 업종, 문의 내용</li>
+            <li>폼에 따라: 지출 예산, 진행 방식, 참고 사이트 주소, 제작 종류, 업종, 문의 내용</li>
           </ul>
           <p style={{ margin: "0.6rem 0 0" }}>
             서비스 개선을 위해 방문 기록(접속 페이지, 유입 경로, 기기 종류)이 자동으로 수집될 수 있습니다. 이 기록은 특정 개인을 식별하지 않습니다.
@@ -50,7 +51,7 @@ export default function PrivacyPage() {
 
         <Section title="2. 수집 목적">
           <ul style={{ ...ul, marginTop: 0 }}>
-            <li>상담 요청에 대한 연락과 안내</li>
+            <li>견적·상담 요청에 대한 연락과 안내</li>
             <li>서비스 이용 통계 분석과 품질 개선</li>
           </ul>
         </Section>

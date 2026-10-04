@@ -3,7 +3,7 @@ import { Home, ArrowRight } from 'lucide-react'
 
 /**
  * 404 페이지 — 없는 주소로 들어와도 사이트 톤을 유지하고,
- * 메인·무료 상담으로 자연스럽게 되돌려 보낸다.
+ * 메인·맞춤 견적으로 자연스럽게 되돌려 보낸다.
  */
 export default function NotFound() {
   return (
@@ -12,6 +12,8 @@ export default function NotFound() {
           봇·잘못 복사된 링크가 남기던 이상한 주소가 통계에 섞이지 않는다 */}
       <span data-weflow-404="1" hidden />
     <section
+      // 메인과 같은 흰 바탕 — .theme-light 가 색 변수를 밝은 값으로 바꾼다 (styles/globals.css)
+      className="theme-light"
       style={{
         background: 'var(--section-a)',
         display: 'flex',
@@ -39,7 +41,6 @@ export default function NotFound() {
             lineHeight: 1.1,
             letterSpacing: '0.02em',
             color: 'var(--text)',
-            textShadow: '0 0 30px rgba(88, 138, 226, 0.55), 0 0 12px rgba(88, 138, 226, 0.35)',
           }}
         >
           404
@@ -77,7 +78,7 @@ export default function NotFound() {
             <Home size={18} strokeWidth={2.2} /> 메인으로 가기
           </Link>
           <Link href="/diagnosis" className="btn-primary nf-btn nf-btn--ghost">
-            무료 상담 신청 <ArrowRight size={18} strokeWidth={2.5} />
+            맞춤 견적 받기 <ArrowRight size={18} strokeWidth={2.5} />
           </Link>
         </div>
       </div>
@@ -95,9 +96,10 @@ export default function NotFound() {
         .nf-btn--ghost {
           background: transparent;
           color: var(--text);
-          border: 1.5px solid var(--border);
+          border: 1.5px solid var(--outline-variant);
+          box-shadow: none;
         }
-        .nf-btn--ghost:hover { border-color: var(--text-muted); background: rgba(255, 255, 255, 0.05); }
+        .nf-btn--ghost:hover { border-color: var(--text-muted); background: rgba(17, 17, 17, 0.04); }
         /* 모바일에서만 안내 문구 줄바꿈 */
         .nf-br { display: none; }
         @media (max-width: 768px) {
