@@ -137,7 +137,7 @@ export default function DiffChat() {
           border: 1px solid var(--border);
           background: var(--surface);
           overflow: hidden;
-          box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+          box-shadow: 0 20px 60px rgba(17,17,17,0.1);
         }
         .dc-chat-head {
           display: flex;
@@ -152,8 +152,8 @@ export default function DiffChat() {
           flex-shrink: 0;
           width: 36px; height: 36px;
           border-radius: 9999px;
-          background: #3a3a40;
-          color: #cfcfd6;
+          background: var(--surface-container-high);
+          color: var(--text-muted);
           font-weight: 800;
           display: flex; align-items: center; justify-content: center;
         }
@@ -165,8 +165,8 @@ export default function DiffChat() {
           display: inline-flex; align-items: center; gap: 0.3rem;
           padding: 0.3rem 0.7rem;
           border-radius: 9999px;
-          background: rgba(239,68,68,0.16);
-          color: #f87171;
+          background: rgba(239,68,68,0.12);
+          color: #dc2626;
           font-size: 0.78rem;
           font-weight: 800;
           white-space: nowrap;

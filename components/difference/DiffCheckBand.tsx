@@ -75,14 +75,12 @@ export default function DiffCheckBand() {
       </Reveal>
 
       <style>{`
-        /* 앞뒤 섹션(02 section-a #0e0e10 / 03 section-b #151517)보다 밝은 면을 깔아
-           삽입물로 읽히게 한다. section-b 까지 내리면 바로 아래 03 과 같은 색이 돼
-           띠로 안 읽히므로 그 위의 값을 직접 쓴다.
+        /* 앞뒤 섹션(02·03 모두 흰 바탕)과 다른 옅은 회색 면을 깔아 삽입물로 읽히게 한다.
            면이 평평하면 허전해서, 위에서 아래로 옅어지는 파란 빛을 한 겹 얹었다. */
         .dcb {
           background:
             radial-gradient(120% 120% at 50% 0%, rgba(106, 146, 215, 0.12), transparent 62%),
-            #1a1a1d;
+            #f5f6f8;
           border-top: 1px solid var(--border);
           border-bottom: 1px solid var(--border);
           padding: clamp(2rem, 4.5vw, 2.75rem) 1.25rem;
@@ -135,7 +133,8 @@ export default function DiffCheckBand() {
           gap: 0.35rem;
           padding: 0.4rem 0.75rem;
           border-radius: 9999px;
-          background: var(--surface-container);
+          /* 띠가 옅은 회색이라 칩은 흰색으로 띄운다 */
+          background: #fff;
           border: 1px solid var(--border);
           color: var(--text-secondary);
           font-size: 0.82rem;
