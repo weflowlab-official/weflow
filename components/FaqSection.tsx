@@ -43,7 +43,7 @@ export default function FaqSection() {
           자주 묻는 질문
         </h2>
         <p className="callout c-muted" style={{ margin: '0 0 2rem', wordBreak: 'keep-all' }}>
-          상담 전에 가장 많이 여쭤보시는 것들을 모았습니다.
+          견적을 받기 전에 가장 많이 여쭤보시는 것들을 모았습니다.
         </p>
 
         <div className="faq-list">

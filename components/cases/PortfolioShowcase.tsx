@@ -219,7 +219,7 @@ export default function PortfolioShowcase({ initialCategory }: { initialCategory
           ))}
         </div>
       ) : (
-        /* 아직 공개 사례가 없는 업종 — 빈 화면 대신 상담으로 잇는다 */
+        /* 아직 공개 사례가 없는 업종 — 빈 화면 대신 견적 요청으로 잇는다 */
         <div
           style={{
             background: 'var(--surface)',
@@ -233,7 +233,7 @@ export default function PortfolioShowcase({ initialCategory }: { initialCategory
             {active} 사례는 공개 준비 중입니다
           </p>
           <p className="footnote c-muted" style={{ margin: 0, lineHeight: 1.7, wordBreak: 'keep-all' }}>
-            상담을 남겨주시면 유사 업종 시안과 함께 안내드릴게요.
+            견적을 요청해 주시면 유사 업종 시안과 함께 안내드릴게요.
           </p>
         </div>
       )}

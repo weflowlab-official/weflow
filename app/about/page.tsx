@@ -200,11 +200,11 @@ export default function AboutPage() {
           </p>
           <p className="ab-cta__sub">함께 흐르고, 더 크게 성장하다</p>
           <div className="ab-cta__btns">
-            <a href="tel:010-2971-7280" className="ab-cta__btn">
+            <a href="tel:010-2971-7280" className="ab-cta__btn btn-goldline">
               전화 상담하기 <ArrowRight size={18} strokeWidth={2.5} />
             </a>
-            <Link href="/diagnosis" className="ab-cta__btn ab-cta__btn--solid">
-              무료 상담 신청 <ArrowRight size={18} strokeWidth={2.5} />
+            <Link href="/diagnosis" className="ab-cta__btn ab-cta__btn--solid btn-goldline">
+              맞춤 견적 받기 <ArrowRight size={18} strokeWidth={2.5} />
             </Link>
           </div>
         </Reveal>

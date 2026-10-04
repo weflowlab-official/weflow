@@ -36,7 +36,7 @@ const LINK_COLUMNS = [
     links: [
       { label: '회사소개', href: '/about' },
       { label: '사이트 점검', href: '/check' },
-      { label: '무료 상담', href: '/diagnosis' },
+      { label: '맞춤 견적', href: '/diagnosis' },
     ],
   },
 ]

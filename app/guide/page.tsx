@@ -80,11 +80,11 @@ export default function GuidePage() {
             <br className="gd-cta__br" /> 어떤 형태가 맞는지부터 함께 정리해 드립니다.
           </p>
           <div className="gd-cta__btns">
-            <a href="tel:010-2971-7280" className="gd-cta__btn">
+            <a href="tel:010-2971-7280" className="gd-cta__btn btn-goldline">
               전화 상담하기 <ArrowRight size={18} strokeWidth={2.5} />
             </a>
-            <Link href="/diagnosis" className="gd-cta__btn gd-cta__btn--solid">
-              무료 상담 신청 <ArrowRight size={18} strokeWidth={2.5} />
+            <Link href="/diagnosis" className="gd-cta__btn gd-cta__btn--solid btn-goldline">
+              맞춤 견적 받기 <ArrowRight size={18} strokeWidth={2.5} />
             </Link>
           </div>
         </Reveal>

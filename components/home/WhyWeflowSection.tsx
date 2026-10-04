@@ -372,7 +372,7 @@ export default function WhyWeflowSection() {
               className="btn-gold btn-gold--fill"
               style={CTA_BTN}
             >
-              <span className="btn-gold__label">무료 상담 신청</span> <ArrowRight size={18} strokeWidth={2.5} />
+              <span className="btn-gold__label">맞춤 견적 받기</span> <ArrowRight size={18} strokeWidth={2.5} />
             </Link>
           </div>
         </div>

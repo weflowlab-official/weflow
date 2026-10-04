@@ -31,7 +31,7 @@ const WORDS = [
 
 /**
  * 페이지 맨 아래 마무리 CTA — 화면 폭을 다 채우는 파란 띠에 흰 글씨로 "지금 OOO를 문의하세요" 헤드라인,
- * 단어가 3초마다 바뀐다. 아래에 전화 상담·무료 상담 신청 버튼.
+ * 단어가 3초마다 바뀐다. 아래에 전화 상담·맞춤 견적 받기 버튼.
  */
 export default function FinalCTA() {
   const [i, setI] = useState(0)
@@ -93,7 +93,7 @@ export default function FinalCTA() {
             전화 상담하기 <ArrowRight size={18} strokeWidth={2.5} />
           </a>
           <Link href="/diagnosis" className="fcta-btn fcta-btn--solid subhead emphasized">
-            무료 상담 신청 <ArrowRight size={18} strokeWidth={2.5} />
+            맞춤 견적 받기 <ArrowRight size={18} strokeWidth={2.5} />
           </Link>
         </div>
       </div>

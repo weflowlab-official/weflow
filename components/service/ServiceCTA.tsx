@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import Reveal from "@/components/Reveal";
 
 /**
- * 페이지 맨 아래 전환 유도 섹션 — 전화상담 · 무료 상담 신청 두 버튼으로 보낸다.
+ * 페이지 맨 아래 전환 유도 섹션 — 전화 상담 · 맞춤 견적 받기 두 버튼으로 보낸다.
  * 혜택 탭 · 가격 탭 · 왜 WEFLOW 탭이 같이 쓴다 (제목·설명만 바꿔 넘긴다. 안 넘기면 혜택 탭 문구가 나온다).
  * 메인 마지막 CTA(파란 띠 + 흰 글씨)의 색을 뒤집은 모양이다 — 흰 바탕에 검은 글씨·하늘색 버튼,
  * 오른쪽 아래 장식 원도 옅은 하늘색으로 그대로 둔다.
@@ -14,17 +14,17 @@ export default function ServiceCTA({
   title = "지금 바로 시작하세요",
   sub = (
     <>
-      무료 상담으로 제작 방향과 비용을 확인하고,
+      맞춤 견적으로 제작 방향과 비용을 확인하고,
       <br className="svc-cta__br" /> 찾아오는 고객을 늘려보세요.
     </>
   ),
-  solidLabel = "무료 상담 신청",
+  solidLabel = "맞춤 견적 받기",
 }: {
   /** 제목 — 설명과 같은 방법으로 좁은 화면에서만 줄을 바꿀 수 있다 */
   title?: ReactNode;
   /** 제목 아래 설명 — 좁은 화면에서만 줄을 바꾸려면 <br className="svc-cta__br" /> 를 넣는다 */
   sub?: ReactNode;
-  /** 채운 버튼(상담 신청)의 글자 */
+  /** 채운 버튼(견적 신청)의 글자 */
   solidLabel?: string;
 }) {
   return (
@@ -40,10 +40,11 @@ export default function ServiceCTA({
 
         {/* CTA 버튼 */}
         <div className="svc-cta__btns">
-          <a href="tel:010-2971-7280" className="svc-cta__btn">
+          {/* 두 버튼 모두 테두리에만 금색 광택(.btn-goldline, styles/globals.css)이 흐른다 */}
+          <a href="tel:010-2971-7280" className="svc-cta__btn btn-goldline">
             전화 상담하기 <ArrowRight size={18} strokeWidth={2.5} />
           </a>
-          <Link href="/diagnosis" className="svc-cta__btn svc-cta__btn--solid">
+          <Link href="/diagnosis" className="svc-cta__btn svc-cta__btn--solid btn-goldline">
             {solidLabel} <ArrowRight size={18} strokeWidth={2.5} />
           </Link>
         </div>

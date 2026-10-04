@@ -181,7 +181,7 @@ export default function HomeWhyIntro() {
               <ArrowRight size={18} />
             </Link>
             <Link href="/diagnosis" className="wi-btn">
-              무료 상담 신청
+              맞춤 견적 받기
             </Link>
           </div>
         </div>

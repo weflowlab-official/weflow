@@ -93,10 +93,10 @@ const SOLUTIONS: Card[] = [
   },
   {
     Icon: Stethoscope,
-    title: '무료 홈페이지 상담',
+    title: '무료 맞춤 견적',
     img: '/images/main/solution/process-01-consult.webp',
     desc: '현재 상태를 먼저 살펴보고 투명한 비용 안내',
-    more: { href: '/diagnosis', label: '상담 신청' },
+    more: { href: '/diagnosis', label: '견적 받기' },
   },
 ]
 

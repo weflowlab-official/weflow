@@ -13,7 +13,7 @@ import { Phone, ClipboardCheck, CalendarCheck } from 'lucide-react'
 // `fab-${metal}` 처럼 조립하면 클래스가 통째로 사라져 테두리·글자가 안 보이게 된다.
 const GLASS = 'rgba(14,14,16,0.82)'
 const ITEMS = [
-  { href: '/diagnosis', label: '무료 상담', icon: ClipboardCheck, size: 26, bg: GLASS, fg: '#c9a262', wiggle: true, metal: 'fab-metal fab-gold' },
+  { href: '/diagnosis', label: '맞춤 견적', icon: ClipboardCheck, size: 26, bg: GLASS, fg: '#c9a262', wiggle: true, metal: 'fab-metal fab-gold' },
   // 수화기는 실루엣 하나뿐이라 안쪽을 파내지 않는다 (solidIcon) — 파면 가늘어 보인다
   { href: 'tel:010-2971-7280', label: '24시간 상담', icon: Phone, size: 25, bg: GLASS, fg: '#a3a3aa', tel: true, metal: 'fab-metal fab-silver', solidIcon: true },
 ]
@@ -21,7 +21,7 @@ const ITEMS = [
 /**
  * 고정 CTA — 화면 크기에 따라 모양이 다르다.
  * · PC: 우측 세로 원형 버튼 3개(전화·카톡·상담). hover 하면 라벨이 왼쪽으로 펼쳐진다.
- * · 모바일: 화면 맨 아래에 붙는 두 칸 바(바로전화 · 무료상담신청).
+ * · 모바일: 화면 맨 아래에 붙는 두 칸 바(바로전화 · 맞춤 견적 받기).
  *   원형 버튼이 스크롤을 따라다니며 내용을 가리는 것보다, 늘 같은 자리의 큰 바가 누르기 쉽다.
  * 전화/외부 링크는 <a>, 내부 경로는 <Link>로 나눠 그린다.
  */
@@ -65,7 +65,7 @@ export default function FloatingButtons() {
         </a>
         <Link href="/diagnosis" className="mobile-cta-bar__btn mobile-cta-bar__btn--form">
           <CalendarCheck size={20} strokeWidth={1.8} />
-          무료상담신청
+          맞춤 견적 받기
         </Link>
       </div>
     </>

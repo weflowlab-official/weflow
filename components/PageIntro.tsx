@@ -24,7 +24,7 @@ export default function PageIntro({
   title,
   body,
   ctaHref = '/diagnosis',
-  ctaLabel = '무료 상담 신청하기 →',
+  ctaLabel = '맞춤 견적 받기 →',
 }: {
   /** 제목 위 영문 라벨 — 오른쪽 큰 글씨로도 쓰인다 */
   eyebrow: string

@@ -92,11 +92,11 @@ export default async function CasesPage({
 
           {/* 마무리 CTA — 혜택·가격 탭 맨 아래와 같은 하늘색 버튼 한 쌍 */}
           <div className="cases-cta">
-            <a href="tel:010-2971-7280" className="btn-sky">
+            <a href="tel:010-2971-7280" className="btn-sky btn-goldline">
               전화 상담하기 <ArrowRight size={18} strokeWidth={2.5} />
             </a>
-            <Link href="/diagnosis" className="btn-sky btn-sky--solid">
-              무료 상담 신청 <ArrowRight size={18} strokeWidth={2.5} />
+            <Link href="/diagnosis" className="btn-sky btn-sky--solid btn-goldline">
+              맞춤 견적 받기 <ArrowRight size={18} strokeWidth={2.5} />
             </Link>
           </div>
         </div>

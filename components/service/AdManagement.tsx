@@ -154,7 +154,7 @@ export default function AdManagement() {
           <p className="footnote c-muted" style={{ margin: 0 }}>
             플랜에 따라 운영 항목이 달라집니다.
             <br className="br-mobile" />
-            <span className="c-accent semibold"> 무료 상담</span>을 통해 맞춤
+            <span className="c-accent semibold"> 맞춤 견적</span>을 통해
             운영 플랜을 확인하세요.
           </p>
         </Reveal>
