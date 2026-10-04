@@ -84,7 +84,9 @@ export default function PlanCard({
           단서 줄 위 여백(0.35rem)은 아래 foot 블록에 따로 있다. */}
       <div style={{ margin: '1.1rem 0 1.25rem' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.25rem' }}>
-          <span className="title-2 emphasized">{price}</span>
+          {/* 금액 뒤의 "~"는 한 칸 띄워 보여 준다 ("690,000원 ~") — 큰 숫자에 바짝 붙으면 답답해 보인다.
+              데이터에는 붙여 적혀 있다(문장 안에서는 붙여 쓰는 편이 자연스럽다) */}
+          <span className="title-2 emphasized">{price.replace(/~$/, ' ~')}</span>
         </div>
         {/* 가격 아래 단서 줄 (VAT 별도).
             구분점은 데이터 쪽 문자열에 들어 있다 — 여기서 "· " 를 붙이면

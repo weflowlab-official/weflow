@@ -185,7 +185,8 @@ export default function PricingPage() {
                           ) : c === false ? (
                             <Minus className="pr-no" size={18} strokeWidth={2.2} aria-label="해당 없음" />
                           ) : (
-                            c
+                            // 금액 뒤의 "~"는 카드와 같게 한 칸 띄워 보여 준다
+                            c.replace(/~$/, " ~")
                           )}
                         </td>
                       ))}

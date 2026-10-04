@@ -10,12 +10,13 @@ import { makePlans } from '@/data/pricing'
  *
  * 최저가는 data/pricing.ts 에서 뽑는다. 금액을 고칠 때 여기만 옛날 값으로 남지 않도록.
  */
-const LOWEST_PRICE = makePlans[0].price
+// 금액 문자열에는 "~"가 붙어 있다("690,000원~") — 아래 문장은 "…부터"로 이어지므로 떼고 쓴다
+const LOWEST_PRICE = makePlans[0].price.replace('~', '')
 
 export const metadata: Metadata = {
   title: '제작 플랜 · 가격 안내 · WEFLOW',
   description:
-    `원페이지형 LANDING ${LOWEST_PRICE}부터 풀패키지 SIGNATURE까지, 제작 플랜별 구성과 가격을 한눈에 비교하세요. 모든 플랜에 서버·보안 관리, 정기 점검, 수정, 장애 대응을 맡는 월 운영관리가 포함됩니다.`,
+    `원페이지형 LANDING ${LOWEST_PRICE}부터 풀패키지 SIGNATURE까지, 제작 플랜별 구성과 가격을 한눈에 비교하세요. 모든 플랜에 서버·보안 관리, 정기 점검, 수정, 장애 대응 등을 맡는 월 운영관리가 포함됩니다.`,
   alternates: { canonical: '/pricing' },
   openGraph: {
     title: '제작 플랜 · 가격 안내 · WEFLOW',
@@ -45,7 +46,7 @@ const PRICING_JSON_LD = {
   name: '홈페이지 제작',
   serviceType: '홈페이지 제작',
   description:
-    'WEFLOW의 홈페이지 제작 플랜. LANDING(원페이지형)·BRAND(브랜드형)·SIGNATURE(풀패키지) 세 가지로 나뉘며, 모든 플랜에 월 운영관리(서버·보안 관리, 정기 점검, 수정, 장애 대응)가 들어 있다. 모든 금액은 VAT 별도.',
+    'WEFLOW의 홈페이지 제작 플랜. LANDING(원페이지형)·BRAND(브랜드형)·SIGNATURE(풀패키지) 세 가지로 나뉘며, 모든 플랜에 월 운영관리(서버·보안 관리, 정기 점검, 수정, 장애 대응 등)가 들어 있다. 모든 금액은 VAT 별도.',
   provider: {
     '@type': 'ProfessionalService',
     name: 'WEFLOW',

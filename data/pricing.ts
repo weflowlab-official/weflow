@@ -1,8 +1,9 @@
 /**
  * 가격 데이터 — 제작 플랜(LANDING · BRAND · SIGNATURE)과 리뉴얼 플랜 정의.
  * /pricing 의 플랜 카드, 검색용 구조화 데이터(app/pricing/layout.tsx · app/layout.tsx), llms.txt 가 함께 쓴다.
- * 금액은 계산하지 않고 표시용 문자열 그대로 둔다("690,000원") — 숫자만 뽑아 구조화 데이터에 쓰므로
- * "69만원"처럼 줄여 쓰면 안 된다 (69 로 읽힌다).
+ * 금액은 계산하지 않고 표시용 문자열 그대로 둔다("690,000원~") — 숫자만 뽑아 구조화 데이터에 쓰므로
+ * "69만원"처럼 줄여 쓰면 안 된다 (69 로 읽힌다). 금액 뒤의 "~"는 "이 금액부터"라는 표시다 —
+ * 기능 구성에 따라 달라질 수 있어서 붙인다. 문장에 넣을 때 "~부터"처럼 겹치지 않게 한다.
  *
  * 50% 할인 프로모션과 관리자 페이지 옵션 가격은 없앴다 — 정가·할인율·옵션 금액 필드도 같이 지웠다.
  * 관리자 페이지는 이제 플랜 구성 안에 들어 있다 (LANDING·BRAND 는 희망 시, SIGNATURE 는 맞춤형 제공).
@@ -29,7 +30,7 @@ export interface MakePlan {
 }
 
 // 가격 아래 단서 두 줄 — 모든 플랜이 같다. 첫 줄은 월 운영관리 포함과 VAT, 둘째 줄은 운영관리에 들어가는 일
-const NOTE = ["월 운영관리 포함 · VAT 별도", "서버·보안 관리, 정기 점검, 수정, 장애 대응"];
+const NOTE = ["월 운영관리 포함 · VAT 별도", "서버·보안 관리, 정기 점검, 수정, 장애 대응 등"];
 
 // SIGNATURE 의 체크리스트 — 리뉴얼 플랜도 같은 구성으로 안내하므로 한 곳에 두고 같이 쓴다
 const SIGNATURE_FEATURES = [
@@ -60,7 +61,7 @@ export const makePlans: MakePlan[] = [
       "헤더 앵커 이동 구성",
       "희망 시 관리자 페이지 제공",
     ],
-    price: "690,000원",
+    price: "690,000원~",
     note: NOTE,
   },
   {
@@ -77,7 +78,7 @@ export const makePlans: MakePlan[] = [
       "페이지 로딩 속도 최적화",
       "희망 시 관리자 페이지 제공",
     ],
-    price: "1,690,000원",
+    price: "1,690,000원~",
     note: NOTE,
   },
   {
@@ -87,7 +88,7 @@ export const makePlans: MakePlan[] = [
     img: "/images/3d-icon/image-5.svg",
     highlight: true,
     features: SIGNATURE_FEATURES,
-    price: "2,190,000원",
+    price: "2,190,000원~",
     note: NOTE,
   },
 ];
