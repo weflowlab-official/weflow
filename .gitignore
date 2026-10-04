@@ -56,3 +56,6 @@ CLAUDE.md
 
 # 히어로 영상 원본 — 배포에는 public/videos 의 압축본만 올린다
 public/hero.mp4
+
+# 내려받은 사진 원본 — 배포에는 잘라서 압축한 것만 올린다
+public/pexels-*.jpg

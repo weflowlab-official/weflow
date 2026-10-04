@@ -1,11 +1,11 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import {
   ChevronRight,
   Code2,
   MonitorSmartphone,
-  Palette,
   Ruler,
   Search,
   ShieldCheck,
@@ -16,66 +16,83 @@ import {
 import type { LucideIcon } from 'lucide-react'
 import { POINTS } from './ListeningSection'
 
-type Card = { Icon: LucideIcon; title: string; desc: string; more?: { href: string; label: string } }
+type Card = {
+  Icon: LucideIcon
+  title: string
+  desc: string
+  /** 카드 위쪽에 깔리는 사진 — 있으면 사진 카드가 된다 */
+  img?: string
+  /** 사진을 잘라 낼 때 기준 위치 (기본은 가운데) */
+  imgPos?: string
+  /** 사진을 얼마나 당겨 보일지 (1 = 그대로) */
+  imgZoom?: number
+  more?: { href: string; label: string }
+}
 
 // 일하는 방식 여섯 가지 — 서비스·회사소개 탭의 '한 줄 소개' 섹션과 같은 목록 (사진은 빼고 글만 쓴다)
 const WAYS: Card[] = POINTS.map(({ Icon, title, desc }) => ({ Icon, title, desc }))
 
-// 메인에서 보여주는 강점 아홉 가지 — 예전 솔루션 섹션의 신뢰 지표(6칸)와 강점(6종)을
-// 겹치는 것 없이 합친 목록이다 (프로모션 할인은 뺐다). 3열 × 3줄로 놓인다.
+// 메인에서 보여주는 강점 여덟 가지 — 예전 솔루션 섹션의 신뢰 지표(6칸)와 강점(6종)을
+// 겹치는 것 없이 합친 목록이다 (프로모션 할인·트렌디한 디자인은 뺐다). 2열 × 4줄로 놓인다.
+// img: 카드 위쪽 사진 — 얼굴이 나오는 사진은 쓰지 않는다 (화면·기기·손만 나오는 것으로 고른다)
 // more: 카드 아래에서 이어지는 페이지
 const SOLUTIONS: Card[] = [
   {
     Icon: Zap,
     title: '최신 기술 활용',
+    img: '/images/main/main-solution-tech.webp',
     desc: '대기업 서비스에 쓰이는 React·Next.js로 제작',
     more: { href: '/difference', label: '차이점 보기' },
   },
   {
     Icon: Search,
     title: 'SEO·AEO·GEO 설계',
+    img: '/images/service/service1.webp',
+    imgPos: 'top', // 맨 위의 검색창이 잘리지 않게 위쪽을 기준으로 자른다
     desc: '검색과 AI 답변에 잡히는 구조부터 설계',
     more: { href: '/check', label: '내 사이트 점검' },
   },
   {
     Icon: MonitorSmartphone,
     title: 'PC·모바일 최적화',
+    img: '/images/main/main-service-05.webp',
     desc: '어떤 화면에서도 빠르고 깨지지 않게',
     more: { href: '/cases', label: '제작 사례' },
   },
   {
     Icon: Code2,
     title: '전문 개발자 직접 제작',
+    img: '/images/process/process-04-dev.webp',
     desc: '외주 없이 개발자가 직접 설계하고 구현',
     more: { href: '/difference', label: '차이점 보기' },
   },
   {
     Icon: Ruler,
     title: '100% 맞춤 제작',
+    img: '/images/process/process-02-plan.webp',
     desc: '템플릿이 아닌 브랜드에 맞춘 설계',
     more: { href: '/guide', label: '제작 라인업' },
   },
   {
     Icon: UserRoundCheck,
     title: '1:1 집중 관리',
+    img: '/images/service/service11.webp',
     desc: '전담 담당자가 처음부터 끝까지 함께',
     more: { href: '/service', label: '서비스 보기' },
   },
   {
     Icon: ShieldCheck,
     title: '꼼꼼한 마무리',
+    img: '/images/service/service22.webp',
+    imgPos: '40% 45%', // 초록 체크가 있는 쪽을 기준으로
+    imgZoom: 1.25,
     desc: '제작 후에도 책임지는 유지보수와 관리',
     more: { href: '/benefits', label: '혜택 보기' },
   },
   {
-    Icon: Palette,
-    title: '트렌디한 디자인',
-    desc: '최신 흐름을 반영한 브랜드 맞춤 디자인',
-    more: { href: '/cases', label: '제작 사례' },
-  },
-  {
     Icon: Stethoscope,
     title: '무료 홈페이지 상담',
+    img: '/images/process/process-01-consult.webp',
     desc: '현재 상태를 먼저 살펴보고 투명한 비용 안내',
     more: { href: '/diagnosis', label: '상담 신청' },
   },
@@ -139,8 +156,11 @@ function RevealText({ lines, hl = [] }: { lines: string[]; hl?: string[] }) {
 
 /**
  * 카드 섹션 하나 — 가운데 머리말(· 소개 한 문단) 아래 옅은 회색 카드 3열 또는 2열.
- * 카드마다 아이콘 · 제목 · 한 줄 설명 (· 이어지는 페이지 링크).
- * 화면에 들어오면 카드가 아래에서 차례로 떠오른다.
+ * 카드마다 (사진 ·) 아이콘 · 제목 · 한 줄 설명 (· 이어지는 페이지 링크).
+ *
+ * 카드는 저마다 화면에 들어올 때 아래에서 떠오르고, 그때 아이콘이 선으로 그려진다.
+ * light 를 켜면, 카드 위에서 마우스를 움직일 때 커서 자리에 옅은 하늘색 빛이 번진다 — 빛은 카드마다
+ * '커서가 내 안의 어디에 있는지'(--mx, --my)로 그리므로, 카드 경계를 넘어가도 이어져 보인다.
  *
  * split 을 주면 제목 대신 그 두 토막을 쓴다 — 스크롤에 맞춰 앞 토막은 왼쪽에서,
  * 뒤 토막은 오른쪽에서 들어와 가운데에서 한 문장으로 붙는다 (올리면 다시 벌어진다).
@@ -153,6 +173,8 @@ function CardSection({
   lead,
   cols = 3,
   cards,
+  light = false,
+  dark = false,
   foot,
 }: {
   id: string
@@ -165,12 +187,53 @@ function CardSection({
   /** 넓은 화면에서의 열 수 */
   cols?: 2 | 3
   cards: Card[]
+  /** 마우스를 따라다니는 빛을 켤지 */
+  light?: boolean
+  /** 검은 바탕으로 그릴지 */
+  dark?: boolean
   /** 카드 아래 가운데에 놓는 것 (더 보기 버튼 등) */
   foot?: React.ReactNode
 }) {
   const ref = useRef<HTMLElement>(null)
   const headRef = useRef<HTMLElement>(null)
+  const gridRef = useRef<HTMLUListElement>(null)
+  const moveRaf = useRef(0)
   const [shown, setShown] = useState(false)
+
+  // 카드마다 화면에 들어오는 순간 .is-on — 등장과 아이콘 그리기가 이 클래스에 걸려 있다
+  useEffect(() => {
+    const grid = gridRef.current
+    if (!grid) return
+    const io = new IntersectionObserver(
+      entries =>
+        entries.forEach(e => {
+          if (!e.isIntersecting) return
+          e.target.classList.add('is-on')
+          io.unobserve(e.target)
+        }),
+      { threshold: 0.2 },
+    )
+    grid.querySelectorAll('.hs-card').forEach(c => io.observe(c))
+    return () => {
+      io.disconnect()
+      if (moveRaf.current) cancelAnimationFrame(moveRaf.current)
+    }
+  }, [])
+
+  // 마우스 빛 — 커서 위치를 카드마다 제 왼쪽 위 기준 좌표로 바꿔 넘긴다 (한 프레임에 한 번)
+  const onMove = (e: React.MouseEvent<HTMLUListElement>) => {
+    if (moveRaf.current) return
+    const grid = e.currentTarget
+    const { clientX, clientY } = e
+    moveRaf.current = requestAnimationFrame(() => {
+      moveRaf.current = 0
+      grid.querySelectorAll<HTMLElement>('.hs-card').forEach(c => {
+        const r = c.getBoundingClientRect()
+        c.style.setProperty('--mx', `${clientX - r.left}px`)
+        c.style.setProperty('--my', `${clientY - r.top}px`)
+      })
+    })
+  }
 
   // 붙는 제목 — 머리말이 화면 아래에서 올라와 가운데쯤 올 때까지의 진행도(0→1)를 --hs-x 로 넘긴다
   useEffect(() => {
@@ -214,7 +277,11 @@ function CardSection({
   }, [])
 
   return (
-    <section ref={ref} className={`hs-section${shown ? ' is-in' : ''}`} aria-labelledby={id}>
+    <section
+      ref={ref}
+      className={`hs-section${dark ? ' hs-section--dark' : ''}${shown ? ' is-in' : ''}`}
+      aria-labelledby={id}
+    >
       <div className="hs-inner">
         <header ref={headRef} className={split ? 'hs-head hs-head--split' : 'hs-head'}>
           <p className="hs-eyebrow">{eyebrow}</p>
@@ -231,9 +298,36 @@ function CardSection({
           {lead && <div className="hs-lead">{lead}</div>}
         </header>
 
-        <ul className={cols === 2 ? 'hs-grid hs-grid--2' : 'hs-grid'}>
-          {cards.map(({ Icon, title, desc, more }, i) => (
-            <li key={title} className="hs-card" style={{ '--i': i } as React.CSSProperties}>
+        <ul
+          ref={gridRef}
+          className={`hs-grid${cols === 2 ? ' hs-grid--2' : ''}${light ? ' hs-grid--light' : ''}`}
+          onMouseMove={light ? onMove : undefined}
+        >
+          {cards.map(({ Icon, title, desc, img, imgPos, imgZoom, more }, i) => (
+            // --d: 같은 줄 안에서의 차례 — 옆 카드보다 조금 늦게 나오게 한다
+            <li
+              key={title}
+              className={img ? 'hs-card hs-card--photo' : 'hs-card'}
+              style={{ '--d': i % cols } as React.CSSProperties}
+            >
+              {img && (
+                <span className="hs-photo">
+                  <Image
+                    src={img}
+                    alt=""
+                    fill
+                    sizes="(max-width: 600px) 100vw, 430px"
+                    style={
+                      {
+                        objectFit: 'cover',
+                        objectPosition: imgPos,
+                        transformOrigin: imgPos,
+                        '--z': imgZoom,
+                      } as React.CSSProperties
+                    }
+                  />
+                </span>
+              )}
               <span className="hs-icon">
                 <Icon size={26} strokeWidth={1.6} aria-hidden="true" />
               </span>
@@ -259,7 +353,7 @@ function CardSection({
 /**
  * 메인의 카드 섹션 둘 — '왜 WEFLOW' 섹션 바로 아래, 흰 바탕.
  *  1) 일하는 방식 여섯 가지, 2열 (회사소개 대신 — 소개는 제목 아래 한 문단만 두고, 어떻게 일하는지를 보여준다)
- *  2) 솔루션: 강점 아홉 가지
+ *  2) 솔루션: 강점 여덟 가지, 2열 — 검은 바탕, 카드마다 사진이 있다
  * 두 섹션이 같은 스타일을 쓰므로 한 번만 싣는다.
  */
 export default function HomeCardSections() {
@@ -289,15 +383,18 @@ export default function HomeCardSections() {
       />
       <CardSection
         id="hs-solution"
-        eyebrow="SOLUTION"
+        eyebrow="OUR STRENGTHS"
         title={
           <>
-            믿을 수 있는 전문가가 직접
+            보이는 것부터
             <br />
-            기획·디자인·제작합니다
+            보이지 않는 것까지
           </>
         }
+        cols={2}
         cards={SOLUTIONS}
+        light
+        dark
       />
 
       <style>{`
@@ -309,6 +406,18 @@ export default function HomeCardSections() {
         /* 같은 흰 바탕 섹션이 연달아 오면 여백이 두 배가 되므로, 뒤 섹션의 위 여백은 뺀다 */
         .hs-section + .hs-section { padding-top: 0; }
         .hs-inner { max-width: 1120px; margin: 0 auto; }
+
+        /* 검은 바탕 — 앞 섹션과 바탕이 다르니 위 여백을 되살리고, 카드·글씨 색을 뒤집는다 */
+        .hs-section--dark { background: #0e0e10; color: #fff; }
+        .hs-section + .hs-section--dark { padding-top: clamp(4.5rem, 10vw, 8.5rem); }
+        .hs-section--dark .hs-title { color: #fff; }
+        .hs-section--dark .hs-card { background: #1a1b1f; }
+        .hs-section--dark .hs-card:hover { background: #1f2228; }
+        .hs-section--dark .hs-card__title { color: #fff; }
+        .hs-section--dark .hs-card__desc,
+        .hs-section--dark .hs-card__more { color: rgba(255, 255, 255, 0.66); }
+        .hs-section--dark .hs-card__more:hover { color: #fff; }
+        .hs-section--dark .hs-photo { background: #24262b; }
 
         /* ── 머리말 ── */
         .hs-head {
@@ -384,19 +493,61 @@ export default function HomeCardSections() {
         /* 2열은 카드가 너무 넓어지지 않게 전체 폭을 좁혀 가운데에 둔다 */
         .hs-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 860px; margin: 0 auto; }
         .hs-card {
-          padding: clamp(1.4rem, 2.4vw, 2rem);
+          --hs-pad: clamp(1.4rem, 2.4vw, 2rem);
+          position: relative;
+          padding: var(--hs-pad);
           border-radius: clamp(18px, 2.2vw, 28px);
+          overflow: hidden;
           background: #f5f6f8;
-          /* 등장 — 아래에서 떠오르고, 순서(--i)대로 조금씩 늦게 */
+          /* 등장 — 화면에 들어오면(.is-on) 아래에서 떠오르고, 같은 줄에서는 차례(--d)대로 조금씩 늦게 */
           opacity: 0;
           transform: translateY(40px);
           transition:
-            opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) calc(0.12s + var(--i) * 0.06s),
-            transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) calc(0.12s + var(--i) * 0.06s),
+            opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) calc(0.05s + var(--d) * 0.1s),
+            transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) calc(0.05s + var(--d) * 0.1s),
             background 0.25s;
         }
-        .is-in .hs-head, .is-in .hs-card { opacity: 1; transform: none; }
+        .is-in .hs-head, .hs-card.is-on { opacity: 1; transform: none; }
         .hs-card:hover { background: #eef4fb; }
+
+        /* 마우스 빛 — 커서 자리(--mx, --my)에 하늘색 빛을 얹는다.
+           빛을 켠 묶음(.hs-grid--light) 위에 마우스가 있을 때만 보인다 */
+        .hs-card::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: radial-gradient(
+            280px circle at var(--mx, -400px) var(--my, -400px),
+            rgba(127, 188, 247, 0.34),
+            transparent 65%
+          );
+          opacity: 0;
+          transition: opacity 0.35s;
+          pointer-events: none;
+        }
+        .hs-grid--light:hover .hs-card::after { opacity: 1; }
+
+        /* 사진 카드 — 사진이 카드 위쪽을 가장자리까지 채우고, 아이콘 타일이 사진 아랫변에 반쯤 걸친다 */
+        .hs-card--photo { padding: 0; }
+        .hs-photo {
+          position: relative;
+          display: block;
+          aspect-ratio: 2 / 1;
+          overflow: hidden;
+          background: #e9ebee;
+        }
+        /* --z: 사진마다 정한 확대 배율. 마우스를 올리면 거기서 조금 더 다가온다 */
+        .hs-photo img { transform: scale(var(--z, 1)); transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .hs-card:hover .hs-photo img { transform: scale(calc(var(--z, 1) * 1.05)); }
+        .hs-card--photo .hs-icon {
+          position: relative;
+          z-index: 1;
+          margin: -28px 0 0 var(--hs-pad);
+          box-shadow: 0 6px 16px rgba(17, 17, 17, 0.12);
+        }
+        .hs-card--photo .hs-card__body { padding: 0 var(--hs-pad) var(--hs-pad); }
+        .hs-card--photo .hs-card__title { margin-top: 1rem; }
 
         /* 아이콘 — 흰 타일 위에 파란색으로. 카드에 마우스를 올리면 타일이 하늘색으로 채워지며 살짝 기운다 */
         .hs-icon {
@@ -416,6 +567,13 @@ export default function HomeCardSections() {
             transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .hs-card:hover .hs-icon { background: #a9d4ff; color: #12304f; transform: rotate(-6deg) scale(1.06); }
+        /* 아이콘 그리기 — 선을 '긴 점선 하나'로 만들어 두고, 카드가 들어오면 시작점을 당겨 선이 그려지게 한다
+           (아이콘 좌표가 24 × 24 라 어떤 선도 100 보다 짧다) */
+        .hs-icon svg * { stroke-dasharray: 100; stroke-dashoffset: 100; }
+        .hs-card.is-on .hs-icon svg * {
+          stroke-dashoffset: 0;
+          transition: stroke-dashoffset 1.4s cubic-bezier(0.3, 0, 0.2, 1) calc(0.3s + var(--d) * 0.1s);
+        }
 
         .hs-card__title {
           margin: clamp(1.1rem, 2vw, 1.5rem) 0 0;
@@ -476,7 +634,7 @@ export default function HomeCardSections() {
         @media (max-width: 960px) {
           .hs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
-        /* 좁은 화면 — 한 줄에 하나씩, 아이콘을 왼쪽에 두어 카드 높이를 낮춘다 (아홉 장이 길어지지 않게) */
+        /* 좁은 화면 — 한 줄에 하나씩, 아이콘을 왼쪽에 두어 카드 높이를 낮춘다 (카드가 많아도 길어지지 않게) */
         @media (max-width: 600px) {
           .hs-section { padding-left: 1.25rem; padding-right: 1.25rem; }
           .hs-grid, .hs-grid--2 { grid-template-columns: 1fr; }
@@ -486,12 +644,21 @@ export default function HomeCardSections() {
           .hs-card__title { margin-top: 0.1rem; }
           .hs-card__desc { margin-top: 0.3rem; }
           .hs-card__more { margin-top: 0.6rem; }
+          /* 사진 카드는 가로형으로 눕히지 않는다 — 사진 위, 글 아래 그대로 */
+          .hs-card--photo { display: block; padding: 0; --hs-pad: 1.2rem; }
+          .hs-card--photo .hs-icon { margin-top: -24px; }
+          .hs-card--photo .hs-card__title { margin-top: 0.8rem; }
+        }
+        /* 터치 기기 — 마우스가 없으니 빛도 없다 */
+        @media (hover: none) {
+          .hs-card::after { display: none; }
         }
 
         @media (prefers-reduced-motion: reduce) {
           .hs-head, .hs-card, .hs-foot { opacity: 1; transform: none; transition: none; }
           .hs-part, .hs-head--split .hs-eyebrow, .hs-head--split .hs-lead { opacity: 1; transform: none; }
-          .hs-icon { transition: none; }
+          .hs-icon, .hs-photo img { transition: none; }
+          .hs-icon svg * { stroke-dashoffset: 0; transition: none; }
         }
       `}</style>
     </>
