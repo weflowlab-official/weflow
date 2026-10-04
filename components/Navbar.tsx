@@ -36,6 +36,11 @@ const NAV_ITEMS: (NavLink | NavGroup)[] = [
 // 강조 메뉴 색 — 흰 헤더·드로어 위에서 읽히는 중간 톤 금색 (상담 버튼 글씨와 같은 계열)
 const NAV_GOLD = "#ad8640";
 
+// 헤더 글씨 크기 — 메뉴·대표 번호는 16px, 드롭다운 항목은 15px.
+// 글씨 클래스(.headline 17px · .body 16px)의 기본값보다 한 단계씩 작게 잡는다
+const NAV_FONT = "1rem";
+const NAV_SUB_FONT = "0.9375rem";
+
 // 상담 버튼 옆에 같이 보여 주는 대표 번호
 const TEL = "010-2971-7280";
 
@@ -225,6 +230,7 @@ export default function Navbar() {
                     style={{
                       padding: "0.4rem 0.7rem",
                       borderRadius: "6px",
+                      fontSize: NAV_FONT,
                       fontWeight: isActive(item.href) || item.gold ? 700 : 500,
                       color: item.gold
                         ? NAV_GOLD
@@ -272,6 +278,7 @@ export default function Navbar() {
                       gap: "0.2rem",
                       padding: "0.4rem 0.7rem",
                       borderRadius: "6px",
+                      fontSize: NAV_FONT,
                       fontWeight: groupActive ? 700 : 500,
                       color: groupActive || shown ? "#111" : "#555",
                       textDecoration: "none",
@@ -325,6 +332,7 @@ export default function Navbar() {
                             display: "block",
                             padding: "0.6rem 0.9rem",
                             borderRadius: "8px",
+                            fontSize: NAV_SUB_FONT,
                             fontWeight: isActive(c.href) ? 700 : 500,
                             color: isActive(c.href) ? "#111" : undefined,
                             textDecoration: "none",
@@ -359,6 +367,7 @@ export default function Navbar() {
                 gap: "0.35rem",
                 marginRight: "1rem",
                 color: "#111",
+                fontSize: NAV_FONT,
                 fontWeight: 700,
                 textDecoration: "none",
                 whiteSpace: "nowrap",
@@ -372,7 +381,7 @@ export default function Navbar() {
             {/* 데스크탑 상담 CTA — 문구가 위로 흐르는 마퀴 + 금색 광택 */}
             <Link
               href="/diagnosis"
-              aria-label="지금 바로 무료 상담 받기"
+              aria-label="지금 바로 맞춤 견적 받기"
               className="btn-primary cta-marquee cta-gradient cta-header hide-mobile"
               style={{
                 width: "132px",
@@ -382,7 +391,7 @@ export default function Navbar() {
               }}
             >
               <span className="cta-marquee-track">
-                {["지금 바로 무료 상담 받기", "지금 바로 무료 상담 받기", "지금 바로 무료 상담 받기", "지금 바로 무료 상담 받기"].map((t, i) => (
+                {["지금 바로 맞춤 견적 받기", "지금 바로 맞춤 견적 받기", "지금 바로 맞춤 견적 받기", "지금 바로 맞춤 견적 받기"].map((t, i) => (
                   <span key={i} className="cta-marquee-item">
                     {t}
                   </span>
@@ -546,7 +555,7 @@ export default function Navbar() {
             style={{ justifyContent: "center", width: "100%" }}
             onClick={close}
           >
-            <span className="cta-label">무료 상담 신청</span>
+            <span className="cta-label">맞춤 견적 받기</span>
           </Link>
         </div>
       </div>
