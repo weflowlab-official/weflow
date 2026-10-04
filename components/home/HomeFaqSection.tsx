@@ -5,7 +5,7 @@ import { ArrowRight } from 'lucide-react'
 import { faqs } from '@/data/faq'
 
 // 화면에 보이는 질문·답변을 그대로 구조화한다 (보이지 않는 내용을 넣으면 가이드라인 위반).
-// /guide 의 FaqSection 과 같은 데이터(data/faq)를 쓰므로 두 곳의 내용이 어긋나지 않는다.
+// 예전에 /guide 에 있던 FaqSection 과 같은 데이터(data/faq)를 쓴다 (/guide 에서는 내렸다).
 const FAQ_JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',

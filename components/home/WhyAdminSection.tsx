@@ -1,12 +1,10 @@
-"use client";
-import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import Image from "next/image";
 import { Star, Crown } from "lucide-react";
+import ScrollPhotoList from "@/components/ScrollPhotoList";
 
 type Point = { order: string; title: string; kw: string; desc: ReactNode };
 
-// 관리자 페이지가 필요한 이유 3가지 — 지그재그 행(키워드 + 설명)을 채운다
+// 관리자 페이지가 필요한 이유 3가지 — 항목마다 키워드 + 설명
 const POINTS: Point[] = [
   {
     order: "첫째",
@@ -53,52 +51,28 @@ const POINTS: Point[] = [
   },
 ];
 
-// 이미지 원본 치수(비율 유지·자르지 않기 위함)
-const IMG_DIMS = [
-  { w: 1190, h: 1322 },
-  { w: 1122, h: 1402 },
-  { w: 1397, h: 1126 },
-];
-
 /**
- * "06 · 관리자 페이지가 필요한 이유" 섹션 — 고객 DB·유입 경로·통계 3가지를
- * 지그재그 좌우 배치로 보여준다 (WhatIsHomepageSection과 같은 구조)
+ * "05 · 관리자 페이지가 필요한 이유" 섹션 — 고객 DB·유입 경로·통계 3가지를
+ * 혜택 안내와 같은 방식으로 보여준다 (WhatIsHomepageSection과 같은 구조):
+ * 왼쪽 사진이 붙어 따라오고, 오른쪽 항목을 스크롤하는 대로 사진이 바뀐다.
+ *
+ * 사진은 관리자 페이지의 실제 화면 캡처라 비율이 제각각이다(세로로 긴 것 둘, 가로로 긴 것 하나).
+ * 정사각 자리에 자르지 않고(contain) 넣는다 — 캡처 바탕이 흰색이라 남는 자리가 티 나지 않는다.
  */
 export default function WhyAdminSection() {
-  const ref = useRef<HTMLElement>(null);
-  const [inView, setInView] = useState(false);
-
-  // 섹션이 화면에 들어오면 파란 키워드 흔들림 애니메이션을 시작한다 (한 번만)
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section
       id="why-admin"
-      ref={ref}
       style={{
         background: "var(--section-a)",
         padding: "clamp(2.25rem, 5vw, 4rem) 1.25rem",
       }}
     >
-      <div style={{ maxWidth: "1000px", margin: "0 auto", width: "100%" }}>
+      <div style={{ maxWidth: "1120px", margin: "0 auto", width: "100%" }}>
         {/* 헤더 */}
         <div style={{ marginBottom: "clamp(2rem, 5vw, 3.5rem)" }}>
           <span className="footnote emphasized c-accent">
-            06 · 관리자 페이지가 필요한 이유
+            05 · 관리자 페이지가 필요한 이유
           </span>
           {/* 별 5개 (배경 없이) */}
           <div
@@ -124,178 +98,33 @@ export default function WhyAdminSection() {
           </h2>
         </div>
 
-        {/* 지그재그 포인트 (위 섹션과 이미지 교차 · WhatIs와 동일하게 정적) */}
-        {POINTS.map((p, i) => (
-          <div
-            key={p.order}
-            className={`wa-row${i % 2 === 0 ? " reverse" : ""}`}
-          >
-            {/* 텍스트 */}
-            <div className="wa-text wa-text--key">
-              <Crown
-                strokeWidth={2}
-                color="#f5b301"
-                fill="#f5b301"
-                style={{
-                  width: "1.625rem",
-                  height: "1.625rem",
-                  display: "block",
-                  marginBottom: "0.2rem",
-                  marginLeft: "-0.15rem",
-                }}
-              />
-              <span className="footnote emphasized c-accent">{p.order}</span>
-              <span className="wa-badge">핵심</span>
-              <h3
-                className="title-2 emphasized"
-                style={{ margin: "0.5rem 0 1rem", wordBreak: "keep-all" }}
-              >
-                {p.title}
-              </h3>
-              <div style={{ margin: "0 0 0.9rem" }}>
-                <span
-                  className={`large-title emphasized c-accent wa-stat${inView ? " go" : ""}`}
-                  style={{
-                    display: "inline-block",
-                    lineHeight: 1.05,
-                    fontSize: "clamp(1.6rem, 3.6vw, 2.4rem)",
-                    wordBreak: "keep-all",
-                  }}
-                >
-                  {p.kw}
-                </span>
-              </div>
-              <p
-                className="body c-muted"
-                style={{ margin: 0, wordBreak: "keep-all" }}
-              >
-                {p.desc}
-              </p>
-            </div>
-
-            {/* 이미지 — 원본 비율 그대로(자르지 않음) */}
-            <div className="wa-img">
-              <Image
-                src={`/images/main/main-adminwhy-0${i + 1}.webp`}
-                alt={p.title}
-                width={IMG_DIMS[i].w}
-                height={IMG_DIMS[i].h}
-                sizes="(max-width: 768px) 100vw, 480px"
-                style={{
-                  display: "block",
-                  width: "100%",
-                  height: "auto",
-                  borderRadius: "var(--radius-2xl)",
-                  border: "1px solid var(--border)",
-                }}
-              />
-
-              {/* 곡선 화살표 + 캡션 — 실제 화면 캡처임을 알린다 */}
-              <div className="wa-img-note">
-                <svg
-                  className="wa-img-arrow"
-                  width="30"
-                  height="26"
-                  viewBox="0 0 64 56"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M56 29 C 32 41, 13 33, 17 13"
-                    stroke="var(--accent)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M8 22 L17 10 L28 20"
-                    stroke="var(--accent)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <p className="wa-img-note-text">
-                  WEFLOW <strong>관리자 페이지</strong>의 실제 화면입니다.
+        <ScrollPhotoList
+          photoRatio={1}
+          fit="contain"
+          caption={
+            <>
+              WEFLOW <strong>관리자 페이지</strong>의 실제 화면입니다.
+            </>
+          }
+          items={POINTS.map((p, i) => ({
+            key: p.order,
+            img: `/images/main/main-adminwhy-0${i + 1}.webp`,
+            alt: p.title,
+            body: (
+              <>
+                <p className="spl-kicker">
+                  <Crown size={22} strokeWidth={2} color="#f5b301" fill="#f5b301" aria-hidden="true" />
+                  {p.order}
+                  <span className="spl-badge">핵심</span>
                 </p>
-              </div>
-            </div>
-          </div>
-        ))}
+                <h3 className="spl-title">{p.title}</h3>
+                <p className="spl-stat spl-stat--text">{p.kw}</p>
+                <p className="spl-desc">{p.desc}</p>
+              </>
+            ),
+          }))}
+        />
       </div>
-
-      <style>{`
-        /* 그리드로 칸을 반씩 고정한다 — flex 는 내용에 따라 폭이 밀려서
-           줄마다 가운데 경계선이 어긋났다. 좌우가 바뀌어도 경계선은 항상 같은 자리다. */
-        .wa-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          align-items: center;
-          gap: clamp(1.5rem, 4vw, 3.5rem);
-        }
-        /* 번갈아 놓기는 order 로 — 칸 자체는 그대로 두고 내용만 자리를 바꾼다 */
-        .wa-row.reverse .wa-text { order: 2; }
-        .wa-row.reverse .wa-img { order: 1; }
-        .wa-row + .wa-row { margin-top: clamp(2.5rem, 6vw, 4rem); }
-        .wa-text { min-width: 0; }
-        .wa-img { min-width: 0; }
-        /* 사진 아래 안내 — 화살표가 사진을 가리키고 문구가 옆에 붙는다 */
-        .wa-img-note {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          margin-top: 0.7rem;
-        }
-        .wa-img-arrow { flex-shrink: 0; }
-        .wa-img-note-text {
-          margin: 0;
-          font-size: 0.92rem;
-          font-weight: 600;
-          line-height: 1.5;
-          color: var(--text);
-          word-break: keep-all;
-        }
-        .wa-img-note-text strong { color: var(--accent); }
-        @media (max-width: 768px) {
-          .wa-row { grid-template-columns: 1fr; align-items: stretch; }
-          .wa-row .wa-text, .wa-row.reverse .wa-text { order: 2; }
-          .wa-row .wa-img, .wa-row.reverse .wa-img { order: 1; }
-        }
-        /* 핵심 뱃지 */
-        .wa-badge {
-          display: inline-block;
-          margin-left: 0.5rem;
-          vertical-align: middle;
-          background: var(--accent);
-          color: var(--on-accent);
-          font-size: 0.66rem;
-          font-weight: 700;
-          padding: 2px 9px;
-          border-radius: 9999px;
-          letter-spacing: 0.02em;
-        }
-        /* 핵심 강조 파란 패널 */
-        .wa-text--key {
-          background: var(--accent-light);
-          border: 1px solid var(--accent-light);
-          border-radius: var(--radius-2xl);
-          padding: clamp(1.25rem, 3vw, 2rem);
-        }
-        /* 파란 키워드 흔들림 (화면 진입 후 7초마다 잠깐) — WhatIs와 동일 */
-        .wa-stat { transform-origin: center bottom; }
-        .wa-stat.go { animation: wa-wiggle 7s ease-in-out infinite; }
-        @keyframes wa-wiggle {
-          0%, 87%, 100% { transform: rotate(0deg); }
-          89% { transform: rotate(-5deg); }
-          91% { transform: rotate(4deg); }
-          93% { transform: rotate(-3deg); }
-          95% { transform: rotate(2deg); }
-          97% { transform: rotate(0deg); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .wa-stat.go { animation: none; }
-        }
-      `}</style>
     </section>
   );
 }

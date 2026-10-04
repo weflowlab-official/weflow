@@ -1,8 +1,6 @@
-'use client'
-import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import Image from 'next/image'
 import { ArrowUp, Crown, Star } from 'lucide-react'
+import ScrollPhotoList from '@/components/ScrollPhotoList'
 
 type Point = {
   order: string
@@ -12,7 +10,7 @@ type Point = {
   source: string
 }
 
-// 홈페이지가 필요한 이유 6가지 — 지그재그 행(통계 숫자 + 설명 + 출처)을 채운다
+// 홈페이지가 필요한 이유 6가지 — 항목마다 통계 숫자 + 설명 + 출처
 const POINTS: Point[] = [
   {
     order: '첫째',
@@ -94,7 +92,7 @@ const POINTS: Point[] = [
   },
 ]
 
-// POINTS 순서와 1:1 매핑 (03만 .jpg)
+// POINTS 순서와 1:1 매핑
 const WHY_IMAGES = [
   '/images/main/main-why-01.webp',
   '/images/main/main-why-02.webp',
@@ -105,36 +103,14 @@ const WHY_IMAGES = [
 ]
 
 /**
- * "02 · 홈페이지가 필요한 이유" 섹션 — 통계 근거 6가지를 지그재그 좌우 배치로 보여준다
- * 앞의 3개는 핵심으로 왕관·뱃지와 강조 패널이 붙는다
+ * "02 · 홈페이지가 필요한 이유" 섹션 — 통계 근거 6가지를 혜택 안내와 같은 방식으로 보여준다:
+ * 왼쪽 사진이 붙어 따라오고, 오른쪽 항목을 스크롤하는 대로 사진이 바뀐다 (ScrollPhotoList).
+ * 앞의 3개는 핵심으로 왕관·뱃지가 붙는다
  */
 export default function WhatIsHomepageSection() {
-  const ref = useRef<HTMLElement>(null)
-  const [inView, setInView] = useState(false)
-
-  // 섹션이 화면에 들어오면 파란 통계 숫자 흔들림 애니메이션을 시작한다 (한 번만)
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true)
-          observer.disconnect()
-        }
-      },
-      // threshold 는 "요소 높이의 몇 %가 보이는가" 기준이라, 이 섹션처럼
-      // 화면보다 긴 요소에는 0.3 을 영영 못 채워 발동하지 않는다.
-      // 대신 화면 위아래 25% 를 잘라낸 가운데 띠에 걸리는 순간을 본다.
-      { threshold: 0, rootMargin: '-25% 0px -25% 0px' },
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
   return (
-    <section id="why-homepage" ref={ref} style={{ background: 'var(--section-a)', padding: 'clamp(2.25rem, 5vw, 4rem) 1.25rem' }}>
-      <div style={{ maxWidth: '880px', margin: '0 auto', width: '100%' }}>
+    <section id="why-homepage" style={{ background: 'var(--section-a)', padding: 'clamp(2.25rem, 5vw, 4rem) 1.25rem' }}>
+      <div style={{ maxWidth: '1120px', margin: '0 auto', width: '100%' }}>
         {/* 헤더 */}
         <div style={{ marginBottom: 'clamp(2rem, 5vw, 3.5rem)' }}>
           <span className="footnote emphasized c-accent">02 · 홈페이지가 필요한 이유</span>
@@ -149,145 +125,30 @@ export default function WhatIsHomepageSection() {
           </h2>
         </div>
 
-        {/* 지그재그 포인트 */}
-        {POINTS.map((p, i) => (
-          <div key={p.order} className={`wih-row${i % 2 === 0 ? ' reverse' : ''}`}>
-            {/* 텍스트 */}
-            <div className={`wih-text${i < 3 ? ' wih-text--key' : ''}`}>
-              {i < 3 && (
-                <Crown
-                  strokeWidth={2}
-                  color="#f5b301"
-                  fill="#f5b301"
-                  style={{ width: '1.625rem', height: '1.625rem', display: 'block', marginBottom: '0.2rem', marginLeft: '-0.15rem' }}
-                />
-              )}
-              <span className="footnote emphasized c-accent">{p.order}</span>
-              {i < 3 && <span className="wih-badge">핵심</span>}
-              <h3 className="title-2 emphasized" style={{ margin: '0.5rem 0 1rem', wordBreak: 'keep-all' }}>
-                {p.title}
-              </h3>
-              <div style={{ marginBottom: '0.9rem' }}>
-                <span
-                  className={`wih-stat${inView ? ' go' : ''}`}
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.2rem' }}
-                >
-                  <span
-                    className="large-title emphasized c-accent"
-                    style={{
-                      lineHeight: 1,
-                      fontSize: 'clamp(1.7rem, 4.2vw, 2.7rem)',
-                      display: 'inline-block',
-                    }}
-                  >
-                    {p.stat}
-                  </span>
-                  {i >= 1 && (
-                    <ArrowUp
-                      strokeWidth={2.6}
-                      color="var(--accent)"
-                      style={{ width: 'clamp(1.7rem, 4.2vw, 2.75rem)', height: 'clamp(1.7rem, 4.2vw, 2.75rem)', flexShrink: 0 }}
-                    />
-                  )}
-                </span>
-              </div>
-              <p className="body c-muted" style={{ margin: 0, wordBreak: 'keep-all' }}>
-                {p.desc}
-              </p>
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '8px 0 0', wordBreak: 'keep-all' }}>
-                {p.source}
-              </p>
-            </div>
-
-            {/* 이미지 */}
-            <div className="wih-img">
-              <div
-                style={{
-                  position: 'relative',
-                  width: '100%',
-                  aspectRatio: '4 / 3',
-                  borderRadius: 'var(--radius-2xl)',
-                  overflow: 'hidden',
-                  background: 'var(--surface-container)',
-                  border: '1px solid var(--border)',
-                }}
-              >
-                <Image
-                  src={WHY_IMAGES[i]}
-                  alt={p.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 420px"
-                  style={{ objectFit: 'cover' }}
-                />
-              </div>
-            </div>
-          </div>
-        ))}
+        <ScrollPhotoList
+          items={POINTS.map((p, i) => ({
+            key: p.order,
+            img: WHY_IMAGES[i],
+            alt: p.title,
+            body: (
+              <>
+                <p className="spl-kicker">
+                  {i < 3 && <Crown size={22} strokeWidth={2} color="#f5b301" fill="#f5b301" aria-hidden="true" />}
+                  {p.order}
+                  {i < 3 && <span className="spl-badge">핵심</span>}
+                </p>
+                <h3 className="spl-title">{p.title}</h3>
+                <p className="spl-stat">
+                  {p.stat}
+                  {i >= 1 && <ArrowUp strokeWidth={2.6} aria-hidden="true" />}
+                </p>
+                <p className="spl-desc">{p.desc}</p>
+                <p className="spl-source">{p.source}</p>
+              </>
+            ),
+          }))}
+        />
       </div>
-
-      <style>{`
-        /* 그리드로 칸을 반씩 고정한다 — flex 는 내용에 따라 폭이 밀려서
-           줄마다 가운데 경계선이 어긋났다. 좌우가 바뀌어도 경계선은 항상 같은 자리다. */
-        .wih-row {
-          display: grid;
-          /* 사진과 글을 반반 — 사진이 칸을 꽉 채우므로
-             가운데 경계선과 바깥 끝선이 줄마다 똑같이 떨어진다 */
-          grid-template-columns: 1fr 1fr;
-          align-items: center;
-          gap: clamp(1.5rem, 4vw, 3.5rem);
-        }
-        /* 번갈아 놓기는 order 로 — 칸 자체는 그대로 두고 내용만 자리를 바꾼다 */
-        .wih-row.reverse .wih-text { order: 2; }
-        .wih-row.reverse .wih-img { order: 1; }
-        .wih-row + .wih-row { margin-top: clamp(2.5rem, 6vw, 4rem); }
-        .wih-text { min-width: 0; }
-        /* 줄 전체를 한 단계 작게 — 전역 글씨 클래스는 rem 이라
-           틀만 좁혀서는 글씨가 따라 줄지 않아 여기서 직접 낮춘다 */
-        .wih-text .title-2 { font-size: clamp(1.2rem, 2.6vw, 1.33rem); }
-        .wih-text .body { font-size: 0.92rem; }
-        .wih-img { min-width: 0; }
-        @media (max-width: 768px) {
-          .wih-row { grid-template-columns: 1fr; align-items: stretch; }
-          .wih-row .wih-text, .wih-row.reverse .wih-text { order: 2; }
-          .wih-row .wih-img, .wih-row.reverse .wih-img { order: 1; }
-          /* 한 줄로 쌓이면 사진이 너무 커지지 않게만 잡아둔다 */
-          .wih-img > div { max-width: 480px; margin-inline: auto; }
-        }
-        /* 핵심 뱃지 */
-        .wih-badge {
-          display: inline-block;
-          margin-left: 0.5rem;
-          vertical-align: middle;
-          background: var(--accent);
-          color: var(--on-accent);
-          font-size: 0.66rem;
-          font-weight: 700;
-          padding: 2px 9px;
-          border-radius: 9999px;
-          letter-spacing: 0.02em;
-        }
-        /* 1·2·3 핵심 강조 패널 */
-        .wih-text--key {
-          background: var(--accent-light);
-          border: 1px solid var(--accent-light);
-          border-radius: var(--radius-2xl);
-          padding: clamp(1rem, 2.2vw, 1.5rem);
-        }
-        /* 파란 숫자 흔들림 효과 (화면 진입 후 7초마다 잠깐 흔들림) */
-        .wih-stat { transform-origin: center bottom; }
-        .wih-stat.go { animation: wih-wiggle 7s ease-in-out infinite; }
-        @keyframes wih-wiggle {
-          0%, 87%, 100% { transform: rotate(0deg); }
-          89% { transform: rotate(-5deg); }
-          91% { transform: rotate(4deg); }
-          93% { transform: rotate(-3deg); }
-          95% { transform: rotate(2deg); }
-          97% { transform: rotate(0deg); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .wih-stat.go { animation: none; }
-        }
-      `}</style>
     </section>
   )
 }

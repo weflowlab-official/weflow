@@ -86,6 +86,9 @@ export default function PageIntro({
       <style>{`
         /* 아래에 흰 섹션이 이어지므로, 섹션 사이 여백은 이쪽 아래 여백이 맡는다 */
         .pi-light {
+          /* 큰 글씨의 크기를 정하는 글자 수 — 여덟 자(BENEFITS)보다 짧은 낱말은 여덟 자로 친다.
+             글자 수로만 나누면 짧은 낱말(GUIDE)일수록 글자가 커져, 탭마다 상단의 크기가 달라진다 */
+          --pi-w: max(var(--pi-n), 8);
           --pi-pt: clamp(3.5rem, 7vw, 6rem);
           --pi-pb: clamp(4.5rem, 10vw, 8.5rem);
           position: relative;
@@ -157,15 +160,20 @@ export default function PageIntro({
           top: calc(50% + (var(--pi-pt) - var(--pi-pb)) / 2);
           transform: translateY(-50%);
           margin: 0;
-          /* 낱말 전체가 화면 폭의 58% 쯤(최대 900px)을 차지하게 — 0.6 은 굵은 영문 대문자 한 자의 평균 폭(em) */
-          font-size: calc(min(58vw, 900px) / (var(--pi-n) * 0.6));
+          /* 여덟 자짜리 낱말이 화면 폭의 58% 쯤(최대 900px)을 차지하는 크기 — 0.6 은 굵은 영문 대문자 한 자의 평균 폭(em) */
+          font-size: calc(min(58vw, 900px) / (var(--pi-w) * 0.6));
           font-weight: 900;
           line-height: 1;
           white-space: nowrap;
           text-transform: uppercase;
-          color: transparent;
+          /* 테두리를 먼저 그리고 그 위에 바탕색(흰색)으로 속을 칠한다 — 눈에는 테두리만 있는 글씨로 보인다.
+             속을 비워 두면(transparent) 안 된다: 이 글꼴의 D 는 세로 기둥과 둥근 부분, 두 조각을 겹쳐 그린 글자라
+             조각마다 테두리가 그려져 겹친 자리에 선이 생기고 글자가 끊겨 보인다. 속을 칠하면 그 선이 덮인다.
+             칠이 테두리의 안쪽 절반도 덮으므로, 보이는 굵기(2px)의 두 배로 긋는다 */
+          color: #fff;
+          paint-order: stroke fill;
           /* 배경이라 메인의 하늘색(#7fbcf7)보다 한참 옅게 */
-          -webkit-text-stroke: 2px #e6f1fc;
+          -webkit-text-stroke: 4px #e6f1fc;
           clip-path: inset(0 100% 0 0);
           /* 제목과 같은 때 시작해 같은 때 끝난다 — 제목이 일정한 박자로 써지므로 이쪽도 일정한 속도로 */
           animation: pi-mark-in var(--pi-write-dur) linear var(--pi-write-start) forwards;
@@ -180,7 +188,7 @@ export default function PageIntro({
            (아래 여백을 글씨 높이 + 3rem 으로 늘려, 글씨가 버튼과 겹치지 않게 한다) */
         @media (max-width: 860px) {
           .pi-light {
-            --pi-pb: calc((100vw - 2.5rem) / (var(--pi-n) * 0.6) + 3rem);
+            --pi-pb: calc((100vw - 2.5rem) / (var(--pi-w) * 0.6) + 3rem);
             padding-left: 1.25rem;
             padding-right: 1.25rem;
           }
@@ -189,7 +197,7 @@ export default function PageIntro({
             bottom: 0.3rem;
             right: 1.25rem;
             transform: none;
-            font-size: calc((100vw - 2.5rem) / (var(--pi-n) * 0.6));
+            font-size: calc((100vw - 2.5rem) / (var(--pi-w) * 0.6));
           }
         }
         @media (prefers-reduced-motion: reduce) {

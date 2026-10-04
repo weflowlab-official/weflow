@@ -75,7 +75,7 @@ export default function HomePage() {
       {/* 일하는 방식 여섯 가지 + 솔루션 강점 여덟 가지 — 같은 모양의 카드 2열 (흰 바탕으로 돌아온다) */}
       <HomeCardSections />
 
-      {/* 자주 묻는 질문 — /guide 와 같은 내용을 메인 형식(흰 바탕, 좌우 2단)으로 */}
+      {/* 자주 묻는 질문 — 메인 형식(흰 바탕, 좌우 2단). 가격 탭도 같은 것을 쓴다 */}
       <HomeFaqSection />
 
       {/* 마지막 CTA */}

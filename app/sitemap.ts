@@ -35,7 +35,8 @@ const paths: {
   // 목록에서 빼고, 그 자리(우선순위 0.9 · 주 단위)를 /benefits 가 이어받는다
   { path: '/benefits', updated: '2026-10-04', priority: 0.9, freq: 'weekly' },
   { path: '/difference', updated: '2026-09-14', priority: 0.8, freq: 'monthly' },
-  { path: '/guide', updated: '2026-09-14', priority: 0.8, freq: 'monthly' },
+  // 10-04: 랜딩페이지 섹션과 자주 묻는 질문을 내리면서 검색 설명을 본문에 맞게 다시 썼다
+  { path: '/guide', updated: '2026-10-04', priority: 0.8, freq: 'monthly' },
   { path: '/pricing', updated: '2026-09-14', priority: 0.9, freq: 'weekly' },
   { path: '/cases', updated: '2026-09-14', priority: 0.8, freq: 'weekly' },
   { path: '/about', updated: '2026-09-14', priority: 0.7, freq: 'monthly' },

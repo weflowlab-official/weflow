@@ -31,7 +31,7 @@ export default function LandingHomepageSection() {
         padding: "clamp(2.25rem, 5vw, 4rem) 1.25rem",
       }}
     >
-      <div style={{ maxWidth: "1000px", margin: "0 auto", width: "100%" }}>
+      <div style={{ maxWidth: "1120px", margin: "0 auto", width: "100%" }}>
         {/* 헤더 */}
         <Reveal variant="up" style={{ marginBottom: "clamp(2rem, 5vw, 3rem)" }}>
           <span className="footnote emphasized c-accent">
@@ -40,7 +40,6 @@ export default function LandingHomepageSection() {
           <h2
             className="title-1"
             style={{
-              fontSize: "clamp(1.5rem, 3.2vw, 1.9rem)",
               marginTop: "0.75rem",
               textAlign: "left",
               wordBreak: "keep-all",
@@ -219,7 +218,7 @@ export default function LandingHomepageSection() {
           border-radius: var(--radius-2xl);
           cursor: pointer;
           transform-origin: 50% 62%;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 10px 30px rgba(17, 17, 17, 0.14);
           transition: transform 0.25s ease, box-shadow 0.25s ease;
           animation: lhdImgWiggle 3.8s ease-in-out infinite;
         }
