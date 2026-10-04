@@ -239,7 +239,7 @@ export default function HeroBanner() {
         >
           <Link
             href="/diagnosis"
-            className="btn-primary hero-btn"
+            className="btn-primary hero-btn btn-goldline"
             style={{ width: "min(240px, 80vw)" }}
           >
             홈페이지 제작 문의
@@ -247,7 +247,7 @@ export default function HeroBanner() {
 
           <Link
             href="/difference"
-            className="btn-primary hero-btn"
+            className="btn-primary hero-btn btn-goldline"
             style={{ width: "min(240px, 80vw)" }}
           >
             우리가 특별한 이유
@@ -284,7 +284,8 @@ export default function HeroBanner() {
           background: rgba(0, 0, 0, var(--hero-veil));
         }
 
-        /* 히어로 버튼 — 어두운 막 위라 흰 면·검정 글씨로 맞춘다 */
+        /* 히어로 버튼 — 어두운 막 위라 흰 면·검정 글씨로 맞춘다.
+           테두리에는 금색 광택(.btn-goldline, styles/globals.css)이 흐른다 */
         .hero-btn {
           font-size: 1.3rem;
           border-radius: 9999px;

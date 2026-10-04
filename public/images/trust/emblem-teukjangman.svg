@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
   <!-- T -->
-  <path d="M14 18h34v12H36v34H24V30H14z" fill="#ffffff"/>
+  <path d="M14 18h34v12H36v34H24V30H14z" fill="#111111"/>
   <!-- J -->
-  <path d="M52 18h30v12H72v22c0 12-7 19-19 19-4 0-8-1-11-3l4-11c2 1 4 2 6 2 5 0 8-3 8-8V30h-8z" fill="#ffffff"/>
+  <path d="M52 18h30v12H72v22c0 12-7 19-19 19-4 0-8-1-11-3l4-11c2 1 4 2 6 2 5 0 8-3 8-8V30h-8z" fill="#111111"/>
 </svg>

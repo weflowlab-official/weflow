@@ -40,7 +40,7 @@ export default function DiffCheckBand() {
         <span className="dcb-badge">자동 사이트 점검</span>
 
         <p className="dcb-hook">그럼 우리 사이트는 지금 어느 쪽일까요?</p>
-        <p className="subhead c-muted dcb-sub">
+        <p className="c-muted dcb-sub">
           주소만 넣으면 네 가지를 바로 점수로 보여드립니다.
         </p>
 
@@ -48,7 +48,7 @@ export default function DiffCheckBand() {
         <ul className="dcb-chips">
           {CHECKS.map(({ Icon, label }) => (
             <li key={label} className="dcb-chip">
-              <Icon size={15} strokeWidth={2.2} aria-hidden="true" />
+              <Icon size={17} strokeWidth={2.2} aria-hidden="true" />
               {label}
             </li>
           ))}
@@ -66,7 +66,8 @@ export default function DiffCheckBand() {
             onKeyDown={e => e.key === 'Enter' && go()}
           />
           {/* 모바일은 주소칸이 좁아지므로 버튼 글자를 짧게 바꿔 자리를 내준다 */}
-          <button type="button" className="btn-primary dcb-btn" onClick={go}>
+          {/* 버튼은 사이트 점검 탭·맨 아래 CTA 와 같은 하늘색 알약(.btn-sky) */}
+          <button type="button" className="btn-sky btn-sky--solid dcb-btn" onClick={go}>
             <span className="dcb-btn__long">무료로 점검하기</span>
             <span className="dcb-btn__short">무료 점검</span>
             <ArrowRight size={17} strokeWidth={2.5} />
@@ -83,10 +84,12 @@ export default function DiffCheckBand() {
             #f5f6f8;
           border-top: 1px solid var(--border);
           border-bottom: 1px solid var(--border);
-          padding: clamp(2rem, 4.5vw, 2.75rem) 1.25rem;
+          /* 크기·여백은 리뉴얼한 다른 섹션에 맞춘다 — 제목은 이 탭 제목(.title-1)과 같은 크기,
+             본문·칩·입력칸도 한 단계씩 키웠다 */
+          padding: clamp(3.5rem, 7vw, 5.5rem) 1.25rem;
         }
         .dcb-inner {
-          max-width: 720px;
+          max-width: 760px;
           margin: 0 auto;
           width: 100%;
           text-align: center;
@@ -94,70 +97,84 @@ export default function DiffCheckBand() {
 
         .dcb-badge {
           display: inline-block;
-          padding: 0.28rem 0.75rem;
+          padding: 0.38rem 0.95rem;
           border-radius: 9999px;
           background: var(--accent-light);
           color: var(--accent);
-          font-size: 0.75rem;
+          font-size: 0.875rem;
           font-weight: 700;
           letter-spacing: 0.03em;
-          margin-bottom: 0.8rem;
+          margin-bottom: 1.1rem;
         }
 
         .dcb-hook {
           margin: 0;
           word-break: keep-all;
-          font-size: clamp(1.2rem, 3.2vw, 1.6rem);
-          font-weight: 600;
-          letter-spacing: -0.02em;
-          line-height: 1.4;
+          /* 이 탭의 다른 섹션 제목(.title-1)과 같은 크기 · 굵기 */
+          font-size: clamp(1.5rem, 4vw, 2.25rem);
+          font-weight: 800;
+          letter-spacing: -0.025em;
+          line-height: 1.3;
         }
         .dcb-sub {
-          margin: 0.55rem 0 0;
+          margin: 0.9rem 0 0;
           word-break: keep-all;
-          line-height: 1.65;
+          font-size: clamp(0.98rem, 1.5vw, 1.1rem);
+          line-height: 1.7;
         }
 
         .dcb-chips {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: 0.45rem;
+          gap: 0.55rem;
           list-style: none;
-          margin: 1.1rem 0 0;
+          margin: 1.6rem 0 0;
           padding: 0;
         }
         .dcb-chip {
           display: inline-flex;
           align-items: center;
-          gap: 0.35rem;
-          padding: 0.4rem 0.75rem;
+          gap: 0.4rem;
+          padding: 0.5rem 1rem;
           border-radius: 9999px;
           /* 띠가 옅은 회색이라 칩은 흰색으로 띄운다 */
           background: #fff;
           border: 1px solid var(--border);
           color: var(--text-secondary);
-          font-size: 0.82rem;
+          font-size: 0.95rem;
+          font-weight: 600;
           white-space: nowrap;
         }
         .dcb-chip svg { color: var(--accent); flex-shrink: 0; }
 
         /* 주소칸과 버튼 높이는 여기서 한 값으로 못 박는다.
-           원래 높이가 다르다(주소칸 ≈41px / 버튼 ≈45px). flex 의 기본 stretch 가
+           원래 높이가 다르다. flex 의 기본 stretch 가
            주소칸을 늘려 주긴 하지만, Safari 는 flex 안의 <input> 을 안 늘리는 경우가 있어
            눈으로 보이는 높이를 우연에 맡기게 된다. */
         .dcb-row {
           display: flex;
           align-items: stretch;
-          gap: 0.6rem;
-          margin-top: 1.2rem;
-          max-width: 520px;
+          gap: 0.7rem;
+          margin-top: 1.75rem;
+          max-width: 600px;
           margin-left: auto;
           margin-right: auto;
         }
         .dcb-input,
-        .dcb-btn { height: 48px; }
-        .dcb-input { flex: 1 1 auto; min-width: 0; }
+        .dcb-btn { height: 54px; }
+        /* 주소칸 — 사이트 점검 탭의 입력칸과 같은 알약 모양 */
+        .dcb-input {
+          flex: 1 1 auto;
+          min-width: 0;
+          padding-left: 1.3rem;
+          padding-right: 1.3rem;
+          border-color: #d5d8dd;
+          border-radius: 9999px;
+          font-size: 1rem;
+        }
+        /* 위에서 테두리 색을 직접 잡았으므로, 눌렀을 때의 파란 테두리도 여기서 다시 준다 */
+        .dcb-input:focus { border-color: var(--accent); }
         .dcb-btn {
           flex-shrink: 0;
           display: inline-flex;
@@ -167,8 +184,8 @@ export default function DiffCheckBand() {
           white-space: nowrap;
           cursor: pointer;
           /* 높이를 고정했으니 위아래 여백은 걷어낸다 — 남겨 두면 글자가 눌린다 */
-          padding-top: 0;
-          padding-bottom: 0;
+          padding: 0 1.7rem;
+          font-size: 1.05rem;
         }
 
         /* 버튼 글자 — 기본은 긴 쪽, 모바일에서 짧은 쪽으로 바꾼다 */
@@ -185,8 +202,9 @@ export default function DiffCheckBand() {
           .dcb-btn {
             padding-left: 1.1rem;
             padding-right: 1.1rem;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
           }
+          .dcb-input { padding-left: 1.05rem; padding-right: 1.05rem; }
           /* 칩 넷이 두 줄로 접힌다 — flex 로 두면 글자 길이대로 흘러 줄이 삐뚤어지므로
              2열 그리드로 바꿔 칸 폭을 같게 맞춘다.
              width:fit-content + 1fr 조합이 핵심이다. 그리드가 제 내용 폭으로 줄어들면
@@ -202,8 +220,8 @@ export default function DiffCheckBand() {
           }
           .dcb-chip {
             justify-content: center;
-            padding: 0.4rem 0.5rem;
-            font-size: 0.78rem;
+            padding: 0.45rem 0.7rem;
+            font-size: 0.88rem;
           }
         }
       `}</style>

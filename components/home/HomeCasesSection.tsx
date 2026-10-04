@@ -161,7 +161,11 @@ export default function HomeCasesSection() {
       // 줄 높이 1 인 상자에서 글자 밑동(기준선) 아래에 남는 높이만큼 아래로 내린다
       if (m.fontBoundingBoxAscent != null) {
         const below = (100 - (m.fontBoundingBoxAscent + m.fontBoundingBoxDescent)) / 2 + m.fontBoundingBoxDescent
-        mark.style.bottom = `${-(below - m.actualBoundingBoxDescent) * k}px`
+        // 둥근 글자(O)는 밑동이 기준선보다 살짝 아래로 내려온다. 잰 값이 그보다 작게 나오면(글꼴이 덜 왔을 때 등)
+        // O 아래가 화면 바닥에 잘리므로, 어림값(글자 크기의 1.6%)으로 받쳐 둔다
+        const descent = Math.max(m.actualBoundingBoxDescent, 1.6)
+        // 테두리만 있는 글씨라 선 두께의 절반(1px)이 글자 밖으로 나온다 — 그 몫과 여유 1px 만큼 더 올린다
+        mark.style.bottom = `${-(below - descent) * k + 2}px`
       }
     }
     const measure = () => {

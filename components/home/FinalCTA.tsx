@@ -89,10 +89,10 @@ export default function FinalCTA() {
 
         {/* 버튼 */}
         <div className="fcta-btns">
-          <a href="tel:010-2971-7280" className="fcta-btn subhead emphasized">
+          <a href="tel:010-2971-7280" className="fcta-btn subhead emphasized btn-goldline">
             전화 상담하기 <ArrowRight size={18} strokeWidth={2.5} />
           </a>
-          <Link href="/diagnosis" className="fcta-btn fcta-btn--solid subhead emphasized">
+          <Link href="/diagnosis" className="fcta-btn fcta-btn--solid subhead emphasized btn-goldline">
             맞춤 견적 받기 <ArrowRight size={18} strokeWidth={2.5} />
           </Link>
         </div>
