@@ -18,6 +18,9 @@ import { formatPhone, isValidPhone } from '@/lib/phone'
  * 결과 일부(로딩 속도)는 바로 보여 주고, 나머지 상세는
  * 연락처를 남기면 그 자리에서 열린다. 자기 사이트 주소를 넣은 방문자는
  * 관심이 확실한 리드라서, 이 흐름 자체가 문의 수집 장치다.
+ *
+ * 메인과 같은 흰 바탕으로 그린다 — 입력 화면, 분석 중, 실패, 결과(잠김·열림) 모든 상태가 같은 묶음(.ck-light)
+ * 안에 있고, 그 묶음이 색 변수를 밝은 바탕용으로 덮어쓴다 (맨 아래 <style>).
  */
 
 interface CheckItem {
@@ -48,7 +51,7 @@ const LOADING_STEPS = ['사이트 접속 확인', '응답 속도 측정', '페�
 /** 점수대별 색 — 관리자 페이지의 상태 배지와 같은 계열을 쓴다 */
 function scoreColor(n: number) {
   if (n >= 80) return 'var(--success-text)'
-  if (n >= 60) return '#eab308'
+  if (n >= 60) return 'var(--ck-warn)'
   return 'var(--danger-text)'
 }
 function gradeWord(n: number) {
@@ -224,7 +227,7 @@ export default function CheckPage() {
   }
 
   return (
-    <div style={{ background: 'var(--section-a)' }}>
+    <div className="ck-light">
       {/* ── 주소 입력 ── */}
       <section
         style={{
@@ -241,16 +244,8 @@ export default function CheckPage() {
         {/* 수학적 정중앙은 아래로 처져 보인다 — PC 에서만 시각 보정으로 살짝 올린다 */}
         <div className="ck-hero" style={{ maxWidth: '720px', width: '100%', margin: '0 auto', textAlign: 'center' }}>
           <Reveal variant="up">
-            <p
-              className="caption-1 emphasized c-accent"
-              style={{ letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.85rem' }}
-            >
-              FREE AUTO CHECK
-            </p>
-            <h1
-              className="emphasized"
-              style={{ margin: '0 0 1.25rem', fontSize: 'clamp(1.9rem, 5vw, 3rem)', lineHeight: 1.3, wordBreak: 'keep-all' }}
-            >
+            <p className="ck-eyebrow">FREE AUTO CHECK</p>
+            <h1 className="ck-title">
               내 홈페이지,<br className="ck-br-mobile" /> 지금 몇 점일까요?
             </h1>
             <p className="c-muted" style={{ margin: '0 0 1.25rem', fontSize: 'clamp(1rem, 2.6vw, 1.15rem)', lineHeight: 1.7, wordBreak: 'keep-all' }}>
@@ -410,7 +405,7 @@ export default function CheckPage() {
                         <li key={item.label}>
                           <div className="ck-item__row">
                             <span className="ck-dot" style={{
-                              background: item.status === 'good' ? 'var(--success-text)' : item.status === 'warn' ? '#eab308' : 'var(--danger-text)',
+                              background: item.status === 'good' ? 'var(--success-text)' : item.status === 'warn' ? 'var(--ck-warn)' : 'var(--danger-text)',
                             }} />
                             {/* 라벨은 한 줄 고정, 값도 한 줄 — 길면 말줄임(…)으로 잘라 라인을 맞춘다 */}
                             <span className="subhead c-primary" style={{ fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0 }}>{item.label}</span>
@@ -533,6 +528,76 @@ export default function CheckPage() {
       )}
 
       <style>{`
+        /* ── 흰 바탕 — 메인과 같은 규격 (바탕 #fff · 글씨 #111 · 본문 회색 #5c6066 · 카드 #f5f6f8 · 강조 파랑 #3f8fe0) ──
+           이 페이지는 전부 색 변수로 그려져 있어서, 여기서 변수만 바꾸면 모든 상태(입력·분석 중·실패·결과)가 따라온다.
+           점수 색(통과·주의·미흡)은 어두운 바탕용 밝은 색이라 흰 바탕에서 읽히는 진한 색으로 바꾼다 */
+        .ck-light {
+          --bg: #fff;
+          --section-a: #fff;
+          --section-b: #fff;
+          --surface: #f5f6f8;
+          --surface-container: #e6e8ec;
+          --text: #111;
+          --text-secondary: #44474d;
+          --text-muted: #5c6066;
+          --border: #e3e5e8;
+          --border-subtle: transparent;
+          --accent: #3f8fe0;
+          --accent-light: #e9f0fb;
+          --on-accent: #fff;
+          --success-text: #16a34a;
+          --success-dim: #e2f5e9;
+          --danger-text: #dc2626;
+          --danger-dim: #fde8e8;
+          --ck-warn: #d39b00;
+          --shadow-card: 0 4px 14px rgba(17, 17, 17, 0.1);
+          background: #fff;
+          /* 글씨색은 body 에서 이미 계산된 값이 내려오므로 여기서 다시 잡아 준다 */
+          color: var(--text);
+        }
+        /* 머리말 — 메인과 같은 영문 머리표 + 굵은 제목 */
+        .ck-eyebrow {
+          margin: 0 0 1rem;
+          font-size: clamp(0.75rem, 1.1vw, 0.9rem);
+          font-weight: 600;
+          letter-spacing: 0.34em;
+          /* 버튼과 같은 하늘색 */
+          color: #6a92d7;
+        }
+        .ck-title {
+          margin: 0 0 1.25rem;
+          color: #111;
+          font-size: clamp(2rem, 5.2vw, 3.5rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1.25;
+          word-break: keep-all;
+        }
+        /* 버튼 — 혜택·가격 탭 맨 아래 CTA 버튼과 같은 하늘색(#6a92d7) 알약.
+           채운 버튼은 하늘색 면에 흰 글씨, 테두리 버튼은 하늘색 테두리·글씨 */
+        .ck-light .btn-primary {
+          background: #6a92d7;
+          color: #fff;
+          border: 1.5px solid #6a92d7;
+          border-radius: 9999px;
+          box-shadow: 0 10px 24px rgba(106, 146, 215, 0.3);
+          transition: background 0.15s, border-color 0.15s, transform 0.12s;
+        }
+        .ck-light .btn-primary:hover { opacity: 1; }
+        .ck-light .btn-primary:hover:not(:disabled) { background: #8aabe3; border-color: #8aabe3; }
+        .ck-light .btn-primary:disabled { opacity: 0.6; cursor: default; }
+        .ck-light .btn-outline {
+          background: rgba(106, 146, 215, 0.08);
+          border: 1.5px solid #6a92d7;
+          border-radius: 9999px;
+          color: #6a92d7;
+        }
+        .ck-light .btn-outline:hover { background: rgba(106, 146, 215, 0.18); color: #6a92d7; }
+        /* 입력칸 — 흰 바탕에서 칸이 보이게 테두리를 한 단계 진하게, 모서리는 버튼과 어울리게 둥글게 */
+        .ck-light .form-input { border-color: #d5d8dd; border-radius: 12px; }
+        .ck-light .form-input:focus { border-color: #3f8fe0; box-shadow: 0 0 0 3px rgba(63, 143, 224, 0.18); }
+        .ck-inputrow .form-input { border-radius: 9999px; }
+
         /* 첫 화면 시각 보정 — 정중앙은 아래로 처져 보여 PC 4% · 모바일 3% 올린다 */
         .ck-hero { translate: 0 -4vh; }
         @media (max-width: 768px) {
@@ -628,9 +693,9 @@ export default function CheckPage() {
           position: relative;
           min-width: 0;
           border: 1px solid var(--border-subtle);
-          border-radius: var(--radius-xl);
+          border-radius: 20px;
           background: var(--surface);
-          padding: 1.25rem 1.25rem 1.35rem;
+          padding: 1.4rem 1.4rem 1.5rem;
         }
         .ck-card__head {
           display: flex;
@@ -696,7 +761,7 @@ export default function CheckPage() {
           padding: 0.55rem 1.1rem;
           border: 1px solid var(--border);
           border-radius: 9999px;
-          background: var(--surface-container);
+          background: var(--bg);
           box-shadow: var(--shadow-card);
           color: var(--text);
           font-size: 0.85rem;
@@ -706,8 +771,8 @@ export default function CheckPage() {
 
         .ck-lead {
           margin-top: 1.6rem;
-          border: 1px solid var(--border);
-          border-radius: var(--radius-xl);
+          border: 1px solid var(--border-subtle);
+          border-radius: 20px;
           background: var(--surface);
           padding: clamp(1.4rem, 4vw, 2rem);
         }
