@@ -1,6 +1,6 @@
-// 메인 페이지 (/) — 히어로 → 신뢰 밴드 → 제작 사례 → 왜 WEFLOW → 일하는 방식·솔루션 → 제작 라인업 → 마지막 CTA.
+// 메인 페이지 (/) — 히어로 → 신뢰 밴드 → 제작 사례 → 왜 WEFLOW → 일하는 방식·솔루션 → 자주 묻는 질문 → 마지막 CTA.
 // 각 섹션의 실제 내용은 components/home/* 에 있고, 여기선 순서만 잡는다.
-// (리뉴얼 전의 솔루션·혜택·가격·비교·제휴·제작 과정·회사소개 섹션은 메인에서 내렸다 — 파일은 그대로 있다)
+// (리뉴얼 전의 솔루션·제작 라인업·혜택·가격·비교·제휴·제작 과정·회사소개 섹션은 메인에서 내렸다 — 파일은 그대로 있다)
 "use client";
 import { useEffect, useRef } from "react";
 import HeroBanner from "@/components/home/HeroBanner";
@@ -8,7 +8,7 @@ import TrustBand from "@/components/home/TrustBand";
 import HomeCasesSection from "@/components/home/HomeCasesSection";
 import HomeWhyIntro from "@/components/home/HomeWhyIntro";
 import HomeCardSections from "@/components/home/HomeCardSections";
-import LineupSection from "@/components/home/LineupSection";
+import HomeFaqSection from "@/components/home/HomeFaqSection";
 import FinalCTA from "@/components/home/FinalCTA";
 
 export default function HomePage() {
@@ -75,8 +75,8 @@ export default function HomePage() {
       {/* 일하는 방식 여섯 가지 + 솔루션 강점 여덟 가지 — 같은 모양의 카드 2열 (흰 바탕으로 돌아온다) */}
       <HomeCardSections />
 
-      {/* 제작 라인업 — 누르면 /guide 의 해당 설명으로 내려간다 */}
-      <LineupSection />
+      {/* 자주 묻는 질문 — /guide 와 같은 내용을 메인 형식(흰 바탕, 좌우 2단)으로 */}
+      <HomeFaqSection />
 
       {/* 마지막 CTA */}
       <FinalCTA />

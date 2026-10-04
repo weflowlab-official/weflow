@@ -35,19 +35,21 @@ const WAYS: Card[] = POINTS.map(({ Icon, title, desc }) => ({ Icon, title, desc 
 // 메인에서 보여주는 강점 여덟 가지 — 예전 솔루션 섹션의 신뢰 지표(6칸)와 강점(6종)을
 // 겹치는 것 없이 합친 목록이다 (프로모션 할인·트렌디한 디자인은 뺐다). 2열 × 4줄로 놓인다.
 // img: 카드 위쪽 사진 — 얼굴이 나오는 사진은 쓰지 않는다 (화면·기기·손만 나오는 것으로 고른다)
+//      카드 폭(약 420px)의 두 배인 860px 로 줄여 둔 사본을 쓴다 (public/images/main/solution).
+//      이 사이트는 이미지 자동 최적화를 꺼 두어서(next.config) 원본을 그대로 걸면 원본 크기 그대로 내려간다.
 // more: 카드 아래에서 이어지는 페이지
 const SOLUTIONS: Card[] = [
   {
     Icon: Zap,
     title: '최신 기술 활용',
-    img: '/images/main/main-solution-tech.webp',
+    img: '/images/main/solution/main-solution-tech.webp',
     desc: '대기업 서비스에 쓰이는 React·Next.js로 제작',
     more: { href: '/difference', label: '차이점 보기' },
   },
   {
     Icon: Search,
     title: 'SEO·AEO·GEO 설계',
-    img: '/images/service/service1.webp',
+    img: '/images/main/solution/service1.webp',
     imgPos: 'top', // 맨 위의 검색창이 잘리지 않게 위쪽을 기준으로 자른다
     desc: '검색과 AI 답변에 잡히는 구조부터 설계',
     more: { href: '/check', label: '내 사이트 점검' },
@@ -55,35 +57,35 @@ const SOLUTIONS: Card[] = [
   {
     Icon: MonitorSmartphone,
     title: 'PC·모바일 최적화',
-    img: '/images/main/main-service-05.webp',
+    img: '/images/main/solution/main-service-05.webp',
     desc: '어떤 화면에서도 빠르고 깨지지 않게',
     more: { href: '/cases', label: '제작 사례' },
   },
   {
     Icon: Code2,
     title: '전문 개발자 직접 제작',
-    img: '/images/process/process-04-dev.webp',
+    img: '/images/main/solution/process-04-dev.webp',
     desc: '외주 없이 개발자가 직접 설계하고 구현',
     more: { href: '/difference', label: '차이점 보기' },
   },
   {
     Icon: Ruler,
     title: '100% 맞춤 제작',
-    img: '/images/process/process-02-plan.webp',
+    img: '/images/main/solution/process-02-plan.webp',
     desc: '템플릿이 아닌 브랜드에 맞춘 설계',
     more: { href: '/guide', label: '제작 라인업' },
   },
   {
     Icon: UserRoundCheck,
     title: '1:1 집중 관리',
-    img: '/images/service/service11.webp',
+    img: '/images/main/solution/service11.webp',
     desc: '전담 담당자가 처음부터 끝까지 함께',
     more: { href: '/service', label: '서비스 보기' },
   },
   {
     Icon: ShieldCheck,
     title: '꼼꼼한 마무리',
-    img: '/images/service/service22.webp',
+    img: '/images/main/solution/service22.webp',
     imgPos: '40% 45%', // 초록 체크가 있는 쪽을 기준으로
     imgZoom: 1.25,
     desc: '제작 후에도 책임지는 유지보수와 관리',
@@ -92,7 +94,7 @@ const SOLUTIONS: Card[] = [
   {
     Icon: Stethoscope,
     title: '무료 홈페이지 상담',
-    img: '/images/process/process-01-consult.webp',
+    img: '/images/main/solution/process-01-consult.webp',
     desc: '현재 상태를 먼저 살펴보고 투명한 비용 안내',
     more: { href: '/diagnosis', label: '상담 신청' },
   },

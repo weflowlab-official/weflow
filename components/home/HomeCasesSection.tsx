@@ -22,6 +22,23 @@ const SHOTS: Record<string, [number, number, number]> = {
   hrentcar: [1, 4, 6],
 }
 
+// 메인 카드용으로 줄여 둔 사진(가로 800px)이 있는 파일 — public/images/cases/home 에 있다.
+// 이 사이트는 이미지 자동 최적화를 꺼 두어서(next.config), 원본(가로 1920px)을 그대로 걸면
+// 카드 폭이 400px 인데도 원본이 통째로 내려간다. SHOTS 를 바꾸면 줄인 사진도 새로 만들어 여기 적는다.
+const HOME_THUMBS = new Set([
+  'cases-atelier-01.webp', 'cases-atelier-07.webp', 'cases-atelier-09.webp',
+  'cases-tirecamp-01.webp', 'cases-tirecamp-07.webp', 'cases-tirecamp-08.webp',
+  'cases-kpsc-01.webp', 'cases-kpsc-05.webp', 'cases-kpsc-10.webp',
+  'cases-saedure-01.webp', 'cases-saedure-02.webp', 'cases-saedure-07.webp',
+  'cases-ksmobility-01.webp', 'cases-ksmobility-03.webp', 'cases-ksmobility-05.webp',
+  'cases-hrentcar-01.webp', 'cases-hrentcar-04.webp', 'cases-hrentcar-06.webp',
+])
+/** 줄여 둔 사진이 있으면 그 주소를, 없으면 원본 주소를 돌려준다 */
+const homeThumb = (src: string) => {
+  const name = src.split('/').pop() ?? ''
+  return HOME_THUMBS.has(name) ? `/images/cases/home/${name}` : src
+}
+
 /**
  * 요소가 화면에 한 번 들어오면 shown 이 켜진다 — 등장 애니메이션용.
  * 페이지 공통 .reveal 감시에 기대지 않고 이 섹션이 직접 본다.
@@ -57,6 +74,7 @@ function CaseCard({ p }: { p: Portfolio }) {
   const shots = (SHOTS[p.slug] ?? [1, 2, 3])
     .map(n => p.images[n - 1])
     .filter(Boolean)
+    .map(homeThumb)
 
   return (
     <Link

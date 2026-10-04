@@ -1,5 +1,6 @@
 // /about — 회사소개 페이지.
 // 인트로 → 이름의 의미 → 철학 → 브랜드 스토리 → 일하는 방식(ListeningSection) → 회사 정보 → CTA 순.
+// 메인과 같은 형식으로 그린다 — 흰 바탕, 영문 머리표 + 굵은 제목, 테두리 없는 회색 카드, 가는 선 목록.
 // 화면에 뿌릴 문구는 아래 상수(MEANING·STORY·INFO)에 모아뒀고,
 // 페이지 전용 스타일은 파일 맨 아래 <style> 블록에 있다.
 import type { Metadata } from "next";
@@ -8,8 +9,8 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import SplitText from "@/components/SplitText";
+import FlowStatement from "@/components/about/FlowStatement";
 import ListeningSection from "@/components/home/ListeningSection";
-import { CTA_BTN, CTA_BTN_FILLED } from "@/lib/ctaButton";
 
 export const metadata: Metadata = {
   title: "회사소개 · WEFLOW",
@@ -51,61 +52,40 @@ const INFO: { label: string; value: string }[] = [
 
 export default function AboutPage() {
   return (
-    <main style={{ background: "var(--section-a)" }}>
+    <main className="ab-page">
       {/* 인트로 */}
-      <section
-        style={{
-          padding: "clamp(3.5rem, 7vw, 6rem) 1.25rem",
-          background: "var(--section-a)",
-          borderBottom: "1px solid var(--border)",
-        }}
-      >
-        <div className="about-hero">
-          <Reveal variant="up">
-            <span
-              className="caption-2 emphasized c-accent"
-              style={{ letterSpacing: "0.1em", textTransform: "uppercase" }}
-            >
-              ABOUT
-            </span>
-          </Reveal>
-          <SplitText
-            as="h1"
-            className="title-1 about-hero-title"
-            style={{ margin: "1rem 0 0", wordBreak: "keep-all" }}
-            segments={[
-              { text: "사람이 움직이면, " },
-              { text: "기술은 따라온다", className: "c-accent", br: "mobile" },
-            ]}
-          />
-          <Reveal variant="up" delay={0.15}>
-            <p
-              className="title-3 c-muted"
-              style={{ margin: "1rem 0 0", letterSpacing: "0.01em" }}
-            >
-              People move. Technology follows.
-            </p>
-            <p
-              className="about-hero-body c-secondary"
-              style={{
-                margin: "1.75rem 0 0",
-                maxWidth: "720px",
-                wordBreak: "keep-all",
-                lineHeight: 1.8,
-              }}
-            >
-              WEFLOW는 사람과 기술이 함께 흘러가며 더 좋은 방향을 만드는
-              회사입니다. 단순히 개발만 하는 회사가 아니라, 기술은 뒤에서
-              받쳐주고 사람은 앞에서 빛나게 하는 흐름을 만듭니다.
-            </p>
-          </Reveal>
-          <Reveal as="div" stagger className="about-hero-imgs">
+      <section className="ab-section ab-hero">
+        <div className="ab-inner">
+          <header className="ab-head">
+            <Reveal variant="up">
+              <p className="ab-eyebrow">ABOUT US</p>
+            </Reveal>
+            <SplitText
+              as="h1"
+              className="ab-hero-title"
+              segments={[
+                { text: "사람이 움직이면, " },
+                { text: "기술은 따라온다", className: "ab-hl", br: "mobile" },
+              ]}
+            />
+            <Reveal variant="up" delay={0.15}>
+              <p className="ab-hero-en">People move. Technology follows.</p>
+              <p className="ab-lead">
+                WEFLOW는 사람과 기술이 함께 흘러가며 더 좋은 방향을 만드는
+                회사입니다.
+                <br />
+                단순히 개발만 하는 회사가 아니라, 기술은 뒤에서 받쳐주고 사람은
+                앞에서 빛나게 하는 흐름을 만듭니다.
+              </p>
+            </Reveal>
+          </header>
+          <Reveal as="div" stagger className="ab-imgs">
             {[
               { src: "/images/about/about1.webp", alt: "WEFLOW 사무 공간" },
               { src: "/images/about/about9.webp", alt: "WEFLOW 작업 모습" },
             ].map(({ src, alt }) => (
               // 원본(16:9)보다 좁게 잡아 좌우를 조금씩 덜어낸다 (cover 가 양옆을 잘라낸다)
-              <div key={src} className="about-img" style={{ aspectRatio: "924 / 572" }}>
+              <div key={src} className="ab-img" style={{ aspectRatio: "924 / 572" }}>
                 <Image
                   src={src}
                   alt={alt}
@@ -119,54 +99,28 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* WE · FLOW 의미 */}
-      <section
-        style={{
-          padding: "clamp(3rem, 6vw, 4.5rem) 1.25rem",
-          background: "var(--section-b)",
-        }}
-      >
-        <div style={{ maxWidth: "1100px", margin: "0 auto", width: "100%" }}>
-          <Reveal variant="up">
-            {/* 아래 카드(820px)와 폭을 맞춰 가운데 정렬.
-                아래 철학 문장(title-1)보다 한 단계 작게 두되 title-2 보다는 키운다 */}
-            <h2
-              className="title-2 emphasized"
-              style={{
-                margin: "0 auto clamp(2.25rem, 5vw, 3.25rem)",
-                maxWidth: "820px",
-                fontSize: "clamp(1.6rem, 3.6vw, 2rem)",
-                lineHeight: 1.3,
-                textAlign: "center",
-                wordBreak: "keep-all",
-              }}
-            >
-              이름에 담은 의미
-            </h2>
+      {/* WE · FLOW 의미 — 사진이 위를 채우는 카드 두 장 */}
+      <section className="ab-section">
+        <div className="ab-inner">
+          <Reveal as="header" variant="up" className="ab-head">
+            <p className="ab-eyebrow">OUR NAME</p>
+            <h2 className="ab-title">이름에 담은 의미</h2>
           </Reveal>
-          <Reveal as="div" stagger className="about-grid-2">
+          <Reveal as="div" stagger className="ab-grid-2">
             {MEANING.map(({ key, desc, img }) => (
-              <div key={key} className="about-meaning-card">
-                <p
-                  className="large-title c-accent"
-                  style={{ margin: "0 0 0.5rem", lineHeight: 1 }}
-                >
-                  {key}
-                </p>
-                <p
-                  className="headline"
-                  style={{ margin: 0, wordBreak: "keep-all" }}
-                >
-                  {desc}
-                </p>
-                <div className="about-card-img">
+              <div key={key} className="ab-card">
+                <div className="ab-card__photo">
                   <Image
                     src={img}
                     alt={key}
                     fill
-                    sizes="(max-width: 768px) 100vw, 520px"
+                    sizes="(max-width: 640px) 100vw, 430px"
                     style={{ objectFit: "cover" }}
                   />
+                </div>
+                <div className="ab-card__body">
+                  <p className="ab-card__key">{key}</p>
+                  <p className="ab-card__desc">{desc}</p>
                 </div>
               </div>
             ))}
@@ -174,267 +128,314 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 철학 문장 */}
-      <section
-        style={{
-          padding: "clamp(3.5rem, 8vw, 6rem) 1.25rem",
-          background: "var(--section-a)",
-          textAlign: "center",
-        }}
-      >
-        <div style={{ maxWidth: "820px", margin: "0 auto" }}>
-          <SplitText
-            as="h2"
-            className="title-1"
-            style={{ margin: 0, wordBreak: "keep-all", lineHeight: 1.5 }}
-            step={0.024}
-            segments={[
-              { text: "기술은 " },
-              { text: "뒤에서 받쳐주고", className: "c-accent emphasized" },
-              { text: ", " },
-              { text: "사람은 ", br: "mobile" },
-              { text: "앞에서 빛나게", className: "c-accent emphasized" },
-              { text: " 하는 흐름" },
-            ]}
-          />
-        </div>
-      </section>
+      {/* 철학 문장 — 화면에 붙은 채 스크롤에 맞춰 두 줄이 양옆에서 들어오고, 바탕이 검게 가라앉는다 */}
+      <FlowStatement />
 
-      {/* 브랜드 스토리 */}
-      <section
-        style={{
-          padding: "clamp(3rem, 7vw, 5rem) 1.25rem",
-          background: "var(--section-b)",
-        }}
-      >
-        <div className="about-story">
-          <Reveal variant="up">
-            <span className="footnote emphasized c-accent">우리의 시작</span>
+      {/* 브랜드 스토리 — 메인의 자주 묻는 질문처럼 왼쪽 제목 · 오른쪽 본문 2단 */}
+      <section className="ab-section">
+        <div className="ab-inner ab-split">
+          <Reveal as="header" variant="up" className="ab-side">
+            <p className="ab-eyebrow">OUR STORY</p>
+            <h2 className="ab-title">우리의 시작</h2>
           </Reveal>
-          <Reveal
-            as="div"
-            stagger
-            style={{
-              marginTop: "1.25rem",
-              display: "flex",
-              flexDirection: "column",
-              gap: "1.1rem",
-            }}
-          >
-            {STORY.map((line) => (
-              <p
-                key={line}
-                className="c-secondary"
-                style={{
-                  margin: 0,
-                  wordBreak: "keep-all",
-                  fontSize: "clamp(1.2rem, 2.6vw, 1.5rem)",
-                  lineHeight: 1.85,
-                }}
-              >
-                {line}
+          <div>
+            <Reveal as="div" stagger className="ab-story">
+              {STORY.map((line) => (
+                <p key={line} className="ab-story__line">
+                  {line}
+                </p>
+              ))}
+              <p className="ab-story__end">
+                그래서 이름은 <span className="ab-hl">WEFLOW</span>
+                입니다.
               </p>
-            ))}
-            <p
-              className="emphasized"
-              style={{
-                margin: "1.5rem 0 0",
-                wordBreak: "keep-all",
-                fontSize: "clamp(1.9rem, 5vw, 3rem)",
-                lineHeight: 1.3,
-              }}
-            >
-              그래서 이름은{" "}
-              <span className="c-accent" style={{ fontWeight: 800 }}>
-                WEFLOW
-              </span>
-              입니다.
-            </p>
-          </Reveal>
-          <Reveal variant="up" delay={0.1}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                gap: "1rem",
-                marginTop: "clamp(2rem, 4vw, 3rem)",
-              }}
-            >
+            </Reveal>
+            <Reveal variant="up" delay={0.1} className="ab-imgs">
               {[0, 1].map((i) => (
                 // 원본이 16:9 — 자리를 같은 비율로 둬야 잘리지 않는다
-                <div key={i} className="about-img" style={{ aspectRatio: "16 / 9" }}>
+                <div key={i} className="ab-img" style={{ aspectRatio: "16 / 9" }}>
                   <Image
                     src={`/images/about/about${i + 4}.webp`}
                     alt="WEFLOW 이야기"
                     fill
-                    sizes="(max-width: 768px) 100vw, 480px"
+                    sizes="(max-width: 640px) 100vw, 360px"
                     style={{ objectFit: "cover" }}
                   />
                 </div>
               ))}
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         </div>
       </section>
 
       {/* 고객의 소리 — 일하는 방식의 연장이라 메인에서 이리로 옮겼다 */}
       <ListeningSection />
 
-      {/* 회사 정보 */}
-      <section
-        style={{
-          padding: "clamp(2.5rem, 5vw, 4rem) 1.25rem",
-          background: "var(--section-a)",
-        }}
-      >
-        <div style={{ maxWidth: "820px", margin: "0 auto", width: "100%" }}>
-          <Reveal variant="up">
-            <h2 className="title-2 emphasized" style={{ margin: "0 0 1.5rem" }}>
-              회사 정보
-            </h2>
+      {/* 회사 정보 — 상자 없이 가는 선으로만 나눈 표 */}
+      <section className="ab-section">
+        <div className="ab-inner ab-split">
+          <Reveal as="header" variant="up" className="ab-side">
+            <p className="ab-eyebrow">COMPANY</p>
+            <h2 className="ab-title">회사 정보</h2>
           </Reveal>
-          <Reveal variant="up" delay={0.1}>
-            <div
-              style={{
-                border: "1px solid var(--border)",
-                borderRadius: "var(--radius-2xl)",
-                overflow: "hidden",
-              }}
-            >
-              {INFO.map(({ label, value }, i) => (
-                <div
-                  key={label}
-                  style={{
-                    display: "flex",
-                    gap: "1rem",
-                    padding: "1rem 1.4rem",
-                    borderTop: i === 0 ? "none" : "1px solid var(--border)",
-                  }}
-                >
-                  <span
-                    className="subhead emphasized c-primary"
-                    style={{ flex: "0 0 140px" }}
-                  >
-                    {label}
-                  </span>
-                  <span className="callout">{value}</span>
-                </div>
-              ))}
-            </div>
+          <Reveal as="dl" variant="up" delay={0.1} className="ab-info">
+            {INFO.map(({ label, value }) => (
+              <div key={label} className="ab-info__row">
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
           </Reveal>
         </div>
       </section>
 
-      {/* CTA */}
-      <section
-        style={{
-          padding: "clamp(3.5rem, 7vw, 5.5rem) 1.25rem",
-          background: "var(--accent-dim)",
-          textAlign: "center",
-        }}
-      >
-        <Reveal variant="zoom">
-          <p
-            className="emphasized"
-            style={{
-              margin: 0,
-              color: "var(--text)",
-              wordBreak: "keep-all",
-              fontSize: "clamp(2rem, 5vw, 3.25rem)",
-              lineHeight: 1.25,
-            }}
-          >
+      {/* CTA — 메인 마지막 CTA 와 같은 파란 띠 */}
+      <section className="ab-cta">
+        <span aria-hidden className="ab-cta__dot ab-cta__dot--lg" />
+        <span aria-hidden className="ab-cta__dot ab-cta__dot--sm" />
+        <Reveal variant="zoom" className="ab-cta__in">
+          <p className="ab-cta__title">
             Flow Together, <br className="br-mobile" />
             Grow Beyond.
           </p>
-          <p
-            style={{
-              margin: "0.9rem 0 2rem",
-              color: "var(--accent)",
-              fontSize: "clamp(1.15rem, 2.6vw, 1.4rem)",
-            }}
-          >
-            함께 흐르고, 더 크게 성장하다
-          </p>
-          <div style={{ display: "flex", gap: "0.8rem", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="tel:010-2971-7280" className="btn-gold" style={CTA_BTN}>
-              <span className="btn-gold__label">전화 상담하기</span> <ArrowRight size={18} strokeWidth={2.5} />
+          <p className="ab-cta__sub">함께 흐르고, 더 크게 성장하다</p>
+          <div className="ab-cta__btns">
+            <a href="tel:010-2971-7280" className="ab-cta__btn">
+              전화 상담하기 <ArrowRight size={18} strokeWidth={2.5} />
             </a>
-            <Link href="/diagnosis" className="btn-gold btn-gold--fill" style={CTA_BTN}>
-              <span className="btn-gold__label">무료 상담 신청</span> <ArrowRight size={18} strokeWidth={2.5} />
+            <Link href="/diagnosis" className="ab-cta__btn ab-cta__btn--solid">
+              무료 상담 신청 <ArrowRight size={18} strokeWidth={2.5} />
             </Link>
           </div>
         </Reveal>
       </section>
 
       <style>{`
-        .about-hero {
-          max-width: 1000px;
-          margin: 0 auto;
-          width: 100%;
+        /* 메인과 같은 규격 — 흰 바탕 #fff · 글씨 #111 · 본문 회색 #5c6066 · 강조 파랑 #3f8fe0 */
+        .ab-page { background: #fff; color: #111; }
+        /* 흰 섹션이 연달아 오므로 여백은 아래쪽에만 둔다 (위아래 다 주면 사이가 두 배가 된다) */
+        .ab-section { padding: 0 1.5rem clamp(4.5rem, 10vw, 8.5rem); }
+        .ab-hero { padding-top: clamp(3.5rem, 7vw, 6rem); }
+        .ab-inner { max-width: 1120px; margin: 0 auto; }
+
+        /* 검은 섹션 — 흰 섹션만 이어지면 구분이 안 돼서 '철학 문장'(FlowStatement)과 '일하는 방식'(ListeningSection)은
+           검은 바탕이다. 바탕이 바뀌는 자리라 그 다음 섹션은 위 여백을 되살린다 */
+        .fs-section + .ab-section,
+        .listen-section + .ab-section { padding-top: clamp(4.5rem, 10vw, 8.5rem); }
+
+        /* ── 머리말 — 영문 머리표 + 굵은 제목 ── */
+        .ab-head { text-align: center; margin-bottom: clamp(2.5rem, 6vw, 4.5rem); }
+        .ab-eyebrow {
+          margin: 0 0 1rem;
+          font-size: clamp(0.75rem, 1.1vw, 0.9rem);
+          font-weight: 600;
+          letter-spacing: 0.34em;
+          color: #8a8a8a;
         }
-        .about-hero-title {
-          font-size: clamp(2.4rem, 6vw, 4rem);
-          line-height: 1.2;
+        .ab-title {
+          margin: 0;
+          color: #111;
+          font-size: clamp(1.75rem, 4vw, 3rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1.3;
+          word-break: keep-all;
         }
-        .about-hero-body {
-          font-size: clamp(1.15rem, 2.6vw, 1.4rem);
+        .ab-hl { color: #3f8fe0; }
+        .ab-hero-title {
+          margin: 0;
+          color: #111;
+          font-size: clamp(2.1rem, 5.4vw, 3.75rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1.25;
+          word-break: keep-all;
         }
-        .about-story {
-          max-width: 1000px;
-          margin: 0 auto;
-          width: 100%;
+        .ab-hero-en {
+          margin: 1rem 0 0;
+          font-size: clamp(1rem, 1.6vw, 1.25rem);
+          font-weight: 600;
+          letter-spacing: 0.01em;
+          color: #8a8a8a;
         }
-        .about-img {
+        .ab-lead {
+          margin: clamp(1.1rem, 2.4vw, 1.6rem) auto 0;
+          /* 둘째 문장이 넓은 화면에서 한 줄에 들어가는 폭 */
+          max-width: 60rem;
+          font-size: clamp(0.98rem, 1.5vw, 1.15rem);
+          line-height: 1.7;
+          color: #5c6066;
+          word-break: keep-all;
+        }
+
+        /* ── 사진 — 테두리 없이 둥근 모서리만. 두 장 나란히, 폰에서만 세로로 ── */
+        .ab-imgs {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: clamp(0.85rem, 1.8vw, 1.4rem);
+        }
+        .ab-img {
           position: relative;
           overflow: hidden;
           width: 100%;
-          border-radius: var(--radius-2xl);
-          background: var(--surface-container);
-          border: 1px solid var(--border);
+          border-radius: clamp(18px, 2.2vw, 28px);
+          background: #e9ebee;
         }
-        /* 인트로 사진 2장 — 나란히, 폰에서만 세로로 */
-        .about-hero-imgs {
+
+        /* ── WE · FLOW 카드 — 메인의 사진 카드와 같은 모양 ── */
+        .ab-grid-2 {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: clamp(0.85rem, 1.8vw, 1.4rem);
+          max-width: 860px;
+          margin: 0 auto;
+        }
+        .ab-card {
+          border-radius: clamp(18px, 2.2vw, 28px);
+          overflow: hidden;
+          background: #f5f6f8;
+        }
+        .ab-card__photo {
+          position: relative;
+          aspect-ratio: 16 / 9;
+          overflow: hidden;
+          background: #e9ebee;
+        }
+        /* 마우스를 올리면 사진이 조금 다가온다 */
+        .ab-card__photo img { transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .ab-card:hover .ab-card__photo img { transform: scale(1.05); }
+        .ab-card__body { padding: clamp(1.4rem, 2.4vw, 2rem); }
+        .ab-card__key {
+          margin: 0;
+          color: #3f8fe0;
+          font-size: clamp(2rem, 4vw, 2.75rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1;
+        }
+        .ab-card__desc {
+          margin: 0.75rem 0 0;
+          font-size: clamp(0.98rem, 1.4vw, 1.1rem);
+          font-weight: 600;
+          line-height: 1.6;
+          color: #5c6066;
+          word-break: keep-all;
+        }
+
+        /* ── 좌우 2단 — 왼쪽 제목 · 오른쪽 본문 (제목은 따라 내려오지 않는다) ── */
+        .ab-split {
+          display: grid;
+          grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.5fr);
+          gap: clamp(2rem, 6vw, 6rem);
+          align-items: start;
+        }
+
+        /* 브랜드 스토리 — 한 줄씩 가는 선으로 나눈다 */
+        .ab-story { border-top: 1px solid #111; }
+        .ab-story__line {
+          margin: 0;
+          padding: clamp(1.15rem, 2.2vw, 1.6rem) 0.25rem;
+          border-bottom: 1px solid #e3e5e8;
+          font-size: clamp(1.02rem, 1.55vw, 1.25rem);
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          line-height: 1.6;
+          word-break: keep-all;
+        }
+        .ab-story__end {
+          margin: clamp(1.75rem, 4vw, 2.75rem) 0 0;
+          font-size: clamp(1.75rem, 4vw, 3rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1.3;
+          word-break: keep-all;
+        }
+        .ab-story + .ab-imgs { margin-top: clamp(2rem, 4vw, 3rem); }
+
+        /* 회사 정보 표 (라벨 — 값) */
+        .ab-info { margin: 0; border-top: 1px solid #111; }
+        .ab-info__row {
+          display: flex;
           gap: 1rem;
-          margin-top: clamp(2rem, 4vw, 3rem);
+          padding: clamp(1.15rem, 2.2vw, 1.6rem) 0.25rem;
+          border-bottom: 1px solid #e3e5e8;
+          font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+          line-height: 1.6;
+        }
+        .ab-info dt { flex: 0 0 140px; font-weight: 700; color: #111; }
+        .ab-info dd { margin: 0; color: #5c6066; }
+
+        /* ── CTA — 화면 폭을 다 채우는 파란 띠, 흰 글씨 ── */
+        .ab-cta {
+          position: relative;
+          overflow: hidden;
+          background: var(--accent);
+          padding: clamp(4rem, 9vw, 7rem) 1.25rem;
+          text-align: center;
+        }
+        /* 장식 원 */
+        .ab-cta__dot { position: absolute; border-radius: 9999px; background: rgba(14, 14, 16, 0.1); }
+        .ab-cta__dot--lg { right: -80px; bottom: -120px; width: 320px; height: 320px; }
+        .ab-cta__dot--sm { right: 40px; bottom: -60px; width: 180px; height: 180px; }
+        .ab-cta__in { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+        .ab-cta__title {
+          margin: 0;
+          color: #fff;
+          font-size: clamp(2rem, 5vw, 3.25rem);
+          font-weight: 800;
+          letter-spacing: -0.02em;
+          line-height: 1.25;
+        }
+        .ab-cta__sub {
+          margin: 0.9rem 0 0;
+          color: rgba(255, 255, 255, 0.88);
+          font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+          font-weight: 600;
+        }
+        .ab-cta__btns {
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-top: clamp(2rem, 5vw, 3rem);
+        }
+        .ab-cta__btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          color: var(--on-accent-strong);
+          font-size: 1.1rem;
+          font-weight: 700;
+          background: rgba(255, 255, 255, 0.12);
+          border: 1.5px solid rgba(255, 255, 255, 0.85);
+          border-radius: 9999px;
+          padding: 0.95rem 2.2rem;
+          text-decoration: none;
+          transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.12s;
+        }
+        .ab-cta__btn:hover { background: rgba(255, 255, 255, 0.22); border-color: var(--on-accent-strong); }
+        .ab-cta__btn:active { transform: scale(0.97); }
+        /* 주 버튼 — 흰색 채움 (강조) */
+        .ab-cta__btn--solid {
+          background: var(--on-accent-strong);
+          color: var(--accent-strong);
+          border-color: var(--on-accent-strong);
+          box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+        }
+        .ab-cta__btn--solid:hover { background: rgba(255, 255, 255, 0.88); border-color: rgba(255, 255, 255, 0.88); }
+
+        /* 좁은 화면 — 2단을 풀어 제목을 위로 올린다 */
+        @media (max-width: 860px) {
+          .ab-section { padding-left: 1.25rem; padding-right: 1.25rem; }
+          .ab-split { grid-template-columns: 1fr; }
         }
         @media (max-width: 640px) {
-          .about-hero-imgs { grid-template-columns: 1fr; }
+          .ab-imgs, .ab-grid-2 { grid-template-columns: 1fr; }
+          .ab-info dt { flex-basis: 110px; }
         }
-        /* WE · FLOW 카드 — 메인 회사소개 섹션과 같은 크기로 맞춘다 */
-        .about-grid-2 {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0.9rem;
-          max-width: 820px;
-          margin: 0 auto;
-        }
-        .about-meaning-card {
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-2xl);
-          padding: clamp(1.5rem, 3vw, 2rem);
-          transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
-        }
-        .about-meaning-card:hover {
-          transform: translateY(-4px);
-          border-color: var(--accent);
-          box-shadow: 0 12px 28px rgba(106, 146, 215,0.25);
-        }
-        .about-card-img {
-          position: relative;
-          overflow: hidden;
-          width: 100%;
-          aspect-ratio: 16 / 9;
-          margin-top: 0.9rem;
-          border-radius: var(--radius-xl);
-          background: var(--surface-container);
-          border: 1px solid var(--border);
-        }
-        @media (max-width: 768px) {
-          .about-grid-2 { grid-template-columns: 1fr; }
+        @media (max-width: 480px) {
+          .ab-cta__btns { flex-direction: column; align-items: stretch; }
+          .ab-cta__btn { justify-content: center; }
         }
       `}</style>
     </main>

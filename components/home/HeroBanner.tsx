@@ -117,7 +117,7 @@ export default function HeroBanner() {
         textAlign: "center",
       }}
     >
-      {/* 배경 영상 — 블러는 .hero-media, 어둡기는 아래 막에서 조절한다 */}
+      {/* 배경 영상 — 어둡기는 아래 막에서 조절한다 */}
       <HeroVideo />
       {/* 가독성 어두운 막 — 영상 위에 깔아 흰 글씨가 읽히게 한다 */}
       <div className="hero-veil" aria-hidden="true" />
@@ -264,8 +264,9 @@ export default function HeroBanner() {
           inset: 0;
           z-index: 0;
           background: url(/videos/hero-poster.jpg) center / cover no-repeat;
-          filter: blur(var(--hero-blur));
-          transform: scale(1.04);
+          /* 블러는 쓰지 않는다 — 0px 라도 filter 가 걸려 있으면 영상 프레임마다 필터 단계를 거쳐
+             그래픽 부하가 생긴다. 다시 흐리게 하려면 filter: blur(Npx) 와 transform: scale(1.04)
+             (블러로 번진 가장자리를 화면 밖으로 미는 용도)를 함께 넣는다 */
         }
         .hero-video {
           display: block;
@@ -309,9 +310,8 @@ export default function HeroBanner() {
            flex 로 받아 채운다. 여백을 8vh → 3vh 로 줄여 밴드가 올라올 자리를 만든다
            (글자 크기는 그대로 두고 낭비되던 빈 공간만 걷어냈다). */
         .hero-section {
-          /* 영상 가독성 조절 — 어두운 막 진하기(0~1)와 블러 세기 */
+          /* 영상 가독성 조절 — 어두운 막 진하기(0~1) */
           --hero-veil: 0.4;
-          --hero-blur: 0px;
           justify-content: center;
           padding: clamp(1rem, 3vh, 2.5rem) 1.25rem;
         }

@@ -30,7 +30,7 @@ const WORDS = [
 ]
 
 /**
- * 페이지 맨 아래 마무리 CTA — 파란 배경에 "지금 OOO를 문의하세요" 헤드라인,
+ * 페이지 맨 아래 마무리 CTA — 화면 폭을 다 채우는 파란 띠에 흰 글씨로 "지금 OOO를 문의하세요" 헤드라인,
  * 단어가 3초마다 바뀐다. 아래에 전화 상담·무료 상담 신청 버튼.
  */
 export default function FinalCTA() {
@@ -65,7 +65,7 @@ export default function FinalCTA() {
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: '900px', margin: '0 auto' }}>
         {/* 헤드라인 */}
-        <h2 className="large-title" style={{ color: 'var(--on-accent)', margin: 0, wordBreak: 'keep-all', lineHeight: 1.25 }}>
+        <h2 className="large-title" style={{ color: '#fff', margin: 0, wordBreak: 'keep-all', lineHeight: 1.25 }}>
           지금{' '}
           <span
             style={{

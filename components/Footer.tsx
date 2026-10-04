@@ -56,7 +56,7 @@ const YoutubeIcon = () => (
 
 // 상담문의 열 — 아이콘은 각 채널 브랜드 색으로 표시
 const CONTACT_LINKS = [
-  { label: '전화문의',          href: 'tel:010-2971-7280',              Icon: PhoneIcon,    external: false, color: '#22d3ee' },
+  { label: '전화문의',          href: 'tel:010-2971-7280',              Icon: PhoneIcon,    external: false, color: '#16a34a' },
   { label: '이메일 문의',       href: 'mailto:contact@weflowlab.kr',    Icon: MailIcon,     external: false, color: '#5b9bff' },
   { label: '카카오 채널 문의',  href: KAKAO_URL,                         Icon: KakaoIcon,    external: true,  color: '#FEE500' },
   { label: '인스타 문의',       href: INSTAGRAM_URL,                     Icon: InstagramIcon, external: true, color: '#E4405F' },
@@ -67,10 +67,20 @@ const CONTACT_LINKS = [
 /**
  * 모든 페이지 하단의 푸터 — 브랜드·사업자 정보 + 링크 4열 + 카피라이트.
  * 하단에 약간의 여백(paddingBottom)을 둔다.
+ *
+ * 흰 바탕이다. 사이트 기본 색 변수(--text 등)는 어두운 바탕용이라, 푸터 안에서만
+ * 밝은 바탕용 값으로 덮어쓴다 — 안쪽의 글씨·선이 모두 이 값을 따라간다.
  */
+const LIGHT = {
+  '--text': '#111',
+  '--text-secondary': '#5c6066',
+  '--text-muted': '#8a8a8a',
+  '--border': 'rgba(17, 17, 17, 0.1)',
+} as React.CSSProperties
+
 export default function Footer() {
   return (
-    <footer style={{ background: 'var(--section-b)', color: 'var(--text-muted)', paddingBottom: '72px' }}>
+    <footer style={{ ...LIGHT, background: '#fff', color: 'var(--text-muted)', paddingBottom: '72px' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem 0' }}>
 
         {/* ── 메인 그리드 ── */}
@@ -79,8 +89,9 @@ export default function Footer() {
           {/* 브랜드 + 사업자 정보 */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+              {/* 로고 원본이 흰색이라 흰 바탕에서는 검정으로 뒤집는다 */}
               <Image src="/logo.png" alt="WEFLOW" width={24} height={24}
-                style={{ width: 24, height: 24, objectFit: 'contain' }} />
+                style={{ width: 24, height: 24, objectFit: 'contain', filter: 'brightness(0)' }} />
               <span className="headline emphasized" style={{ color: 'var(--text)', letterSpacing: '-0.02em' }}>WEFLOW</span>
             </div>
             <p className="footnote" style={{ lineHeight: 1.8, margin: '0 0 1.25rem', color: 'var(--text-secondary)', wordBreak: 'keep-all' }}>

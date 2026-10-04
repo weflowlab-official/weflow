@@ -2,19 +2,33 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, Menu, Phone, X } from "lucide-react";
+
+type NavLink = { href: string; label: string; gold?: boolean };
+type NavGroup = { label: string; children: NavLink[] };
 
 // 상단 메뉴 목록 (데스크탑 가로 메뉴 / 모바일 드로어가 같이 쓴다).
-// 헤더는 이정표라 짧게 — 자세한 이름은 푸터에 그대로 남겨뒀다.
-const NAV_LINKS: { href: string; label: string; gold?: boolean }[] = [
+// 헤더에는 네 개만 보이고, 묶음(children)은 데스크탑에서 드롭다운으로 펼쳐진다 — 페이지와 주소는 그대로다.
+const NAV_ITEMS: (NavLink | NavGroup)[] = [
   { href: "/about", label: "회사소개" },
-  { href: "/service", label: "서비스" },
-  { href: "/pricing", label: "가격 안내" },
-  { href: "/difference", label: "왜 WEFLOW?" },
-  { href: "/benefits", label: "WEFLOW 혜택" },
-  { href: "/cases", label: "제작 사례" },
-  { href: "/guide", label: "제작 라인업" },
+  {
+    label: "WEFLOW 혜택",
+    children: [
+      { href: "/service", label: "서비스" },
+      { href: "/pricing", label: "가격 안내" },
+      { href: "/difference", label: "왜 WEFLOW?" },
+      // 묶음 이름과 겹치지 않게 '혜택 안내'로 부른다
+      { href: "/benefits", label: "혜택 안내" },
+    ],
+  },
+  {
+    label: "포트폴리오",
+    children: [
+      { href: "/cases", label: "제작 사례" },
+      { href: "/guide", label: "제작 라인업" },
+    ],
+  },
   // 예약 신청(/booking)은 메뉴에서 내리고 그 자리에 사이트 점검을 뒀다 — 페이지 자체는 남아 있다
   // gold: 다른 메뉴보다 눈에 띄게 굵은 금색으로 그린다 (PC·모바일 공통)
   { href: "/check", label: "사이트 점검", gold: true },
@@ -22,6 +36,9 @@ const NAV_LINKS: { href: string; label: string; gold?: boolean }[] = [
 
 // 강조 메뉴 색 — 흰 헤더·드로어 위에서 읽히는 중간 톤 금색 (상담 버튼 글씨와 같은 계열)
 const NAV_GOLD = "#ad8640";
+
+// 상담 버튼 옆에 같이 보여 주는 대표 번호
+const TEL = "010-2971-7280";
 
 // 같은 페이지에서 다시 눌렀을 때 폼을 새로 시작해야 하는 경로
 const RESETTABLE = new Set(["/booking", "/diagnosis", "/check"]);
@@ -37,6 +54,26 @@ export default function Navbar() {
   const [hidden, setHidden] = useState(false);
   // 페이지 맨 위에서는 헤더 아래 선을 감춘다
   const [atTop, setAtTop] = useState(true);
+  // 데스크탑에서 펼쳐져 있는 드롭다운 (묶음 이름) — 없으면 null
+  const [menu, setMenu] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement>(null);
+
+  // 드롭다운이 열려 있을 때 — 메뉴 바깥을 누르거나 Esc를 누르면 닫는다 (터치 기기는 마우스가 벗어나는 일이 없다)
+  useEffect(() => {
+    if (!menu) return;
+    const onDown = (e: PointerEvent) => {
+      if (!navRef.current?.contains(e.target as Node)) setMenu(null);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenu(null);
+    };
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menu]);
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -71,6 +108,37 @@ export default function Navbar() {
 
   const close = () => setOpen(false);
 
+  // 현재 페이지인지 — 사례 상세(/cases/…)처럼 하위 경로도 같은 메뉴로 친다
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
+
+  // 드로어 메뉴 한 줄 — sub: 묶음 아래에 들어가는 줄 (조금 낮게)
+  const drawerLink = (l: NavLink, sub = false) => (
+    <Link
+      key={l.href}
+      href={l.href}
+      onClick={(e) => {
+        close();
+        handleClick(l.href)(e);
+      }}
+      className="callout"
+      style={{
+        display: "block",
+        padding: sub ? "0.7rem 1.5rem" : "0.9rem 1.5rem",
+        color: l.gold ? NAV_GOLD : "#111",
+        textDecoration: "none",
+        fontWeight: isActive(l.href) || l.gold ? 700 : 500,
+        borderLeft: isActive(l.href)
+          ? "3px solid #111"
+          : "3px solid transparent",
+        background: isActive(l.href) ? "rgba(17,17,17,0.05)" : "transparent",
+        transition: "background 0.15s",
+      }}
+    >
+      {l.label}
+    </Link>
+  );
+
   // 홈에서 로고 클릭 시 이동 대신 맨 위로 부드럽게 스크롤
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (pathname === "/") {
@@ -95,7 +163,8 @@ export default function Navbar() {
       >
         <div
           style={{
-            maxWidth: "1200px",
+            // 본문(1200px)보다 넓게 — 로고와 번호·버튼을 화면 양끝 쪽으로 더 보낸다
+            maxWidth: "1320px",
             margin: "0 auto",
             // 위 4px — 내용을 2px 내린다. 헤더 아래 흰 여백과 한글 글꼴 특성 때문에
             // 정확한 가운데는 눈에 살짝 위로 치우쳐 보인다
@@ -107,103 +176,235 @@ export default function Navbar() {
             justifyContent: "space-between",
           }}
         >
-          <Link
-            href="/"
-            onClick={handleLogoClick}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              textDecoration: "none",
-            }}
-          >
-            <Image
-              src="/logo.png"
-              alt="WEFLOW"
-              width={27}
-              height={27}
-              // 로고 원본이 흰색이라 흰 헤더에서는 검정으로 뒤집는다
-              style={{ width: 27, height: 27, objectFit: "contain", filter: "brightness(0)" }}
-            />
-            <span
-              className="title-3 emphasized"
-              style={{ color: "#111", letterSpacing: "-0.02em" }}
+          {/* 왼쪽(로고)·오른쪽(번호·버튼)이 같은 폭을 나눠 가져, 가운데 메뉴가 화면 정중앙에 온다 */}
+          <div style={{ flex: "1 1 0", display: "flex" }}>
+            <Link
+              href="/"
+              onClick={handleLogoClick}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                textDecoration: "none",
+              }}
             >
-              WEFLOW
-            </span>
-          </Link>
+              <Image
+                src="/logo.png"
+                alt="WEFLOW"
+                width={27}
+                height={27}
+                // 로고 원본이 흰색이라 흰 헤더에서는 검정으로 뒤집는다
+                style={{ width: 27, height: 27, objectFit: "contain", filter: "brightness(0)" }}
+              />
+              <span
+                className="title-3 emphasized"
+                style={{ color: "#111", letterSpacing: "-0.02em" }}
+              >
+                WEFLOW
+              </span>
+            </Link>
+          </div>
 
-          {/* 데스크탑 가로 메뉴 — 현재 페이지는 강조색 굵게 */}
+          {/* 데스크탑 가로 메뉴 — 현재 페이지는 강조색 굵게. 묶음은 올리거나 누르면 아래로 펼쳐진다 */}
           <nav
+            ref={navRef}
             className="hide-mobile"
             style={{
               display: "flex",
-              gap: "0.25rem",
-              flex: 1,
-              justifyContent: "center",
-            }}
-          >
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={handleClick(l.href)}
-                className="subhead"
-                style={{
-                  padding: "0.4rem 0.6rem",
-                  borderRadius: "6px",
-                  fontWeight: pathname === l.href || l.gold ? 700 : 500,
-                  color: l.gold
-                    ? NAV_GOLD
-                    : pathname === l.href
-                      ? "#111"
-                      : "#555",
-                  textDecoration: "none",
-                  whiteSpace: "nowrap",
-                  transition: "color 0.15s",
-                }}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </nav>
-
-          {/* 데스크탑 상담 CTA — 문구가 위로 흐르는 마퀴 + 금색 광택 */}
-          <Link
-            href="/diagnosis"
-            aria-label="지금 바로 무료 상담 받기"
-            className="btn-primary cta-marquee cta-gradient cta-header hide-mobile"
-            style={{
-              width: "132px",
-              height: "40px",
-              fontSize: "0.95rem",
+              gap: "1rem",
               flexShrink: 0,
             }}
           >
-            <span className="cta-marquee-track">
-              {["지금 바로 무료 상담 받기", "지금 바로 무료 상담 받기", "지금 바로 무료 상담 받기", "지금 바로 무료 상담 받기"].map((t, i) => (
-                <span key={i} className="cta-marquee-item">
-                  {t}
-                </span>
-              ))}
-            </span>
-          </Link>
+            {NAV_ITEMS.map((item) => {
+              if (!("children" in item)) {
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={handleClick(item.href)}
+                    className="headline"
+                    style={{
+                      padding: "0.4rem 0.7rem",
+                      borderRadius: "6px",
+                      fontWeight: isActive(item.href) || item.gold ? 700 : 500,
+                      color: item.gold
+                        ? NAV_GOLD
+                        : isActive(item.href)
+                          ? "#111"
+                          : "#555",
+                      textDecoration: "none",
+                      whiteSpace: "nowrap",
+                      transition: "color 0.15s",
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              }
 
-          {/* 모바일 햄버거 — 드로어를 연다 */}
-          <button
-            onClick={() => setOpen(true)}
-            className="show-mobile-flex"
+              const shown = menu === item.label;
+              const groupActive = item.children.some((c) => isActive(c.href));
+              return (
+                <div
+                  key={item.label}
+                  style={{ position: "relative" }}
+                  onMouseEnter={() => setMenu(item.label)}
+                  onMouseLeave={() => setMenu(null)}
+                  // 탭 키로 묶음을 빠져나가면 닫는다
+                  onBlur={(e) => {
+                    if (!e.currentTarget.contains(e.relatedTarget)) setMenu(null);
+                  }}
+                >
+                  {/* 누르면 열기만 한다 — 터치에서는 올림과 누름이 같이 와서, 토글이면 열리자마자 닫힌다 */}
+                  <button
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded={shown}
+                    onClick={() => setMenu(item.label)}
+                    className="headline"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.2rem",
+                      padding: "0.4rem 0.7rem",
+                      borderRadius: "6px",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      fontFamily: "inherit",
+                      fontWeight: groupActive ? 700 : 500,
+                      color: groupActive || shown ? "#111" : "#555",
+                      whiteSpace: "nowrap",
+                      transition: "color 0.15s",
+                    }}
+                  >
+                    {item.label}
+                    <ChevronDown
+                      size={16}
+                      style={{
+                        transform: shown ? "rotate(180deg)" : "none",
+                        transition: "transform 0.2s",
+                      }}
+                    />
+                  </button>
+
+                  {/* 위 여백(paddingTop)까지가 hover 영역 — 버튼에서 목록으로 내려가는 사이에 닫히지 않는다 */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      left: "50%",
+                      paddingTop: "10px",
+                      transform: `translateX(-50%) translateY(${shown ? 0 : -4}px)`,
+                      opacity: shown ? 1 : 0,
+                      visibility: shown ? "visible" : "hidden",
+                      transition: "opacity 0.18s, transform 0.18s, visibility 0.18s",
+                    }}
+                  >
+                    <div
+                      style={{
+                        minWidth: "168px",
+                        padding: "6px",
+                        background: "#fff",
+                        border: "1px solid rgba(17,17,17,0.08)",
+                        borderRadius: "12px",
+                        boxShadow: "0 12px 32px rgba(0,0,0,0.12)",
+                      }}
+                    >
+                      {item.children.map((c) => (
+                        <Link
+                          key={c.href}
+                          href={c.href}
+                          onClick={(e) => {
+                            setMenu(null);
+                            handleClick(c.href)(e);
+                          }}
+                          className="body nav-sub-link"
+                          style={{
+                            display: "block",
+                            padding: "0.6rem 0.9rem",
+                            borderRadius: "8px",
+                            fontWeight: isActive(c.href) ? 700 : 500,
+                            color: isActive(c.href) ? "#111" : undefined,
+                            textDecoration: "none",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {c.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </nav>
+
+          <div
             style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: "0.5rem",
-              color: "#111",
-              display: "none",
+              flex: "1 1 0",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
             }}
           >
-            <Menu size={24} />
-          </button>
+            {/* 대표 번호 — 누르면 바로 전화. 폭이 좁은 화면(태블릿)에서는 메뉴 자리를 위해 숨긴다 */}
+            <a
+              href={`tel:${TEL}`}
+              className="headline nav-tel hide-mobile"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.35rem",
+                marginRight: "1rem",
+                color: "#111",
+                fontWeight: 700,
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
+              }}
+            >
+              <Phone size={16} />
+              {TEL}
+            </a>
+
+            {/* 데스크탑 상담 CTA — 문구가 위로 흐르는 마퀴 + 금색 광택 */}
+            <Link
+              href="/diagnosis"
+              aria-label="지금 바로 무료 상담 받기"
+              className="btn-primary cta-marquee cta-gradient cta-header hide-mobile"
+              style={{
+                width: "132px",
+                height: "40px",
+                fontSize: "0.95rem",
+                flexShrink: 0,
+              }}
+            >
+              <span className="cta-marquee-track">
+                {["지금 바로 무료 상담 받기", "지금 바로 무료 상담 받기", "지금 바로 무료 상담 받기", "지금 바로 무료 상담 받기"].map((t, i) => (
+                  <span key={i} className="cta-marquee-item">
+                    {t}
+                  </span>
+                ))}
+              </span>
+            </Link>
+
+            {/* 모바일 햄버거 — 드로어를 연다 */}
+            <button
+              onClick={() => setOpen(true)}
+              className="show-mobile-flex"
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: "0.5rem",
+                color: "#111",
+                display: "none",
+              }}
+            >
+              <Menu size={24} />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -292,33 +493,26 @@ export default function Navbar() {
 
         {/* 메뉴 링크 */}
         <nav style={{ flex: 1, overflowY: "auto", padding: "0.5rem 0" }}>
-          {NAV_LINKS.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              onClick={(e) => {
-                close();
-                handleClick(l.href)(e);
-              }}
-              className="callout"
-              style={{
-                display: "block",
-                padding: "0.9rem 1.5rem",
-                color: l.gold ? NAV_GOLD : "#111",
-                textDecoration: "none",
-                fontWeight: pathname === l.href || l.gold ? 700 : 500,
-                borderLeft:
-                  pathname === l.href
-                    ? "3px solid #111"
-                    : "3px solid transparent",
-                background:
-                  pathname === l.href ? "rgba(17,17,17,0.05)" : "transparent",
-                transition: "background 0.15s",
-              }}
-            >
-              {l.label}
-            </Link>
-          ))}
+          {/* 드로어에서는 묶음을 접지 않고 이름표 아래에 그대로 펼쳐 둔다 — 한 번에 누를 수 있게 */}
+          {NAV_ITEMS.map((item) =>
+            "children" in item ? (
+              <div key={item.label}>
+                <div
+                  className="footnote"
+                  style={{
+                    padding: "0.9rem 1.5rem 0.3rem",
+                    color: "#888",
+                    fontWeight: 600,
+                  }}
+                >
+                  {item.label}
+                </div>
+                {item.children.map((c) => drawerLink(c, true))}
+              </div>
+            ) : (
+              drawerLink(item)
+            ),
+          )}
         </nav>
 
         {/* 하단 CTA */}
@@ -328,6 +522,23 @@ export default function Navbar() {
             borderTop: "1px solid rgba(17,17,17,0.08)",
           }}
         >
+          <a
+            href={`tel:${TEL}`}
+            className="headline"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "0.4rem",
+              marginBottom: "0.75rem",
+              color: "#111",
+              fontWeight: 700,
+              textDecoration: "none",
+            }}
+          >
+            <Phone size={16} />
+            {TEL}
+          </a>
           <Link
             href="/diagnosis"
             className="btn-primary cta-gradient cta-header"
@@ -341,6 +552,11 @@ export default function Navbar() {
 
       <style>{`
         @media (max-width: 768px) { .show-mobile-flex { display: flex !important; } }
+        /* 태블릿 폭에서는 메뉴·상담 버튼만 남기고 번호는 숨긴다 */
+        @media (max-width: 1024px) { .nav-tel { display: none !important; } }
+        /* 드롭다운 안의 줄 — 올리면 옅은 회색 바탕 */
+        .nav-sub-link { color: #555; transition: background 0.15s, color 0.15s; }
+        .nav-sub-link:hover { background: rgba(17, 17, 17, 0.05); color: #111; }
         /* 흰 헤더·드로어 위 CTA — 바탕 없이 금색 테두리·금색 글씨만 남긴다 */
         .cta-gradient.cta-header {
           background: transparent !important;

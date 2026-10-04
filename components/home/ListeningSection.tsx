@@ -46,61 +46,41 @@ export const POINTS: { Icon: LucideIcon; title: string; desc: string; img: strin
     },
   ];
 
-/** 한 줄 소개 섹션 — "고객의 소리에 귀 기울이는 WEFLOW", 일하는 방식 3가지를 카드로 */
+/**
+ * 일하는 방식 섹션 (회사소개 탭) — "고객의 소리에 귀 기울이는 WEFLOW", 여섯 가지를 사진 카드로.
+ * 메인의 솔루션 카드 섹션과 같은 형식이다 — 검은 바탕, 영문 머리표 + 굵은 제목, 테두리 없는 카드.
+ */
 export default function ListeningSection() {
   return (
-    <section
-      style={{
-        background: "var(--section-b)",
-        padding: "clamp(3rem, 6vw, 4.5rem) 1.25rem",
-      }}
-    >
-      <div style={{ maxWidth: "1100px", margin: "0 auto", width: "100%" }}>
-        {/* 헤더 (좌측 정렬) */}
-        <Reveal variant="up" style={{ marginBottom: "clamp(1.75rem, 4vw, 2.5rem)" }}>
-          <span className="footnote emphasized c-accent">한 줄 소개</span>
-          <h2
-            className="title-1"
-            style={{ marginTop: "0.75rem", textAlign: "left" }}
-          >
-            고객의 소리에 <span className="c-accent">귀 기울이는</span> WEFLOW
+    <section className="listen-section">
+      <div className="listen-inner">
+        <Reveal as="header" variant="up" className="listen-head">
+          <p className="listen-eyebrow">HOW WE WORK</p>
+          <h2 className="listen-title">
+            고객의 소리에 <span>귀 기울이는</span> WEFLOW
           </h2>
-          <p
-            className="body c-muted"
-            style={{
-              margin: "1rem 0 0",
-              maxWidth: "640px",
-              wordBreak: "keep-all",
-            }}
-          >
-            WEFLOW의 일하는 방식
-          </p>
+          <p className="listen-lead">WEFLOW의 일하는 방식</p>
         </Reveal>
 
-        {/* 3개 카드 (각 카드에 이미지) */}
+        {/* 카드 여섯 장 — 사진이 위를 채우고, 아이콘 타일이 사진 아랫변에 반쯤 걸친다 */}
         <Reveal as="div" stagger className="listen-list">
           {POINTS.map(({ Icon, title, desc, img }) => (
             <div key={title} className="listen-card">
-              <span className="listen-card-icon">
-                <Icon size={22} strokeWidth={2} />
-              </span>
-              <h3 className="headline" style={{ margin: "0.9rem 0 0.35rem" }}>
-                {title}
-              </h3>
-              <p
-                className="callout"
-                style={{ margin: 0, wordBreak: "keep-all" }}
-              >
-                {desc}
-              </p>
               <div className="listen-card-img">
                 <Image
                   src={img}
                   alt={title}
                   fill
-                  sizes="(max-width: 860px) 100vw, 340px"
+                  sizes="(max-width: 860px) 100vw, 360px"
                   style={{ objectFit: "cover" }}
                 />
+              </div>
+              <span className="listen-card-icon">
+                <Icon size={26} strokeWidth={1.6} aria-hidden="true" />
+              </span>
+              <div className="listen-card-body">
+                <h3>{title}</h3>
+                <p>{desc}</p>
               </div>
             </div>
           ))}
@@ -108,38 +88,98 @@ export default function ListeningSection() {
       </div>
 
       <style>{`
-        .listen-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
-        .listen-card {
-          display: flex;
-          flex-direction: column;
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-2xl);
-          padding: 1.5rem 1.6rem;
+        /* 회사소개 탭의 다른 섹션(.ab-section)과 같은 규격 — 흰 섹션 사이에 검은 바탕으로 들어가 구분을 만든다 */
+        .listen-section {
+          background: #0e0e10;
+          color: #fff;
+          padding: clamp(4.5rem, 10vw, 8.5rem) 1.5rem;
         }
-        .listen-card-icon {
-          width: 46px;
-          height: 46px;
-          flex-shrink: 0;
-          border-radius: var(--radius-xl);
-          background: var(--accent-light);
-          color: var(--accent);
-          display: flex;
-          align-items: center;
-          justify-content: center;
+        .listen-inner { max-width: 1120px; margin: 0 auto; }
+
+        .listen-head { text-align: center; margin-bottom: clamp(2.5rem, 6vw, 4.5rem); }
+        .listen-eyebrow {
+          margin: 0 0 1rem;
+          font-size: clamp(0.75rem, 1.1vw, 0.9rem);
+          font-weight: 600;
+          letter-spacing: 0.34em;
+          color: #8a8a8a;
+        }
+        .listen-title {
+          margin: 0;
+          color: #fff;
+          font-size: clamp(1.75rem, 4vw, 3rem);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1.3;
+          word-break: keep-all;
+        }
+        .listen-title span { color: #3f8fe0; }
+        .listen-lead {
+          margin: clamp(1.1rem, 2.4vw, 1.6rem) 0 0;
+          font-size: clamp(0.98rem, 1.5vw, 1.15rem);
+          line-height: 1.7;
+          color: rgba(255, 255, 255, 0.66);
+        }
+
+        .listen-list {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: clamp(0.85rem, 1.8vw, 1.4rem);
+        }
+        .listen-card {
+          --listen-pad: clamp(1.4rem, 2.4vw, 2rem);
+          border-radius: clamp(18px, 2.2vw, 28px);
+          overflow: hidden;
+          background: #1a1b1f;
         }
         .listen-card-img {
           position: relative;
+          aspect-ratio: 3 / 2;
           overflow: hidden;
-          width: 100%;
-          aspect-ratio: 4 / 3;
-          margin-top: 1.25rem;
-          border-radius: var(--radius-xl);
-          background: var(--surface-container);
-          border: 1px solid var(--border);
+          background: #24262b;
+        }
+        /* 마우스를 올리면 사진이 조금 다가온다 */
+        .listen-card-img img { transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .listen-card:hover .listen-card-img img { transform: scale(1.05); }
+        /* 아이콘 — 흰 타일 위에 파란색으로. 카드에 마우스를 올리면 타일이 하늘색으로 채워지며 살짝 기운다 */
+        .listen-card-icon {
+          position: relative;
+          z-index: 1;
+          width: 56px;
+          height: 56px;
+          margin: -28px 0 0 var(--listen-pad);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 16px;
+          background: #fff;
+          color: #3f8fe0;
+          box-shadow: 0 6px 16px rgba(17, 17, 17, 0.12);
+          transition:
+            background 0.25s,
+            color 0.25s,
+            transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .listen-card:hover .listen-card-icon { background: #a9d4ff; color: #12304f; transform: rotate(-6deg) scale(1.06); }
+        .listen-card-body { padding: 1rem var(--listen-pad) var(--listen-pad); }
+        .listen-card-body h3 {
+          margin: 0;
+          color: #fff;
+          font-size: clamp(1.08rem, 1.6vw, 1.28rem);
+          font-weight: 800;
+          letter-spacing: -0.02em;
+          word-break: keep-all;
+        }
+        .listen-card-body p {
+          margin: 0.6rem 0 0;
+          font-size: clamp(0.92rem, 1.2vw, 1rem);
+          line-height: 1.6;
+          color: rgba(255, 255, 255, 0.66);
+          word-break: keep-all;
         }
         /* 6장이라 태블릿에서는 2열로 한 번 접고, 모바일에서만 1열로 내린다 */
         @media (max-width: 860px) {
+          .listen-section { padding-left: 1.25rem; padding-right: 1.25rem; }
           .listen-list { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 560px) {

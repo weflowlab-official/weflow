@@ -1,40 +1,24 @@
-'use client'
-import { useEffect, useRef } from 'react'
-
 /**
- * Pretendard(dynamic-subset)를 첫 화면 렌더를 막지 않고 불러온다.
+ * 본문 글꼴 중 가장 많이 쓰는 굵기 둘을 미리 받아 두게 한다 — 글꼴 자체는 globals.css 의 @font-face 가 선언한다.
  *
- * 예전에는 globals.css 의 @import 로 불러와 CSS 파싱이 끝날 때까지 화면이
- * 그려지지 않았다(FCP 지연). 여기서는 media="print" 로 요청해 렌더를 막지 않고,
- * 로드가 끝나면 media="all" 로 바꿔 실제 적용한다(표준 비차단 CSS 패턴).
- * 폰트가 오기 전에는 body 의 system-ui fallback 으로 글자가 즉시 보인다.
- *
- * onLoad 가 하이드레이션 전에 지나가 놓치는 경우를 대비해 useEffect 에서도
- * media 를 all 로 확정한다.
+ * 미리 받지 않으면 브라우저는 CSS 를 다 읽고 그 굵기의 글자를 만난 뒤에야 받기 시작해,
+ * 시스템 글꼴로 먼저 그렸다가 바꿔 끼우는 순간이 늦어진다.
+ * 여섯 굵기를 전부 미리 받으면 첫 화면의 영상·사진과 다투므로, 제목(700)과 본문 강조(600)만 당긴다.
+ * (글꼴이 오기 전에는 font-display: swap 으로 시스템 글꼴이 바로 보인다)
  */
-const FONT_CSS =
-  'https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css'
-
 export default function FontLoader() {
-  const ref = useRef<HTMLLinkElement>(null)
-
-  useEffect(() => {
-    const link = ref.current
-    if (link && link.media !== 'all') link.media = 'all'
-  }, [])
-
   return (
     <>
-      <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-      <link
-        ref={ref}
-        rel="stylesheet"
-        href={FONT_CSS}
-        media="print"
-        onLoad={(e) => {
-          e.currentTarget.media = 'all'
-        }}
-      />
+      {[600, 700].map(w => (
+        <link
+          key={w}
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href={`/fonts/WeflowSans-${w}.woff2`}
+          crossOrigin="anonymous"
+        />
+      ))}
     </>
   )
 }
