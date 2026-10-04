@@ -254,12 +254,17 @@ export default function Navbar() {
                     if (!e.currentTarget.contains(e.relatedTarget)) setMenu(null);
                   }}
                 >
-                  {/* 누르면 열기만 한다 — 터치에서는 올림과 누름이 같이 와서, 토글이면 열리자마자 닫힌다 */}
-                  <button
-                    type="button"
+                  {/* 묶음 이름 — 올리면 목록이 펼쳐지고, 누르면 목록의 첫 페이지로 간다
+                      (WEFLOW 혜택 → 혜택 안내, 포트폴리오 → 제작 사례). 탭 키로 들어와도 목록이 펼쳐진다 */}
+                  <Link
+                    href={item.children[0].href}
                     aria-haspopup="true"
                     aria-expanded={shown}
-                    onClick={() => setMenu(item.label)}
+                    onFocus={() => setMenu(item.label)}
+                    onClick={(e) => {
+                      setMenu(null);
+                      handleClick(item.children[0].href)(e);
+                    }}
                     className="headline"
                     style={{
                       display: "flex",
@@ -267,12 +272,9 @@ export default function Navbar() {
                       gap: "0.2rem",
                       padding: "0.4rem 0.7rem",
                       borderRadius: "6px",
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      fontFamily: "inherit",
                       fontWeight: groupActive ? 700 : 500,
                       color: groupActive || shown ? "#111" : "#555",
+                      textDecoration: "none",
                       whiteSpace: "nowrap",
                       transition: "color 0.15s",
                     }}
@@ -285,7 +287,7 @@ export default function Navbar() {
                         transition: "transform 0.2s",
                       }}
                     />
-                  </button>
+                  </Link>
 
                   {/* 위 여백(paddingTop)까지가 hover 영역 — 버튼에서 목록으로 내려가는 사이에 닫히지 않는다 */}
                   <div

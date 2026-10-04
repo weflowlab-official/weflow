@@ -9,19 +9,36 @@ import { OFFICIAL_CHANNELS } from '@/data/common'
 const { kakao: KAKAO_URL, blog: BLOG_URL, instagram: INSTAGRAM_URL, youtube: YOUTUBE_URL } =
   OFFICIAL_CHANNELS
 
-/* 헤더(Navbar) 메뉴와 동일하게 맞춤 */
-const SERVICE_LINKS = [
-  { label: '회사소개',        href: '/about' },
-  { label: 'WEFLOW 혜택',     href: '/benefits' },
-  { label: '가격 안내',        href: '/pricing' },
-  { label: '왜 WEFLOW?',       href: '/difference' },
-  { label: '제작 라인업',       href: '/guide' },
-]
-
-const CARE_LINKS = [
-  { label: '제작 사례', href: '/cases' },
-  { label: '사이트 점검',         href: '/check' },
-  { label: '무료 상담',           href: '/diagnosis' },
+/*
+ * 링크 열 — 헤더(Navbar)의 메뉴 묶음과 같은 이름·같은 구성으로 맞춘다.
+ * 헤더에서 드롭다운으로 묶인 둘(WEFLOW 혜택 · 포트폴리오)은 그대로 한 열씩,
+ * 헤더에 낱개로 있는 것(회사소개 · 사이트 점검 · 상담 버튼)은 '바로가기' 한 열에 모은다.
+ * 헤더 메뉴(Navbar 의 NAV_ITEMS)를 고치면 여기도 같이 고친다.
+ */
+const LINK_COLUMNS = [
+  {
+    title: 'WEFLOW 혜택',
+    links: [
+      { label: '혜택 안내', href: '/benefits' },
+      { label: '가격 안내', href: '/pricing' },
+      { label: '왜 WEFLOW?', href: '/difference' },
+    ],
+  },
+  {
+    title: '포트폴리오',
+    links: [
+      { label: '제작 사례', href: '/cases' },
+      { label: '제작 라인업', href: '/guide' },
+    ],
+  },
+  {
+    title: '바로가기',
+    links: [
+      { label: '회사소개', href: '/about' },
+      { label: '사이트 점검', href: '/check' },
+      { label: '무료 상담', href: '/diagnosis' },
+    ],
+  },
 ]
 
 /* 아이콘 SVG */
@@ -64,7 +81,7 @@ const CONTACT_LINKS = [
 ]
 
 /**
- * 모든 페이지 하단의 푸터 — 브랜드·사업자 정보 + 링크 4열 + 카피라이트.
+ * 모든 페이지 하단의 푸터 — 브랜드·사업자 정보 + 링크 3열(헤더 메뉴와 같은 묶음) + 상담문의 + 카피라이트.
  * 하단에 약간의 여백(paddingBottom)을 둔다.
  *
  * 흰 바탕이다. 사이트 기본 색 변수(--text 등)는 어두운 바탕용이라, 푸터 안에서만
@@ -107,33 +124,21 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 서비스 */}
-          <div>
-            <p className="ft-col-title">서비스</p>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
-              {SERVICE_LINKS.map(l => (
-                <li key={l.label}>
-                  <Link href={l.href} className="footnote" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* 바로가기 */}
-          <div>
-            <p className="ft-col-title">바로가기</p>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
-              {CARE_LINKS.map(l => (
-                <li key={l.label}>
-                  <Link href={l.href} className="footnote" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* 링크 열 — 헤더 메뉴와 같은 묶음 */}
+          {LINK_COLUMNS.map(col => (
+            <div key={col.title}>
+              <p className="ft-col-title">{col.title}</p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
+                {col.links.map(l => (
+                  <li key={l.label}>
+                    <Link href={l.href} className="footnote" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
           {/* 상담문의 */}
           <div>
@@ -183,12 +188,14 @@ export default function Footer() {
         footer .caption-2 { font-size: 0.82rem; }
         .ft-main {
           display: grid;
-          grid-template-columns: 1.2fr 1fr 1fr 1fr;
+          grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
           gap: 2.5rem;
           align-items: start;
         }
+        /* 좁아지면 브랜드 칸이 한 줄을 다 쓰고, 링크 네 열이 2 × 2 로 놓인다 */
         @media (max-width: 900px) {
           .ft-main { grid-template-columns: 1fr 1fr; gap: 2rem; }
+          .ft-main > :first-child { grid-column: 1 / -1; }
         }
         @media (max-width: 480px) {
           .ft-main { grid-template-columns: 1fr; gap: 1.75rem; }
