@@ -202,7 +202,8 @@ export default function PcPromoWidgets() {
           align-items: center;
           justify-content: center;
           gap: 0.35rem;
-          background: #6a92d7;
+          /* 모바일 하단 바의 '맞춤 견적 받기'와 같은 파랑 (사이트 하늘색보다 한 단계 진하다) */
+          background: #4f7bcc;
           color: #fff;
           border: 1.5px solid transparent;
           border-radius: 10px;
@@ -210,12 +211,12 @@ export default function PcPromoWidgets() {
           font-size: 0.82rem;
           font-weight: 700;
           text-decoration: none;
-          box-shadow: 0 8px 20px rgba(106, 146, 215, 0.35);
+          box-shadow: 0 8px 20px rgba(79, 123, 204, 0.35);
           transition: transform 0.16s ease, background 0.16s ease;
         }
         .pc-side-widget__btn:hover {
           transform: translateY(-1px);
-          background: #8aabe3;
+          background: #6a92d7;
         }
 
         /* ── 우측 하단 상담 유도 팝업 ── */

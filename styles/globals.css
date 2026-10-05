@@ -836,9 +836,10 @@
     border-top: 1px solid #e3e5e8;
   }
   .mobile-cta-bar__btn--call svg { color: #22c55e; }
-  /* 맞춤 견적 받기 — 사이트 하늘색(#6a92d7) 채움에 흰 글씨. 흰 바탕용 CTA 버튼(.btn-sky--solid)과 같은 색 */
+  /* 맞춤 견적 받기 — 사이트 하늘색(#6a92d7)보다 한 단계 진한 파랑에 흰 글씨.
+     늘 떠 있는 작은 바라, 같은 하늘색이면 흰 글씨가 옅게 읽혀 조금 진하게 잡았다 */
   .mobile-cta-bar__btn--form {
-    background: #6a92d7;
+    background: #4f7bcc;
     color: #fff;
   }
   .fab {
