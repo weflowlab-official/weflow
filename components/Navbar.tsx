@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Menu, Phone, X } from "lucide-react";
+import { ChevronDown, Menu, Phone, X, CalendarCheck } from "lucide-react";
 
 type NavLink = { href: string; label: string; gold?: boolean };
 type NavGroup = { label: string; children: NavLink[] };
@@ -540,22 +540,15 @@ export default function Navbar() {
             borderTop: "1px solid rgba(17,17,17,0.08)",
           }}
         >
+          {/* 바로 전화 — 아래 견적 버튼과 같은 금색 테두리 버튼. 번호는 읽어 주는 기기에만 알린다 */}
           <a
             href={`tel:${TEL}`}
-            className="headline"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.4rem",
-              marginBottom: "0.75rem",
-              color: "#111",
-              fontWeight: 700,
-              textDecoration: "none",
-            }}
+            aria-label={`바로 전화 ${TEL}`}
+            className="btn-primary cta-gradient cta-header"
+            style={{ justifyContent: "center", width: "100%", marginBottom: "0.6rem" }}
           >
-            <Phone size={16} />
-            {TEL}
+            <Phone size={16} strokeWidth={2.2} color={NAV_GOLD} />
+            <span className="cta-label">바로 전화</span>
           </a>
           <Link
             href="/diagnosis"
@@ -563,6 +556,8 @@ export default function Navbar() {
             style={{ justifyContent: "center", width: "100%" }}
             onClick={close}
           >
+            {/* 아이콘은 하단 고정 바의 같은 버튼과 맞춘다 */}
+            <CalendarCheck size={16} strokeWidth={2.2} color={NAV_GOLD} />
             <span className="cta-label">맞춤 견적 받기</span>
           </Link>
         </div>
