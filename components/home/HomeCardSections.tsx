@@ -40,19 +40,18 @@ const WAYS: Card[] = POINTS.map(({ Icon, title, desc }) => ({ Icon, title, desc 
 // more: 카드 아래에서 이어지는 페이지
 const SOLUTIONS: Card[] = [
   {
+    Icon: Search,
+    title: 'SEO·AEO·GEO 설계',
+    img: '/images/main/solution/main-solution-seo.webp', // 혜택 안내 01 과 같은 사진
+    desc: '검색과 AI 답변에 잡히는 구조부터 설계',
+    more: { href: '/check', label: '내 사이트 점검' },
+  },
+  {
     Icon: Zap,
     title: '최신 기술 활용',
     img: '/images/main/solution/main-solution-tech.webp',
     desc: '대기업 서비스에 쓰이는 React·Next.js로 제작',
     more: { href: '/difference', label: '차이점 보기' },
-  },
-  {
-    Icon: Search,
-    title: 'SEO·AEO·GEO 설계',
-    img: '/images/main/solution/service1.webp',
-    imgPos: 'top', // 맨 위의 검색창이 잘리지 않게 위쪽을 기준으로 자른다
-    desc: '검색과 AI 답변에 잡히는 구조부터 설계',
-    more: { href: '/check', label: '내 사이트 점검' },
   },
   {
     Icon: MonitorSmartphone,
@@ -78,7 +77,7 @@ const SOLUTIONS: Card[] = [
   {
     Icon: UserRoundCheck,
     title: '1:1 집중 관리',
-    img: '/images/main/solution/service11.webp',
+    img: '/images/main/solution/main-solution-care.webp', // 혜택 안내 03 과 같은 사진
     desc: '전담 담당자가 처음부터 끝까지 함께',
     more: { href: '/benefits', label: '혜택 보기' },
   },
