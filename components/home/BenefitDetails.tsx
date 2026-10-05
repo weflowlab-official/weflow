@@ -30,7 +30,7 @@ const BENEFITS: Benefit[] = [
     cta: { label: "내 사이트 점검하기", href: "/check" },
   },
   {
-    title: "최신 기술로 제작",
+    title: "최신 기술 맞춤 제작",
     points: [
       "대기업 서비스에 쓰이는 React·Next.js로 제작",
       "템플릿 없이 처음부터 직접 설계·개발",

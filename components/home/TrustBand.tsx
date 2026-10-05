@@ -66,7 +66,7 @@ export default function TrustBand() {
             수많은 고객이 선택한 WEFLOW_위플로우
           </p>
           <p className="trustband-headline">
-            최신 기술 활용<span className="hide-mobile"> · </span>
+            최신 기술 맞춤 제작<span className="hide-mobile"> · </span>
             <br className="br-mobile" />
             SEO·AEO·GEO 구조 설계
           </p>

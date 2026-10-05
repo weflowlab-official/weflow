@@ -35,7 +35,7 @@ const ANSWERS: { id: string; title: React.ReactNode; desc: React.ReactNode; Demo
   },
   {
     id: 'speed',
-    title: '최신 기술로 제작',
+    title: '최신 기술 맞춤 제작',
     desc: (
       <>
         최신 웹 기술로 처음부터 만들어,

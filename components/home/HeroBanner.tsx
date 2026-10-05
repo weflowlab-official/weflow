@@ -160,7 +160,7 @@ export default function HeroBanner() {
           {/* 금색 체크를 앞에 달아 '갖춘 것'으로 읽히게 한다 */}
           <span className="tag-badge">
             <Check size={16} strokeWidth={3} aria-hidden="true" />
-            최신 기술 활용
+            최신 기술 맞춤 제작
           </span>
           <span className="tag-badge">
             <Check size={16} strokeWidth={3} aria-hidden="true" />
@@ -482,6 +482,8 @@ export default function HeroBanner() {
           .hero-eyebrow {
             gap: 0.4rem;
             margin-bottom: 1.45rem;
+            /* 아주 좁은 화면(340px 아래)에서는 두 칩이 한 줄에 안 들어간다 — 넘치지 않게 줄을 바꾼다 */
+            flex-wrap: wrap;
           }
           /* 콘텐츠를 3px 위로 당기던 보정도 걷어냈다 —
              위 여백만 3px 줄고 아래가 3px 늘어 위아래가 6px 어긋나 있었다.

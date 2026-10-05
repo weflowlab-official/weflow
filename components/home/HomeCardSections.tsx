@@ -48,7 +48,7 @@ const SOLUTIONS: Card[] = [
   },
   {
     Icon: Zap,
-    title: '최신 기술 활용',
+    title: '최신 기술 맞춤 제작',
     img: '/images/main/solution/main-solution-tech.webp',
     desc: '대기업 서비스에 쓰이는 React·Next.js로 제작',
     more: { href: '/difference', label: '차이점 보기' },
