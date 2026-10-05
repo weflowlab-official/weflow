@@ -16,7 +16,7 @@ const WRITE_CHAR = 0.08
  * 그 뒤 오른쪽에는 머리표 낱말이 하늘색 테두리 글씨로 크게 깔린다 (메인 제작 사례 섹션의 'WEFLOW' 글씨와 같은 모양).
  * 큰 글씨는 배경이다 — 옅은 색으로, 본문 폭의 오른쪽 끝에 맞춰(왼쪽 글 묶음과 양옆 여백이 같게) 글 묶음의 위아래
  * 한가운데에 놓이고, 처음 보일 때 왼쪽부터 써지듯 드러난다.
- * 좁은 화면에서는 제목 높이에 맞춰 그 옆에 깔리고, 화면 밖으로 넘치는 글자는 잘린다.
+ * 좁은 화면에서는 버튼 오른쪽 빈자리에 깔리고, 화면 밖으로 넘치는 글자는 잘린다.
  * 제목은 줄 단위 배열로 받는다 — 타자를 치듯 한 글자씩 차례로 나타난다 (줄을 넘어가도 차례가 이어진다).
  * hl 을 켠 줄은 파랗게 칠해진다. 뒤의 큰 글씨도 제목과 같은 때 시작해 같은 때 다 써진다.
  */
@@ -197,19 +197,22 @@ export default function PageIntro({
           to { clip-path: inset(0 0 0 0); }
         }
 
-        /* 좁은 화면 — 큰 글씨를 제목 높이에 맞춰 그 옆(뒤)에 깔고 오른쪽으로 흘려 보낸다.
+        /* 좁은 화면 — 큰 글씨를 맨 아래 버튼 오른쪽의 빈자리에 깔고 오른쪽으로 흘려 보낸다.
+           제목 뒤에 두면 글자와 겹쳐 어수선해서, 글이 없는 자리로 내렸다.
            낱말이 화면보다 길어 뒤쪽 글자는 화면 밖으로 잘려 나간다 (섹션이 overflow: hidden).
-           top 의 4.6rem 은 머리표 한 줄 + 두 줄짜리 제목의 절반 높이 — 제목 한가운데에 글씨 가운데가 온다 */
+           bottom 의 1.8rem 은 버튼 높이의 절반 — 버튼 한가운데 높이에 글씨 가운데가 온다 */
         @media (max-width: 860px) {
           .pi-light {
             padding-left: 1.25rem;
             padding-right: 1.25rem;
           }
           .pi-mark {
-            top: calc(var(--pi-pt) + 4.6rem);
-            left: 42%;
+            top: auto;
+            bottom: calc(var(--pi-pb) + 1.8rem);
+            left: 64%;
             right: auto;
-            font-size: min(24vw, 9rem);
+            transform: translateY(50%);
+            font-size: min(22vw, 8rem);
           }
         }
         @media (prefers-reduced-motion: reduce) {

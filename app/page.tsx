@@ -57,7 +57,10 @@ export default function HomePage() {
   }, []);
 
   return (
-    <>
+    // 흰 바탕을 한 겹 깐다 — 사이트 기본 바탕(body)은 검정이라, 흰 섹션끼리 맞닿는 자리에
+    // 소수점 높이 때문에 실금이 생기면 그 틈으로 검은 선이 비치고 스크롤할 때 깜빡거린다
+    // (모바일 제작 사례 섹션 아래에서 보였다). 뒤가 흰색이면 틈이 생겨도 보이지 않는다
+    <div className="home-page">
       {/* 1. 첫 화면 — 히어로가 둥근 카드로 떠 있다가 스크롤하면 화면 폭을 꽉 채운다 */}
       <div className="first-screen" ref={firstScreenRef}>
         <HeroBanner />
@@ -82,6 +85,7 @@ export default function HomePage() {
       <FinalCTA />
 
       <style>{`
+        .home-page { background: #fff; }
         /* 첫 화면 = 뷰포트 - 헤더(64). svh 라 주소창 변화에 안전하다.
            히어로는 이 높이를 전부 채운다.
 
@@ -118,6 +122,6 @@ export default function HomePage() {
           }
         }
       `}</style>
-    </>
+    </div>
   );
 }
