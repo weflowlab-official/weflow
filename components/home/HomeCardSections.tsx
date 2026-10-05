@@ -607,6 +607,17 @@ export default function HomeCardSections() {
           text-decoration: none;
           transition: color 0.2s;
         }
+        /* 카드 전체가 눌리게 한다 — 링크의 누르는 영역을 카드 크기로 늘린다.
+           (이 링크에는 position 을 주지 않는다 — 늘린 영역이 링크가 아니라 카드(.hs-card)를 기준으로 잡혀야 한다.
+            z-index 는 사진 위에 걸친 아이콘 타일(z-index 1)보다 위)
+           덕분에 카드에 마우스를 올리면 아래 hover 규칙도 같이 켜져, 링크 글씨가 진해지고 화살표가 움직인다 */
+        .hs-card__more::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          z-index: 2;
+          border-radius: inherit;
+        }
         .hs-card__more svg { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .hs-card__more:hover { color: #111; }
         .hs-card__more:hover svg { transform: translateX(4px); }
