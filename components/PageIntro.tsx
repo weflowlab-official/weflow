@@ -16,6 +16,7 @@ const WRITE_CHAR = 0.08
  * 그 뒤 오른쪽에는 머리표 낱말이 하늘색 테두리 글씨로 크게 깔린다 (메인 제작 사례 섹션의 'WEFLOW' 글씨와 같은 모양).
  * 큰 글씨는 배경이다 — 옅은 색으로, 본문 폭의 오른쪽 끝에 맞춰(왼쪽 글 묶음과 양옆 여백이 같게) 글 묶음의 위아래
  * 한가운데에 놓이고, 처음 보일 때 왼쪽부터 써지듯 드러난다.
+ * 좁은 화면에서는 제목 높이에 맞춰 그 옆에 깔리고, 화면 밖으로 넘치는 글자는 잘린다.
  * 제목은 줄 단위 배열로 받는다 — 타자를 치듯 한 글자씩 차례로 나타난다 (줄을 넘어가도 차례가 이어진다).
  * hl 을 켠 줄은 파랗게 칠해진다. 뒤의 큰 글씨도 제목과 같은 때 시작해 같은 때 다 써진다.
  */
@@ -67,9 +68,19 @@ export default function PageIntro({
         <h1 className="pi-title" aria-label={title.map((l) => l.text).join(' ')}>
           {title.map((line, i) => (
             <span key={i} className={line.hl ? 'pi-line pi-line--hl' : 'pi-line'} aria-hidden="true">
-              {Array.from(line.text).map((ch, j) => (
-                <span key={j} className="pi-char" style={{ animationDelay: `${(WRITE_START + n++ * WRITE_STEP).toFixed(2)}s` }}>
-                  {ch}
+              {/* 낱말 단위로 묶는다 — 글자 하나하나가 inline-block 이라, 묶지 않으면 좁은 화면에서
+                  낱말 한가운데서 줄이 꺾인다 (word-break: keep-all 은 inline-block 사이에는 듣지 않는다).
+                  띄어쓰기도 한 박자로 세어, 묶기 전과 같은 속도로 써진다 */}
+              {line.text.split(' ').map((word, w) => (
+                <span key={w}>
+                  {w > 0 && (n++, ' ')}
+                  <span className="pi-word">
+                    {Array.from(word).map((ch, j) => (
+                      <span key={j} className="pi-char" style={{ animationDelay: `${(WRITE_START + n++ * WRITE_STEP).toFixed(2)}s` }}>
+                        {ch}
+                      </span>
+                    ))}
+                  </span>
                 </span>
               ))}{' '}
             </span>
@@ -116,6 +127,8 @@ export default function PageIntro({
           word-break: keep-all;
         }
         .pi-line { display: block; }
+        /* 낱말 — 안에서는 줄이 꺾이지 않는다 */
+        .pi-word { display: inline-block; white-space: nowrap; }
         .pi-line--hl { color: #3f8fe0; }
         /* 글자 하나 — 숨겨 두었다가 제 차례(animation-delay)에 톡 나타난다. 타자를 치는 느낌 */
         .pi-char {
@@ -184,20 +197,19 @@ export default function PageIntro({
           to { clip-path: inset(0 0 0 0); }
         }
 
-        /* 좁은 화면 — 글 뒤에 깔리면 읽기 어려우므로, 섹션 아래 여백 자리에 가로로 꽉 채워 깐다
-           (아래 여백을 글씨 높이 + 3rem 으로 늘려, 글씨가 버튼과 겹치지 않게 한다) */
+        /* 좁은 화면 — 큰 글씨를 제목 높이에 맞춰 그 옆(뒤)에 깔고 오른쪽으로 흘려 보낸다.
+           낱말이 화면보다 길어 뒤쪽 글자는 화면 밖으로 잘려 나간다 (섹션이 overflow: hidden).
+           top 의 4.6rem 은 머리표 한 줄 + 두 줄짜리 제목의 절반 높이 — 제목 한가운데에 글씨 가운데가 온다 */
         @media (max-width: 860px) {
           .pi-light {
-            --pi-pb: calc((100vw - 2.5rem) / (var(--pi-w) * 0.6) + 3rem);
             padding-left: 1.25rem;
             padding-right: 1.25rem;
           }
           .pi-mark {
-            top: auto;
-            bottom: 0.3rem;
-            right: 1.25rem;
-            transform: none;
-            font-size: calc((100vw - 2.5rem) / (var(--pi-w) * 0.6));
+            top: calc(var(--pi-pt) + 4.6rem);
+            left: 42%;
+            right: auto;
+            font-size: min(24vw, 9rem);
           }
         }
         @media (prefers-reduced-motion: reduce) {
