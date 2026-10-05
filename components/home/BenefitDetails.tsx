@@ -25,7 +25,8 @@ const BENEFITS: Benefit[] = [
       "검색과 AI 답변에 잡히는 구조부터 설계",
       "페이지마다 제목·설명·구조화 데이터를 직접 구성",
     ],
-    img: "/images/service/service1.webp",
+    // 지표·그래프 화면이 뜬 노트북 (Pexels 사진을 16:9 로 잘라 줄인 것)
+    img: "/images/benefits/benefits9.webp",
     cta: { label: "내 사이트 점검하기", href: "/check" },
   },
   {
@@ -44,7 +45,8 @@ const BENEFITS: Benefit[] = [
       "충분한 소통으로 고객의 니즈 파악",
       "전담 담당자가 고객 한 분을 1:1로 전담",
     ],
-    img: "/images/service/service12.webp",
+    // 마주 앉아 서류를 놓고 이야기하는 상담 장면 — 손만 나온다 (Pexels 사진을 16:9 로 잘라 줄인 것)
+    img: "/images/benefits/benefits10.webp",
   },
   {
     title: "합리적 가성비",
