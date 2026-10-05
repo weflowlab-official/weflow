@@ -61,6 +61,9 @@ export default function Navbar() {
   const [atTop, setAtTop] = useState(true);
   // 데스크탑에서 펼쳐져 있는 드롭다운 (묶음 이름) — 없으면 null
   const [menu, setMenu] = useState<string | null>(null);
+  // 모바일 메뉴에서 손으로 펼치거나 접은 묶음 (묶음 이름 → 펼침 여부). 손대지 않은 묶음은 여기 없다 —
+  // 그때는 지금 페이지가 그 묶음에 들어 있는지로 정한다
+  const [drawerGroups, setDrawerGroups] = useState<Record<string, boolean>>({});
   const navRef = useRef<HTMLElement>(null);
 
   // 드롭다운이 열려 있을 때 — 메뉴 바깥을 누르거나 Esc를 누르면 닫는다 (터치 기기는 마우스가 벗어나는 일이 없다)
@@ -118,7 +121,12 @@ export default function Navbar() {
       }
     };
 
-  const close = () => setOpen(false);
+  // 메뉴를 닫을 때 손으로 펼치거나 접은 묶음 기록도 지운다 — 다음에 열면 지금 페이지가 든 묶음만 펼쳐져 있다
+  // (지우지 않으면 한 번 펼쳐 본 묶음이 다른 페이지로 간 뒤에도 계속 열려 있다)
+  const close = () => {
+    setOpen(false);
+    setDrawerGroups({});
+  };
 
   // 현재 페이지인지 — 사례 상세(/cases/…)처럼 하위 경로도 같은 메뉴로 친다
   const isActive = (href: string) =>
@@ -136,7 +144,8 @@ export default function Navbar() {
       className="callout"
       style={{
         display: "block",
-        padding: sub ? "0.7rem 1.5rem" : "0.9rem 1.5rem",
+        // 묶음 안의 줄은 한 단 들여 쓴다
+        padding: sub ? "0.7rem 1.5rem 0.7rem 2.4rem" : "0.9rem 1.5rem",
         color: l.gold ? NAV_GOLD : "#111",
         textDecoration: "none",
         fontWeight: isActive(l.href) || l.gold ? 700 : 500,
@@ -511,26 +520,68 @@ export default function Navbar() {
 
         {/* 메뉴 링크 */}
         <nav style={{ flex: 1, overflowY: "auto", padding: "0.5rem 0" }}>
-          {/* 드로어에서는 묶음을 접지 않고 이름표 아래에 그대로 펼쳐 둔다 — 한 번에 누를 수 있게 */}
-          {NAV_ITEMS.map((item) =>
-            "children" in item ? (
+          {/* 묶음은 PC 드롭다운처럼 접어 둔다 — 묶음 이름(▾)을 누르면 아래로 펼쳐진다.
+              지금 보고 있는 페이지가 든 묶음은 처음부터 펼쳐 둔다 */}
+          {NAV_ITEMS.map((item) => {
+            if (!("children" in item)) return drawerLink(item);
+            const groupActive = item.children.some((c) => isActive(c.href));
+            const shown = drawerGroups[item.label] ?? groupActive;
+            return (
               <div key={item.label}>
-                <div
-                  className="footnote"
+                <button
+                  type="button"
+                  aria-expanded={shown}
+                  onClick={() =>
+                    setDrawerGroups((g) => ({ ...g, [item.label]: !shown }))
+                  }
+                  className="callout"
                   style={{
-                    padding: "0.9rem 1.5rem 0.3rem",
-                    color: "#888",
-                    fontWeight: 600,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    padding: "0.9rem 1.5rem",
+                    background: "none",
+                    border: "none",
+                    borderLeft: "3px solid transparent",
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                    fontWeight: groupActive ? 700 : 500,
+                    color: "#111",
+                    textAlign: "left",
                   }}
                 >
                   {item.label}
+                  <ChevronDown
+                    size={18}
+                    style={{
+                      color: "#888",
+                      transform: shown ? "rotate(180deg)" : "none",
+                      transition: "transform 0.2s",
+                    }}
+                  />
+                </button>
+                {/* grid-rows 0fr ↔ 1fr 로 높이가 부드럽게 열리고 닫힌다. 접힌 동안에는 탭 키로도 안 잡히게 감춘다 */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateRows: shown ? "1fr" : "0fr",
+                    transition: "grid-template-rows 0.25s ease",
+                  }}
+                >
+                  <div
+                    style={{
+                      overflow: "hidden",
+                      visibility: shown ? "visible" : "hidden",
+                      transition: "visibility 0.25s",
+                    }}
+                  >
+                    {item.children.map((c) => drawerLink(c, true))}
+                  </div>
                 </div>
-                {item.children.map((c) => drawerLink(c, true))}
               </div>
-            ) : (
-              drawerLink(item)
-            ),
-          )}
+            );
+          })}
         </nav>
 
         {/* 하단 CTA */}
