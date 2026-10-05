@@ -130,6 +130,11 @@ export default function FlowStatement() {
             scale(calc(1 + var(--fs-z, 0) * 0.12));
         }
 
+        /* 폰에서는 조금 더 크게 — 아랫줄이 커진 뒤(×1.12)에도 화면 폭 375px 에서 310px, 320px 에서 265px 이라 넘치지 않는다 */
+        @media (max-width: 600px) {
+          .fs-title { font-size: clamp(1.25rem, 6.4vw, 4rem); }
+        }
+
         .fs-hl { transition: color 0.5s ease, text-shadow 0.5s ease; }
         .fs-section.is-lit .fs-hl { color: #9fd0ff; text-shadow: 0 0 28px rgba(127, 188, 247, 0.55); }
 

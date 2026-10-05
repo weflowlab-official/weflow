@@ -88,7 +88,14 @@ export default function ServiceSteps() {
                     <span className="pt-step">STEP {s.num}</span>
                     <h3>{s.title}</h3>
                     <span className="pt-badge">{s.desc}</span>
-                    <p style={{ whiteSpace: 'pre-line' }}>{s.detail}</p>
+                    <p style={{ whiteSpace: 'pre-line' }}>
+                      {s.detail.split('|').map((part, k) => (
+                        <span key={k}>
+                          {k > 0 && <> <br className="br-mobile" /></>}
+                          {part}
+                        </span>
+                      ))}
+                    </p>
                   </div>
                 </div>
 

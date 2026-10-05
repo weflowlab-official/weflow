@@ -225,7 +225,7 @@ export default function HomeWhyIntro() {
         .wi-title {
           margin: 0;
           color: inherit;
-          font-size: clamp(1.7rem, 5vw, 4.25rem);
+          font-size: clamp(1.95rem, 5vw, 4.25rem);
           font-weight: 800;
           letter-spacing: -0.035em;
           line-height: 1.25;

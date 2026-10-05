@@ -39,7 +39,10 @@ export default function DiffCheckBand() {
       <Reveal variant="up" className="dcb-inner">
         <span className="dcb-badge">자동 사이트 점검</span>
 
-        <p className="dcb-hook">그럼 우리 사이트는 지금 어느 쪽일까요?</p>
+        <p className="dcb-hook">
+          그럼 우리 사이트는 <br className="br-mobile" />
+          지금 어느 쪽일까요?
+        </p>
         <p className="c-muted dcb-sub">
           주소만 넣으면 네 가지를 바로 점수로 보여드립니다.
         </p>

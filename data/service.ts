@@ -3,7 +3,8 @@
  * steps 는 components/service/ServiceSteps.tsx 가 단계 카드로 뿌린다.
  */
 
-/** 제작 단계 하나 — 번호·제목·한 줄 요약·펼쳤을 때 본문·좌측 이미지 */
+/** 제작 단계 하나 — 번호·제목·한 줄 요약·펼쳤을 때 본문·좌측 이미지.
+ *  detail 안의 '|' 는 모바일에서만 줄을 바꾸는 자리다 (넓은 화면에서는 한 칸 띄고 이어진다) */
 export interface Step {
   num: string;
   title: string;
@@ -27,7 +28,7 @@ export const steps: Step[] = [
     title: "기획·설계",
     desc: "문의 구조 및 전략 설계",
     detail:
-      "고객이 문의로 이어지는 동선을 설계하고, 버튼 위치와 CTA 구조를 최적화합니다.",
+      "고객이 문의로 이어지는 동선을 설계하고,|버튼 위치와 CTA 구조를 최적화합니다.",
     image: "/images/process/process-02-plan.webp",
   },
   {

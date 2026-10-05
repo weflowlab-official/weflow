@@ -2,11 +2,13 @@ import { MessageCircle, PenLine, Users, PencilRuler, Workflow, Wrench } from "lu
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 
 // WEFLOW의 일하는 방식 6가지 — 상담(듣기) → 기획·설계 → 동선 → 워딩 → 전담 케어 → 운영 순.
 // 회사 소개에 따로 있던 "WEFLOW가 일하는 방식" 3장을 여기로 합쳤다.
 // 메인의 일하는 방식 카드(HomeCardSections)도 같은 목록을 쓴다
-export const POINTS: { Icon: LucideIcon; title: string; desc: string; img: string }[] =
+// (설명 안의 br-mobile 은 모바일에서만 줄을 바꾼다 — 쉼표 뒤에서 끊어 읽히게)
+export const POINTS: { Icon: LucideIcon; title: string; desc: ReactNode; img: string }[] =
   [
     {
       Icon: MessageCircle,
@@ -17,7 +19,12 @@ export const POINTS: { Icon: LucideIcon; title: string; desc: string; img: strin
     {
       Icon: PencilRuler,
       title: "직접 기획·설계",
-      desc: "템플릿에 맞추지 않고, 목표부터 구조까지 직접 기획합니다.",
+      desc: (
+        <>
+          템플릿에 맞추지 않고, <br className="br-mobile" />
+          목표부터 구조까지 직접 기획합니다.
+        </>
+      ),
       img: "/images/about/about6.webp",
     },
     {
@@ -29,7 +36,12 @@ export const POINTS: { Icon: LucideIcon; title: string; desc: string; img: strin
     {
       Icon: PenLine,
       title: "맞춤형 워딩",
-      desc: "업종과 브랜드 톤에 맞춰, 문구 하나까지 직접 다듬습니다.",
+      desc: (
+        <>
+          업종과 브랜드 톤에 맞춰, <br className="br-mobile" />
+          문구 하나까지 직접 다듬습니다.
+        </>
+      ),
       img: "/images/main/main-listen-02.webp",
     },
     {

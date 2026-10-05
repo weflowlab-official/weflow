@@ -346,8 +346,12 @@ export default function HomeCasesSection() {
           }
           .hc-inner { padding: 0 1.25rem; }
           /* 딱딱 멈추는 스냅은 두지 않는다 — 손을 떼는 자리에서 그대로 멈춘다 */
+          /* overflow-y 를 hidden 으로 못 박는다. overflow-x 만 주면 세로도 저절로 auto 가 되는데,
+             아직 화면에 안 들어온 카드가 등장 전 자세(아래로 56px 내려가 있음)라 세로로 넘치는 몫이 생긴다.
+             그러면 카드를 잡고 위로 밀 때 페이지 대신 이 줄이 위로 딸려 올라간다 */
           .hc-viewport {
             overflow-x: auto;
+            overflow-y: hidden;
             scrollbar-width: none;
           }
           .hc-viewport::-webkit-scrollbar { display: none; }

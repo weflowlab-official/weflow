@@ -71,8 +71,8 @@ export default function AboutPage() {
             <Reveal variant="up" delay={0.15}>
               <p className="ab-hero-en">People move. Technology follows.</p>
               <p className="ab-lead">
-                WEFLOW는 사람과 기술이 함께 흘러가며 더 좋은 방향을 만드는
-                회사입니다.
+                WEFLOW는 사람과 기술이 함께 흘러가며{" "}
+                <br className="br-mobile" />더 좋은 방향을 만드는 회사입니다.
                 <br />
                 단순히 개발만 하는 회사가 아니라, 기술은 뒤에서 받쳐주고 사람은
                 앞에서 빛나게 하는 흐름을 만듭니다.
@@ -433,9 +433,20 @@ export default function AboutPage() {
           .ab-imgs, .ab-grid-2 { grid-template-columns: 1fr; }
           .ab-info dt { flex-basis: 110px; }
         }
+        /* 좁은 화면 — 두 버튼을 세로로 쌓지 않고 한 줄에 반씩 놓는다 (하단 고정 바와 같은 배치).
+           한 줄에 들어가게 글씨·여백·화살표를 조금씩 줄인다 */
         @media (max-width: 480px) {
-          .ab-cta__btns { flex-direction: column; align-items: stretch; }
-          .ab-cta__btn { justify-content: center; }
+          .ab-cta__btns { flex-wrap: nowrap; gap: 0.6rem; }
+          .ab-cta__btn {
+            flex: 1 1 0;
+            min-width: 0;
+            justify-content: center;
+            gap: 0.3rem;
+            padding: 0.85rem 0.5rem;
+            font-size: 0.95rem;
+            white-space: nowrap;
+          }
+          .ab-cta__btn svg { width: 16px; height: 16px; flex-shrink: 0; }
         }
       `}</style>
     </main>

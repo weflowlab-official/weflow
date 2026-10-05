@@ -19,7 +19,7 @@ import { POINTS } from './ListeningSection'
 type Card = {
   Icon: LucideIcon
   title: string
-  desc: string
+  desc: React.ReactNode
   /** 카드 위쪽에 깔리는 사진 — 있으면 사진 카드가 된다 */
   img?: string
   /** 사진을 잘라 낼 때 기준 위치 (기본은 가운데) */
@@ -103,6 +103,7 @@ const SOLUTIONS: Card[] = [
 /**
  * 스크롤하는 만큼 읽히는 글 — 처음엔 전부 옅은 회색이다가, 내려갈수록 앞 낱말부터 차례로 검게 켜진다.
  * (올리면 다시 꺼진다) lines 의 한 줄이 화면의 한 줄이고, hl 에 든 낱말은 켜질 때 파란색이 된다.
+ * 줄 안의 '|' 는 좁은 화면에서만 줄을 바꾸는 자리다 (넓은 화면에서는 그냥 이어진다).
  */
 function RevealText({ lines, hl = [] }: { lines: string[]; hl?: string[] }) {
   const ref = useRef<HTMLParagraphElement>(null)
@@ -145,9 +146,13 @@ function RevealText({ lines, hl = [] }: { lines: string[]; hl?: string[] }) {
     <p ref={ref} className="hs-reveal">
       {lines.map((line, i) => (
         <span key={i} className="hs-reveal__line">
-          {line.split(' ').map((w, j) => (
-            <span key={j}>
-              <span className={hl.some(h => w.includes(h)) ? 'hs-word hs-word--hl' : 'hs-word'}>{w}</span>{' '}
+          {line.split('|').map((seg, s) => (
+            <span key={s} className="hs-reveal__seg">
+              {seg.split(' ').map((w, j) => (
+                <span key={j}>
+                  <span className={hl.some(h => w.includes(h)) ? 'hs-word hs-word--hl' : 'hs-word'}>{w}</span>{' '}
+                </span>
+              ))}
             </span>
           ))}
         </span>
@@ -368,8 +373,8 @@ export default function HomeCardSections() {
         lead={
           <RevealText
             lines={[
-              'WEFLOW는 사람과 기술이 함께 흘러가며 더 좋은 방향을 만드는 회사입니다.',
-              '기술은 뒤에서 받쳐주고, 사람이 앞에서 직접 듣고 기획하며 끝까지 책임집니다.',
+              'WEFLOW는 사람과 기술이 함께 흘러가며|더 좋은 방향을 만드는 회사입니다.',
+              '기술은 뒤에서 받쳐주고,|사람이 앞에서 직접 듣고 기획하며 끝까지 책임집니다.',
             ]}
             hl={['끝까지', '책임집니다']}
           />
@@ -641,6 +646,8 @@ export default function HomeCardSections() {
           .hs-section { padding-left: 1.25rem; padding-right: 1.25rem; }
           .hs-grid, .hs-grid--2 { grid-template-columns: 1fr; }
           .hs-br { display: none; }
+          /* 소개 문단 — 줄 안의 '|' 자리에서도 줄을 바꾼다 */
+          .hs-reveal__seg { display: block; }
           .hs-card { display: flex; align-items: flex-start; gap: 1rem; padding: 1.2rem; }
           .hs-icon { width: 48px; height: 48px; border-radius: 14px; }
           .hs-card__title { margin-top: 0.1rem; }
