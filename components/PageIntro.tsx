@@ -7,6 +7,15 @@ const WRITE_START = 0.15
 const WRITE_STEP = 0.05
 const WRITE_CHAR = 0.08
 
+// 큰 글씨(굵기 900)의 영문 대문자 폭 — 글자 크기 1 일 때의 폭(em). 글꼴 파일(WeflowSans-900)에서 잰 값이다.
+// 좁은 화면에서 낱말을 본문 폭에 꼭 맞게 키우려면 낱말의 실제 폭을 알아야 한다
+// (글자마다 폭이 달라서 — I 는 0.28, W 는 1.06 — 글자 수만으로는 맞출 수 없다)
+const CAP_EM: Record<string, number> = {
+  A: 0.766, B: 0.647, C: 0.744, D: 0.711, E: 0.603, F: 0.567, G: 0.749, H: 0.728, I: 0.281,
+  J: 0.569, K: 0.69, L: 0.554, M: 0.903, N: 0.704, O: 0.771, P: 0.636, Q: 0.771, R: 0.647,
+  S: 0.645, T: 0.664, U: 0.702, V: 0.766, W: 1.055, X: 0.735, Y: 0.737, Z: 0.671,
+}
+
 /**
  * 페이지 맨 위 도입부 — 라벨 · 제목(h1) · 설명 · CTA.
  * 하위 페이지들이 제목 없이 본문부터 시작하던 걸 이걸로 통일한다.
@@ -16,7 +25,7 @@ const WRITE_CHAR = 0.08
  * 그 뒤 오른쪽에는 머리표 낱말이 하늘색 테두리 글씨로 크게 깔린다 (메인 제작 사례 섹션의 'WEFLOW' 글씨와 같은 모양).
  * 큰 글씨는 배경이다 — 옅은 색으로, 본문 폭의 오른쪽 끝에 맞춰(왼쪽 글 묶음과 양옆 여백이 같게) 글 묶음의 위아래
  * 한가운데에 놓이고, 처음 보일 때 왼쪽부터 써지듯 드러난다.
- * 좁은 화면에서는 버튼 오른쪽 빈자리에 깔리고, 화면 밖으로 넘치는 글자는 잘린다.
+ * 좁은 화면에서는 제목과 설명 문단 사이에 걸쳐 깔린다 — 낱말 전체가 본문 폭 안에 들어가 잘리지 않는다.
  * 제목은 줄 단위 배열로 받는다 — 타자를 치듯 한 글자씩 차례로 나타난다 (줄을 넘어가도 차례가 이어진다).
  * hl 을 켠 줄은 파랗게 칠해진다. 뒤의 큰 글씨도 제목과 같은 때 시작해 같은 때 다 써진다.
  */
@@ -41,20 +50,25 @@ export default function PageIntro({
   // 제목이 다 써지는 데 걸리는 시간 — 뒤의 큰 글씨가 같은 때 끝나도록 이 길이로 맞춘다
   const chars = title.reduce((sum, l) => sum + Array.from(l.text).length, 0)
   const writeDur = Math.max(0, chars - 1) * WRITE_STEP + WRITE_CHAR
+  // 큰 글씨 낱말의 폭(em) — 표에 없는 글자는 평균값으로 친다
+  const markEm = Array.from(eyebrow.toUpperCase()).reduce((sum, ch) => sum + (CAP_EM[ch] ?? 0.66), 0)
   return (
-    // --pi-n: 큰 글씨의 글자 수 — 글씨 크기와 (좁은 화면의) 아래 여백을 여기서 계산한다
+    // --pi-n: 큰 글씨의 글자 수 — 넓은 화면의 글씨 크기를 여기서 계산한다
+    // --pi-em: 큰 글씨 낱말의 실제 폭(em) — 좁은 화면에서 본문 폭에 꼭 맞추는 데 쓴다
     <section
       className="pi-light"
       style={
         {
           '--pi-n': eyebrow.length,
+          '--pi-em': markEm.toFixed(3),
           '--pi-write-start': `${WRITE_START}s`,
           '--pi-write-dur': `${writeDur.toFixed(2)}s`,
         } as React.CSSProperties
       }
     >
-      {/* 뒤에 깔리는 큰 글씨 — 장식이라 보조 기술에는 숨긴다. 맨 앞에 두어 글 묶음보다 뒤에 깔리게 한다 */}
-      <p className="pi-mark" aria-hidden="true">
+      {/* 뒤에 깔리는 큰 글씨 — 장식이라 보조 기술에는 숨긴다. 맨 앞에 두어 글 묶음보다 뒤에 깔리게 한다.
+          넓은 화면용이다 — 좁은 화면에서는 이걸 감추고, 아래 설명 문단 뒤에 깔리는 것(pi-mark--body)을 쓴다 */}
+      <p className="pi-mark pi-mark--side" aria-hidden="true">
         {eyebrow}
       </p>
 
@@ -87,7 +101,15 @@ export default function PageIntro({
           ))}
         </h1>
         <Reveal variant="up" delay={0.2}>
-          {body && <p className="pi-body">{body}</p>}
+          {body && (
+            <div className="pi-bodywrap">
+              {/* 좁은 화면용 큰 글씨 — 제목과 설명 문단 사이에 걸쳐 깔린다 (낱말 전체가 본문 폭 안에 들어간다) */}
+              <p className="pi-mark pi-mark--body" aria-hidden="true">
+                {eyebrow}
+              </p>
+              <p className="pi-body">{body}</p>
+            </div>
+          )}
           <Link href={ctaHref} className="pi-cta">
             {ctaLabel}
           </Link>
@@ -118,6 +140,10 @@ export default function PageIntro({
           color: #8a8a8a;
         }
         .pi-title {
+          /* 좁은 화면에서 큰 글씨(pi-mark--body)가 제목 아랫줄까지 올라온다 — 그 위에 그려지게 한다
+             (큰 글씨는 속을 흰색으로 칠해 두어서, 아래에 깔리면 제목이 지워진다) */
+          position: relative;
+          z-index: 1;
           margin: 0;
           color: #111;
           font-size: clamp(1.9rem, 4vw, 3.1rem);
@@ -140,7 +166,10 @@ export default function PageIntro({
         @keyframes pi-type {
           to { opacity: 1; }
         }
+        .pi-bodywrap { position: relative; }
         .pi-body {
+          /* 뒤에 깔리는 큰 글씨(pi-mark--body)보다 위에 그려지게 */
+          position: relative;
           margin: clamp(1.1rem, 2.4vw, 1.6rem) 0 0;
           font-size: clamp(0.98rem, 1.5vw, 1.15rem);
           line-height: 1.7;
@@ -197,22 +226,25 @@ export default function PageIntro({
           to { clip-path: inset(0 0 0 0); }
         }
 
-        /* 좁은 화면 — 큰 글씨를 맨 아래 버튼 오른쪽의 빈자리에 깔고 오른쪽으로 흘려 보낸다.
-           제목 뒤에 두면 글자와 겹쳐 어수선해서, 글이 없는 자리로 내렸다.
-           낱말이 화면보다 길어 뒤쪽 글자는 화면 밖으로 잘려 나간다 (섹션이 overflow: hidden).
-           bottom 의 1.8rem 은 버튼 높이의 절반 — 버튼 한가운데 높이에 글씨 가운데가 온다 */
+        /* 설명 문단 뒤의 큰 글씨는 좁은 화면에서만 쓴다 */
+        .pi-mark--body { display: none; }
+
+        /* 좁은 화면 — 옆에 둘 자리가 없으므로, 큰 글씨를 제목과 설명 문단 사이에 걸쳐 깐다.
+           본문 폭의 오른쪽 끝에 붙고(오른쪽 정렬), 글씨의 위아래 가운데가 제목과 설명 사이 틈의 한가운데에 온다
+           (top 은 그 틈 — 설명 문단의 위 여백 — 의 절반만큼 위). 낱말이 본문 폭에 꼭 맞게, 잘리지 않는 한에서
+           가장 크게 잡는다 — 본문 폭을 낱말의 실제 폭(--pi-em)으로 나눈 크기. 테두리가 글자 밖으로 나오는 몫으로
+           6px 을 남긴다 (화면이 넓어져도 9rem 보다 커지지는 않는다) */
         @media (max-width: 860px) {
           .pi-light {
             padding-left: 1.25rem;
             padding-right: 1.25rem;
           }
-          .pi-mark {
-            top: auto;
-            bottom: calc(var(--pi-pb) + 1.8rem);
-            left: 64%;
-            right: auto;
-            transform: translateY(50%);
-            font-size: min(22vw, 8rem);
+          .pi-mark--side { display: none; }
+          .pi-mark--body {
+            display: block;
+            top: calc(clamp(1.1rem, 2.4vw, 1.6rem) / -2);
+            right: 0;
+            font-size: min(calc((100vw - 2.5rem - 6px) / var(--pi-em)), 9rem);
           }
         }
         @media (prefers-reduced-motion: reduce) {
