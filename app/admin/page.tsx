@@ -31,7 +31,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
-import { projectTypes } from "@/data/common";
+import { requestModes } from "@/data/common";
 import { portfolios } from "@/data/cases";
 import { SITE_TYPE } from "@/lib/siteConfig";
 
@@ -581,7 +581,7 @@ function PeriodSelect({
   );
 }
 
-// 제작 종류별 막대 — 항목마다 다른 색 (순서대로 순환)
+// 진행 방식별 막대 — 항목마다 다른 색 (순서대로 순환)
 const TYPE_COLORS = [
   "#0ea5e9",
   "#6366f1",
@@ -1244,7 +1244,7 @@ function Legend({ color, label }: { color: string; label: string }) {
 
 /**
  * 통계 관리 탭 — 사이트 점검·문의 접수 데이터를 기간별로 집계해 보여준다.
- * 일별 접수 추이(꺾은선), 상태 분포(누적 막대), 제작 종류별 건수(가로 막대).
+ * 일별 접수 추이(꺾은선), 상태 분포(누적 막대), 진행 방식별 건수(가로 막대).
  */
 function AnalyticsView({
   checks: allB,
@@ -1333,14 +1333,25 @@ function AnalyticsView({
     { label: "문의", data: stCount(inquiries) },
   ];
 
-  // ── 제작 종류별 ──
+  // ── 진행 방식별 — 견적 폼에서 고른 '시안 먼저 받기 / 견적만 받기' ──
+  // 문의의 type 칸에 진행 방식이 들어 있다 (사이트 점검 문의는 종류가 달라 여기서 세지 않는다).
+  // 폼을 바꾸기 전에 들어온 문의는 type 이 예전 '제작 종류'(신규 제작 · 리뉴얼 …)라 둘 중 어디에도 안 맞는다 —
+  // 버리지 않고 '예전 양식'으로 모아, 그런 문의가 기간 안에 있을 때만 한 줄 더 보여 준다
+  const MODE_OLD = "예전 양식";
   const typeCount: Record<string, number> = {};
-  projectTypes.forEach((t) => {
+  requestModes.forEach((t) => {
     typeCount[t] = 0;
   });
-  [...checks, ...inquiries].forEach((r) => {
+  let oldCount = 0;
+  inquiries.forEach((r) => {
     if (r.type in typeCount) typeCount[r.type]++;
+    else oldCount++;
   });
+  const modeRows: string[] = [...requestModes];
+  if (oldCount > 0) {
+    typeCount[MODE_OLD] = oldCount;
+    modeRows.push(MODE_OLD);
+  }
   const maxType = Math.max(1, ...Object.values(typeCount));
 
   // ── SVG 좌표 ──
@@ -1565,13 +1576,13 @@ function AnalyticsView({
           </div>
         </section>
 
-        {/* 제작 종류별 */}
+        {/* 진행 방식별 */}
         <section style={card}>
-          <h3 style={{ ...h3, marginBottom: "1.1rem" }}>제작 종류별 건수</h3>
+          <h3 style={{ ...h3, marginBottom: "1.1rem" }}>진행 방식별 건수</h3>
           <div
             style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}
           >
-            {projectTypes.map((t, i) => (
+            {modeRows.map((t, i) => (
               <div
                 key={t}
                 style={{

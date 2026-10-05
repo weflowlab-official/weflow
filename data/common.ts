@@ -1,8 +1,8 @@
 /**
  * 여러 화면이 함께 쓰는 공용 상수.
  * projectTypes는 상담 예약(/booking)의 "제작 종류"
- * 셀렉트 박스를 채우고, 관리자 페이지(/admin)에서는 종류별 집계 기준이 된다.
- * (맞춤 견적 폼(/diagnosis)은 제작 종류 대신 지출 예산·진행 방식을 묻는다 — 그쪽 문의는 이 집계에 잡히지 않는다)
+ * 셀렉트 박스를 채운다.
+ * (맞춤 견적 폼(/diagnosis)은 제작 종류 대신 지출 예산·진행 방식을 묻는다 — 아래 requestModes)
  * 폼에 저장되는 값이 곧 이 문자열이므로 문구를 바꾸면 기존 데이터와 어긋난다.
  */
 
@@ -24,6 +24,12 @@ export const OFFICIAL_CHANNELS = {
   instagram: 'https://www.instagram.com/weflowlab.kr',
   youtube: 'https://www.youtube.com/channel/UCc3SKVxpHSLeIoZJ5IE6fcA',
 } as const
+
+/**
+ * 진행 방식 — 맞춤 견적 폼(/diagnosis)의 카드 두 장. 고른 이름이 문의의 type 칸에 그대로 저장되고,
+ * 관리자 통계의 '진행 방식별 건수'가 이 이름으로 센다. 문구를 바꾸면 이미 쌓인 문의와 어긋난다.
+ */
+export const requestModes = ['시안 먼저 받기', '견적만 받기'] as const
 
 /** 제작 종류 선택지 — 배열 순서가 곧 셀렉트·집계 목록 순서 */
 export const projectTypes = [

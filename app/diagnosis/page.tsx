@@ -6,6 +6,7 @@ import type { LucideIcon } from 'lucide-react'
 import { attributionLine } from '@/lib/attribution'
 import { markNaverLead } from '@/lib/naverConversion'
 import HoneypotField from '@/components/HoneypotField'
+import { requestModes } from '@/data/common'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
 import { formatPhone, isValidPhone } from '@/lib/phone'
 import { readStore, writeStore, removeStore } from '@/lib/safeStorage'
@@ -18,8 +19,8 @@ const BUDGETS = ['0~100만원', '100~200만원', '200~300만원', '300~400만원
  * (예전에 '제작 종류'가 들어가던 칸이라, 관리자 목록의 그 열에 이 값이 보인다).
  */
 const MODES: { value: string; Icon: LucideIcon; desc: string; badge?: string }[] = [
-  { value: '시안 먼저 받기', Icon: LayoutTemplate, desc: '메인 1페이지 시안을 먼저 보고 결정합니다.', badge: '추천' },
-  { value: '견적만 받기', Icon: FileText, desc: '시안 없이 견적만 받습니다.' },
+  { value: requestModes[0], Icon: LayoutTemplate, desc: '메인 1페이지 시안을 먼저 보고 결정합니다.', badge: '추천' },
+  { value: requestModes[1], Icon: FileText, desc: '시안 없이 견적만 받습니다.' },
 ]
 
 export default function DiagnosisPage() {
