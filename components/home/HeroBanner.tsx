@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Check } from "lucide-react";
 import HeroVideo from "./HeroVideo";
 
 // 글자 단위 등장 — 자리는 유지하고 투명→나타남 (start: 앞선 글자 수, step: 글자 간격)
@@ -154,10 +155,17 @@ export default function HeroBanner() {
           alignItems: "center",
         }}
       >
-        {/* 아이브로우 — 데스크탑은 두 칩을 나란히, 모바일은 신규 칩을 위로 쌓는다 */}
+        {/* 아이브로우 — 칩 두 개를 나란히. 히어로 아래 월계수 띠의 강조 문구와 같은 두 가지를 적는다 */}
         <div className="hero-eyebrow">
-          <span className="tag-badge">리뉴얼 · 신규 제작</span>
-          <span className="tag-badge">홈페이지 메인 제작 솔루션</span>
+          {/* 금색 체크를 앞에 달아 '갖춘 것'으로 읽히게 한다 */}
+          <span className="tag-badge">
+            <Check size={16} strokeWidth={3} aria-hidden="true" />
+            최신 기술 활용
+          </span>
+          <span className="tag-badge">
+            <Check size={16} strokeWidth={3} aria-hidden="true" />
+            SEO·AEO·GEO 구조 설계
+          </span>
         </div>
 
         {/* 메인 타이틀 — 리드 문구(낮은 계층) → weflow(최상위 계층) */}
@@ -242,7 +250,7 @@ export default function HeroBanner() {
             className="btn-primary hero-btn btn-goldline"
             style={{ width: "min(240px, 80vw)" }}
           >
-            홈페이지 제작 문의
+            <span className="hero-btn__label">홈페이지 제작 문의</span>
           </Link>
 
           <Link
@@ -250,7 +258,7 @@ export default function HeroBanner() {
             className="btn-primary hero-btn btn-goldline"
             style={{ width: "min(240px, 80vw)" }}
           >
-            왜 WEFLOW?
+            <span className="hero-btn__label">왜 WEFLOW?</span>
           </Link>
         </div>
 
@@ -284,27 +292,42 @@ export default function HeroBanner() {
           background: rgba(0, 0, 0, var(--hero-veil));
         }
 
-        /* 히어로 버튼 — 어두운 막 위라 흰 면·검정 글씨로 맞춘다.
-           테두리에는 금색 광택(.btn-goldline, styles/globals.css)이 흐른다 */
+        /* 히어로 버튼 — 흰 반투명 유리 면에 금색 광택 글씨, 테두리에도 금색 광택(.btn-goldline, styles/globals.css).
+           면이 반투명이라 뒤의 어두운 영상이 비쳐, 밝은 금색 글씨가 또렷하게 읽힌다 (위 칩과 같은 유리 느낌).
+           마우스를 올리면 면이 검은 유리로 가라앉아 금색이 더 선명해진다 */
         .hero-btn {
           font-size: 1.3rem;
           border-radius: 9999px;
           padding: 1.15rem 1rem;
           white-space: nowrap;
           justify-content: center;
-          background: #fff;
-          color: #111;
-          border: 1.5px solid #fff;
+          background: rgba(255, 255, 255, 0.16);
+          -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+          color: #e9d3a6;
+          border: 1.5px solid transparent;
           box-shadow: none;
-          transition: background 0.08s, color 0.08s;
+          transition: background 0.2s;
         }
-        /* 호버 — 영상이 비쳐 보이는 반투명 면에 흰 테두리·흰 글씨로 뒤집힌다.
-           공통 버튼의 호버(살짝 투명 + 파란 그림자)는 흰검 톤과 안 맞아 끈다 */
+        /* 호버 — 검은 유리 면으로 바뀐다. 공통 버튼의 호버(살짝 투명 + 파란 그림자)는 끈다 */
         .hero-btn:hover {
-          background: rgba(255, 255, 255, 0.12);
-          color: #fff;
+          background: rgba(14, 14, 16, 0.72);
           opacity: 1;
           box-shadow: none;
+        }
+
+        /* 버튼 글씨 — 금색 광택. 어두운 면 위라 밝은 금색(사이트 금색 글씨 .c-gold 와 같은 계열)을 쓴다 */
+        .hero-btn__label {
+          display: inline-block;
+          background: linear-gradient(115deg, #d9bc88 0%, #e9d3a6 38%, #fff8e6 50%, #e9d3a6 62%, #d9bc88 100%);
+          background-size: 250% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: cGoldSheen 2.8s linear infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-btn__label { animation: none; }
         }
 
         /* 높이는 부모(.first-screen)가 정한다 — 히어로는 신뢰 밴드를 뺀 나머지를
@@ -399,10 +422,10 @@ export default function HeroBanner() {
           .hero-award__rank { font-size: 0.78rem; }
         }
 
-        /* 아이브로우 배지 — 데스크탑은 가로 배치(신규 칩이 오른쪽), 아래 여백 (모바일에서 축소 → 타이틀 세 줄 위로) */
+        /* 아이브로우 배지 — 가로 배치(적힌 순서대로 왼쪽부터), 아래 여백 (모바일에서 축소 → 타이틀 세 줄 위로) */
         .hero-eyebrow {
           display: flex;
-          flex-direction: row-reverse;
+          flex-direction: row;
           align-items: center;
           justify-content: center;
           gap: 0.6rem;
@@ -410,17 +433,24 @@ export default function HeroBanner() {
         }
         /* 두 칩의 높이를 강제로 동일하게 — 글리프별 라인박스 차이 방지 */
         .hero-eyebrow .tag-badge {
-          font-size: 0.95rem;
-          height: 2.1rem;
+          /* 잘 보이게 — 글씨를 키우고 굵게, 면은 영상 위에서 묻히지 않게 조금 더 짙은 유리로,
+             테두리는 또렷한 흰색으로 잡는다 */
+          gap: 0.4rem;
+          font-size: 1rem;
+          font-weight: 700;
+          height: 2.4rem;
           line-height: 1;
           white-space: nowrap;
-          padding-top: 0;
-          padding-bottom: 0;
-          /* 흰검 톤 — 두 칩 모두 반투명 면에 흰 글씨 */
+          padding: 0 1.15rem;
           color: #fff;
-          background: rgba(255, 255, 255, 0.14);
-          border: 1px solid rgba(255, 255, 255, 0.55);
+          background: rgba(14, 14, 16, 0.45);
+          -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+          border: 1px solid rgba(255, 255, 255, 0.85);
         }
+        /* 체크 — 금색. 버튼 글씨의 밝은 금색(#e9d3a6)은 작은 아이콘에서 흰색처럼 보이고,
+           진한 금색(#dcb45a)은 겨자색으로 떠 보여서 그 사이의 부드러운 금색을 쓴다 (버튼 테두리 금색과 같은 계열) */
+        .hero-eyebrow .tag-badge svg { flex: none; color: #e6c88a; }
 
         /* 모바일은 타이틀이 세 줄이라 PC(1.2)보다는 넉넉하게 둔다.
            1.5 는 줄 사이 빈 공간이 과해 여백을 깎게 만들었다 */
@@ -467,11 +497,13 @@ export default function HeroBanner() {
              위 여백만 3px 줄고 아래가 3px 늘어 위아래가 6px 어긋나 있었다.
              지금은 padding 이 위아래 같으므로 정확히 대칭이다. */
           .hero-eyebrow .tag-badge {
-            font-size: clamp(0.72rem, 3.4vw, 0.95rem);
-            height: 1.9rem;
+            gap: 0.25rem;
+            font-size: clamp(0.72rem, 3.3vw, 0.95rem);
+            height: 2.1rem;
             padding-left: 10px;
             padding-right: 10px;
           }
+          .hero-eyebrow .tag-badge svg { width: 13px; height: 13px; }
           /* 줄 간격·버튼 여백을 좁혀, 신뢰 밴드까지 한 화면에 들어갈 자리를 만든다 */
           .hero-line2 { white-space: normal; margin-top: 0.7rem !important; }
           /* WEFLOW 를 다음 줄로 내리되, 위 두 줄 간격과 맞춘다.
