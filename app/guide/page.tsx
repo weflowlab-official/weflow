@@ -152,9 +152,20 @@ export default function GuidePage() {
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
         }
         .gd-cta__btn--solid:hover { background: rgba(255, 255, 255, 0.88); border-color: rgba(255, 255, 255, 0.88); }
+        /* 좁은 화면 — 두 버튼을 세로로 쌓지 않고 한 줄에 반씩 놓는다 (하단 고정 바와 같은 배치).
+           한 줄에 들어가게 글씨·여백·화살표를 조금씩 줄인다 */
         @media (max-width: 480px) {
-          .gd-cta__btns { flex-direction: column; align-items: stretch; }
-          .gd-cta__btn { justify-content: center; }
+          .gd-cta__btns { flex-wrap: nowrap; gap: 0.6rem; }
+          .gd-cta__btn {
+            flex: 1 1 0;
+            min-width: 0;
+            justify-content: center;
+            gap: 0.3rem;
+            padding: 0.85rem 0.5rem;
+            font-size: 0.95rem;
+            white-space: nowrap;
+          }
+          .gd-cta__btn svg { width: 16px; height: 16px; flex-shrink: 0; }
         }
 
         /* 좁은 화면에서만 줄바꿈 */

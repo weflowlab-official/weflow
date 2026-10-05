@@ -808,10 +808,10 @@
     right: 0;
     bottom: 0;
     z-index: 200;
-    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 -6px 20px rgba(17, 17, 17, 0.1);
     /* 홈 인디케이터가 있는 폰에서 바가 가려지지 않게 */
     padding-bottom: max(0px, calc(env(safe-area-inset-bottom) - 0.75rem));
-    background: var(--surface);
+    background: #fff;
   }
   @media (max-width: 768px) {
     .mobile-cta-bar { display: flex; }
@@ -829,14 +829,16 @@
     font-weight: 600;
     text-decoration: none;
   }
+  /* 바로전화 — 흰 바탕에 검은 글씨 (사이트가 흰 바탕이라 위쪽 가는 선으로 경계를 준다) */
   .mobile-cta-bar__btn--call {
-    background: var(--surface);
-    color: var(--text);
-    border-top: 1px solid var(--border);
+    background: #fff;
+    color: #111;
+    border-top: 1px solid #e3e5e8;
   }
   .mobile-cta-bar__btn--call svg { color: #22c55e; }
+  /* 맞춤 견적 받기 — 사이트 하늘색(#6a92d7) 채움에 흰 글씨. 흰 바탕용 CTA 버튼(.btn-sky--solid)과 같은 색 */
   .mobile-cta-bar__btn--form {
-    background: var(--accent-strong);
+    background: #6a92d7;
     color: #fff;
   }
   .fab {

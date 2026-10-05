@@ -16,7 +16,6 @@ export default function DiffCTA() {
           <br className="svc-cta__br" /> 견적과 함께 바로 정리해 드립니다.
         </>
       }
-      solidLabel="지금 바로 견적 받기"
     />
   );
 }

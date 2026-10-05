@@ -110,8 +110,20 @@ export default async function CasesPage({
           flex-wrap: wrap;
           margin-top: clamp(2.5rem, 5vw, 3.5rem);
         }
+        /* 좁은 화면 — 두 버튼을 세로로 쌓지 않고 한 줄에 반씩 놓는다 (하단 고정 바와 같은 배치).
+           한 줄에 들어가게 글씨·여백·화살표를 조금씩 줄인다 */
         @media (max-width: 480px) {
-          .cases-cta { flex-direction: column; align-items: stretch; }
+          .cases-cta { flex-wrap: nowrap; gap: 0.6rem; }
+          .cases-cta .btn-sky {
+            flex: 1 1 0;
+            min-width: 0;
+            justify-content: center;
+            gap: 0.3rem;
+            padding: 0.85rem 0.5rem;
+            font-size: 0.95rem;
+            white-space: nowrap;
+          }
+          .cases-cta .btn-sky svg { width: 16px; height: 16px; flex-shrink: 0; }
         }
       `}</style>
     </div>

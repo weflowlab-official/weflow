@@ -18,14 +18,11 @@ export default function ServiceCTA({
       <br className="svc-cta__br" /> 찾아오는 고객을 늘려보세요.
     </>
   ),
-  solidLabel = "맞춤 견적 받기",
 }: {
   /** 제목 — 설명과 같은 방법으로 좁은 화면에서만 줄을 바꿀 수 있다 */
   title?: ReactNode;
   /** 제목 아래 설명 — 좁은 화면에서만 줄을 바꾸려면 <br className="svc-cta__br" /> 를 넣는다 */
   sub?: ReactNode;
-  /** 채운 버튼(견적 신청)의 글자 */
-  solidLabel?: string;
 }) {
   return (
     <section className="svc-cta">
@@ -45,7 +42,7 @@ export default function ServiceCTA({
             전화 상담하기 <ArrowRight size={18} strokeWidth={2.5} />
           </a>
           <Link href="/diagnosis" className="svc-cta__btn svc-cta__btn--solid btn-goldline">
-            {solidLabel} <ArrowRight size={18} strokeWidth={2.5} />
+            맞춤 견적 받기 <ArrowRight size={18} strokeWidth={2.5} />
           </Link>
         </div>
       </Reveal>
@@ -119,9 +116,20 @@ export default function ServiceCTA({
           box-shadow: 0 10px 24px rgba(106, 146, 215, 0.35);
         }
         .svc-cta__btn--solid:hover { background: #8aabe3; border-color: #8aabe3; }
+        /* 좁은 화면 — 두 버튼을 세로로 쌓지 않고 한 줄에 반씩 놓는다 (하단 고정 바와 같은 배치).
+           한 줄에 들어가게 글씨·여백·화살표를 조금씩 줄인다 */
         @media (max-width: 480px) {
-          .svc-cta__btns { flex-direction: column; align-items: stretch; }
-          .svc-cta__btn { justify-content: center; }
+          .svc-cta__btns { flex-wrap: nowrap; gap: 0.6rem; }
+          .svc-cta__btn {
+            flex: 1 1 0;
+            min-width: 0;
+            justify-content: center;
+            gap: 0.3rem;
+            padding: 0.85rem 0.5rem;
+            font-size: 0.95rem;
+            white-space: nowrap;
+          }
+          .svc-cta__btn svg { width: 16px; height: 16px; flex-shrink: 0; }
         }
 
         /* 좁은 화면에서만 줄바꿈 */
