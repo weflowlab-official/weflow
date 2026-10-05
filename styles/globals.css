@@ -800,7 +800,7 @@
     .floating-cta { display: none; }
   }
 
-  /* ── 모바일 하단 고정 바 — 바로전화 · 무료상담신청 두 칸 ── */
+  /* ── 모바일 하단 고정 바 — 바로 전화 · 맞춤 견적 받기 두 칸 ── */
   .mobile-cta-bar {
     display: none;
     position: fixed;
@@ -829,7 +829,7 @@
     font-weight: 700;
     text-decoration: none;
   }
-  /* 바로전화 — 흰 바탕에 검은 글씨 (사이트가 흰 바탕이라 위쪽 가는 선으로 경계를 준다) */
+  /* 바로 전화 — 흰 바탕에 검은 글씨 (사이트가 흰 바탕이라 위쪽 가는 선으로 경계를 준다) */
   .mobile-cta-bar__btn--call {
     background: #fff;
     color: #111;

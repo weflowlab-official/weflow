@@ -11,7 +11,7 @@ import { formatPhone, isValidPhone } from '@/lib/phone'
 import { readStore, writeStore, removeStore } from '@/lib/safeStorage'
 
 /** 지출 예산 선택지 — 고른 문장이 그대로 문의 메모에 "예산: …" 줄로 남는다 */
-const BUDGETS = ['0~100만원', '100~200만원', '200~300만원', '300~400만원', '400~500만원', '500만원 이상']
+const BUDGETS = ['0~100만원', '100~200만원', '200~300만원', '300~400만원', '400만원 이상']
 
 /**
  * 진행 방식 — 둘 중 하나를 카드로 고른다. 고른 이름이 문의의 type 칸에 저장된다
