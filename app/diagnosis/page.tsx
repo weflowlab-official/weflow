@@ -68,7 +68,7 @@ export default function DiagnosisPage() {
   useEffect(() => {
     // 진행 방식은 처음부터 골라져 있으므로 '손댔는지'를 볼 때는 세지 않는다
     const touched = !!(form.name || form.phone || form.budget || form.ref || form.industry || form.note || form.agree)
-    const complete = !!(form.name && form.phone && form.budget && form.agree)
+    const complete = !!(form.name && form.phone && form.industry.trim() && form.budget && form.agree)
     if (touched && !complete) {
       writeStore('session', 'weflow_form_intent', '1')
       window.dispatchEvent(new Event('weflow-intent'))  // 뒤로가기 트랩 무장
@@ -79,11 +79,12 @@ export default function DiagnosisPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.name || !isValidPhone(form.phone) || !form.budget || !form.agree) {
+    if (!form.name || !isValidPhone(form.phone) || !form.industry.trim() || !form.budget || !form.agree) {
       setShowErrors(true)
       const firstId =
         !form.name ? 'dg-name'
         : !isValidPhone(form.phone) ? 'dg-phone'
+        : !form.industry.trim() ? 'dg-industry'
         : !form.budget ? 'dg-budget'
         : 'dg-agree'
       const el = document.getElementById(firstId)
@@ -107,7 +108,7 @@ export default function DiagnosisPage() {
           name: form.name,
           phone: form.phone,
           type: form.mode,
-          industry: form.industry,
+          industry: form.industry.trim(),
           agree: form.agree,
           [HONEYPOT_FIELD]: honeypot,
           note: [
@@ -238,7 +239,7 @@ export default function DiagnosisPage() {
                 {/* 참고 사이트 — 선택. type="url" 은 쓰지 않는다: 'naver.com' 처럼 앞머리 없이 적으면
                     브라우저가 제출을 막아 버린다 */}
                 <div className="dg-field">
-                  <label className="form-label" htmlFor="dg-ref">참고 사이트 주소 <span className="dg-optional">(선택)</span></label>
+                  <label className="form-label" htmlFor="dg-ref">참고 사이트 주소</label>
                   <input
                     id="dg-ref"
                     className="form-input"
@@ -252,6 +253,20 @@ export default function DiagnosisPage() {
                     value={form.ref}
                     onChange={e => setForm(f => ({ ...f, ref: e.target.value }))}
                   />
+                </div>
+
+                {/* 업종 — 필수. 문의 테이블의 industry 칸에 그대로 저장돼 관리자 상세의 '업종'에 보인다 */}
+                <div className="dg-field">
+                  <label className="form-label" htmlFor="dg-industry">업종 <span style={{ color: '#ef4444' }}>*</span></label>
+                  <input
+                    id="dg-industry"
+                    className="form-input"
+                    maxLength={40}
+                    placeholder="기업/비즈니스, 인테리어, 차량/타이어 등"
+                    value={form.industry}
+                    onChange={e => setForm(f => ({ ...f, industry: e.target.value }))}
+                  />
+                  {showErrors && !form.industry.trim() && <p className="field-error">* 업종을 입력해 주세요</p>}
                 </div>
 
                 <div className="dg-field">
@@ -270,7 +285,7 @@ export default function DiagnosisPage() {
                     id="dg-note"
                     className="form-input"
                     rows={4}
-                    placeholder="추가 문의사항이 있다면 작성해 주세요."
+                    placeholder="추가 문의 사항이 있다면 작성해 주세요."
                     value={form.note}
                     onChange={e => setForm(f => ({ ...f, note: e.target.value }))}
                     style={{ resize: 'vertical', lineHeight: 1.6, minHeight: '6.5rem' }}
@@ -297,7 +312,7 @@ export default function DiagnosisPage() {
                   <div id="dg-privacy-text" className={`dg-consent__body${privacyOpen ? ' is-open' : ''}`}>
                     <div style={{ overflow: 'hidden' }}>
                       <div className="dg-consent__text">
-                        <p>1. 수집 항목 및 목적: 성함, 연락처, 지출 예산, 진행 방식, 참고 사이트 주소, 문의 내용을 맞춤 견적·상담 및 확인 전화 안내를 위해 수집하며, 명시된 목적 외의 용도로 이용하지 않습니다.</p>
+                        <p>1. 수집 항목 및 목적: 성함, 연락처, 업종, 지출 예산, 진행 방식, 참고 사이트 주소, 문의 내용을 맞춤 견적·상담 및 확인 전화 안내를 위해 수집하며, 명시된 목적 외의 용도로 이용하지 않습니다.</p>
                         <p>2. 보유 및 이용 기간: 상담 종료 후 1년까지</p>
                       </div>
                     </div>
@@ -365,7 +380,6 @@ export default function DiagnosisPage() {
         @media (max-width: 640px) { .br-mobile { display: inline; } }
 
         /* ── 진행 방식 — 카드 두 장 중 하나를 고른다 ── */
-        .dg-optional { font-weight: 400; color: var(--text-muted); }
         .dg-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
         .dg-mode {
           position: relative;
