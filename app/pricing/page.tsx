@@ -179,14 +179,21 @@ export default function PricingPage() {
                         {desc && <span className="pr-row-desc">{desc}</span>}
                       </th>
                       {cells.map((c, i) => (
-                        <td key={i}>
+                        <td key={i} className={typeof c === "string" && c.endsWith("~") ? "pr-price" : undefined}>
                           {c === true ? (
                             <Check className="pr-yes" size={20} strokeWidth={2.6} aria-label="포함" />
                           ) : c === false ? (
                             <Minus className="pr-no" size={18} strokeWidth={2.2} aria-label="해당 없음" />
                           ) : (
-                            // 금액 뒤의 "~"는 카드와 같게 한 칸 띄워 보여 준다
-                            c.replace(/~$/, " ~")
+                            // 금액 뒤의 "~"는 카드와 같게 한 칸 띄워 보여 준다 (좁은 화면에서는 한 줄에 넣느라 붙인다)
+                            <>
+                              {c.replace(/~$/, "")}
+                              {c.endsWith("~") && (
+                                <>
+                                  <span className="pr-price-gap"> </span>~
+                                </>
+                              )}
+                            </>
                           )}
                         </td>
                       ))}
@@ -459,6 +466,18 @@ export default function PricingPage() {
         .pr-yes, .pr-no { display: block; margin: 0 auto; }
         .pr-yes { color: #3f8fe0; }
         .pr-no { color: #c4c8ce; }
+        /* 좁은 화면 — 금액이 두 줄로 꺾이지 않게 한다. 칸 폭(약 74px)에 "1,690,000원~" 가 들어가는 크기로
+           글씨를 화면 폭에 맞춰 줄이고(375px 에서 약 11.8px), 좌우 여백과 "~" 앞의 띄어쓰기를 걷어 낸다 */
+        @media (max-width: 600px) {
+          .pr-table td.pr-price {
+            padding-left: 2px;
+            padding-right: 2px;
+            font-size: min(3.15vw, 0.82rem);
+            letter-spacing: -0.02em;
+            white-space: nowrap;
+          }
+          .pr-price-gap { display: none; }
+        }
 
         /* ── 자주 묻는 질문 — 위 섹션이 이미 아래 여백을 두므로 위 여백은 뺀다 ── */
         .pr-page .hf-section { padding-top: 0; }

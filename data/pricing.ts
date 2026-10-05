@@ -52,7 +52,7 @@ export const makePlans: MakePlan[] = [
     id: "landing",
     sub: "LANDING",
     tagline: "원페이지형",
-    img: "/images/3d-icon/image-3.svg",
+    img: "/images/3d-icon/image-3.webp",
     highlight: false,
     features: [
       "원페이지",
@@ -68,7 +68,7 @@ export const makePlans: MakePlan[] = [
     id: "brand",
     sub: "BRAND",
     tagline: "브랜드형",
-    img: "/images/3d-icon/image-4.svg",
+    img: "/images/3d-icon/image-4.webp",
     highlight: false,
     features: [
       "페이지 수 제한 없음",
@@ -85,7 +85,7 @@ export const makePlans: MakePlan[] = [
     id: "signature",
     sub: "SIGNATURE",
     tagline: "풀패키지",
-    img: "/images/3d-icon/image-5.svg",
+    img: "/images/3d-icon/image-5.webp",
     highlight: true,
     features: SIGNATURE_FEATURES,
     price: "1,690,000원~",
