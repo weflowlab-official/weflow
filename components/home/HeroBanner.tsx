@@ -292,40 +292,41 @@ export default function HeroBanner() {
           background: rgba(0, 0, 0, var(--hero-veil));
         }
 
-        /* 히어로 버튼 — 흰 반투명 유리 면에 금색 광택 글씨, 테두리에도 금색 광택(.btn-goldline, styles/globals.css).
-           면이 반투명이라 뒤의 어두운 영상이 비쳐, 밝은 금색 글씨가 또렷하게 읽힌다 (위 칩과 같은 유리 느낌).
-           마우스를 올리면 면이 검은 유리로 가라앉아 금색이 더 선명해진다 */
+        /* 히어로 버튼 — 어두운 막 위라 흰 면으로 띄우고, 글씨는 금색 광택(아래 .hero-btn__label)으로 쓴다.
+           테두리에는 금색 광택(.btn-goldline, styles/globals.css)이 흐른다 */
         .hero-btn {
           font-size: 1.3rem;
           border-radius: 9999px;
           padding: 1.15rem 1rem;
           white-space: nowrap;
           justify-content: center;
-          background: rgba(255, 255, 255, 0.16);
-          -webkit-backdrop-filter: blur(6px);
-          backdrop-filter: blur(6px);
-          color: #e9d3a6;
-          border: 1.5px solid transparent;
+          background: #fff;
+          color: #111;
+          border: 1.5px solid #fff;
           box-shadow: none;
-          transition: background 0.2s;
+          transition: background 0.08s, color 0.08s;
         }
-        /* 호버 — 검은 유리 면으로 바뀐다. 공통 버튼의 호버(살짝 투명 + 파란 그림자)는 끈다 */
+        /* 호버 — 영상이 비쳐 보이는 반투명 면에 흰 테두리·흰 글씨로 뒤집힌다.
+           공통 버튼의 호버(살짝 투명 + 파란 그림자)는 흰검 톤과 안 맞아 끈다 */
         .hero-btn:hover {
-          background: rgba(14, 14, 16, 0.72);
+          background: rgba(255, 255, 255, 0.12);
+          color: #fff;
           opacity: 1;
           box-shadow: none;
         }
 
-        /* 버튼 글씨 — 금색 광택. 어두운 면 위라 밝은 금색(사이트 금색 글씨 .c-gold 와 같은 계열)을 쓴다 */
+        /* 버튼 글씨 — 금색 광택. 흰 면 위라 헤더 견적 버튼의 글씨와 같은 중간 톤 금색을 쓴다
+           (어두운 바탕용 밝은 금색은 흰 면에서 안 읽힌다). 호버로 면이 어두워지면 흰 글씨로 바뀐다 */
         .hero-btn__label {
           display: inline-block;
-          background: linear-gradient(115deg, #d9bc88 0%, #e9d3a6 38%, #fff8e6 50%, #e9d3a6 62%, #d9bc88 100%);
+          background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #dcbc7c 50%, #b8914e 62%, #a8823e 100%);
           background-size: 250% auto;
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
           animation: cGoldSheen 2.8s linear infinite;
         }
+        .hero-btn:hover .hero-btn__label { background: none; color: #fff; }
         @media (prefers-reduced-motion: reduce) {
           .hero-btn__label { animation: none; }
         }
