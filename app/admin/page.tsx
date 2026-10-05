@@ -351,7 +351,7 @@ function PeriodSelect({
               border: 1px solid var(--border);
               border-radius: 14px;
               padding: 0.9rem;
-              box-shadow: 0 16px 44px rgba(0, 0, 0, 0.35);
+              box-shadow: 0 16px 44px rgba(17, 17, 17, 0.14);
             }
             .pp-presets {
               display: flex;
@@ -1211,7 +1211,7 @@ function ActionBtn({
 
 // 상태 분포 누적 막대의 구간 — 표시 순서와 색
 const STATUS_SEG: { key: Status; label: string; color: string }[] = [
-  { key: "pending", label: "대기", color: "#cbd5e1" },
+  { key: "pending", label: "대기", color: "#94a3b8" },
   { key: "in_progress", label: "진행중", color: "var(--accent)" },
   { key: "done", label: "완료", color: "#22c55e" },
 ];
@@ -1662,10 +1662,10 @@ const SOURCE_COLOR: Record<string, string> = {
   facebook: "#1877f2",
   google: "#ea4335",
   daum: "#06b6d4",
-  twitter: "#e7e9ea",
+  twitter: "#111111",
   youtube: "#ff0000",
   band: "#00c73c",
-  threads: "#e1e1e6",
+  threads: "#333333",
   "threads-ad": "#8e8e93",
   direct: "#94a3b8",
 };
@@ -2651,7 +2651,7 @@ function TrafficView({
                 <BarRow
                   key={path}
                   label={pageName(path)}
-                  color="#f87171"
+                  color="#ef4444"
                   value={cnt}
                   max={maxExit}
                   right={`${cnt}회 (${exitTotal ? Math.round((cnt / exitTotal) * 100) : 0}%)`}
@@ -2887,6 +2887,7 @@ export default function AdminPage() {
   if (!authed) {
     return (
       <div
+        className="theme-light admin-light"
         style={{
           minHeight: "100vh",
           display: "flex",
@@ -2904,7 +2905,7 @@ export default function AdminPage() {
             padding: "1.75rem 2.75rem 2.75rem",
             width: "100%",
             maxWidth: "440px",
-            boxShadow: "0 4px 24px rgba(0,0,0,0.5)",
+            boxShadow: "0 4px 24px rgba(17,17,17,0.08)",
           }}
         >
           <div style={{ textAlign: "center", marginBottom: "2.25rem" }}>
@@ -2918,6 +2919,7 @@ export default function AdminPage() {
                 height: 72,
                 margin: "0 auto 0.4rem",
                 display: "block",
+                filter: "brightness(0)",
               }}
             />
             <h1
@@ -3006,7 +3008,7 @@ export default function AdminPage() {
 
   return (
     <div
-      className="admin-wrap"
+      className="admin-wrap theme-light admin-light"
       style={{ minHeight: "100vh", background: "var(--bg-secondary)" }}
     >
       {/* ── 데스크탑 사이드바 ── */}
@@ -3041,7 +3043,7 @@ export default function AdminPage() {
               alt="WEFLOW"
               width={32}
               height={32}
-              style={{ width: 32, height: 32 }}
+              style={{ width: 32, height: 32, filter: "brightness(0)" }}
             />
             <span
               className="emphasized"
@@ -3173,7 +3175,7 @@ export default function AdminPage() {
               alt="WEFLOW"
               width={26}
               height={26}
-              style={{ width: 26, height: 26 }}
+              style={{ width: 26, height: 26, filter: "brightness(0)" }}
             />
             <span
               className="subhead emphasized"
@@ -3230,7 +3232,7 @@ export default function AdminPage() {
           zIndex: 201,
           width: "min(260px, 80vw)",
           background: "var(--surface)",
-          boxShadow: "4px 0 24px rgba(0,0,0,0.5)",
+          boxShadow: "4px 0 24px rgba(17,17,17,0.14)",
           display: "none",
           flexDirection: "column",
           transform: menuOpen ? "translateX(0)" : "translateX(-100%)",
@@ -3271,7 +3273,7 @@ export default function AdminPage() {
                 alt="WEFLOW"
                 width={26}
                 height={26}
-                style={{ width: 26, height: 26 }}
+                style={{ width: 26, height: 26, filter: "brightness(0)" }}
               />
               <span
                 className="subhead emphasized"
@@ -3581,7 +3583,7 @@ export default function AdminPage() {
         .admin-wrap { display: flex; flex-direction: row; }
         .admin-sidebar { width: 264px; position: sticky; top: 0; align-self: flex-start; height: 100vh; overflow-y: auto; }
         .admin-stat-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
-        .admin-stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.45); }
+        .admin-stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(17,17,17,0.1); }
         .admin-row td { transition: background 0.12s ease; }
         .admin-row:hover td { background: var(--bg-secondary); }
         .stat-grid-4 { grid-template-columns: repeat(4, 1fr); }
