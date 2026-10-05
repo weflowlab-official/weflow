@@ -37,10 +37,8 @@ const NAV_ITEMS: (NavLink | NavGroup)[] = [
 // 강조 메뉴 색 — 흰 헤더·드로어 위에서 읽히는 중간 톤 금색 (상담 버튼 글씨와 같은 계열)
 const NAV_GOLD = "#ad8640";
 
-// 헤더 글씨 크기 — 대표 번호는 16px, 드롭다운 항목은 15px.
-// 글씨 클래스(.headline 17px · .body 16px)의 기본값보다 한 단계씩 작게 잡는다.
-// 메뉴 글씨·간격은 화면 폭에 따라 달라서 아래 <style> 의 .nav-menu 가 정한다
-const NAV_FONT = "1rem";
+// 드롭다운 항목의 글씨 크기 — 글씨 클래스(.body 16px)의 기본값보다 한 단계 작게 잡는다.
+// 메뉴·대표 번호·로고의 크기는 화면 폭에 따라 달라서 아래 <style> 이 정한다
 const NAV_SUB_FONT = "0.9375rem";
 
 // 상담 버튼 옆에 같이 보여 주는 대표 번호
@@ -172,6 +170,7 @@ export default function Navbar() {
   return (
     <>
       <header
+        className="nav-header"
         style={{
           position: "sticky",
           top: 0,
@@ -213,13 +212,14 @@ export default function Navbar() {
               <Image
                 src="/logo.png"
                 alt="WEFLOW"
-                width={27}
-                height={27}
-                // 로고 원본이 흰색이라 흰 헤더에서는 검정으로 뒤집는다
-                style={{ width: 27, height: 27, objectFit: "contain", filter: "brightness(0)" }}
+                width={32}
+                height={32}
+                className="nav-logo-img"
+                // 로고 원본이 흰색이라 흰 헤더에서는 검정으로 뒤집는다 (크기는 아래 <style> 의 .nav-logo-img)
+                style={{ objectFit: "contain", filter: "brightness(0)" }}
               />
               <span
-                className="title-3 emphasized"
+                className="title-3 emphasized nav-logo-text"
                 style={{ color: "#111", letterSpacing: "-0.02em" }}
               >
                 WEFLOW
@@ -230,7 +230,7 @@ export default function Navbar() {
           {/* 데스크탑 가로 메뉴 — 현재 페이지는 강조색 굵게. 묶음은 올리거나 누르면 아래로 펼쳐진다 */}
           <nav
             ref={navRef}
-            className="hide-mobile nav-menu"
+            className="hide-mobile"
             style={{
               display: "flex",
               gap: "var(--nav-gap)",
@@ -289,7 +289,7 @@ export default function Navbar() {
                       setMenu(null);
                       handleClick(item.children[0].href)(e);
                     }}
-                    className="headline"
+                    className="headline nav-group-link"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -385,14 +385,14 @@ export default function Navbar() {
                 gap: "0.35rem",
                 marginRight: "1rem",
                 color: "#111",
-                fontSize: NAV_FONT,
+                fontSize: "var(--nav-font)",
                 fontWeight: 700,
                 textDecoration: "none",
                 whiteSpace: "nowrap",
                 flexShrink: 0,
               }}
             >
-              <Phone size={16} />
+              <Phone size={17} />
               {TEL}
             </a>
 
@@ -617,12 +617,22 @@ export default function Navbar() {
 
       <style>{`
         @media (max-width: 768px) { .show-mobile-flex { display: flex !important; } }
-        /* PC 메뉴의 글씨·좌우 여백·사이 간격 — 넓은 화면(1200px 이상)에서는 메뉴 묶음이 헤더 가운데를
-           넉넉하게 차지하도록 키운다 (묶음 폭 약 620px). 그보다 좁으면 번호·견적 버튼과 부딪혀서 작게 둔다 */
-        .nav-menu { --nav-font: 1rem; --nav-pad: 0.7rem; --nav-gap: 1rem; }
+        /* PC 메뉴·대표 번호의 글씨, 메뉴의 좌우 여백·사이 간격 — 넓은 화면(1200px 이상)에서는 키운다.
+           그보다 좁으면 번호·견적 버튼과 부딪혀서 작게 둔다 (값은 헤더 전체에서 쓰도록 .nav-header 에 건다) */
+        .nav-header { --nav-font: 1rem; --nav-pad: 0.7rem; --nav-gap: 1rem; }
         @media (min-width: 1200px) {
-          .nav-menu { --nav-font: 1.0625rem; --nav-pad: 1.1rem; --nav-gap: 2.1rem; }
+          /* 사이 간격 2.6rem — 아래 화살표 보정(-0.75rem × 2)으로 줄어드는 폭을 메워, 메뉴 묶음 전체 폭을 약 620px 로 유지한다 */
+          .nav-header { --nav-font: 1.0625rem; --nav-pad: 1.1rem; --nav-gap: 2.6rem; }
         }
+        /* 로고 — 메뉴를 키운 넓은 화면에서는 로고도 같이 키워 무게를 맞춘다 */
+        .nav-logo-img { width: 27px; height: 27px; }
+        @media (min-width: 1200px) {
+          .nav-logo-img { width: 30px; height: 30px; }
+          .nav-logo-text { font-size: 1.375rem; }
+        }
+        /* 화살표(▾)가 달린 묶음은 화살표 몫만큼 다음 메뉴가 멀어 보인다 —
+           다음 메뉴를 조금 당겨, 글자와 글자 사이가 고르게 보이게 한다 */
+        .nav-group-link { margin-right: -0.75rem; }
         /* 태블릿 폭에서는 메뉴·상담 버튼만 남기고 번호는 숨긴다 */
         @media (max-width: 1024px) { .nav-tel { display: none !important; } }
         /* 드롭다운 안의 줄 — 올리면 옅은 회색 바탕 */
