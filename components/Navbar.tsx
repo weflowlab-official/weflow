@@ -37,8 +37,9 @@ const NAV_ITEMS: (NavLink | NavGroup)[] = [
 // 강조 메뉴 색 — 흰 헤더·드로어 위에서 읽히는 중간 톤 금색 (상담 버튼 글씨와 같은 계열)
 const NAV_GOLD = "#ad8640";
 
-// 헤더 글씨 크기 — 메뉴·대표 번호는 16px, 드롭다운 항목은 15px.
-// 글씨 클래스(.headline 17px · .body 16px)의 기본값보다 한 단계씩 작게 잡는다
+// 헤더 글씨 크기 — 대표 번호는 16px, 드롭다운 항목은 15px.
+// 글씨 클래스(.headline 17px · .body 16px)의 기본값보다 한 단계씩 작게 잡는다.
+// 메뉴 글씨·간격은 화면 폭에 따라 달라서 아래 <style> 의 .nav-menu 가 정한다
 const NAV_FONT = "1rem";
 const NAV_SUB_FONT = "0.9375rem";
 
@@ -229,10 +230,10 @@ export default function Navbar() {
           {/* 데스크탑 가로 메뉴 — 현재 페이지는 강조색 굵게. 묶음은 올리거나 누르면 아래로 펼쳐진다 */}
           <nav
             ref={navRef}
-            className="hide-mobile"
+            className="hide-mobile nav-menu"
             style={{
               display: "flex",
-              gap: "1rem",
+              gap: "var(--nav-gap)",
               flexShrink: 0,
             }}
           >
@@ -245,9 +246,9 @@ export default function Navbar() {
                     onClick={handleClick(item.href)}
                     className="headline"
                     style={{
-                      padding: "0.4rem 0.7rem",
+                      padding: "0.5rem var(--nav-pad)",
                       borderRadius: "6px",
-                      fontSize: NAV_FONT,
+                      fontSize: "var(--nav-font)",
                       fontWeight: isActive(item.href) || item.gold ? 700 : 500,
                       color: item.gold
                         ? NAV_GOLD
@@ -293,9 +294,9 @@ export default function Navbar() {
                       display: "flex",
                       alignItems: "center",
                       gap: "0.2rem",
-                      padding: "0.4rem 0.7rem",
+                      padding: "0.5rem var(--nav-pad)",
                       borderRadius: "6px",
-                      fontSize: NAV_FONT,
+                      fontSize: "var(--nav-font)",
                       fontWeight: groupActive ? 700 : 500,
                       color: groupActive || shown ? "#111" : "#555",
                       textDecoration: "none",
@@ -616,6 +617,12 @@ export default function Navbar() {
 
       <style>{`
         @media (max-width: 768px) { .show-mobile-flex { display: flex !important; } }
+        /* PC 메뉴의 글씨·좌우 여백·사이 간격 — 넓은 화면(1200px 이상)에서는 메뉴 묶음이 헤더 가운데를
+           넉넉하게 차지하도록 키운다 (묶음 폭 약 620px). 그보다 좁으면 번호·견적 버튼과 부딪혀서 작게 둔다 */
+        .nav-menu { --nav-font: 1rem; --nav-pad: 0.7rem; --nav-gap: 1rem; }
+        @media (min-width: 1200px) {
+          .nav-menu { --nav-font: 1.0625rem; --nav-pad: 1.1rem; --nav-gap: 2.1rem; }
+        }
         /* 태블릿 폭에서는 메뉴·상담 버튼만 남기고 번호는 숨긴다 */
         @media (max-width: 1024px) { .nav-tel { display: none !important; } }
         /* 드롭다운 안의 줄 — 올리면 옅은 회색 바탕 */
