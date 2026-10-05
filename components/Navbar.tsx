@@ -13,12 +13,13 @@ type NavGroup = { label: string; children: NavLink[] };
 const NAV_ITEMS: (NavLink | NavGroup)[] = [
   { href: "/about", label: "회사소개" },
   {
-    label: "WEFLOW 혜택",
+    // 묶음 이름을 누르면 맨 위 항목(왜 WEFLOW?)으로 간다 — 그래서 왜 WEFLOW? 를 첫째에 둔다
+    label: "Why?",
     children: [
-      // 묶음 이름과 겹치지 않게 '혜택 안내'로 부른다 (서비스 안내는 이 페이지로 합쳤다)
+      { href: "/difference", label: "왜 WEFLOW?" },
+      // 서비스 안내는 혜택 안내로 합쳤다
       { href: "/benefits", label: "혜택 안내" },
       { href: "/pricing", label: "가격 안내" },
-      { href: "/difference", label: "왜 WEFLOW?" },
     ],
   },
   {
@@ -91,12 +92,19 @@ export default function Navbar() {
       else return;
       lastY = y;
     };
+    // 숨겨져 있을 때 마우스를 화면 맨 위(헤더가 있던 자리)로 올리면 다시 내려온다.
+    // 그 뒤 다시 아래로 스크롤하면 위 규칙대로 숨는다
+    const onMouseMove = (e: MouseEvent) => {
+      if (e.clientY <= 72) setHidden(false);
+    };
     // 처음 한 번 — 스크롤된 채로 새로고침했을 때도 선이 바로 맞게 보이도록 다음 프레임에 맞춘다
     const raf = requestAnimationFrame(() => setAtTop(window.scrollY <= 2));
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("mousemove", onMouseMove);
     };
   }, []);
 
@@ -261,7 +269,7 @@ export default function Navbar() {
                   }}
                 >
                   {/* 묶음 이름 — 올리면 목록이 펼쳐지고, 누르면 목록의 첫 페이지로 간다
-                      (WEFLOW 혜택 → 혜택 안내, 포트폴리오 → 제작 사례). 탭 키로 들어와도 목록이 펼쳐진다 */}
+                      (Why? → 왜 WEFLOW?, 포트폴리오 → 제작 사례). 탭 키로 들어와도 목록이 펼쳐진다 */}
                   <Link
                     href={item.children[0].href}
                     aria-haspopup="true"

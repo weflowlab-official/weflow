@@ -78,7 +78,7 @@ export const makePlans: MakePlan[] = [
       "페이지 로딩 속도 최적화",
       "희망 시 관리자 페이지 제공",
     ],
-    price: "1,690,000원~",
+    price: "1,290,000원~",
     note: NOTE,
   },
   {
@@ -88,7 +88,7 @@ export const makePlans: MakePlan[] = [
     img: "/images/3d-icon/image-5.svg",
     highlight: true,
     features: SIGNATURE_FEATURES,
-    price: "2,190,000원~",
+    price: "1,690,000원~",
     note: NOTE,
   },
 ];

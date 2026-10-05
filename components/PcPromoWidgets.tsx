@@ -15,8 +15,6 @@ const TRUST_ROWS: { label: string; img?: string; Icon?: LucideIcon }[] = [
 ]
 
 const POP_HIDE_KEY = 'weflow_pc_promo_hide' // 닫으면 이번 탭(세션) 동안 안 뜸
-// 이만큼(px) 스크롤을 내려야 두 개가 나타난다 — 들어오자마자 화면을 가리지 않게
-const SHOW_AFTER = 240
 const SIDE_HIDE_KEY = 'weflow_pc_side_hide' // 신뢰 카드를 접어 두면 이번 탭 동안 접힌 채로 남는다
 
 /**
@@ -28,16 +26,12 @@ const SIDE_HIDE_KEY = 'weflow_pc_side_hide' // 신뢰 카드를 접어 두면 �
  * · 우측 하단: "30초만에 …" 상담 유도 팝업 (아래 '닫기' → 이번 탭 동안 안 뜸. X 버튼은 따로 두지 않는다)
  * 우측 하단 원형 버튼(FloatingButtons)과 겹치지 않게 팝업은 그 왼쪽에 둔다.
  *
- * 둘 다 페이지에 들어오자마자 뜨지 않고, 스크롤을 조금(SHOW_AFTER) 내렸을 때 처음 나타난다.
- * 한 번 나타난 뒤에는 다시 위로 올리거나 다른 탭으로 넘어가도 그대로 있다.
+ * 둘 다 사이트에 들어오자마자 뜬다 (닫아 둔 기록이 있으면 그대로 따른다).
  */
 export default function PcPromoWidgets() {
   const [popOpen, setPopOpen] = useState(false)
   // 회사명 카드 — pending: 접어 뒀는지 아직 모름(아무것도 안 그린다) / open: 펼침 / closed: 접힘(＋ 버튼만)
   const [side, setSide] = useState<'pending' | 'open' | 'closed'>('pending')
-  // 스크롤을 조금 내렸는지 — 그 전에는 둘 다 그리지 않는다
-  const [scrolled, setScrolled] = useState(false)
-
   // 닫아 둔 기록을 읽는다 (팝업은 닫았으면 안 띄우고, 카드는 접어 뒀으면 접힌 채로)
   useEffect(() => {
     try {
@@ -48,18 +42,6 @@ export default function PcPromoWidgets() {
       setSide('open')
       setPopOpen(true)
     }
-  }, [])
-
-  // 스크롤을 SHOW_AFTER 넘게 내리면 나타난다 — 한 번 나타나면 더 볼 필요가 없어 듣기를 끝낸다
-  useEffect(() => {
-    const onScroll = () => {
-      if (window.scrollY < SHOW_AFTER) return
-      setScrolled(true)
-      window.removeEventListener('scroll', onScroll)
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   const closePop = () => {
@@ -82,7 +64,7 @@ export default function PcPromoWidgets() {
   return (
     <>
       {/* ── 우측 가운데: 회사명 카드 + 견적 버튼, 맨 아래에 접기(✕)·펴기(＋) 버튼 ── */}
-      {scrolled && side !== 'pending' && (
+      {side !== 'pending' && (
       <div className={side === 'open' ? 'pc-side-widget' : 'pc-side-widget is-closed'}>
         {/* 접혀도 자리는 그대로 둔다(보이지만 않게) — 맨 아래 버튼이 제자리에 남는다 */}
         <div className="pc-side-widget__body" aria-hidden={side !== 'open'}>
@@ -117,7 +99,7 @@ export default function PcPromoWidgets() {
       )}
 
       {/* ── 우측 하단: 상담 유도 팝업 ── */}
-      {scrolled && popOpen && (
+      {popOpen && (
         <div className="pc-promo-pop">
           <div className="pc-promo-pop__card">
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
@@ -140,8 +122,8 @@ export default function PcPromoWidgets() {
         /* ── 우측 가운데 회사명 카드 (흰 바탕) ── */
         .pc-side-widget {
           position: fixed;
-          /* 세로 중앙 근처 — px 고정(210px)은 모니터가 클수록 위로 붙어 보였다 */
-          top: 47.5%;
+          /* 세로 가운데보다 조금 아래 — px 고정(210px)은 모니터가 클수록 위로 붙어 보였다 */
+          top: 55%;
           transform: translateY(-50%);
           right: 16px;
           z-index: 150;

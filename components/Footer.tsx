@@ -11,17 +11,17 @@ const { kakao: KAKAO_URL, blog: BLOG_URL, instagram: INSTAGRAM_URL, youtube: YOU
 
 /*
  * 링크 열 — 헤더(Navbar)의 메뉴 묶음과 같은 이름·같은 구성으로 맞춘다.
- * 헤더에서 드롭다운으로 묶인 둘(WEFLOW 혜택 · 포트폴리오)은 그대로 한 열씩,
+ * 헤더에서 드롭다운으로 묶인 둘(Why? · 포트폴리오)은 그대로 한 열씩,
  * 헤더에 낱개로 있는 것(회사소개 · 사이트 점검 · 상담 버튼)은 '바로가기' 한 열에 모은다.
  * 헤더 메뉴(Navbar 의 NAV_ITEMS)를 고치면 여기도 같이 고친다.
  */
 const LINK_COLUMNS = [
   {
-    title: 'WEFLOW 혜택',
+    title: 'Why?',
     links: [
+      { label: '왜 WEFLOW?', href: '/difference' },
       { label: '혜택 안내', href: '/benefits' },
       { label: '가격 안내', href: '/pricing' },
-      { label: '왜 WEFLOW?', href: '/difference' },
     ],
   },
   {

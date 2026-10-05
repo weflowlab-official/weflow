@@ -250,7 +250,7 @@ export default function HeroBanner() {
             className="btn-primary hero-btn btn-goldline"
             style={{ width: "min(240px, 80vw)" }}
           >
-            우리가 특별한 이유
+            왜 WEFLOW?
           </Link>
         </div>
 
