@@ -161,7 +161,7 @@ export default function DiagnosisPage() {
     // 메인과 같은 흰 바탕 — .theme-light 가 색 변수를 밝은 값으로 바꾼다 (styles/globals.css).
     <div className="theme-light" style={{ background: 'var(--section-a)' }}>
       {/* ── 본문 — PC·모바일 모두 폼만 보인다 (h1 은 폼 제목 '맞춤 견적 받기') ── */}
-      <section style={{ padding: 'clamp(2rem, 5vw, 3rem) 1.5rem' }}>
+      <section className="dg-section">
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div className="diag-grid">
 
@@ -177,7 +177,8 @@ export default function DiagnosisPage() {
                 <p className="caption-1 emphasized c-accent" style={{ letterSpacing: '0.25em', textTransform: 'uppercase', margin: 0 }}>CALL TO ACTION</p>
                 <h1 className="dg-form-title">맞춤 견적 받기</h1>
                 <p className="c-muted" style={{ margin: '0.6rem 0 0', lineHeight: 1.6, fontSize: '1.02rem', wordBreak: 'keep-all' }}>
-                  간단한 정보만 남겨주시면 확인 후 빠르게 연락드립니다.
+                  간단한 정보만 남겨주시면 <br className="br-mobile" />
+                  확인 후 빠르게 연락드립니다.
                 </p>
               </div>
 
@@ -246,7 +247,7 @@ export default function DiagnosisPage() {
                     autoCorrect="off"
                     spellCheck={false}
                     maxLength={300}
-                    placeholder="참고하고 싶은 사이트가 있다면 주소를 적어주세요."
+                    placeholder="참고할 사이트 주소를 적어주세요"
                     value={form.ref}
                     onChange={e => setForm(f => ({ ...f, ref: e.target.value }))}
                   />
@@ -330,6 +331,7 @@ export default function DiagnosisPage() {
 
       <style>{`
         /* 상담 폼은 예약 페이지(/booking)의 .booking-card 와 같은 여백·글씨 크기를 쓴다 */
+        .dg-section { padding: clamp(2rem, 5vw, 3rem) 1.5rem; }
         .dg-card {
           /* 카드도 흰색 — 바탕과 같은 색이라, 옅은 테두리와 넓게 퍼지는 그림자로 띄운다 */
           background: var(--bg);
@@ -340,6 +342,8 @@ export default function DiagnosisPage() {
           padding: 1.75rem 1.5rem;
         }
         @media (max-width: 640px) {
+          /* 좁은 화면 — 바깥 여백을 줄여 진행 방식 카드 두 장이 설 자리를 넓힌다 */
+          .dg-section { padding-left: 1rem; padding-right: 1rem; }
           .dg-card { padding: 1.35rem 1.1rem; border-radius: 12px; }
         }
         .dg-card .form-input { font-size: 1.08rem; }
@@ -430,6 +434,15 @@ export default function DiagnosisPage() {
           line-height: 1.5;
           color: var(--text-muted);
           word-break: keep-all;
+        }
+
+        /* 좁은 화면 — '시안 먼저 받기' 와 '추천' 칩이 한 줄에 서게 카드 안쪽 여백·틈·제목 글씨를 조금씩 줄인다
+           (화면 폭 360px 에서 카드 안쪽 약 117px, 제목 + 칩 약 115px) */
+        @media (max-width: 640px) {
+          .dg-modes { gap: 0.5rem; }
+          .dg-mode { padding: 0.8rem 0.65rem 0.9rem; }
+          .dg-mode__name { gap: 0.3rem; font-size: clamp(0.9rem, 4.1vw, 1.05rem); letter-spacing: -0.03em; }
+          .dg-mode__badge { padding: 1px 6px; font-size: 0.66rem; letter-spacing: 0; }
         }
 
         /* 개인정보 동의 박스 */
