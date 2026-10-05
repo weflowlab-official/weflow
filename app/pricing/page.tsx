@@ -477,6 +477,10 @@ export default function PricingPage() {
             white-space: nowrap;
           }
           .pr-price-gap { display: none; }
+          /* 플랜 이름도 한 줄로 — 가장 긴 SIGNATURE 가 칸 폭에 들어가게 좌우 여백을 걷고 글씨·자간을 조금 줄인다
+             (화면 폭 360px 에서 칸 안쪽 약 70px, SIGNATURE 약 68px) */
+          .pr-table thead th { padding-left: 2px; padding-right: 2px; }
+          .pr-th-name { font-size: min(3.5vw, 0.95rem); letter-spacing: -0.03em; white-space: nowrap; }
         }
 
         /* ── 자주 묻는 질문 — 위 섹션이 이미 아래 여백을 두므로 위 여백은 뺀다 ── */

@@ -31,7 +31,7 @@ export interface Faq {
 }
 
 /** 플랜별 시작 금액 한 줄 — /pricing 카드에 찍히는 값을 그대로 옮긴다 (금액 뒤 "~"까지 — "690,000원~") */
-const planPriceLine = makePlans.map(p => `${p.sub} ${p.price}`).join(', ')
+const planPriceLine = makePlans.map(p => `${p.sub} ${p.price}`).join(' ')
 
 export const faqs: Faq[] = [
   // 비용
