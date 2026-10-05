@@ -27,7 +27,7 @@ const FAQ_JSON_LD = {
 export default function HomeFaqSection() {
   const ref = useRef<HTMLElement>(null)
   const [shown, setShown] = useState(false)
-  const [open, setOpen] = useState(0) // 열려 있는 질문 번호 (-1 = 모두 접힘)
+  const [open, setOpen] = useState(-1) // 열려 있는 질문 번호 (-1 = 모두 접힘). 처음에는 전부 접어 둔다
 
   useEffect(() => {
     const el = ref.current
