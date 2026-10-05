@@ -292,8 +292,8 @@ export default function HeroBanner() {
           background: rgba(0, 0, 0, var(--hero-veil));
         }
 
-        /* 히어로 버튼 — 어두운 막 위라 흰 면으로 띄우고, 글씨는 금색 광택(아래 .hero-btn__label)으로 쓴다.
-           테두리에는 금색 광택(.btn-goldline, styles/globals.css)이 흐른다 */
+        /* 히어로 버튼 — 어두운 막 위라 흰 면으로 띄우고, 글씨는 금색(아래 .hero-btn__label)으로 쓴다.
+           빛이 흐르는 건 테두리뿐이다 (.btn-goldline, styles/globals.css) — 글씨는 움직이지 않는다 */
         .hero-btn {
           font-size: 1.3rem;
           border-radius: 9999px;
@@ -315,21 +315,10 @@ export default function HeroBanner() {
           box-shadow: none;
         }
 
-        /* 버튼 글씨 — 금색 광택. 흰 면 위라 헤더 견적 버튼의 글씨와 같은 중간 톤 금색을 쓴다
+        /* 버튼 글씨 — 광택 없는 한 가지 금색. 흰 면 위라 헤더 견적 버튼의 글씨와 같은 중간 톤 금색을 쓴다
            (어두운 바탕용 밝은 금색은 흰 면에서 안 읽힌다). 호버로 면이 어두워지면 흰 글씨로 바뀐다 */
-        .hero-btn__label {
-          display: inline-block;
-          background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #dcbc7c 50%, #b8914e 62%, #a8823e 100%);
-          background-size: 250% auto;
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-          animation: cGoldSheen 2.8s linear infinite;
-        }
-        .hero-btn:hover .hero-btn__label { background: none; color: #fff; }
-        @media (prefers-reduced-motion: reduce) {
-          .hero-btn__label { animation: none; }
-        }
+        .hero-btn__label { color: #ad8640; }
+        .hero-btn:hover .hero-btn__label { color: #fff; }
 
         /* 높이는 부모(.first-screen)가 정한다 — 히어로는 신뢰 밴드를 뺀 나머지를
            flex 로 받아 채운다. 여백을 8vh → 3vh 로 줄여 밴드가 올라올 자리를 만든다
