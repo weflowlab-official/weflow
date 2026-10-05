@@ -11,11 +11,41 @@ const easeOut = (t: number) => 1 - Math.pow(1 - t, 3)
 // '왜 WEFLOW일까요?' 에 대한 답 — /difference 의 긴 설명을 키워드 한 줄 + 한 문장으로 줄였다.
 // 자세한 내용은 그 페이지에 그대로 두고 마지막 버튼으로 넘긴다.
 // 답마다 왼쪽에 시연 카드(코드로 그린 화면), 오른쪽에 글이 놓인다.
-const ANSWERS = [
-  { title: '원하는 기능은 무엇이든', desc: '“안 됩니다” 대신, 필요한 기능을 직접 개발해 넣습니다.', Demo: WhyFeatureDemo },
-  { title: '검색에 잡히는 구조', desc: '페이지마다 SEO·AEO·GEO 구조를 직접 설계합니다.', Demo: WhySearchDemo },
-  { title: '모바일에서도 빠른 로딩', desc: '필요한 것만 불러오는 최신 기술로, 가볍고 빠릅니다.', Demo: WhySpeedDemo },
-  { title: '나만의 관리자 페이지', desc: '문의·예약이 한곳에 쌓이고, 내용도 직접 고칩니다.', Demo: WhyAdminDemo },
+// 02·03 은 WEFLOW 가 내세우는 낱말(SEO·AEO·GEO · 최신 기술)을 제목에 두고, 고객이 얻는 결과는 설명에 적는다
+// (메인 솔루션 카드·혜택 안내와 같은 제목)
+// (제목·설명의 줄바꿈은 정해 둔 자리다 — 쉼표 뒤, 그리고 'SEO·AEO·GEO' 뒤에서 끊는다)
+const ANSWERS: { id: string; title: React.ReactNode; desc: React.ReactNode; Demo: () => React.ReactNode }[] = [
+  { id: 'feature', title: '원하는 기능은 무엇이든', desc: '“안 됩니다” 대신, 필요한 기능을 직접 개발해 넣습니다.', Demo: WhyFeatureDemo },
+  {
+    id: 'search',
+    title: (
+      <>
+        SEO·AEO·GEO <br className="wi-br-pc" />
+        구조 설계
+      </>
+    ),
+    desc: (
+      <>
+        네이버·구글 검색과 AI 답변에 잡히도록,
+        <br />
+        구조부터 설계합니다.
+      </>
+    ),
+    Demo: WhySearchDemo,
+  },
+  {
+    id: 'speed',
+    title: '최신 기술로 제작',
+    desc: (
+      <>
+        최신 웹 기술로 처음부터 만들어,
+        <br />
+        모바일에서도 로딩이 빠릅니다.
+      </>
+    ),
+    Demo: WhySpeedDemo,
+  },
+  { id: 'admin', title: '나만의 관리자 페이지', desc: '문의·예약이 한곳에 쌓이고, 내용도 직접 고칩니다.', Demo: WhyAdminDemo },
 ]
 
 // 진행 구간 — 단위는 '화면 높이의 몇 배'. 섹션이 화면에 붙은 뒤로 스크롤한 거리 기준이다.
@@ -143,7 +173,7 @@ export default function HomeWhyIntro() {
         <div className="wi-answers">
           {ANSWERS.map((a, i) => (
             <div
-              key={a.title}
+              key={a.id}
               ref={node => {
                 answerRefs.current[i] = node
               }}
@@ -263,7 +293,9 @@ export default function HomeWhyIntro() {
           opacity: 0;
           will-change: transform, opacity;
         }
-        .wi-answer__text { max-width: 30rem; }
+        /* 글 칸의 폭을 못 박는다 — 카드와 글 묶음을 화면 가운데에 놓으므로, 폭을 글 길이에 맡기면
+           설명이 짧은 답(줄을 일찍 끊은 02·03)만 묶음이 좁아져 카드와 글의 자리가 답마다 달라진다 */
+        .wi-answer__text { flex: 0 1 30rem; min-width: 0; }
         .wi-num {
           margin: 0 0 clamp(1rem, 3vh, 1.75rem);
           font-size: clamp(0.95rem, 1.4vw, 1.15rem);
@@ -315,7 +347,9 @@ export default function HomeWhyIntro() {
         @media (max-width: 800px) {
           .wi-answer { flex-direction: column; gap: 1.75rem; text-align: center; }
           .wi-card { width: min(84vw, 420px); border-radius: 20px; }
-          .wi-answer__text { max-width: none; }
+          .wi-answer__text { flex: none; }
+          /* 넓은 화면에서만 끊는 줄바꿈 — 좁은 화면에서는 한 줄에 다 들어간다 ('SEO·AEO·GEO 구조 설계') */
+          .wi-br-pc { display: none; }
         }
 
         /* ── 맺음 장면 — 화면 한가운데에 물음 한 줄과 버튼 둘 ── */
