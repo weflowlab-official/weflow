@@ -88,7 +88,7 @@ export interface Portfolio {
 export const categoryOrder = [
   '기업/비즈니스', '쇼핑몰/결제', '인테리어', '캠핑/레저', '차량/타이어', '금융/보험',
   '의료/병원', '뷰티/미용', '학원/교육', '음식점/카페', '법률/세무', '부동산',
-  '펜션/숙박', '헬스/피트니스', '반려동물', '제조/공장', '웨딩/스튜디오', '청소/이사',
+  '펜션/숙박', '헬스/피트니스', '반려동물', '제조/공장', '웨딩/스튜디오', '이벤트/행사', '청소/이사',
 ]
 
 // 목록 페이지의 PortfolioShowcase가 그리는 실제 제작 사례 목록
@@ -1028,6 +1028,26 @@ export const portfolios: Portfolio[] = [
     desc: '홀 투어 예약 안내 웨딩홀 홈페이지',
     url: '',
     images: ['/images/cases/samples/sample-wed-1.webp'],
+    placeholder: true,
+  },
+  {
+    slug: 'sample-event-1',
+    name: 'OO이벤트',
+    category: '이벤트/행사',
+    plan: '홈페이지',
+    desc: '기업 행사 · 공연 기획과 현장 운영 대행 홈페이지',
+    url: '',
+    images: ['/images/cases/samples/sample-event-1.webp'],
+    placeholder: true,
+  },
+  {
+    slug: 'sample-event-2',
+    name: 'OO컨벤션',
+    category: '이벤트/행사',
+    plan: '홈페이지',
+    desc: '세미나 · 컨퍼런스 진행 사례와 상담 안내 홈페이지',
+    url: '',
+    images: ['/images/cases/samples/sample-event-2.webp'],
     placeholder: true,
   },
   {
