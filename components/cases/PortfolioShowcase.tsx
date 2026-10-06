@@ -192,10 +192,9 @@ export default function PortfolioShowcase({ initialCategory }: { initialCategory
             <button
               key={cat}
               onClick={() => choose(cat)}
-              className="subhead"
+              className="subhead portfolio-chip"
               style={{
                 flexShrink: 0,
-                padding: '0.4rem 1rem',
                 background: isActive ? 'var(--accent)' : 'var(--surface)',
                 border: 'none',
                 borderRadius: '9999px',
@@ -244,6 +243,23 @@ export default function PortfolioShowcase({ initialCategory }: { initialCategory
           gap: 0.4rem;
           flex-wrap: wrap;
           margin-bottom: 1.25rem;
+        }
+        .portfolio-chip { padding: 0.4rem 1rem; }
+        /* 모바일 — 한 줄에 네 개씩 같은 폭으로. 가장 긴 이름(헬스/피트니스 · 웨딩/스튜디오)이 칸에 들어가도록
+           글씨를 화면 폭에 맞춰 줄이고 좌우 여백을 거의 없앤다 (360px 폰에서 칸 폭 약 77px, 글씨 약 11px) */
+        @media (max-width: 768px) {
+          .portfolio-chips {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.4rem;
+          }
+          .portfolio-chip {
+            min-width: 0;
+            padding: 0.5rem 0.15rem;
+            font-size: min(3.1vw, 0.8rem);
+            letter-spacing: -0.02em;
+            text-align: center;
+          }
         }
         .portfolio-grid {
           display: grid;
