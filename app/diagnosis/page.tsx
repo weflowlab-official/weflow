@@ -239,7 +239,7 @@ export default function DiagnosisPage() {
                 {/* 참고 사이트 — 선택. type="url" 은 쓰지 않는다: 'naver.com' 처럼 앞머리 없이 적으면
                     브라우저가 제출을 막아 버린다 */}
                 <div className="dg-field">
-                  <label className="form-label" htmlFor="dg-ref">참고 사이트 주소</label>
+                  <label className="form-label" htmlFor="dg-ref">참고 사이트 주소 <span className="dg-optional">(선택)</span></label>
                   <input
                     id="dg-ref"
                     className="form-input"
@@ -348,6 +348,7 @@ export default function DiagnosisPage() {
       <style>{`
         /* 상담 폼은 예약 페이지(/booking)의 .booking-card 와 같은 여백·글씨 크기를 쓴다 */
         .dg-section { padding: clamp(2rem, 5vw, 3rem) 1.5rem; }
+        .dg-optional { font-weight: 400; color: var(--text-muted); }
         .dg-card {
           /* 카드도 흰색 — 바탕과 같은 색이라, 옅은 테두리와 넓게 퍼지는 그림자로 띄운다 */
           background: var(--bg);
