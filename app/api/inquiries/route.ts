@@ -2,8 +2,9 @@
 // GET: 관리자 인증 필요 (문의 목록 조회)
 // POST: 공개 — 상담 폼에서 호출
 
-import { NextResponse } from 'next/server'
+import { NextResponse, after } from 'next/server'
 import { inquiryStore } from '@/lib/store'
+import { notifyInquiry } from '@/lib/notify'
 import { isAdmin } from '@/lib/adminAuth'
 import { deviceNoteLine } from '@/lib/device'
 import { parseLead } from '@/lib/leadInput'
@@ -64,5 +65,7 @@ export async function POST(req: Request) {
     .filter(Boolean)
     .join('\n')
   const item = await inquiryStore.create({ ...lead, note: noteWithDevice })
+  // 알림 메일은 응답을 보낸 뒤에 보낸다 — Gmail 이 느리거나 실패해도 방문자는 기다리지 않는다
+  after(() => notifyInquiry(item))
   return NextResponse.json(item, { status: 201 })
 }
