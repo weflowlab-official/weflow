@@ -64,11 +64,13 @@ const DIFFERENCE_TILES: Tile[] = [
 ]
 
 const BENEFITS_TILES: Tile[] = [
-  /* 남 */ { name: '50% 특가 프로모션 — 전상품 50% 할인', img: '/images/ads/benefits-01.png' },
-  /* 흰 */ { name: '월 유지보수 무제한 — 고객 맞춤 이미지·문구 수정', img: '/images/ads/benefits-02.png' },
-  /* 남 */ { name: '무료 상담 — 연중무휴 24시간 상담', img: '/images/ads/benefits-03.png' },
+  // 01·02·03 은 2026-10-12 에 서비스 카드 01·04·05 를 옮겨 왔다 — 50% 할인·유지보수 무제한·제휴 마케팅을
+  // 더는 하지 않아서다. /service 는 /benefits 로 넘어가 서비스 카드가 검색에 나갈 일이 없어 겹치지 않는다
+  /* 남 */ { name: '희망 오픈일 맞춤 — 일정에 맞춰 완성', img: '/images/ads/benefits-01.png' },
+  /* 흰 */ { name: 'PC·모바일 최적화 — 모바일에서도 빠른 로딩', img: '/images/ads/benefits-02.png' },
+  /* 남 */ { name: 'SNS 연동 — 카카오톡·인스타 자유롭게 연결', img: '/images/ads/benefits-03.png' },
   /* 흰 */ { name: '합리적 가성비 — 필요한 기능만 부담 없이 시작', img: '/images/ads/benefits-04.png' },
-  /* 남 */ { name: '제휴 마케팅 연결 — 블로그·인스타 플레이스까지', img: '/images/ads/benefits-05.png' },
+  /* 남 */ { name: '무료 상담 — 연중무휴 24시간 상담', img: '/images/ads/benefits-05.png' },
 ]
 
 /**
