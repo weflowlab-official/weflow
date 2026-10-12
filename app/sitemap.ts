@@ -22,8 +22,10 @@ const paths: {
   priority: number
   freq: MetadataRoute.Sitemap[number]['changeFrequency']
 }[] = [
-  // 09-13: 제목을 브랜드 앞세운 형태로 교체, 설명도 제작 방식·1:1 전담 중심으로 다시 씀
-  { path: '', updated: '2026-09-13', priority: 1.0, freq: 'weekly' },
+  // 10-04~06 리뉴얼: 메인·사례·왜 WEFLOW·회사소개·사이트 점검 본문을 새로 짜고 플랜을 LANDING·BRAND·SIGNATURE 로 바꿨다.
+  // 날짜가 9월에 멈춰 있어 검색엔진이 바뀐 줄 몰랐다 — 각 페이지를 실제로 마지막에 고친 날로 올린다
+  // (10-12: /pricing 공유 이미지를 새 가격으로, /benefits 광고 카드 세 장을 지금 혜택으로 바꿨다)
+  { path: '', updated: '2026-10-06', priority: 1.0, freq: 'weekly' },
   //
   // 09-14: 아래 아홉 줄이 한꺼번에 올라간 건 배포 시각을 찍어서가 아니다.
   // 이날 검색 결과에 나가는 그림을 전 페이지에 새로 달았다 —
@@ -33,16 +35,16 @@ const paths: {
   //
   // 10-04: 서비스 안내(/service)를 WEFLOW 혜택(/benefits)으로 합쳤다 — /service 는 /benefits 로 넘어가므로
   // 목록에서 빼고, 그 자리(우선순위 0.9 · 주 단위)를 /benefits 가 이어받는다
-  { path: '/benefits', updated: '2026-10-04', priority: 0.9, freq: 'weekly' },
-  { path: '/difference', updated: '2026-09-14', priority: 0.8, freq: 'monthly' },
+  { path: '/benefits', updated: '2026-10-12', priority: 0.9, freq: 'weekly' },
+  { path: '/difference', updated: '2026-10-05', priority: 0.8, freq: 'monthly' },
   // 10-04: 랜딩페이지 섹션과 자주 묻는 질문을 내리면서 검색 설명을 본문에 맞게 다시 썼다
-  { path: '/guide', updated: '2026-10-04', priority: 0.8, freq: 'monthly' },
-  { path: '/pricing', updated: '2026-09-14', priority: 0.9, freq: 'weekly' },
-  { path: '/cases', updated: '2026-09-14', priority: 0.8, freq: 'weekly' },
-  { path: '/about', updated: '2026-09-14', priority: 0.7, freq: 'monthly' },
+  { path: '/guide', updated: '2026-10-05', priority: 0.8, freq: 'monthly' },
+  { path: '/pricing', updated: '2026-10-12', priority: 0.9, freq: 'weekly' },
+  { path: '/cases', updated: '2026-10-06', priority: 0.8, freq: 'weekly' },
+  { path: '/about', updated: '2026-10-05', priority: 0.7, freq: 'monthly' },
   // 10-04: 이름을 '무료 상담 신청'에서 '맞춤 견적 받기'로 바꾸면서 검색 제목·설명도 같이 바꿨다
-  { path: '/diagnosis', updated: '2026-10-04', priority: 0.8, freq: 'monthly' },
-  { path: '/check', updated: '2026-09-14', priority: 0.8, freq: 'monthly' },
+  { path: '/diagnosis', updated: '2026-10-06', priority: 0.8, freq: 'monthly' },
+  { path: '/check', updated: '2026-10-04', priority: 0.8, freq: 'monthly' },
   // /booking 은 메뉴에서 내리면서 검색 노출도 뺐다 — 페이지는 주소로만 접근 가능
 ]
 
