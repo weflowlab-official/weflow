@@ -97,9 +97,10 @@ export default function ScrollPhotoList({
           <div className="spl-shots">
             {items.map((it, i) => (
               <div key={it.key} className={i === active ? "spl-shot is-on" : "spl-shot"}>
+                {/* 판은 aria-hidden 이라 낭독기에는 안 읽힌다 — 빈 alt 는 네이버 진단이 누락으로 잡아 목록과 같은 설명을 넣는다 */}
                 <Image
                   src={it.img}
-                  alt=""
+                  alt={it.alt}
                   fill
                   sizes="(max-width: 860px) 1px, 520px"
                   style={{ objectFit: fit }}

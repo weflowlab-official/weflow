@@ -67,7 +67,7 @@ export default function PlanCard({
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
         <Image
           src={icon}
-          alt=""
+          alt={`${title} 아이콘`}
           width={48}
           height={48}
           style={{ width: 48, height: 48, objectFit: 'contain' }}

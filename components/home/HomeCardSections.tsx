@@ -320,7 +320,7 @@ function CardSection({
                 <span className="hs-photo">
                   <Image
                     src={img}
-                    alt=""
+                    alt={title}
                     fill
                     sizes="(max-width: 600px) 100vw, 430px"
                     style={

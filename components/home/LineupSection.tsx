@@ -76,7 +76,7 @@ export default function LineupSection() {
               src={it.img}
               srcSet={`${it.img.replace('.webp', '-720.webp')} 720w, ${it.img} 1588w`}
               sizes="(max-width: 1024px) 50vw, 60vw"
-              alt=""
+              alt={it.name}
               loading="lazy"
               decoding="async"
               className="lineup-img"
@@ -109,7 +109,7 @@ export default function LineupSection() {
               src={it.img}
               srcSet={`${it.img.replace('.webp', '-720.webp')} 720w, ${it.img} 1588w`}
               sizes="50vw"
-              alt=""
+              alt={it.name}
               loading="lazy"
               decoding="async"
               className="lineup-img"

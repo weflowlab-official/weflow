@@ -167,9 +167,11 @@ export default function BenefitDetails() {
             <div className="bd-shots">
               {BENEFITS.map((b, i) => (
                 <div key={b.title} className={i === active ? "bd-shot is-on" : "bd-shot"}>
+                  {/* 판 전체가 aria-hidden 이라 낭독기에는 어차피 안 읽힌다 — 그래도 빈 alt 는 네이버
+                      사이트 진단이 'Alt 속성 누락'으로 잡아서 오른쪽 목록과 같은 제목을 넣어 둔다 */}
                   <Image
                     src={b.img}
-                    alt=""
+                    alt={b.title}
                     fill
                     sizes="(max-width: 860px) 1px, 520px"
                     style={{ objectFit: "cover" }}
