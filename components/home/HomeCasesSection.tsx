@@ -337,6 +337,16 @@ export default function HomeCasesSection() {
         .hc-card.is-in:hover .hc-shots { transform: scale(1.045); }
         .hc-shot { position: relative; display: block; flex: 1 1 0; min-height: 0; }
 
+        /* ── PC — 첫째와 셋째 카드의 자리를 바꾼다 (한가운데 오는 셋째 카드를 눈에 띄는 것으로).
+              모바일은 옆으로 넘기는 순서라 데이터 순서 그대로 둔다 ── */
+        @media (min-width: 701px) {
+          .hc-card:nth-child(1) { order: 3; }
+          .hc-card:nth-child(2) { order: 2; }
+          .hc-card:nth-child(3) { order: 1; }
+          .hc-card:nth-child(4) { order: 4; }
+          .hc-card:nth-child(5) { order: 5; }
+        }
+
         /* ── 모바일 — 손가락으로 옆으로 넘긴다. 첫 카드는 왼쪽 여백(1.25rem)만 두고 붙어서 시작한다 ── */
         @media (max-width: 700px) {
           .hc-pin {
