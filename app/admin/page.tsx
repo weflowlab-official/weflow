@@ -1706,6 +1706,7 @@ const PAGE_KO: Record<string, string> = {
   "/booking": "예약",
   "/cases": "제작 사례",
   "/check": "사이트 점검",
+  "/clinic-blog": "병·의원 웹블로그",
   "/diagnosis": "무료 상담",
   "/difference": "왜 WEFLOW?",
   "/guide": "제작 라인업",

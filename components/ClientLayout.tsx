@@ -10,12 +10,15 @@ import ScrollRestorer from './ScrollRestorer'
 /**
  * 모든 페이지를 감싸는 공통 껍데기 — 헤더 · 본문 · 푸터 · 하단 바.
  * 관리자(/admin)는 이 껍데기 없이 본문만 그린다.
+ * 병·의원 블로그 홍보 페이지(/clinic-blog)도 메인 사이트와 이어지지 않는 단독 페이지라 껍데기를 뺀다.
  */
+const BARE_PATHS = ['/admin', '/clinic-blog']
+
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isAdmin = pathname.startsWith('/admin')
+  const isBare = BARE_PATHS.some(p => pathname.startsWith(p))
 
-  if (isAdmin) {
+  if (isBare) {
     return <>{children}</>
   }
 
