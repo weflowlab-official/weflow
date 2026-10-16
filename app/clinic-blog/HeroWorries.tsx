@@ -34,6 +34,7 @@ const SLOT_DEPTH = [1, 0.6, 1.4, 0.8, 1.2, 0.7]
 
 type Bubble = { id: number; msg: number; phase: 'typing' | 'shown' | 'out' }
 
+/** 말풍선에 붙는 시각 — 방금 온 메시지처럼 지금 시각을 쓴다 */
 function now() {
   const d = new Date()
   const h = d.getHours()
@@ -186,20 +187,20 @@ export default function HeroWorries() {
         @keyframes hwFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
         /* 말풍선 — 이름·시간이 붙은 메신저 모양. 오른쪽 자리는 꼬리를 오른쪽에 */
-        .hw-bubble { width: max-content; max-width: 320px; background: #fff; border: 1px solid #e9ebef; border-radius: 22px; border-bottom-left-radius: 8px; padding: 14px 18px 16px; box-shadow: 0 16px 40px rgba(17,20,24,.08); text-align: left; animation: hwPop .55s cubic-bezier(.34,1.56,.64,1) both; transform-origin: 0 100%; }
-        .hw-s1 .hw-bubble, .hw-s3 .hw-bubble, .hw-s5 .hw-bubble, .is-right .hw-bubble { border-bottom-left-radius: 22px; border-bottom-right-radius: 8px; transform-origin: 100% 100%; }
+        .hw-bubble { width: max-content; max-width: 270px; background: #fff; border: 1px solid #e9ebef; border-radius: 20px; border-bottom-left-radius: 7px; padding: 11px 15px 13px; box-shadow: 0 16px 40px rgba(17,20,24,.08); text-align: left; animation: hwPop .55s cubic-bezier(.34,1.56,.64,1) both; transform-origin: 0 100%; }
+        .hw-s1 .hw-bubble, .hw-s3 .hw-bubble, .hw-s5 .hw-bubble, .is-right .hw-bubble { border-bottom-left-radius: 20px; border-bottom-right-radius: 7px; transform-origin: 100% 100%; }
         .hw-bubble.is-out { animation: hwOut .35s ease-in both; }
         @keyframes hwPop { from { opacity: 0; transform: translateY(14px) scale(.7); } to { opacity: 1; transform: none; } }
         @keyframes hwOut { to { opacity: 0; transform: translateY(-10px) scale(.9); } }
-        .hw-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-        .hw-avatar { width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: .66rem; font-weight: 800; }
+        .hw-head { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+        .hw-avatar { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: .6rem; font-weight: 800; }
         .hw-dr .hw-avatar { background: #e6eefc; color: #1f63d6; }
         .hw-mg .hw-avatar { background: #eef0f3; color: #4b5360; }
         .hw-pt .hw-avatar { background: #def5ee; color: #0f8a6c; }
-        .hw-head b { font-size: .9rem; color: #111418; }
-        .hw-head time { font-size: .78rem; color: #9aa1ac; margin-left: auto; padding-left: 12px; }
-        .hw-bubble p { margin: 0; font-size: 1.12rem; font-weight: 600; line-height: 1.45; color: #111418; letter-spacing: -0.01em; }
-        .hw-typing { display: inline-flex; gap: 6px; padding: 16px 20px; }
+        .hw-head b { font-size: .82rem; color: #111418; }
+        .hw-head time { font-size: .72rem; color: #9aa1ac; margin-left: auto; padding-left: 12px; }
+        .hw-bubble p { margin: 0; font-size: 1rem; font-weight: 600; line-height: 1.45; color: #111418; letter-spacing: -0.01em; }
+        .hw-typing { display: inline-flex; gap: 6px; padding: 14px 18px; }
         .hw-typing i { width: 8px; height: 8px; border-radius: 50%; background: #b4bac4; animation: hwDot 1s ease-in-out infinite; }
         .hw-typing i:nth-child(2) { animation-delay: .15s; }
         .hw-typing i:nth-child(3) { animation-delay: .3s; }

@@ -206,8 +206,8 @@ function ReserveDemo() {
 }
 
 const ANSWERS = [
-  { id: 'search', title: 'SEO·AEO·GEO\n구조 설계', desc: '네이버·구글은 물론 AI 답변에서도,\n우리 병원 글이 출처로 인용되도록 구조부터 설계합니다.', Demo: SearchDemo },
-  { id: 'own', title: '글이 병원 자산으로\n남아요', desc: '빌린 블로그가 아니라 병원 주소 아래에 쌓여,\n플랫폼 정책이 바뀌어도 그대로예요.', Demo: OwnDemo },
+  { id: 'search', title: 'SEO·AEO·GEO\n구조 설계', desc: <>네이버·구글은 물론 AI 답변에서도,{'\n'}우리 병원 글이 출처로 인용되도록<br className="bwy-mo" /> 구조부터 설계합니다.</>, Demo: SearchDemo },
+  { id: 'own', title: '글이 병원 자산으로\n남아요', desc: '빌린 블로그가 아니라 병원 주소 아래에 쌓여,\n플랫폼 정책이 바뀌어도 그대로 남습니다.', Demo: OwnDemo },
   { id: 'category', title: '진료과목별로\n정리돼요', desc: '환자가 검색하는 말 그대로 나눠,\n관련 글을 이어서 읽게 합니다.', Demo: CategoryDemo },
   { id: 'reserve', title: '읽다가 바로\n홈페이지로 이어져요', desc: '글마다 병원 홈페이지로 가는 버튼이 붙어,\n마음먹은 순간을 놓치지 않습니다.', Demo: ReserveDemo },
 ]
@@ -354,7 +354,7 @@ export default function BlogWhy() {
               </li>
             ))}
           </ul>
-          <a href="#contact" className="bwy-btn">
+          <a href="#contact-form" className="bwy-btn">
             무료 상담 신청 <ArrowRight size={20} />
           </a>
         </div>
@@ -365,7 +365,7 @@ export default function BlogWhy() {
         .bwy-pin { position: sticky; top: 0; height: 100svh; overflow: hidden; background: #fff; color: #111418; }
 
         /* ── 질문 ── */
-        .bwy-ask { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; will-change: transform, opacity; }
+        .bwy-ask { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 8vh; /* 화면 정가운데보다 살짝 위 */ will-change: transform, opacity; }
         .bwy-eyebrow { margin: 0 0 clamp(1.25rem, 3.5vh, 2.25rem); font-size: clamp(.8rem, 1.1vw, .92rem); font-weight: 700; letter-spacing: .26em; color: #1f63d6; opacity: var(--bw-x, 0); }
         .bwy-title { margin: 0; font-size: clamp(1.95rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.25; text-align: center; }
         .bwy-line { display: block; white-space: nowrap; will-change: transform; }
@@ -385,7 +385,11 @@ export default function BlogWhy() {
 
         /* 파스텔 하늘색 카드 — 창은 위·왼쪽만 띄우고 오른쪽·아래는 카드 끝까지 붙인다 (메인 카드와 같은 모양) */
         .bwy-card { position: relative; flex: none; width: min(46vw, 540px); aspect-ratio: 1 / .78; border-radius: 28px; overflow: hidden; background: linear-gradient(135deg, #e3f0ff 0%, #b4d6fa 100%); container-type: inline-size; }
+        @media (min-width: 801px) { .bwy-mo { display: none; } }
         @media (max-width: 800px) {
+          /* 휴대폰은 화면이 길어 가운데에 두면 아래로 처져 보인다 — 질문·답 모두 위로 올린다 */
+          .bwy-ask { padding-bottom: 16vh; }
+          .bwy-answer { padding-bottom: 12vh; }
           .bwy-answer { flex-direction: column; gap: 1.75rem; text-align: center; }
           .bwy-card { width: min(86vw, 420px); border-radius: 20px; }
           .bwy-text { flex: none; }
@@ -402,8 +406,10 @@ export default function BlogWhy() {
         .bwy-end-title { margin: 0; font-size: clamp(2rem, 4.6vw, 3.6rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.2; }
         .bwy-end-title span { color: #e3f0ff; }
         .bwy-end-desc { margin: clamp(1rem, 2.6vh, 1.5rem) 0 0; font-size: clamp(1rem, 1.5vw, 1.15rem); color: rgba(255,255,255,.9); }
-        .bwy-end-chips { list-style: none; padding: 0; margin: clamp(1.5rem, 4vh, 2.5rem) 0 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 640px; }
-        .bwy-end-chips li { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 999px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); font-weight: 700; font-size: .98rem; opacity: 0; transform: translateY(10px) scale(.85); transition: opacity .35s ease, transform .5s cubic-bezier(.34,1.56,.64,1); transition-delay: calc(var(--i) * .12s); }
+        /* 칩 네 개를 같은 폭으로 — 같은 크기 칸 격자라 가장 긴 문구 폭에 나머지가 맞춰진다 (좁은 화면은 2×2) */
+        .bwy-end-chips { list-style: none; padding: 0; margin: clamp(1.5rem, 4vh, 2.5rem) 0 0; display: inline-grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        @media (max-width: 760px) { .bwy-end-chips { grid-template-columns: repeat(2, 1fr); } }
+        .bwy-end-chips li { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 16px; white-space: nowrap; border-radius: 999px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); font-weight: 700; font-size: .98rem; opacity: 0; transform: translateY(10px) scale(.85); transition: opacity .35s ease, transform .5s cubic-bezier(.34,1.56,.64,1); transition-delay: calc(var(--i) * .12s); }
         .bwy-end-chips svg { color: #8ff0c8; }
         .bwy.is-end .bwy-end-chips li { opacity: 1; transform: none; }
         .bwy-btn { display: inline-flex; align-items: center; gap: 10px; margin-top: clamp(1.75rem, 5vh, 3rem); background: #fff; color: #1f63d6; font-weight: 800; font-size: clamp(1rem, 1.4vw, 1.1rem); padding: 18px 34px; border-radius: 999px; text-decoration: none; box-shadow: 0 14px 34px rgba(20,60,130,.25); transition: transform .2s, box-shadow .2s; }

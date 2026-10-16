@@ -59,7 +59,7 @@ export default function ClinicHeader() {
             <a key={m.href} href={m.href}>{m.label}</a>
           ))}
         </nav>
-        <a href="#contact" className="cb-top-btn">
+        <a href="#contact-form" className="cb-top-btn">
           무료 상담 신청 <ArrowRight size={15} />
         </a>
       </div>

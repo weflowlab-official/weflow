@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react'
-import { CheckCircle2 } from 'lucide-react'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
 import { attributionLine } from '@/lib/attribution'
@@ -77,16 +76,31 @@ export default function InquiryForm() {
 
   if (done) {
     return (
-      <div className="cb-done" role="status">
-        <CheckCircle2 size={44} />
-        <h3>상담 신청이 접수되었습니다</h3>
-        <p>확인 후 남겨 주신 연락처로 빠르게 연락드리겠습니다.</p>
+      <div id="contact-form" className="cb-done" role="status">
+        {/* 파란 동그라미가 톡 튀어나오고, 그 위에 체크가 그려진다 */}
+        <div className="cb-done-check" aria-hidden="true">
+          <svg viewBox="0 0 76 76">
+            <circle cx="38" cy="38" r="38" />
+            <path d="M24 39l9 9 19-19" />
+          </svg>
+        </div>
+        <h3>{name.trim()}님, 신청이 접수됐어요</h3>
+        <p>
+          남겨 주신 연락처로<br />
+          담당자가 확인 후 직접 연락드릴게요.
+        </p>
+        {/* 지금 어디쯤인지 — 신청은 끝났고, 다음은 담당자 연락 */}
+        <ol className="cb-done-steps">
+          <li className="is-done"><b>✓</b>신청 완료</li>
+          <li className="is-now"><b>2</b>담당자 연락</li>
+          <li><b>3</b>맞춤 구성 안내</li>
+        </ol>
       </div>
     )
   }
 
   return (
-    <form className="cb-form" onSubmit={onSubmit} noValidate>
+    <form id="contact-form" className="cb-form" onSubmit={onSubmit} noValidate>
       <HoneypotField value={honeypot} onChange={setHoneypot} />
       <div className="cb-form-head cb-full">
         <strong>무료 상담 신청</strong>

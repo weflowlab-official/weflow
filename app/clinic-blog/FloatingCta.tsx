@@ -31,7 +31,7 @@ export default function FloatingCta() {
 
   return (
     <a
-      href="#contact"
+      href="#contact-form"
       className={`fc ${show ? 'is-on' : ''}`}
       aria-label="무료 상담 신청"
       title="무료 상담 신청"
