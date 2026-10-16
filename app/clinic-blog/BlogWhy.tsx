@@ -207,9 +207,9 @@ function ReserveDemo() {
 
 const ANSWERS = [
   { id: 'search', title: 'SEO·AEO·GEO\n구조 설계', desc: <>네이버·구글은 물론 AI 답변에서도,{'\n'}우리 병원 글이 출처로 인용되도록<br className="bwy-mo" /> 구조부터 설계합니다.</>, Demo: SearchDemo },
-  { id: 'own', title: '글이 병원 자산으로\n남아요', desc: '빌린 블로그가 아니라 병원 주소 아래에 쌓여,\n플랫폼 정책이 바뀌어도 그대로 남습니다.', Demo: OwnDemo },
-  { id: 'category', title: '진료과목별로\n정리돼요', desc: '환자가 검색하는 말 그대로 나눠,\n관련 글을 이어서 읽게 합니다.', Demo: CategoryDemo },
-  { id: 'reserve', title: '읽다가 바로\n홈페이지로 이어져요', desc: '글마다 병원 홈페이지로 가는 버튼이 붙어,\n마음먹은 순간을 놓치지 않습니다.', Demo: ReserveDemo },
+  { id: 'own', title: '병원 자산으로\n남는 글', desc: '빌린 블로그가 아니라 병원 주소 아래에 쌓여,\n플랫폼 정책이 바뀌어도 그대로 남습니다.', Demo: OwnDemo },
+  { id: 'category', title: '진료과목별\n카테고리 정리', desc: '환자가 검색하는 말 그대로 나눠,\n관련 글을 이어서 읽게 합니다.', Demo: CategoryDemo },
+  { id: 'reserve', title: '읽다가 바로\n홈페이지로 연결', desc: '글마다 병원 홈페이지로 가는 버튼이 붙어,\n마음먹은 순간을 놓치지 않습니다.', Demo: ReserveDemo },
 ]
 
 // 진행 구간 — 단위는 '화면 높이의 몇 배'. 섹션이 화면에 붙은 뒤로 스크롤한 거리 기준이다.
@@ -388,8 +388,8 @@ export default function BlogWhy() {
         @media (min-width: 801px) { .bwy-mo { display: none; } }
         @media (max-width: 800px) {
           /* 휴대폰은 화면이 길어 가운데에 두면 아래로 처져 보인다 — 질문·답 모두 위로 올린다 */
-          .bwy-ask { padding-bottom: 16vh; }
-          .bwy-answer { padding-bottom: 12vh; }
+          .bwy-ask { padding-bottom: 11vh; } /* 8vh 는 처져 보였고 16vh 는 너무 올라갔다 */
+          .bwy-answer { padding-bottom: 5vh; } /* 0 은 처져 보였고 12vh 는 너무 올라갔다 */
           .bwy-answer { flex-direction: column; gap: 1.75rem; text-align: center; }
           .bwy-card { width: min(86vw, 420px); border-radius: 20px; }
           .bwy-text { flex: none; }
