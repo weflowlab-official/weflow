@@ -387,11 +387,10 @@ export default function BlogWhy() {
         .bwy-card { position: relative; flex: none; width: min(46vw, 540px); aspect-ratio: 1 / .78; border-radius: 28px; overflow: hidden; background: linear-gradient(135deg, #e3f0ff 0%, #b4d6fa 100%); container-type: inline-size; }
         @media (min-width: 801px) { .bwy-mo { display: none; } }
         @media (max-width: 800px) {
-          /* 휴대폰은 화면이 길어 가운데에 두면 아래로 처져 보인다 — 질문·답 모두 위로 올린다 */
-          .bwy-ask { padding-bottom: 11vh; } /* 8vh 는 처져 보였고 16vh 는 너무 올라갔다 */
-          .bwy-answer { padding-bottom: 5vh; } /* 0 은 처져 보였고 12vh 는 너무 올라갔다 */
+          /* 휴대폰 위치는 메인의 '왜 WEFLOW?'(components/home/HomeWhyIntro.tsx) 와 똑같이 — 질문·답 모두 화면 정가운데 */
+          .bwy-ask { padding-bottom: 0; }
           .bwy-answer { flex-direction: column; gap: 1.75rem; text-align: center; }
-          .bwy-card { width: min(86vw, 420px); border-radius: 20px; }
+          .bwy-card { width: min(84vw, 420px); border-radius: 20px; }
           .bwy-text { flex: none; }
           .bwy-answer-title { white-space: normal; }
         }

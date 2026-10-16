@@ -549,8 +549,8 @@ export default function ClinicBlogPage() {
         @keyframes cbDonePop { from { transform: scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
         @keyframes cbDoneDraw { to { stroke-dashoffset: 0; } }
         @keyframes cbDoneRing { from { box-shadow: 0 0 0 0 rgba(31,99,214,.35); } to { box-shadow: 0 0 0 22px rgba(31,99,214,0); } }
-        .cb-done h3 { position: relative; margin: 24px 0 10px; font-size: 1.45rem; letter-spacing: -0.03em; }
-        .cb-done > p { position: relative; color: var(--cb-sub); margin: 0; line-height: 1.7; }
+        .cb-done h3 { position: relative; margin: 24px 0 10px; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; }
+        .cb-done > p { position: relative; color: #3a414c; font-weight: 500; margin: 0; line-height: 1.7; }
         .cb-done-steps { position: relative; list-style: none; padding: 0; margin: 32px auto 0; max-width: 420px; display: grid; grid-template-columns: repeat(3, 1fr); }
         .cb-done-steps::before { content: ''; position: absolute; top: 15px; left: 16.6%; right: 16.6%; height: 2px; background: linear-gradient(90deg, #1f63d6 0 50%, #e3e7ed 50% 100%); }
         .cb-done-steps li { position: relative; display: grid; justify-items: center; gap: 8px; font-size: .85rem; font-weight: 700; color: var(--cb-muted); }
