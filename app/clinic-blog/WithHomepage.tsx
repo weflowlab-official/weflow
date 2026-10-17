@@ -183,7 +183,8 @@ export default function WithHomepage() {
         /* 환자가 지나가는 길 */
         .ch-flow { position: relative; max-width: 960px; margin: 84px auto 0; }
         .ch-steps { position: relative; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
-        .ch-steps li { position: relative; display: grid; justify-items: center; gap: 6px; opacity: .35; transition: opacity .4s ease; transition-delay: calc(var(--i) * .45s); }
+        /* align-content: start — 설명이 두 줄인 칸(홈페이지)만 아이콘·이름이 위로 떠 보이지 않게, 네 칸 모두 위에서부터 같은 선으로 쌓는다 */
+        .ch-steps li { position: relative; display: grid; align-content: start; justify-items: center; gap: 6px; opacity: .35; transition: opacity .4s ease; transition-delay: calc(var(--i) * .45s); }
         .ch-flow.is-in .ch-steps li { opacity: 1; }
         .ch-node { position: relative; z-index: 1; width: 64px; height: 64px; border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; background: #f3f5f8; color: #8a919c; margin-bottom: 8px; transition: background .4s ease, color .4s ease, box-shadow .4s ease; transition-delay: calc(var(--i) * .45s); }
         .ch-flow.is-in .ch-node { background: #1f63d6; color: #fff; box-shadow: 0 12px 28px rgba(31,99,214,.25); }
