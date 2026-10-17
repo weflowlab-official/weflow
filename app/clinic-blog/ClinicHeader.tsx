@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { ArrowRight, Menu, X, ClipboardList, Phone } from 'lucide-react'
 
 /**
- * 병·의원 블로그 페이지 상단 띠 — 브랜드와 상담 버튼만 있고, 메인 사이트로 가는 링크는 두지 않는다.
+ * 병의원 블로그 페이지 상단 띠 — 브랜드와 상담 버튼만 있고, 메인 사이트로 가는 링크는 두지 않는다.
  * 첫 화면에서는 투명하게 두어 제목에 시선이 가게 하고, 조금이라도 내리면 흰 바탕과 아래 선을 깐다.
  * 가운데 메뉴는 페이지 안의 섹션(id)으로만 이동한다 — 넓은 화면에서만 보인다.
  * 좁은 화면에서는 상담 버튼 오른쪽에 햄버거 버튼을 두고, 누르면 오른쪽에서 메뉴 판이 밀려 나온다
@@ -37,7 +37,7 @@ function Brand({ onClick }: { onClick?: () => void }) {
       <Image src="/logo.png" alt="" width={28} height={28} style={{ filter: 'brightness(0)' }} />
       WEFLOW
       <i className="cb-brand-sep" aria-hidden="true" />
-      <span className="cb-brand-sub">병·의원 웹블로그</span>
+      <span className="cb-brand-sub">병의원 웹블로그</span>
     </a>
   )
 }

@@ -11,7 +11,7 @@ import FloatingCta from './FloatingCta'
 import WithHomepage from './WithHomepage'
 
 /**
- * 병·의원 전용 웹블로그 홍보 페이지 — /clinic-blog
+ * 병의원 전용 웹블로그 홍보 페이지 — /clinic-blog
  *
  * 광고·제안서에서 링크로만 들어오는 단독 페이지다. 메인 사이트와 섞이지 않게
  * 헤더·푸터·플로팅 버튼을 빼고(components/ClientLayout.tsx), 메뉴·사이트맵에도 넣지 않는다.
@@ -25,12 +25,12 @@ import WithHomepage from './WithHomepage'
  */
 
 export const metadata: Metadata = {
-  title: '병·의원 웹블로그 · 홈페이지 제작 · WEFLOW',
+  title: '병의원 웹블로그 · 홈페이지 제작 · WEFLOW',
   description:
     '진료과목별로 정리되고 예약으로 이어지는 병원 전용 웹블로그와 홈페이지를 만들어 드립니다. 웹블로그만, 홈페이지만, 또는 함께 — 네이버·구글·AI 검색 노출까지 설계합니다.',
   alternates: { canonical: '/clinic-blog' },
   openGraph: {
-    title: '병·의원 웹블로그 · 홈페이지 제작 · WEFLOW',
+    title: '병의원 웹블로그 · 홈페이지 제작 · WEFLOW',
     description: '블로그 글은 쌓이는데 예약은 그대로라면. 예약으로 이어지는 병원 전용 웹블로그 · 홈페이지 제작.',
     url: '/clinic-blog',
     // openGraph 를 정의하면 루트의 것을 통째로 덮어쓴다 — 이미지도 여기서 다시 지정해야 한다
@@ -123,7 +123,7 @@ export default function ClinicBlogPage() {
         {/* 제목 둘레에서 고민 메시지가 계속 오간다 (좁은 화면에서는 말풍선 없이 궤도·모눈만) */}
         <HeroWorries />
         <div className="cb-wrap cb-hero-inner">
-          <p className="cb-tag">병·의원 웹블로그 · 홈페이지 제작</p>
+          <p className="cb-tag">병의원 웹블로그 · 홈페이지 제작</p>
           <h1 className="cb-h1">
             블로그 글은 쌓이는데<br />
             <span className="cb-mark">예약은 그대로</span>라면

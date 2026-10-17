@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 
 /**
- * 병·의원 웹블로그 페이지의 자주 묻는 질문 — 메인의 자주 묻는 질문(components/home/HomeFaqSection.tsx)과 같은 모양이다.
+ * 병의원 웹블로그 페이지의 자주 묻는 질문 — 메인의 자주 묻는 질문(components/home/HomeFaqSection.tsx)과 같은 모양이다.
  * 왼쪽에 제목과 '찾으시는 질문이 없나요?' + 상담 버튼, 오른쪽에 선으로만 나눈 질문 목록.
  *
  * 질문을 누르면 답이 부드럽게 펼쳐지고, 한 번에 하나만 열린다. 열리면 + 가 45° 돌아 × 가 된다.

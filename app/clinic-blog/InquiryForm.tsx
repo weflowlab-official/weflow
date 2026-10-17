@@ -8,8 +8,8 @@ import { formatPhone, isValidPhone } from '@/lib/phone'
 import { PLAN_EVENT } from './PlanButton'
 
 /**
- * 병·의원 웹블로그 상담 신청 폼 — 일반 문의와 같은 /api/inquiries 로 보낸다.
- * 관리자 화면에서 구분되도록 type 을 '병·의원 웹블로그', source 를 'clinic-blog' 로 남기고,
+ * 병의원 웹블로그 상담 신청 폼 — 일반 문의와 같은 /api/inquiries 로 보낸다.
+ * 관리자 화면에서 구분되도록 type 을 '병의원 웹블로그', source 를 'clinic-blog' 로 남기고,
  * 진료과목은 업종(industry) 칸에, 문의 유형(웹블로그 + 홈페이지 / 웹블로그만 / 홈페이지만 / 상담 후 결정)은 메모 첫 줄에 넣는다.
  * 문의 유형은 상품 카드의 '이걸로 상담받기' 를 누르면 미리 골라진다 (PlanButton 이 보내는 신호를 듣는다).
  */
@@ -63,7 +63,7 @@ export default function InquiryForm() {
         body: JSON.stringify({
           name: name.trim(),
           phone,
-          type: '병·의원 웹블로그',
+          type: '병의원 웹블로그',
           industry: specialty,
           note: [
             plan && `문의 유형: ${plan}`,

@@ -372,13 +372,15 @@ export default function BlogWhy() {
 
       // 4) 맺음 — 가운데서 파란 원이 퍼져 화면을 덮고, 그 위로 문구가 올라온다.
       //    원이 거의 다 찬 뒤(.is-end)에 장점 칩이 하나씩 튀어나온다. 다 보이기 전에는 버튼이 눌리지 않게 한다
-      const bg = easeOut(clamp01((p - END_FROM) / (ANS_LEN * ANS_IN)))
+      // 맺음은 답 하나가 들어오는 것과 비슷한 짧은 거리 안에 다 보이게 한다 — 예전엔 원이 다 찬 뒤에야 글이 올라와 한참 내려야 했다
+      const END_IN = ANS_LEN * ANS_IN * 0.8
+      const bg = easeOut(clamp01((p - END_FROM) / END_IN))
       endBg.style.clipPath = `circle(${(bg * 150).toFixed(2)}vmax at 50% 50%)`
-      const fin = easeOut(clamp01((p - END_FROM - ANS_LEN * ANS_IN * 0.45) / (ANS_LEN * ANS_IN)))
+      const fin = easeOut(clamp01((p - END_FROM - END_IN * 0.25) / END_IN))
       end.style.opacity = String(fin)
       end.style.transform = `translate3d(0, ${(1 - fin) * 44}px, 0) scale(${(0.94 + fin * 0.06).toFixed(4)})`
       end.style.pointerEvents = fin > 0.6 ? 'auto' : 'none'
-      el.classList.toggle('is-end', fin > 0.85)
+      el.classList.toggle('is-end', fin > 0.6)
     }
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update)
