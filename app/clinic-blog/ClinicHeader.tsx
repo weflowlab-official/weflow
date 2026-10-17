@@ -8,7 +8,7 @@ import { ArrowRight, Menu, X, ClipboardList, Phone } from 'lucide-react'
  * 첫 화면에서는 투명하게 두어 제목에 시선이 가게 하고, 조금이라도 내리면 흰 바탕과 아래 선을 깐다.
  * 가운데 메뉴는 페이지 안의 섹션(id)으로만 이동한다 — 넓은 화면에서만 보인다.
  * 좁은 화면에서는 상담 버튼 오른쪽에 햄버거 버튼을 두고, 누르면 오른쪽에서 메뉴 판이 밀려 나온다
- * (메인 사이트 모바일 메뉴와 같은 구성 — 위에 로고·닫기, 가운데 메뉴, 아래 무료 상담 버튼).
+ * (메인 사이트 모바일 메뉴와 같은 구성 — 위에 로고·닫기, 가운데 메뉴, 아래 바로 전화 · 무료 견적 신청 버튼).
  */
 /** 대표 번호 — 메인 헤더(components/Navbar.tsx)와 같은 번호 */
 const TEL = '010-2971-7280'
@@ -116,6 +116,9 @@ export default function ClinicHeader() {
           ))}
         </nav>
         <div className="cb-drawer-foot">
+          <a href={`tel:${TEL}`} className="cb-drawer-btn cb-drawer-btn--tel" tabIndex={open ? 0 : -1}>
+            <Phone size={19} fill="currentColor" /> 바로 전화
+          </a>
           <a href="#contact-form" className="cb-drawer-btn cb-drawer-btn--fill" onClick={close} tabIndex={open ? 0 : -1}>
             <ClipboardList size={19} /> 무료 견적 신청
           </a>
@@ -152,6 +155,7 @@ export default function ClinicHeader() {
         .cb-drawer-foot { display: grid; gap: 10px; padding: 18px 20px max(22px, env(safe-area-inset-bottom)); border-top: 1px solid #e9ebef; }
         .cb-drawer-btn { display: flex; align-items: center; justify-content: center; gap: 8px; height: 56px; border-radius: 16px; border: 1.5px solid #d5d9df; color: #111418; font-size: 1.05rem; font-weight: 700; text-decoration: none; }
         .cb-drawer-btn--fill { background: #1f63d6; border-color: #1f63d6; color: #fff; }
+        .cb-drawer-btn--tel svg { color: #16a34a; } /* 하단 바 '바로 전화' 와 같은 초록 수화기 */
         @media (prefers-reduced-motion: reduce) { .cb-drawer, .cb-drawer.is-open, .cb-drawer-dim { transition: none; } }
       `}</style>
     </>
