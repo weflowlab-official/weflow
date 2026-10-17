@@ -712,7 +712,7 @@ export default function BlogWhy() {
         .bw-adm-area .bw-line { height: .5em; }
         .bw-adm-l1, .bw-adm-l2, .bw-adm-l3 { transform: scaleX(0); transform-origin: left; }
         /* 사진 고르기 — 단색 사진 세 장. 고르면 파란 테두리와 오른쪽 위 순서 번호가 톡 붙는다 */
-        .bw-adm-photos { display: flex; gap: .45em; }
+        .bw-adm-photos { display: flex; gap: .8em; padding-left: 2px; } /* 고르면 바깥으로 테두리가 생기니 사이를 넉넉히 */
         .bw-adm-photo { position: relative; width: 3.4em; height: 3.4em; border-radius: .45em; box-shadow: 0 0 0 0 #1f63d6; filter: saturate(.55) brightness(1.08); }
         .bw-adm-photo1 { background: #4f8ded; }
         .bw-adm-photo2 { background: #5fbf9f; }
