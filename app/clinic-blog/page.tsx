@@ -8,6 +8,7 @@ import ClinicHeader from './ClinicHeader'
 import HeroWorries from './HeroWorries'
 import ClinicFaq from './ClinicFaq'
 import FloatingCta from './FloatingCta'
+import WithHomepage from './WithHomepage'
 
 /**
  * 병·의원 전용 웹블로그 홍보 페이지 — /clinic-blog
@@ -17,8 +18,8 @@ import FloatingCta from './FloatingCta'
  * 그래서 이 페이지 안에서도 메인 사이트로 가는 링크를 두지 않는다 — 나가는 길은 문의 폼과 카카오톡뿐이다.
  *
  * 기능을 나열하지 않고 대화 장면으로 풀어 간다 —
- * 환자의 검색 → 원장님의 고민 → 노출이 빠진 날 → 그래서, 웹블로그(BlogWhy) → 진행 과정 → 자주 묻는 질문 → 상담.
- * 헤더 메뉴(ClinicHeader)가 각 덩어리의 id(story·webblog·process·faq·contact)로 이동한다.
+ * 환자의 검색 → 원장님의 고민 → 노출이 빠진 날 → 웹블로그란·왜 웹블로그(BlogWhy) → 홈페이지와 함께하면 + 상품(WithHomepage)
+ * → 진행 과정 → 자주 묻는 질문 → 상담. 헤더 메뉴(ClinicHeader)가 각 덩어리의 id(webblog·with-homepage·process·faq·contact)로 이동한다.
  * 장면마다 말풍선이 스크롤에 맞춰 차례로 올라온다 (InView 가 'is-in' 을 붙이고, 순서는 아래 CSS 의 --i 로 늦춘다).
  * 색은 맨 아래 <style> 의 .cb 묶음 안에서만 정의해 다른 페이지에 새지 않게 했다.
  */
@@ -223,6 +224,9 @@ export default function ClinicBlogPage() {
 
       {/* ── 그래서, 웹블로그 — 화면을 붙잡아 두고 답 네 개를 차례로 (메인의 '왜 WEFLOW?' 와 같은 방식) ── */}
       <BlogWhy />
+
+      {/* ── 홈페이지와 함께하면 + 상품 두 가지 ── */}
+      <WithHomepage />
 
       {/* ── 진행 과정 ── */}
       <section id="process" className="cb-sec cb-step-sec">
@@ -510,6 +514,13 @@ export default function ClinicBlogPage() {
         /* 신청서 — 흰 카드에 그림자, 입력칸은 연회색으로 채워 두고 누르면 흰 바탕 + 파란 테두리 */
         .cb-form { background: #fff; color: var(--cb-text); border: 1px solid var(--cb-line); border-radius: 24px; box-shadow: 0 24px 60px rgba(17,20,24,.08); padding: 26px 20px; display: grid; gap: 16px; position: relative; }
         #contact-form { scroll-margin-top: 24px; }
+        /* 문의 유형 칩 — 고르면 파란 테두리, 상품 카드에서 넘어오면 미리 골라져 있다 */
+        .cb-field-label { display: block; font-weight: 700; font-size: .9rem; margin-bottom: 8px; }
+        .cb-plan-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .cb-plan-chip { padding: 12px 8px; border-radius: 12px; border: 1.5px solid transparent; background: var(--cb-soft); color: var(--cb-sub); font: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; transition: background .15s, color .15s, border-color .15s; word-break: keep-all; }
+        .cb-plan-chip:hover { border-color: #d5d9df; }
+        .cb-plan-chip.is-on { background: #fff; color: var(--cb-accent); border-color: var(--cb-accent); } /* 고르면 흰 바탕에 파란 테두리·글자 */
+        @media (max-width: 480px) { .cb-plan-chips { grid-template-columns: 1fr; } }
         .cb-form-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--cb-line); }
         .cb-form-head strong { font-size: 1.25rem; letter-spacing: -0.02em; }
         .cb-form-head span { font-size: .82rem; color: var(--cb-muted); }

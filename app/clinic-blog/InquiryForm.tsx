@@ -1,16 +1,23 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
 import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
 import { formatPhone, isValidPhone } from '@/lib/phone'
+import { PLAN_EVENT } from './PlanButton'
 
 /**
  * 병·의원 웹블로그 상담 신청 폼 — 일반 문의와 같은 /api/inquiries 로 보낸다.
  * 관리자 화면에서 구분되도록 type 을 '병·의원 웹블로그', source 를 'clinic-blog' 로 남기고,
- * 진료과목은 업종(industry) 칸에 넣는다.
+ * 진료과목은 업종(industry) 칸에, 문의 유형(웹블로그만 / 홈페이지 + 웹블로그 / 상담 후 결정)은 메모 첫 줄에 넣는다.
+ * 문의 유형은 상품 카드의 '이걸로 상담받기' 를 누르면 미리 골라진다 (PlanButton 이 보내는 신호를 듣는다).
  */
+
+const PLANS = ['웹블로그만', '홈페이지 + 웹블로그', '상담 후 결정']
+
+/** 지출 예산 — 선택 칸. 고른 값은 메모에 '예산: …' 한 줄로 남는다 */
+const BUDGETS = ['0~200만원', '200~400만원', '400~600만원', '600만원 이상']
 
 const SPECIALTIES = ['치과', '피부과', '성형외과', '한의원', '정형외과', '안과', '내과·소아과', '산부인과', '기타']
 
@@ -19,6 +26,8 @@ export default function InquiryForm() {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [specialty, setSpecialty] = useState('')
+  const [budget, setBudget] = useState('')
+  const [plan, setPlan] = useState('')
   const [note, setNote] = useState('')
   const [agree, setAgree] = useState(false)
   const [honeypot, setHoneypot] = useState('')
@@ -27,6 +36,13 @@ export default function InquiryForm() {
   // 칸별 안내 — 비어 있는 필수 칸 바로 아래에 띄운다. 그 칸을 다시 고치면 지운다
   const [errs, setErrs] = useState<{ name?: string; phone?: string; agree?: string }>({})
   const [done, setDone] = useState(false)
+
+  // 상품 카드에서 고른 문의 유형을 받아 둔다
+  useEffect(() => {
+    const onPlan = (e: Event) => setPlan((e as CustomEvent<string>).detail)
+    window.addEventListener(PLAN_EVENT, onPlan)
+    return () => window.removeEventListener(PLAN_EVENT, onPlan)
+  }, [])
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -50,6 +66,8 @@ export default function InquiryForm() {
           type: '병·의원 웹블로그',
           industry: specialty,
           note: [
+            plan && `문의 유형: ${plan}`,
+            budget && `예산: ${budget}`,
             clinic.trim() && `병원명: ${clinic.trim()}`,
             note.trim(),
             attributionLine() && `유입: ${attributionLine()}`,
@@ -105,6 +123,24 @@ export default function InquiryForm() {
       <div className="cb-form-head cb-full">
         <strong>무료 상담 신청</strong>
       </div>
+      {/* 문의 유형 — 셋 중 하나를 고르는 칩. 선택 칸이라 안 골라도 신청된다 */}
+      <div className="cb-field cb-full" role="radiogroup" aria-label="문의 유형">
+        <span className="cb-field-label">문의 유형</span>
+        <div className="cb-plan-chips">
+          {PLANS.map(p => (
+            <button
+              key={p}
+              type="button"
+              role="radio"
+              aria-checked={plan === p}
+              className={`cb-plan-chip${plan === p ? ' is-on' : ''}`}
+              onClick={() => setPlan(plan === p ? '' : p)}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+      </div>
       <div className="cb-field">
         <label htmlFor="cb-clinic">병원명</label>
         <input id="cb-clinic" value={clinic} onChange={e => setClinic(e.target.value)} placeholder="예) 위플로우치과" maxLength={40} />
@@ -115,6 +151,13 @@ export default function InquiryForm() {
         <select id="cb-specialty" value={specialty} onChange={e => setSpecialty(e.target.value)} required>
           <option value="" disabled>선택해 주세요</option>
           {SPECIALTIES.map(s => <option key={s} value={s}>{s}</option>)}
+        </select>
+      </div>
+      <div className="cb-field cb-full">
+        <label htmlFor="cb-budget">지출 예산</label>
+        <select id="cb-budget" value={budget} onChange={e => setBudget(e.target.value)} required>
+          <option value="" disabled>선택해 주세요</option>
+          {BUDGETS.map(b => <option key={b} value={b}>{b}</option>)}
         </select>
       </div>
       <div className={`cb-field ${errs.name ? 'is-err' : ''}`}>

@@ -205,11 +205,109 @@ function ReserveDemo() {
   )
 }
 
+/**
+ * 05 · 관리자 페이지 — 창을 반으로 나눠 왼쪽은 환자가 보는 실제 화면, 오른쪽은 관리자 수정 화면.
+ * 오른쪽에서 고치면 왼쪽이 바로 바뀐다.
+ *  장면 1 (0~48%): 새 글을 쓰고 발행 → 왼쪽 블로그 목록 맨 위에 새 글이 들어온다
+ *  장면 2 (50~100%): 배너 사진을 고르고 문구를 바꿔 저장 → 왼쪽 홈페이지 배너가 바뀐다
+ */
+function AdminDemo() {
+  return (
+    <div className="bw bw-adm" aria-hidden="true">
+      <div className="bw-top">
+        <i /><i /><i />
+        <span className="bw-url"><Lock size={11} style={{ marginRight: '.3em', color: '#12a37a' }} /> 우리병원.com/admin</span>
+      </div>
+      <div className="bw-body bw-adm-body">
+        {/* 왼쪽 — 실제 화면 */}
+        <div className="bw-adm-live">
+          <span className="bw-adm-tag"><i /> 실제 화면</span>
+          {/* 장면 1 — 블로그 목록 */}
+          <div className="bw-adm-lp bw-adm-lp1">
+            <b className="bw-adm-lp-title">우리병원치과 블로그</b>
+            <div className="bw-adm-new">
+              <div className="bw-adm-post"><span className="bw-adm-th bw-adm-th-new" /><span><em>NEW</em>사랑니는 꼭 빼야 하나요?</span></div>
+            </div>
+            <div className="bw-adm-post"><span className="bw-adm-th" /><span>임플란트 수술 후 일주일</span></div>
+            <div className="bw-adm-post"><span className="bw-adm-th bw-adm-th-2" /><span>스케일링, 얼마나 자주?</span></div>
+          </div>
+          {/* 장면 2 — 홈페이지 배너 */}
+          <div className="bw-adm-lp bw-adm-lp2">
+            <div className="bw-adm-nav"><b>우리병원치과</b><i /><i /><i /></div>
+            <div className="bw-adm-banner">
+              <i className="bw-adm-bg-a" /><i className="bw-adm-bg-b" />
+              {/* 문구와 버튼을 한 묶음으로 배너 세로 가운데에 — 옛 문구·새 문구는 같은 자리에 겹쳐 둔다 */}
+              <div className="bw-adm-bcontent">
+                <span className="bw-adm-btxt">
+                  <span className="bw-adm-bt bw-adm-bt-old">건강한 미소를<br />오래 지켜드립니다</span>
+                  <span className="bw-adm-bt bw-adm-bt-new">10월부터<br />야간 진료 시작</span>
+                </span>
+                {/* 오른쪽 설정의 '버튼 문구' 와 같은 버튼 */}
+                <span className="bw-adm-bbtn">진료 예약하기</span>
+              </div>
+            </div>
+            <div className="bw-adm-quick"><i /><i /><i /></div>
+            {/* 배너 아래로 이어지는 내용 — 의료진 소개 · 공지. 아래가 흐려지며 잘려 '더 있다' 는 느낌을 준다 */}
+            <b className="bw-adm-sec">의료진 소개</b>
+            <div className="bw-adm-docs">
+              <span><i /><u /><u /></span>
+              <span><i /><u /><u /></span>
+            </div>
+            <b className="bw-adm-sec">공지사항</b>
+            <div className="bw-adm-notice"><u /><u /></div>
+          </div>
+        </div>
+
+        {/* 오른쪽 — 관리자 수정 화면 */}
+        <div className="bw-adm-edit">
+          <div className="bw-adm-tabs"><span className="bw-adm-tab1">글쓰기</span><span className="bw-adm-tab2">디자인 수정</span></div>
+          {/* 장면 1 — 새 글 */}
+          <div className="bw-adm-ep bw-adm-ep1">
+            <label>제목</label>
+            <span className="bw-adm-input"><span className="bw-adm-type1">사랑니는 꼭 빼야 하나요?</span></span>
+            <label>본문</label>
+            <div className="bw-adm-area">
+              <i className="bw-line bw-adm-l1" style={{ width: '92%' }} />
+              <i className="bw-line bw-adm-l2" style={{ width: '84%' }} />
+              <i className="bw-line bw-adm-l3" style={{ width: '58%' }} />
+            </div>
+            <label>사진 선택</label>
+            {/* 갤러리에서 고르듯 — 세 장이 놓여 있고, 차례로 테두리와 순서 번호가 붙으며 골라진다 */}
+            <div className="bw-adm-photos">
+              {[1, 2, 3].map(n => (
+                <span key={n} className={`bw-adm-photo bw-adm-photo${n}`}><em>{n}</em></span>
+              ))}
+            </div>
+            <span className="bw-adm-btn bw-adm-pub">발행하기</span>
+          </div>
+          {/* 장면 2 — 배너 수정 */}
+          <div className="bw-adm-ep bw-adm-ep2">
+            <label>배너 사진</label>
+            <div className="bw-adm-thumbs"><i className="bw-adm-tb1" /><i className="bw-adm-tb2" /><i className="bw-adm-tb3" /></div>
+            <label>배너 문구</label>
+            <span className="bw-adm-input">
+              <span className="bw-adm-old">건강한 미소를 오래 지켜드립니다</span>
+              <span className="bw-adm-type2">10월부터 야간 진료 시작</span>
+            </span>
+            {/* 아래가 비지 않게 — 배너에 딸린 설정 두 가지 (움직이지 않는 칸) */}
+            <label>버튼 문구</label>
+            <span className="bw-adm-input bw-adm-input--static">진료 예약하기</span>
+            <span className="bw-adm-toggle"><span>메인 화면에 바로 노출</span><i /></span>
+            <span className="bw-adm-btn bw-adm-save">저장하기</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// 순서 — 앞의 STORY 01~03 고민에 같은 순서로 답한다: 노출(01) → 예약(02) → 안정성(03), 그다음 직접 관리 · 카테고리 정리
 const ANSWERS = [
   { id: 'search', title: 'SEO·AEO·GEO\n구조 설계', desc: <>네이버·구글은 물론 AI 답변에서도,{'\n'}우리 병원 글이 출처로 인용되도록<br className="bwy-mo" /> 구조부터 설계합니다.</>, Demo: SearchDemo },
-  { id: 'own', title: '병원 자산으로\n남는 글', desc: '빌린 블로그가 아니라 병원 주소 아래에 쌓여,\n플랫폼 정책이 바뀌어도 그대로 남습니다.', Demo: OwnDemo },
-  { id: 'category', title: '진료과목별\n카테고리 정리', desc: '환자가 검색하는 말 그대로 나눠,\n관련 글을 이어서 읽게 합니다.', Demo: CategoryDemo },
   { id: 'reserve', title: '읽다가 바로\n홈페이지로 연결', desc: '글마다 병원 홈페이지로 가는 버튼이 붙어,\n마음먹은 순간을 놓치지 않습니다.', Demo: ReserveDemo },
+  { id: 'own', title: '병원 자산으로\n남는 글', desc: '빌린 블로그가 아니라 병원 주소 아래에 쌓여,\n플랫폼 정책이 바뀌어도 그대로 남습니다.', Demo: OwnDemo },
+  { id: 'admin', title: '관리자 페이지에서\n직접 작성 · 수정', desc: '블로그 글은 물론 홈페이지의 사진과 문구도,\n관리자 페이지에서 바로 바꿉니다.', Demo: AdminDemo },
+  { id: 'category', title: '진료과목별\n카테고리 정리', desc: '환자가 검색하는 말 그대로 나눠,\n관련 글을 이어서 읽게 합니다.', Demo: CategoryDemo },
 ]
 
 // 진행 구간 — 단위는 '화면 높이의 몇 배'. 섹션이 화면에 붙은 뒤로 스크롤한 거리 기준이다.
@@ -313,6 +411,11 @@ export default function BlogWhy() {
               <span className="bwy-hl">웹블로그</span>는 다릅니다
             </span>
           </h2>
+          {/* 웹블로그가 무엇인지 한 줄 — '웹블로그' 에 파란색이 들어올 때 함께 올라온다 */}
+          <p className="bwy-def">
+            웹블로그는 <b>우리 병원 홈페이지 주소 안</b>에 있는 블로그입니다.<br />
+            글 쓰는 방법은 같고, <br className="bwy-mo" />글이 쌓이는 곳만 달라집니다.
+          </p>
         </div>
 
         <div className="bwy-answers">
@@ -348,7 +451,7 @@ export default function BlogWhy() {
           </h3>
           <p className="bwy-end-desc">우리 병원도 웹블로그로 바꿔 볼까요?</p>
           <ul className="bwy-end-chips">
-            {['AI 검색 인용', '병원 자산으로', '진료과목별 정리', '홈페이지 연결'].map((t, i) => (
+            {['AI 검색 인용', '홈페이지 연결', '병원 자산으로', '직접 관리'].map((t, i) => (
               <li key={t} style={{ '--i': i } as React.CSSProperties}>
                 <Check size={15} /> {t}
               </li>
@@ -365,7 +468,7 @@ export default function BlogWhy() {
         .bwy-pin { position: sticky; top: 0; height: 100svh; overflow: hidden; background: #fff; color: #111418; }
 
         /* ── 질문 ── */
-        .bwy-ask { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 8vh; /* 화면 정가운데보다 살짝 위 */ will-change: transform, opacity; }
+        .bwy-ask { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 4vh; /* 정가운데보다 아주 살짝 위 — 8vh 는 너무 높았고 0 은 낮아 보였다 */ will-change: transform, opacity; }
         .bwy-eyebrow { margin: 0 0 clamp(1.25rem, 3.5vh, 2.25rem); font-size: clamp(.8rem, 1.1vw, .92rem); font-weight: 700; letter-spacing: .26em; color: #1f63d6; opacity: var(--bw-x, 0); }
         .bwy-title { margin: 0; font-size: clamp(1.95rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.25; text-align: center; }
         .bwy-line { display: block; white-space: nowrap; will-change: transform; }
@@ -373,6 +476,9 @@ export default function BlogWhy() {
         .bwy-line--b { transform: translate3d(calc((1 - var(--bw-x, 0)) * 70vw), 0, 0); }
         .bwy-hl { transition: color .5s ease; }
         .bwy.is-lit .bwy-hl { color: #1f63d6; }
+        .bwy-def { margin: clamp(1.5rem, 4vh, 2.25rem) 0 0; padding: 0 1.5rem; font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.75; color: #4b5360; text-align: center; opacity: 0; transform: translateY(12px); transition: opacity .5s ease, transform .5s ease; }
+        .bwy-def b { color: #111418; }
+        .bwy.is-lit .bwy-def { opacity: 1; transform: none; }
 
         /* ── 답 — 왼쪽 카드, 오른쪽 글 ── */
         .bwy-answers { position: absolute; inset: 0; pointer-events: none; }
@@ -448,6 +554,7 @@ export default function BlogWhy() {
         @keyframes bwFade { 0% { opacity: 0 } 4%, 94% { opacity: 1 } 100% { opacity: 0 } }
         .is-on .bw-body { animation: bwFade 8s linear infinite; }
         .is-on .bw-ai .bw-body, .is-on .bw-cat .bw-body { animation-duration: 9s; }
+        .is-on .bw-adm .bw-body { animation-duration: 12s; }
 
         /* 01 · 주소 */
         .bw-own-old, .bw-own-new { position: absolute; left: 1em; right: 1em; display: flex; align-items: center; white-space: nowrap; }
@@ -547,6 +654,132 @@ export default function BlogWhy() {
         @keyframes bw3L2 { 0%, 33% { opacity: 0; transform: translateY(8px) } 37%, 63% { opacity: 1; transform: none } 66%, 100% { opacity: 0; transform: translateY(-6px) } }
         @keyframes bw3L3 { 0%, 66% { opacity: 0; transform: translateY(8px) } 70%, 100% { opacity: 1; transform: none } }
 
+        /* 05 · 관리자 페이지 — 왼쪽 실제 화면 / 오른쪽 수정 화면. 장면 1(0~48%) 글쓰기 → 장면 2(50~100%) 디자인 수정 */
+        .bw-adm-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; }
+        .bw-adm-live { position: relative; background: #f3f6fa; border-right: 1px solid #e6ebf2; overflow: hidden; }
+        .bw-adm-tag { position: absolute; z-index: 2; top: .7em; left: .8em; display: inline-flex; align-items: center; gap: .35em; padding: .3em .7em; border-radius: 999px; background: #fff; font-size: .7em; font-weight: 800; color: #0f8a6c; box-shadow: 0 2px 8px rgba(17,20,24,.06); }
+        .bw-adm-tag i { width: .55em; height: .55em; border-radius: 50%; background: #12a37a; animation: bwLive 1.4s ease-in-out infinite; }
+        @keyframes bwLive { 50% { opacity: .3; } }
+        .bw-adm-lp { position: absolute; inset: 2.6em .8em .8em; border-radius: .7em; background: #fff; box-shadow: 0 6px 18px rgba(17,20,24,.06); padding: .8em; display: flex; flex-direction: column; gap: .5em; overflow: hidden; }
+        .bw-adm-lp2 { opacity: 0; padding: 0; gap: 0; }
+        .bw-adm-lp-title { font-size: .78em; padding-bottom: .4em; border-bottom: 1px solid #eef0f3; }
+        .bw-adm-post { display: flex; align-items: center; gap: .5em; font-size: .72em; font-weight: 700; color: #111418; white-space: nowrap; overflow: hidden; }
+        .bw-adm-post em { font-style: normal; font-size: .82em; color: #fff; background: #e05252; padding: .05em .4em; border-radius: .3em; margin-right: .35em; }
+        .bw-adm-th { flex: none; width: 2.8em; height: 2.1em; border-radius: .4em; background: linear-gradient(135deg, #d9e8fc, #b9d3f7); }
+        .bw-adm-th-2 { background: linear-gradient(135deg, #d6f2ea, #aee3d3); }
+        .bw-adm-th-new { background: linear-gradient(135deg, #f1e6fb, #d8c6f3); }
+        .bw-adm-new { max-height: 0; opacity: 0; overflow: hidden; border-radius: .5em; }
+        .bw-adm-new .bw-adm-post { padding: .3em; }
+        .bw-adm-nav { display: flex; align-items: center; gap: .4em; padding: .55em .7em; border-bottom: 1px solid #eef0f3; }
+        .bw-adm-nav b { font-size: .72em; margin-right: auto; }
+        .bw-adm-nav i { width: 1.6em; height: .35em; border-radius: 999px; background: #e3e7ed; }
+        .bw-adm-banner { position: relative; height: 8em; margin: .6em; border-radius: .6em; overflow: hidden; }
+        .bw-adm-banner > i { position: absolute; inset: 0; }
+        .bw-adm-bg-a { background: linear-gradient(135deg, #cfd8e3, #a9b5c5); }
+        .bw-adm-bg-b { background: linear-gradient(135deg, #6aa2f2, #1f63d6); opacity: 0; }
+        .bw-adm-bcontent { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: .5em; padding-left: .8em; }
+        .bw-adm-btxt { display: grid; }
+        .bw-adm-bt { grid-area: 1 / 1; color: #fff; font-size: .78em; font-weight: 800; line-height: 1.3; }
+        .bw-adm-bbtn { padding: .35em .75em; border-radius: 999px; background: #fff; color: #1f63d6; font-size: .62em; font-weight: 800; }
+        .bw-adm-bt-new { opacity: 0; }
+        .bw-adm-quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4em; margin: 0 .6em; }
+        .bw-adm-quick i { height: 1.8em; border-radius: .4em; background: #f3f5f8; }
+        .bw-adm-lp2::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3em; background: linear-gradient(rgba(255,255,255,0), #fff); pointer-events: none; }
+        .bw-adm-sec { display: block; margin: 1.2em 0 .6em calc(.85em / .66); font-size: .66em; } /* 도형 왼쪽 선(.6em)보다 살짝 안쪽 — 글자 크기 .66em 만큼 나눠 맞춘다 */
+        .bw-adm-docs { display: grid; grid-template-columns: 1fr 1fr; gap: .4em; margin: 0 .6em; }
+        .bw-adm-docs span { display: grid; grid-template-columns: 1.8em 1fr; grid-template-rows: auto auto; column-gap: .4em; row-gap: .3em; align-items: center; padding: .4em; border-radius: .4em; background: #f7f8fa; }
+        .bw-adm-docs i { grid-row: 1 / 3; width: 1.8em; height: 1.8em; border-radius: 50%; background: linear-gradient(135deg, #dfe7f2, #c5d2e4); }
+        .bw-adm-docs u, .bw-adm-notice u { display: block; height: .32em; border-radius: 999px; background: #e3e7ed; }
+        .bw-adm-docs u + u { width: 60%; }
+        .bw-adm-notice { display: grid; gap: .35em; margin: 0 .6em; }
+        .bw-adm-notice u + u { width: 75%; }
+
+        .bw-adm-edit { position: relative; padding: .8em .9em; display: flex; flex-direction: column; }
+        .bw-adm-tabs { display: flex; gap: .3em; margin-bottom: .7em; }
+        .bw-adm-tabs span { padding: .35em .7em; border-radius: 999px; font-size: .72em; font-weight: 700; color: #8a919c; background: #f3f5f8; }
+        /* !important 를 쓰면 애니메이션이 못 덮어써서 탭이 안 바뀐다 — 선택자를 한 단계 구체적으로 써서 이긴다 */
+        .bw-adm-tabs .bw-adm-tab1 { background: #111418; color: #fff; }
+        .bw-adm-ep { position: absolute; left: .9em; right: .9em; top: 3em; bottom: .8em; display: flex; flex-direction: column; gap: .35em; }
+        .bw-adm-ep2 { opacity: 0; }
+        .bw-adm-ep label { font-size: .68em; font-weight: 700; color: #8a919c; margin-top: .2em; }
+        .bw-adm-input { position: relative; display: block; height: 2.1em; padding: 0 .6em; border: 1px solid #e3e7ed; border-radius: .5em; font-size: .78em; font-weight: 700; line-height: 2.1em; white-space: nowrap; overflow: hidden; }
+        .bw-adm-type1, .bw-adm-type2 { display: inline-block; clip-path: inset(0 100% 0 0); }
+        .bw-adm-type2, .bw-adm-old { position: absolute; left: .6em; top: 0; }
+        .bw-adm-area { display: flex; flex-direction: column; gap: .45em; padding: .6em; border: 1px solid #e3e7ed; border-radius: .5em; }
+        .bw-adm-area .bw-line { height: .5em; }
+        .bw-adm-l1, .bw-adm-l2, .bw-adm-l3 { transform: scaleX(0); transform-origin: left; }
+        /* 사진 고르기 — 단색 사진 세 장. 고르면 파란 테두리와 오른쪽 위 순서 번호가 톡 붙는다 */
+        .bw-adm-photos { display: flex; gap: .45em; }
+        .bw-adm-photo { position: relative; width: 3.4em; height: 3.4em; border-radius: .45em; box-shadow: 0 0 0 0 #1f63d6; filter: saturate(.55) brightness(1.08); }
+        .bw-adm-photo1 { background: #4f8ded; }
+        .bw-adm-photo2 { background: #5fbf9f; }
+        .bw-adm-photo3 { background: #f2a65a; }
+        .bw-adm-photo em { position: absolute; top: -.35em; right: -.35em; width: 1.25em; height: 1.25em; border-radius: 50%; background: #1f63d6; border: 2px solid #fff; color: #fff; font-style: normal; font-size: .62em; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; transform: scale(0); }
+        .bw-adm-btn { position: absolute; right: 0; bottom: 0; padding: .55em 1em; border-radius: .5em; background: #1f63d6; color: #fff; font-size: .74em; font-weight: 700; }
+        .bw-adm-input--static { color: #6b7380; font-weight: 600; }
+        .bw-adm-toggle { display: flex; align-items: center; justify-content: space-between; margin-top: .45em; padding: .55em .6em; border-radius: .5em; background: #f7f8fa; font-size: .72em; font-weight: 700; color: #3a414c; }
+        .bw-adm-toggle i { position: relative; width: 2.2em; height: 1.25em; border-radius: 999px; background: #1f63d6; }
+        .bw-adm-toggle i::after { content: ''; position: absolute; top: .15em; right: .15em; width: .95em; height: .95em; border-radius: 50%; background: #fff; }
+        .bw-adm-thumbs { display: flex; gap: .4em; }
+        .bw-adm-thumbs i { width: 3.4em; height: 2.4em; border-radius: .45em; border: 2px solid transparent; }
+        .bw-adm-thumbs .bw-adm-tb1 { background: linear-gradient(135deg, #cfd8e3, #a9b5c5); border-color: #111418; }
+        .bw-adm-tb2 { background: linear-gradient(135deg, #6aa2f2, #1f63d6); }
+        .bw-adm-tb3 { background: linear-gradient(135deg, #d6f2ea, #7fcfb5); }
+
+        .is-on .bw-adm-lp1, .is-on .bw-adm-ep1 { animation: bw5S1 12s linear infinite; }
+        .is-on .bw-adm-lp2, .is-on .bw-adm-ep2 { animation: bw5S2 12s linear infinite; }
+        .is-on .bw-adm-tab1 { animation: bw5Tab1 12s linear infinite; }
+        .is-on .bw-adm-tab2 { animation: bw5Tab2 12s linear infinite; }
+        .is-on .bw-adm-type1 { animation: bw5Type1 12s steps(14, end) infinite; }
+        .is-on .bw-adm-l1 { animation: bw5L1 12s linear infinite; }
+        .is-on .bw-adm-l2 { animation: bw5L2 12s linear infinite; }
+        .is-on .bw-adm-l3 { animation: bw5L3 12s linear infinite; }
+        .is-on .bw-adm-photo1 { animation: bw5Pick1 12s ease infinite; }
+        .is-on .bw-adm-photo2 { animation: bw5Pick2 12s ease infinite; }
+        .is-on .bw-adm-photo3 { animation: bw5Pick3 12s ease infinite; }
+        .is-on .bw-adm-photo1 em { animation: bw5No1 12s cubic-bezier(.34,1.56,.64,1) infinite; }
+        .is-on .bw-adm-photo2 em { animation: bw5No2 12s cubic-bezier(.34,1.56,.64,1) infinite; }
+        .is-on .bw-adm-photo3 em { animation: bw5No3 12s cubic-bezier(.34,1.56,.64,1) infinite; }
+        .is-on .bw-adm-pub { animation: bw5Pub 12s ease-in-out infinite; }
+        .is-on .bw-adm-new { animation: bw5New 12s cubic-bezier(.16,1,.3,1) infinite; }
+        .is-on .bw-adm-tb1 { animation: bw5Tb1 12s linear infinite; }
+        .is-on .bw-adm-tb2 { animation: bw5Tb2 12s linear infinite; }
+        .is-on .bw-adm-bg-b { animation: bw5Bg 12s ease infinite; }
+        .is-on .bw-adm-old { animation: bw5Old 12s linear infinite; }
+        .is-on .bw-adm-type2 { animation: bw5Type2 12s steps(14, end) infinite; }
+        .is-on .bw-adm-save { animation: bw5Save 12s ease-in-out infinite; }
+        .is-on .bw-adm-bt-old { animation: bw5BtOld 12s ease infinite; }
+        .is-on .bw-adm-bt-new { animation: bw5BtNew 12s ease infinite; }
+        .is-on .bw-adm-banner { animation: bw5Flash 12s ease infinite; }
+        @keyframes bw5S1 { 0%, 47% { opacity: 1; } 49%, 100% { opacity: 0; } }
+        @keyframes bw5S2 { 0%, 49% { opacity: 0; } 51%, 100% { opacity: 1; } }
+        @keyframes bw5Tab1 { 0%, 48% { background: #111418; color: #fff; } 50%, 100% { background: #f3f5f8; color: #8a919c; } }
+        @keyframes bw5Tab2 { 0%, 48% { background: #f3f5f8; color: #8a919c; } 50%, 100% { background: #111418; color: #fff; } }
+        /* 장면 1 — 제목(4~13%) · 본문 세 줄(14~23%) · 사진 첨부(24%) · 발행(28%) → 왼쪽에 새 글(30~34%) */
+        @keyframes bw5Type1 { 0%, 4% { clip-path: inset(0 100% 0 0); } 13%, 100% { clip-path: inset(0 0 0 0); } }
+        @keyframes bw5L1 { 0%, 14% { transform: scaleX(0); } 17%, 100% { transform: scaleX(1); } }
+        @keyframes bw5L2 { 0%, 17.5% { transform: scaleX(0); } 20.5%, 100% { transform: scaleX(1); } }
+        @keyframes bw5L3 { 0%, 21% { transform: scaleX(0); } 23%, 100% { transform: scaleX(1); } }
+        /* 사진 세 장을 차례로 고른다 (23.5% · 25% · 26.5%) */
+        @keyframes bw5Pick1 { 0%, 23.5% { box-shadow: 0 0 0 0 #1f63d6; filter: saturate(.55) brightness(1.08); } 24.2%, 100% { box-shadow: 0 0 0 2px #1f63d6; filter: none; } }
+        @keyframes bw5Pick2 { 0%, 25% { box-shadow: 0 0 0 0 #1f63d6; filter: saturate(.55) brightness(1.08); } 25.7%, 100% { box-shadow: 0 0 0 2px #1f63d6; filter: none; } }
+        @keyframes bw5Pick3 { 0%, 26.5% { box-shadow: 0 0 0 0 #1f63d6; filter: saturate(.55) brightness(1.08); } 27.2%, 100% { box-shadow: 0 0 0 2px #1f63d6; filter: none; } }
+        @keyframes bw5No1 { 0%, 23.5% { transform: scale(0); } 24.8%, 100% { transform: scale(1); } }
+        @keyframes bw5No2 { 0%, 25% { transform: scale(0); } 26.3%, 100% { transform: scale(1); } }
+        @keyframes bw5No3 { 0%, 26.5% { transform: scale(0); } 27.8%, 100% { transform: scale(1); } }
+        @keyframes bw5Pub { 0%, 29% { transform: none; } 30.5% { transform: scale(.9); } 32%, 100% { transform: none; } }
+        @keyframes bw5New { 0%, 32% { max-height: 0; opacity: 0; background: transparent; } 36% { max-height: 4em; opacity: 1; background: #eef4fe; } 44%, 100% { max-height: 4em; opacity: 1; background: transparent; } }
+        /* 장면 2 — 두 번째 사진 고름(56%) → 왼쪽 배경 바로 바뀜 · 문구 지우고 새로 씀(63~74%) · 저장(79%) → 왼쪽 문구 바뀜 */
+        @keyframes bw5Tb1 { 0%, 55% { border-color: #111418; } 56%, 100% { border-color: transparent; } }
+        @keyframes bw5Tb2 { 0%, 55% { border-color: transparent; } 56%, 100% { border-color: #111418; } }
+        @keyframes bw5Bg { 0%, 56% { opacity: 0; } 60%, 100% { opacity: 1; } }
+        @keyframes bw5Old { 0%, 61% { opacity: 1; } 63%, 100% { opacity: 0; } }
+        @keyframes bw5Type2 { 0%, 63% { clip-path: inset(0 100% 0 0); } 74%, 100% { clip-path: inset(0 0 0 0); } }
+        @keyframes bw5Save { 0%, 78% { transform: none; } 79.5% { transform: scale(.9); } 81%, 100% { transform: none; } }
+        @keyframes bw5BtOld { 0%, 81% { opacity: 1; } 83%, 100% { opacity: 0; } }
+        @keyframes bw5BtNew { 0%, 82% { opacity: 0; transform: translateY(.4em); } 85%, 100% { opacity: 1; transform: none; } }
+        @keyframes bw5Flash { 0%, 81% { box-shadow: 0 0 0 0 rgba(31,99,214,0); } 84% { box-shadow: 0 0 0 .3em rgba(31,99,214,.35); } 92%, 100% { box-shadow: 0 0 0 0 rgba(31,99,214,0); } }
+
         /* 04 · 글 → 병원 홈페이지 */
         .bw-u { position: absolute; left: 1em; right: 1em; display: flex; align-items: center; gap: .3em; white-space: nowrap; }
         .bw-u-home { opacity: 0; color: #111418; font-weight: 700; }
@@ -604,6 +837,7 @@ export default function BlogWhy() {
           .bwy-eyebrow { opacity: 1; }
           .bwy-line--a, .bwy-line--b { transform: none; }
           .bwy-hl { color: #1f63d6; }
+          .bwy-def { opacity: 1; transform: none; }
           .bwy-answers { pointer-events: auto; }
           .bwy-answer { opacity: 1; margin-top: 4.5rem; }
           .bwy-end { opacity: 1; pointer-events: auto; margin-top: 5rem; padding: 5rem 1.5rem; background: #4f8ded; }

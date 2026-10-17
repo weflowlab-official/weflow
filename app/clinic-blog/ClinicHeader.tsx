@@ -9,8 +9,8 @@ import { ArrowRight } from 'lucide-react'
  * 가운데 메뉴는 페이지 안의 섹션(id)으로만 이동한다 — 넓은 화면에서만 보이고, 좁은 화면에서는 상담 버튼만 남긴다.
  */
 const MENU = [
-  { href: '#story', label: '지금의 블로그' },
   { href: '#webblog', label: '웹블로그란' },
+  { href: '#with-homepage', label: '홈페이지와 함께' },
   { href: '#process', label: '진행 과정' },
   { href: '#faq', label: '자주 묻는 질문' },
 ]
