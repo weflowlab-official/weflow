@@ -718,9 +718,10 @@ export default function BlogWhy() {
         .bw-adm-photo2 { background: #5fbf9f; }
         .bw-adm-photo3 { background: #f2a65a; }
         /* 휴대폰 — 카드가 작아 번호가 뭉개지니 번호·흐림은 빼고 파란 테두리만 생기게 */
+        /* (번호 모양 규칙이 이 아래에 있어서, 선택자를 한 단계 더 구체적으로 써야 덮어쓴다) */
         @media (max-width: 800px) {
-          .bw-adm-photo { filter: none !important; }
-          .bw-adm-photo em { display: none; }
+          .bw-adm-photos .bw-adm-photo { filter: none !important; }
+          .bw-adm-photos .bw-adm-photo em { display: none; }
         }
         .bw-adm-photo em { position: absolute; top: -.35em; right: -.35em; width: 1.25em; height: 1.25em; border-radius: 50%; background: #1f63d6; border: 2px solid #fff; color: #fff; font-style: normal; font-size: .62em; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; transform: scale(0); }
         .bw-adm-btn { position: absolute; right: 0; bottom: 0; padding: .55em 1em; border-radius: .5em; background: #1f63d6; color: #fff; font-size: .74em; font-weight: 700; }
