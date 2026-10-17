@@ -1,16 +1,20 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { MessagesSquare } from 'lucide-react'
+import { MessagesSquare, Phone, ClipboardList } from 'lucide-react'
+
+/** 대표 번호 — 헤더와 같은 번호 */
+const TEL = '010-2971-7280'
 
 /**
- * 오른쪽 아래 떠 있는 동그란 상담 버튼(아이콘만) — 누르면 맨 아래 상담 폼(#contact)으로 내려간다.
- *
- * 첫 화면(히어로)에는 같은 역할의 버튼이 이미 있으니 숨겨 두고, 첫 화면을 반쯤 지나면 올라온다.
- * 상담 폼이 화면에 보이는 동안에는 바로 앞에 폼이 있으니 다시 내려간다.
+ * 늘 떠 있는 상담 버튼 — 화면 크기에 따라 모양이 다르다 (메인 사이트 components/FloatingButtons.tsx 와 같은 구성).
+ *  · PC: 오른쪽 아래 동그란 버튼 두 개(무료 견적 · 24시간 상담 전화). 아이콘이 위아래 차례로 흔들리고, 마우스를 올리면 왼쪽으로 이름표가 펼쳐진다.
+ *        첫 화면에는 같은 역할의 버튼이 이미 있으니 숨겨 두고, 첫 화면을 반쯤 지나면 올라온다.
+ *        견적 폼이 화면에 보이는 동안에는 바로 앞에 폼이 있으니 다시 내려간다.
+ *  · 모바일: 화면 맨 아래에 붙는 두 칸 바(바로 전화 · 무료 견적 신청). 늘 같은 자리에 있다.
  */
 export default function FloatingCta() {
   const [past, setPast] = useState(false) // 첫 화면을 지났는지
-  const [atForm, setAtForm] = useState(false) // 상담 폼이 보이는지
+  const [atForm, setAtForm] = useState(false) // 견적 폼이 보이는지
 
   useEffect(() => {
     const onScroll = () => setPast(window.scrollY > window.innerHeight * 0.6)
@@ -30,35 +34,63 @@ export default function FloatingCta() {
   const show = past && !atForm
 
   return (
-    <a
-      href="#contact-form"
-      className={`fc ${show ? 'is-on' : ''}`}
-      aria-label="무료 상담 신청"
-      title="무료 상담 신청"
-      aria-hidden={!show}
-      tabIndex={show ? 0 : -1}
-    >
-      <MessagesSquare size={28} />
+    <>
+      {/* PC — 오른쪽 아래 동그란 버튼 두 개 */}
+      <div className={`fc-wrap ${show ? 'is-on' : ''}`} aria-hidden={!show}>
+        <a href="#contact-form" className="fc fc--form" aria-label="무료 견적 신청" tabIndex={show ? 0 : -1}>
+          <span className="fc-label">무료 견적 신청</span>
+          <span className="fc-icon"><MessagesSquare size={28} /></span>
+        </a>
+        <a href={`tel:${TEL}`} className="fc fc--tel" aria-label={`전화 상담 ${TEL}`} tabIndex={show ? 0 : -1}>
+          <span className="fc-label">24시간 상담</span>
+          <span className="fc-icon"><Phone size={24} fill="currentColor" /></span>
+        </a>
+      </div>
+
+      {/* 모바일 — 화면 맨 아래 두 칸 바 */}
+      <div className="fc-bar">
+        <a href={`tel:${TEL}`} className="fc-bar-btn fc-bar-btn--tel">
+          <Phone size={19} strokeWidth={2.2} /> 바로 전화
+        </a>
+        <a href="#contact-form" className="fc-bar-btn fc-bar-btn--form">
+          <ClipboardList size={19} strokeWidth={2.2} /> 무료 견적 신청
+        </a>
+      </div>
+
       <style>{`
-        .fc { position: fixed; right: max(20px, env(safe-area-inset-right)); bottom: max(24px, env(safe-area-inset-bottom)); z-index: 40; width: 60px; height: 60px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: #1f63d6; color: #fff; text-decoration: none; box-shadow: 0 14px 34px rgba(31,99,214,.32); opacity: 0; transform: translateY(16px) scale(.96); pointer-events: none; transition: opacity .3s ease, transform .4s cubic-bezier(.16,1,.3,1), background .15s; }
-        .fc.is-on { opacity: 1; transform: none; pointer-events: auto; }
-        .fc:hover { background: #1852b5; }
-        /* 눈에 띄게 — 아이콘이 쉬지 않고 흔들흔들, 버튼 둘레로는 파란 물결이 번진다 */
-        .fc.is-on svg { animation: fcWiggle 1.6s ease-in-out infinite; transform-origin: 50% 60%; }
-        .fc::after { content: ''; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 0 rgba(31,99,214,.45); pointer-events: none; }
-        .fc.is-on::after { animation: fcPulse 2s ease-out infinite; }
-        @keyframes fcWiggle {
-          0%, 100% { transform: rotate(0deg); }
-          15% { transform: rotate(-14deg); }
-          30% { transform: rotate(12deg); }
-          45% { transform: rotate(-9deg); }
-          60% { transform: rotate(6deg); }
-          75% { transform: rotate(-3deg); }
+        /* ── PC 동그란 버튼 ── */
+        .fc-wrap { position: fixed; right: max(20px, env(safe-area-inset-right)); bottom: 24px; z-index: 40; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .3s ease, transform .4s cubic-bezier(.16,1,.3,1); }
+        .fc-wrap.is-on { opacity: 1; transform: none; pointer-events: auto; }
+        .fc { position: relative; display: flex; align-items: center; height: 60px; border-radius: 999px; color: #fff; text-decoration: none; box-shadow: 0 14px 34px rgba(31,99,214,.3); transition: background .15s; }
+        .fc-icon { width: 60px; height: 60px; flex: none; display: inline-flex; align-items: center; justify-content: center; }
+        /* 이름표 — 평소엔 폭 0, 마우스를 올리면 왼쪽으로 펼쳐진다 */
+        .fc-label { max-width: 0; overflow: hidden; white-space: nowrap; font-weight: 700; font-size: .98rem; transition: max-width .35s cubic-bezier(.16,1,.3,1), padding .35s cubic-bezier(.16,1,.3,1); }
+        .fc:hover .fc-label { max-width: 200px; padding-left: 22px; }
+        .fc--form { background: #1f63d6; }
+        .fc--form:hover { background: #1852b5; }
+        .fc--tel { background: #fff; color: #111418; box-shadow: 0 10px 28px rgba(17,20,24,.14); }
+        .fc--tel .fc-icon { color: #16a34a; }
+        /* 눈에 띄게 — 두 버튼 아이콘이 흔들흔들 (전화는 반 박자 늦게 흔들려 둘이 번갈아 움직인다) */
+        /* 순서대로 — 견적 버튼이 흔들린 뒤 멈추면 전화 버튼이 이어서 흔들린다 (3.2초에 한 바퀴, 각자 앞쪽 절반만 흔들림) */
+        .fc-wrap.is-on .fc-icon svg { animation: fcWiggle 3.2s ease-in-out infinite; transform-origin: 50% 60%; }
+        .fc-wrap.is-on .fc--tel .fc-icon svg { animation-delay: 1.6s; }
+        @keyframes fcWiggle { 0%, 45%, 100% { transform: rotate(0deg); } 7.5% { transform: rotate(-14deg); } 15% { transform: rotate(12deg); } 22.5% { transform: rotate(-9deg); } 30% { transform: rotate(6deg); } 37.5% { transform: rotate(-3deg); } }
+
+        /* ── 모바일 하단 두 칸 바 (메인 사이트 하단 바와 같은 크기) ── */
+        .fc-bar { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: #fff; box-shadow: 0 -6px 20px rgba(17,20,24,.1); padding-bottom: max(0px, calc(env(safe-area-inset-bottom) - 12px)); }
+        .fc-bar-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px; font-size: 15px; font-weight: 700; text-decoration: none; }
+        .fc-bar-btn--tel { background: #fff; color: #111418; border-top: 1px solid #e3e5e8; }
+        .fc-bar-btn--tel svg { color: #16a34a; }
+        .fc-bar-btn--form { background: #1f63d6; color: #fff; }
+        @media (max-width: 768px) {
+          .fc-wrap { display: none; }
+          .fc-bar { display: flex; }
         }
-        @keyframes fcPulse { 0% { box-shadow: 0 0 0 0 rgba(31,99,214,.45); } 100% { box-shadow: 0 0 0 18px rgba(31,99,214,0); } }
-        @media (max-width: 640px) { .fc { right: 16px; bottom: 16px; width: 52px; height: 52px; } .fc svg { width: 26px; height: 26px; } }
-        @media (prefers-reduced-motion: reduce) { .fc { transition: opacity .2s; transform: none; } .fc.is-on svg, .fc.is-on::after { animation: none; } }
+        @media (prefers-reduced-motion: reduce) {
+          .fc-wrap, .fc-label { transition: none; }
+          .fc-wrap.is-on .fc-icon svg { animation: none; }
+        }
       `}</style>
-    </a>
+    </>
   )
 }

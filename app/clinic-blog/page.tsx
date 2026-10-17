@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
-import { MessageCircle, MessagesSquare, FolderTree, PenTool, Rocket, Check } from 'lucide-react'
-import { KAKAO_URL } from '@/data/common'
+import { MessagesSquare, FolderTree, PenTool, Rocket, Check, ClipboardList, BookOpen, Phone } from 'lucide-react'
 import InquiryForm from './InquiryForm'
 import InView from './InView'
 import BlogWhy from './BlogWhy'
 import ClinicHeader from './ClinicHeader'
 import HeroWorries from './HeroWorries'
 import ClinicFaq from './ClinicFaq'
+import HomeVsBlog from './HomeVsBlog'
 import FloatingCta from './FloatingCta'
 import WithHomepage from './WithHomepage'
 
@@ -25,13 +25,13 @@ import WithHomepage from './WithHomepage'
  */
 
 export const metadata: Metadata = {
-  title: '병·의원 전용 웹블로그 제작 · WEFLOW',
+  title: '병·의원 웹블로그 · 홈페이지 제작 · WEFLOW',
   description:
-    '진료과목·질환별로 정리되고, 글마다 예약으로 이어지는 병원 전용 웹블로그를 만들어 드립니다. 우리 병원 도메인에 쌓이는 글로 네이버·구글 검색 노출까지 잡으세요.',
+    '진료과목별로 정리되고 예약으로 이어지는 병원 전용 웹블로그와 홈페이지를 만들어 드립니다. 웹블로그만, 홈페이지만, 또는 함께 — 네이버·구글·AI 검색 노출까지 설계합니다.',
   alternates: { canonical: '/clinic-blog' },
   openGraph: {
-    title: '병·의원 전용 웹블로그 제작 · WEFLOW',
-    description: '블로그 글은 쌓이는데 예약은 그대로라면. 우리 병원 주소에 쌓이고, 예약으로 이어지는 병원 전용 웹블로그.',
+    title: '병·의원 웹블로그 · 홈페이지 제작 · WEFLOW',
+    description: '블로그 글은 쌓이는데 예약은 그대로라면. 예약으로 이어지는 병원 전용 웹블로그 · 홈페이지 제작.',
     url: '/clinic-blog',
     // openGraph 를 정의하면 루트의 것을 통째로 덮어쓴다 — 이미지도 여기서 다시 지정해야 한다
     images: [{ url: '/images/main/og-logo-2.jpg', width: 1200, height: 630 }],
@@ -123,15 +123,15 @@ export default function ClinicBlogPage() {
         {/* 제목 둘레에서 고민 메시지가 계속 오간다 (좁은 화면에서는 말풍선 없이 궤도·모눈만) */}
         <HeroWorries />
         <div className="cb-wrap cb-hero-inner">
-          <p className="cb-tag">병·의원 전용 웹블로그 제작</p>
+          <p className="cb-tag">병·의원 웹블로그 · 홈페이지 제작</p>
           <h1 className="cb-h1">
             블로그 글은 쌓이는데<br />
             <span className="cb-mark">예약은 그대로</span>라면
           </h1>
           {/* 바로 문의하려는 분은 상담으로, 더 알아보려는 분은 웹블로그 설명으로 */}
           <div className="cb-hero-btns">
-            <a href="#contact-form" className="cb-hero-btn cb-hero-btn--fill">웹블로그 제작 문의</a>
-            <a href="#webblog" className="cb-hero-btn">웹블로그란?</a>
+            <a href="#contact-form" className="cb-hero-btn cb-hero-btn--fill"><ClipboardList size={18} /> 무료 견적 신청</a>
+            <a href="#webblog" className="cb-hero-btn"><BookOpen size={18} /> 웹블로그란?</a>
           </div>
         </div>
         {/* 아래로 내려가라는 선 — 제목 묶음의 높이에 끼지 않게 바닥에 따로 띄운다 */}
@@ -140,6 +140,9 @@ export default function ClinicBlogPage() {
           <i />
         </span>
       </section>
+
+      {/* ── 홈페이지 vs 웹블로그 — 둘이 무엇이 다른지 창 두 개로 ── */}
+      <HomeVsBlog />
 
       {/* ── 장면 1 — 가운데 휴대폰 화면 안에서 환자가 검색한다 ── */}
       <section id="story" className="cb-scene cb-scene-alt cb-phone-scene">
@@ -266,8 +269,8 @@ export default function ClinicBlogPage() {
                 <li key={t}><span><Check size={14} /></span>{t}</li>
               ))}
             </ul>
-            <a href={KAKAO_URL} target="_blank" rel="noopener noreferrer" className="cb-kakao">
-              <MessageCircle size={18} /> 카카오톡 상담하기
+            <a href="tel:010-2971-7280" className="cb-call">
+              <Phone size={18} fill="currentColor" /> 전화 상담하기
             </a>
           </div>
           <InquiryForm />
@@ -332,7 +335,6 @@ export default function ClinicBlogPage() {
           .cb-menu { display: flex; align-items: center; }
           .cb-top-inner { display: grid; grid-template-columns: 1fr auto 1fr; }
           .cb-brand { justify-self: start; }
-          .cb-top-btn { justify-self: end; }
         }
         .cb-menu a { position: relative; color: var(--cb-sub); font-weight: 600; font-size: 1.08rem; text-decoration: none; padding: 6px 0; transition: color .15s; }
         .cb-menu a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--cb-text); transform: scaleX(0); transition: transform .25s ease; }
@@ -366,6 +368,7 @@ export default function ClinicBlogPage() {
         .cb-hero-btn:hover { border-color: var(--cb-text); background: #fff; }
         .cb-hero-btn--fill { background: var(--cb-text); border-color: var(--cb-text); color: #fff; }
         .cb-hero-btn--fill:hover { background: var(--cb-accent); border-color: var(--cb-accent); }
+        .cb-hero-btn--fill svg { position: relative; top: -.75px; } /* 클립보드 아이콘이 글자보다 아래로 처져 보여 살짝 올린다 */
         /* 휴대폰(기본 규칙보다 뒤에 둬야 덮어쓴다) — 위아래로 쌓지 않고 나란히. 화면 폭을 꽉 채우는 두 칸으로 두고 글자·여백을 줄여 한 줄에 들어가게 한다 */
         @media (max-width: 480px) {
           .cb-hero-btns { display: grid; width: 100%; max-width: 340px; margin: 8px auto 0; gap: 8px; }
@@ -508,23 +511,21 @@ export default function ClinicBlogPage() {
         .cb-gets { list-style: none; padding: 0; margin: 32px 0 0; display: grid; gap: 12px; }
         .cb-gets li { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.02rem; }
         .cb-gets span { flex: none; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--cb-accent); color: #fff; }
-        .cb-kakao { display: inline-flex; align-items: center; gap: 8px; margin-top: 36px; padding: 14px 22px; border-radius: 999px; background: #fee500; color: #191919; font-weight: 700; text-decoration: none; transition: transform .15s, box-shadow .15s; }
-        .cb-kakao:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(254,229,0,.35); }
+        /* 전화 상담 — 흰 바탕 테두리 버튼, 수화기는 플로팅 전화 버튼과 같은 초록 */
+        .cb-call { display: inline-flex; align-items: center; gap: 8px; margin-top: 36px; padding: 14px 22px; border-radius: 999px; background: #fff; border: 1.5px solid #d5d9df; color: #111418; font-weight: 700; text-decoration: none; transition: transform .15s, border-color .15s, box-shadow .15s; }
+        .cb-call svg { color: #16a34a; }
+        .cb-call:hover { transform: translateY(-1px); border-color: #111418; box-shadow: 0 8px 20px rgba(17,20,24,.08); }
 
         /* 신청서 — 흰 카드에 그림자, 입력칸은 연회색으로 채워 두고 누르면 흰 바탕 + 파란 테두리 */
         .cb-form { background: #fff; color: var(--cb-text); border: 1px solid var(--cb-line); border-radius: 24px; box-shadow: 0 24px 60px rgba(17,20,24,.08); padding: 26px 20px; display: grid; gap: 16px; position: relative; }
         #contact-form { scroll-margin-top: 24px; }
         /* 문의 유형 칩 — 고르면 파란 테두리, 상품 카드에서 넘어오면 미리 골라져 있다 */
         .cb-field-label { display: block; font-weight: 700; font-size: .9rem; margin-bottom: 8px; }
-        .cb-plan-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .cb-plan-chips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; } /* 네 가지라 2×2 */
         .cb-plan-chip { padding: 12px 8px; border-radius: 12px; border: 1.5px solid transparent; background: var(--cb-soft); color: var(--cb-sub); font: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; transition: background .15s, color .15s, border-color .15s; word-break: keep-all; }
         .cb-plan-chip:hover { border-color: #d5d9df; }
         .cb-plan-chip.is-on { background: #fff; color: var(--cb-accent); border-color: var(--cb-accent); } /* 고르면 흰 바탕에 파란 테두리·글자 */
-        /* 휴대폰 — 첫 줄에 '홈페이지 + 웹블로그' 하나, 둘째 줄에 '웹블로그만 · 상담 후 결정' */
-        @media (max-width: 480px) {
-          .cb-plan-chips { grid-template-columns: 1fr 1fr; }
-          .cb-plan-chip:nth-child(2) { grid-column: 1 / -1; order: -1; }
-        }
+
         .cb-form-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--cb-line); }
         .cb-form-head strong { font-size: 1.25rem; letter-spacing: -0.02em; }
         .cb-form-head span { font-size: .82rem; color: var(--cb-muted); }
@@ -532,6 +533,7 @@ export default function ClinicBlogPage() {
         @media (min-width: 768px) { .cb-form { padding: 36px; grid-template-columns: 1fr 1fr; } .cb-full { grid-column: 1 / -1; } }
         .cb-field label { display: block; font-weight: 700; font-size: .9rem; margin-bottom: 6px; }
         .cb-field label i { color: #e05252; font-style: normal; margin-left: 2px; }
+        .cb-optional { font-weight: 500; color: var(--cb-muted); }
         .cb-field input, .cb-field select, .cb-field textarea { width: 100%; border: 1px solid transparent; border-radius: 12px; padding: 13px 15px; font: inherit; font-size: 1rem; color: var(--cb-text); background-color: var(--cb-soft); transition: background-color .15s; }
         /* 바탕은 background-color 로만 바꾼다 — background 로 통째로 바꾸면 드롭다운 꺾쇠 그림의 위치가 초기화돼 날아다닌다 */
         .cb-field input:focus, .cb-field select:focus, .cb-field textarea:focus { background-color: #fff; }
@@ -578,6 +580,7 @@ export default function ClinicBlogPage() {
         @media (prefers-reduced-motion: reduce) { .cb-done-check circle, .cb-done-check::after, .cb-done-steps li.is-now b { animation: none; } .cb-done-check path { animation: none; stroke-dashoffset: 0; } }
 
         .cb-foot { border-top: 1px solid var(--cb-line); color: var(--cb-muted); padding: 28px 0 36px; font-size: .85rem; }
+        @media (max-width: 768px) { .cb-foot { padding-bottom: calc(36px + 56px); } } /* 휴대폰 하단 두 칸 바(56px)에 가리지 않게 */
         .cb-foot p { margin: 0; }
         .cb-foot-info span + span::before { content: '·'; margin: 0 .5em; }
         @media (max-width: 640px) {

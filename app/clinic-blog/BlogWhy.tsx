@@ -458,7 +458,7 @@ export default function BlogWhy() {
             ))}
           </ul>
           <a href="#contact-form" className="bwy-btn">
-            무료 상담 신청 <ArrowRight size={20} />
+            무료 견적 신청 <ArrowRight size={20} />
           </a>
         </div>
       </div>

@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { ArrowRight, Menu, X, ClipboardList } from 'lucide-react'
+import { ArrowRight, Menu, X, ClipboardList, Phone } from 'lucide-react'
 
 /**
  * 병·의원 블로그 페이지 상단 띠 — 브랜드와 상담 버튼만 있고, 메인 사이트로 가는 링크는 두지 않는다.
@@ -10,6 +10,9 @@ import { ArrowRight, Menu, X, ClipboardList } from 'lucide-react'
  * 좁은 화면에서는 상담 버튼 오른쪽에 햄버거 버튼을 두고, 누르면 오른쪽에서 메뉴 판이 밀려 나온다
  * (메인 사이트 모바일 메뉴와 같은 구성 — 위에 로고·닫기, 가운데 메뉴, 아래 무료 상담 버튼).
  */
+/** 대표 번호 — 메인 헤더(components/Navbar.tsx)와 같은 번호 */
+const TEL = '010-2971-7280'
+
 const MENU = [
   { href: '#webblog', label: '웹블로그란' },
   { href: '#with-homepage', label: '홈페이지와 함께' },
@@ -85,12 +88,16 @@ export default function ClinicHeader() {
               <a key={m.href} href={m.href}>{m.label}</a>
             ))}
           </nav>
-          <a href="#contact-form" className="cb-top-btn">
-            무료 상담 신청 <ArrowRight size={15} />
-          </a>
+          {/* 오른쪽 묶음 — 대표 번호(넓은 화면에서만) · 견적 버튼 · 햄버거(좁은 화면에서만) */}
+          <div className="cb-top-right">
+            <a href={`tel:${TEL}`} className="cb-tel"><Phone size={17} /> {TEL}</a>
+            <a href="#contact-form" className="cb-top-btn">
+              무료 견적 신청 <ArrowRight size={15} />
+            </a>
           <button type="button" className="cb-burger" aria-label="메뉴 열기" aria-expanded={open} onClick={() => setOpen(true)}>
             <Menu size={26} />
           </button>
+          </div>
         </div>
       </header>
 
@@ -110,18 +117,26 @@ export default function ClinicHeader() {
         </nav>
         <div className="cb-drawer-foot">
           <a href="#contact-form" className="cb-drawer-btn cb-drawer-btn--fill" onClick={close} tabIndex={open ? 0 : -1}>
-            <ClipboardList size={19} /> 무료 상담 신청
+            <ClipboardList size={19} /> 무료 견적 신청
           </a>
         </div>
       </aside>
 
       <style>{`
+        .cb-top-right { display: flex; align-items: center; justify-self: end; }
+        /* 대표 번호 — 메인 헤더처럼 견적 버튼 왼쪽. 메뉴와 겹치지 않을 만큼 넓은 화면(1100px 이상)에서만 */
+        .cb-tel { display: none; align-items: center; gap: 6px; margin-right: 20px; color: #111418; font-size: 1.08rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
+        .cb-tel:hover { color: #1f63d6; }
+        @media (min-width: 1100px) { .cb-tel { display: inline-flex; } }
         /* 햄버거 — 가운데 메뉴가 숨는 화면(960px 미만)에서만, 상담 버튼 오른쪽에 붙는다 */
         .cb-burger { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; margin-right: -8px; border: 0; background: none; color: #111418; cursor: pointer; }
         @media (max-width: 959px) {
           .cb-burger { display: inline-flex; }
-          .cb-top-btn { margin-left: auto; margin-right: 6px; }
+          .cb-top-right { margin-left: auto; }
+          .cb-top-btn { margin-right: 6px; }
         }
+        /* 휴대폰 — 화면 아래 두 칸 바에 '무료 견적 신청' 이 늘 있으니 헤더에서는 뺀다 */
+        @media (max-width: 768px) { .cb-top-btn { display: none !important; } }
 
         /* 메뉴 판 — 오른쪽에서 밀려 나오고, 뒤는 어둡게 깔린다 */
         .cb-drawer-dim { position: fixed; inset: 0; z-index: 60; background: rgba(17,20,24,.45); opacity: 0; pointer-events: none; transition: opacity .3s ease; }

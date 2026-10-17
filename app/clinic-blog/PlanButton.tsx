@@ -11,7 +11,7 @@ export default function PlanButton({ plan, fill }: { plan: string; fill?: boolea
       className={`ch-plan-btn${fill ? ' ch-plan-btn--fill' : ''}`}
       onClick={() => window.dispatchEvent(new CustomEvent(PLAN_EVENT, { detail: plan }))}
     >
-      이 구성으로 상담 신청 <ArrowRight size={17} />
+      이 구성으로 견적 신청 <ArrowRight size={17} />
     </a>
   )
 }

@@ -10,11 +10,11 @@ import { PLAN_EVENT } from './PlanButton'
 /**
  * 병·의원 웹블로그 상담 신청 폼 — 일반 문의와 같은 /api/inquiries 로 보낸다.
  * 관리자 화면에서 구분되도록 type 을 '병·의원 웹블로그', source 를 'clinic-blog' 로 남기고,
- * 진료과목은 업종(industry) 칸에, 문의 유형(웹블로그만 / 홈페이지 + 웹블로그 / 상담 후 결정)은 메모 첫 줄에 넣는다.
+ * 진료과목은 업종(industry) 칸에, 문의 유형(웹블로그 + 홈페이지 / 웹블로그만 / 홈페이지만 / 상담 후 결정)은 메모 첫 줄에 넣는다.
  * 문의 유형은 상품 카드의 '이걸로 상담받기' 를 누르면 미리 골라진다 (PlanButton 이 보내는 신호를 듣는다).
  */
 
-const PLANS = ['웹블로그만', '홈페이지 + 웹블로그', '상담 후 결정']
+const PLANS = ['웹블로그 + 홈페이지', '웹블로그만', '홈페이지만', '상담 후 결정']
 
 /** 지출 예산 — 선택 칸. 고른 값은 메모에 '예산: …' 한 줄로 남는다 */
 const BUDGETS = ['0~200만원', '200~400만원', '400~600만원', '600만원 이상']
@@ -22,11 +22,11 @@ const BUDGETS = ['0~200만원', '200~400만원', '400~600만원', '600만원 이
 const SPECIALTIES = ['치과', '피부과', '성형외과', '한의원', '정형외과', '안과', '내과·소아과', '산부인과', '기타']
 
 export default function InquiryForm() {
-  const [clinic, setClinic] = useState('')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [specialty, setSpecialty] = useState('')
   const [budget, setBudget] = useState('')
+  const [ref, setRef] = useState('')
   const [plan, setPlan] = useState('')
   const [note, setNote] = useState('')
   const [agree, setAgree] = useState(false)
@@ -68,7 +68,7 @@ export default function InquiryForm() {
           note: [
             plan && `문의 유형: ${plan}`,
             budget && `예산: ${budget}`,
-            clinic.trim() && `병원명: ${clinic.trim()}`,
+            ref.trim() && `참고 사이트: ${ref.trim()}`,
             note.trim(),
             attributionLine() && `유입: ${attributionLine()}`,
           ].filter(Boolean).join('\n'),
@@ -121,7 +121,7 @@ export default function InquiryForm() {
     <form id="contact-form" className="cb-form" onSubmit={onSubmit} noValidate>
       <HoneypotField value={honeypot} onChange={setHoneypot} />
       <div className="cb-form-head cb-full">
-        <strong>무료 상담 신청</strong>
+        <strong>무료 견적 신청</strong>
       </div>
       {/* 문의 유형 — 셋 중 하나를 고르는 칩. 선택 칸이라 안 골라도 신청된다 */}
       <div className="cb-field cb-full" role="radiogroup" aria-label="문의 유형">
@@ -141,27 +141,8 @@ export default function InquiryForm() {
           ))}
         </div>
       </div>
-      <div className="cb-field">
-        <label htmlFor="cb-clinic">병원명</label>
-        <input id="cb-clinic" value={clinic} onChange={e => setClinic(e.target.value)} placeholder="예) 위플로우치과" maxLength={40} />
-      </div>
-      <div className="cb-field">
-        <label htmlFor="cb-specialty">진료과목</label>
-        {/* required 는 '아직 안 고름' 을 흐린 글자로 보이게 하려는 것뿐 — 이 칸은 선택이라 제출 검사는 하지 않는다 (noValidate) */}
-        <select id="cb-specialty" value={specialty} onChange={e => setSpecialty(e.target.value)} required>
-          <option value="" disabled>선택해 주세요</option>
-          {SPECIALTIES.map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
-      </div>
-      <div className="cb-field cb-full">
-        <label htmlFor="cb-budget">지출 예산</label>
-        <select id="cb-budget" value={budget} onChange={e => setBudget(e.target.value)} required>
-          <option value="" disabled>선택해 주세요</option>
-          {BUDGETS.map(b => <option key={b} value={b}>{b}</option>)}
-        </select>
-      </div>
       <div className={`cb-field ${errs.name ? 'is-err' : ''}`}>
-        <label htmlFor="cb-name">담당자 성함<i>*</i></label>
+        <label htmlFor="cb-name">성함<i>*</i></label>
         <input
           id="cb-name"
           value={name}
@@ -194,6 +175,38 @@ export default function InquiryForm() {
         />
         {errs.phone && <p id="cb-phone-err" className="cb-field-err">* {errs.phone}</p>}
       </div>
+      <div className="cb-field">
+        <label htmlFor="cb-specialty">진료과목</label>
+        {/* required 는 '아직 안 고름' 을 흐린 글자로 보이게 하려는 것뿐 — 이 칸은 선택이라 제출 검사는 하지 않는다 (noValidate) */}
+        <select id="cb-specialty" value={specialty} onChange={e => setSpecialty(e.target.value)} required>
+          <option value="" disabled>선택해 주세요</option>
+          {SPECIALTIES.map(s => <option key={s} value={s}>{s}</option>)}
+        </select>
+      </div>
+      <div className="cb-field">
+        <label htmlFor="cb-budget">지출 예산</label>
+        <select id="cb-budget" value={budget} onChange={e => setBudget(e.target.value)} required>
+          <option value="" disabled>선택해 주세요</option>
+          {BUDGETS.map(b => <option key={b} value={b}>{b}</option>)}
+        </select>
+      </div>
+      {/* 참고 사이트 — 선택. 메인 맞춤 견적 폼과 같은 방식: type="url" 은 쓰지 않는다
+          ('naver.com' 처럼 앞머리 없이 적으면 브라우저가 제출을 막는다) */}
+      <div className="cb-field cb-full">
+        <label htmlFor="cb-ref">참고 사이트 주소 <span className="cb-optional">(선택)</span></label>
+        <input
+          id="cb-ref"
+          type="text"
+          inputMode="url"
+          autoCapitalize="off"
+          autoCorrect="off"
+          spellCheck={false}
+          maxLength={300}
+          placeholder="참고할 병원 사이트 주소를 적어주세요"
+          value={ref}
+          onChange={e => setRef(e.target.value)}
+        />
+      </div>
       <div className="cb-field cb-full">
         <label htmlFor="cb-note">문의 내용</label>
         <textarea
@@ -222,7 +235,7 @@ export default function InquiryForm() {
       </div>
       {error && <p className="cb-error cb-full" role="alert">{error}</p>}
       <button type="submit" className="cb-btn cb-full" disabled={submitting}>
-        {submitting ? '접수 중…' : '무료 상담 신청하기'}
+        {submitting ? '접수 중…' : '무료 견적 신청하기'}
       </button>
     </form>
   )

@@ -8,7 +8,7 @@ import PlanButton from './PlanButton'
  * 위: 환자가 지나가는 길(검색 → 블로그 글 → 홈페이지 → 예약)을 네 칸으로 보여 준다.
  *     화면에 들어오면 칸이 차례로 켜지고 사이 선이 이어진다. 가운데 두 칸(블로그 글·홈페이지)은
  *     '한 사이트 안' 이라는 띠로 묶어, 밖으로 나가지 않는다는 걸 그림으로 말한다.
- * 아래: 웹블로그만 / 홈페이지 + 웹블로그(추천) 카드. 버튼을 누르면 상담 폼의 문의 유형이 미리 골라진다.
+ * 아래: 웹블로그 / 웹블로그 + 홈페이지(추천) / 홈페이지 카드. 버튼을 누르면 상담 폼의 문의 유형이 미리 골라진다.
  * 헤더의 '홈페이지 결합' 메뉴가 여기(#with-homepage)로 온다.
  */
 
@@ -96,11 +96,17 @@ const PLANS = [
     items: ['진료과목별 웹블로그', '쉬운 글쓰기 관리자 화면', '기존 홈페이지와 연결', 'SEO·AEO·GEO 구조 설계'],
   },
   {
-    name: '홈페이지 + 웹블로그',
-    plan: '홈페이지 + 웹블로그',
+    name: '웹블로그 + 홈페이지',
+    plan: '웹블로그 + 홈페이지',
     for: '새로 만들거나 리뉴얼한다면',
     items: ['홈페이지와 웹블로그를 한 디자인으로', '관리자 화면 하나로 모두 관리', '문의·예약이 한곳에 쌓임', 'SEO·AEO·GEO 구조 설계'],
     best: true,
+  },
+  {
+    name: '홈페이지',
+    plan: '홈페이지만',
+    for: '홈페이지부터 만들고 싶다면',
+    items: ['병원 맞춤 디자인 홈페이지', '의료진 · 진료 안내 · 오시는 길', '문의·예약 접수', 'SEO·AEO·GEO 구조 설계'],
   },
 ]
 
@@ -144,7 +150,7 @@ export default function WithHomepage() {
 
         {/* 상품 두 가지 */}
         <div className="ch-plans-head">
-          <h3>홈페이지가 있다면 웹블로그만, <br className="ch-mo" />없다면 함께</h3>
+          <h3>웹블로그만, 홈페이지만, <br className="ch-mo" />또는 함께</h3>
         </div>
         <div className="ch-plans">
           {PLANS.map(p => (
@@ -290,8 +296,9 @@ export default function WithHomepage() {
         /* 상품 두 가지 */
         .ch-plans-head { margin: 96px 0 0; }
         .ch-plans-head h3 { margin: 0; font-size: clamp(1.35rem, 2.6vw, 1.75rem); font-weight: 800; letter-spacing: -0.03em; color: #111418; }
-        .ch-plans { max-width: 880px; margin: 32px auto 0; display: grid; gap: 16px; text-align: left; }
-        @media (min-width: 768px) { .ch-plans { grid-template-columns: 1fr 1fr; gap: 20px; } }
+        /* 세 장 — 넓은 화면은 한 줄(추천이 가운데), 좁으면 한 장씩 */
+        .ch-plans { max-width: 1080px; margin: 32px auto 0; display: grid; gap: 16px; text-align: left; }
+        @media (min-width: 900px) { .ch-plans { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
         .ch-plan { position: relative; display: flex; flex-direction: column; padding: 32px 28px 28px; border-radius: 24px; background: #fff; border: 1.5px solid #e6ebf2; }
         /* 추천 카드 테두리 — 파랑 · 하늘색 · 민트가 테두리를 따라 천천히 흐른다.
            안쪽 바탕(padding-box)은 그대로 두고, 테두리 층(border-box)만 3배 넓게 깔아 위치를 옮긴다 */
@@ -299,11 +306,11 @@ export default function WithHomepage() {
         @keyframes chBorderFlow { from { background-position: 0 0, 0% 50%; } to { background-position: 0 0, 150% 50%; } }
         @media (prefers-reduced-motion: reduce) { .ch-plan.is-best { animation: none; } }
         /* 별 태그 바탕도 테두리와 같은 색(파랑 · 하늘색 · 민트)이 같은 속도로 흐른다 */
-        .ch-badge { position: absolute; top: -13px; left: 28px; display: inline-flex; align-items: center; gap: 2px; padding: 5px 11px; border-radius: 999px; background: linear-gradient(90deg, #1f63d6, #6aa2f2, #5fd3c0, #6aa2f2, #1f63d6); background-size: 300% 100%; animation: chBadgeFlow 4s linear infinite; box-shadow: 0 4px 10px rgba(31,99,214,.32); }
+        .ch-badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 2px; padding: 5px 11px; border-radius: 999px; background: linear-gradient(90deg, #1f63d6, #6aa2f2, #5fd3c0, #6aa2f2, #1f63d6); background-size: 300% 100%; animation: chBadgeFlow 4s linear infinite; box-shadow: 0 4px 10px rgba(31,99,214,.32); }
         @keyframes chBadgeFlow { from { background-position: 0% 50%; } to { background-position: 150% 50%; } }
         @media (prefers-reduced-motion: reduce) { .ch-badge { animation: none; } }
         .ch-plan small { font-size: .9rem; font-weight: 700; color: #1f63d6; }
-        @media (max-width: 767px) { .ch-plan.is-best { order: -1; } } /* 휴대폰은 한 줄로 쌓이니 추천 카드를 먼저 */
+        @media (max-width: 899px) { .ch-plan.is-best { order: -1; } } /* 휴대폰은 한 줄로 쌓이니 추천 카드를 먼저 */
         .ch-plan h4 { margin: 6px 0 20px; font-size: 1.45rem; font-weight: 800; letter-spacing: -0.03em; color: #111418; }
         .ch-plan ul { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 10px; flex: 1; }
         .ch-plan li { display: flex; align-items: center; gap: 8px; font-size: 1rem; color: #3a414c; }
