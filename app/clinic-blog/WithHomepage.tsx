@@ -181,7 +181,7 @@ export default function WithHomepage() {
         .ch-body { margin: 20px auto 0; max-width: 640px; color: #4b5360; font-size: 1.15rem; line-height: 1.8; }
 
         /* 환자가 지나가는 길 */
-        .ch-flow { position: relative; max-width: 960px; margin: 68px auto 0; }
+        .ch-flow { position: relative; max-width: 960px; margin: 84px auto 0; }
         .ch-steps { position: relative; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
         /* align-content: start — 설명이 두 줄인 칸(홈페이지)만 아이콘·이름이 위로 떠 보이지 않게, 네 칸 모두 위에서부터 같은 선으로 쌓는다 */
         .ch-steps li { position: relative; display: grid; align-content: start; justify-items: center; gap: 6px; opacity: .35; transition: opacity .4s ease; transition-delay: calc(var(--i) * .45s); }
@@ -203,6 +203,7 @@ export default function WithHomepage() {
         /* 휴대폰 — 세로로 쌓지 않고 PC 처럼 가로 네 칸을 작게. 길게 늘어지지 않고 '한 사이트 안' 띠도 그대로 보인다 */
         @media (max-width: 767px) {
           .ch-flow { margin-top: 56px; }
+          .ch-gains { margin-top: 48px; }
           .ch-node { width: 46px; height: 46px; border-radius: 14px; margin-bottom: 4px; }
           .ch-node svg { width: 20px; height: 20px; }
           .ch-steps li { gap: 3px; padding: 0 2px; }
@@ -214,7 +215,7 @@ export default function WithHomepage() {
         }
 
         /* 좋은 점 넷 */
-        .ch-gains { margin: 48px auto 0; max-width: 960px; display: grid; gap: 14px; text-align: left; }
+        .ch-gains { margin: 64px auto 0; max-width: 960px; display: grid; gap: 14px; text-align: left; }
         @media (min-width: 768px) { .ch-gains { grid-template-columns: 1fr 1fr; gap: 20px; } }
         .ch-gain { padding: 14px 14px 26px; border-radius: 24px; background: #f7f8fa; transition: transform .25s ease, box-shadow .25s ease; }
         .ch-gain:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(17,20,24,.07); }
