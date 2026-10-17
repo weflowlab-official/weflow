@@ -24,10 +24,10 @@ const STEPS = [
  * 묶음(.ch-gains)이 화면에 들어오면(.is-in) 그림이 움직인다: 주소가 바뀌고, 막대가 차오르고, 색이 맞춰지고, 문의 수가 뜬다.
  */
 const GAINS = [
-  { key: 'stay', title: '밖으로 나가지 않아요', desc: '글을 읽은 환자가 같은 사이트 안에서 바로 병원 정보를 봅니다.' },
-  { key: 'grow', title: '홈페이지도 같이 강해져요', desc: '같은 주소에 글이 쌓일수록 홈페이지의 검색 신뢰도가 올라갑니다.' },
-  { key: 'brand', title: '병원 이미지가 이어져요', desc: '블로그와 홈페이지가 한 디자인이라 처음부터 끝까지 일관됩니다.' },
-  { key: 'admin', title: '관리 화면은 하나', desc: '글쓰기, 홈페이지 수정, 문의 확인을 한곳에서 합니다.' },
+  { key: 'stay', title: '밖으로 나가지 않아요', desc: <>글을 읽은 환자가 <br className="ch-mo" />같은 사이트 안에서 바로 병원 정보를 봅니다.</> },
+  { key: 'grow', title: '홈페이지도 같이 강해져요', desc: <>같은 주소에 글이 쌓일수록 <br className="ch-mo" />홈페이지의 검색 신뢰도가 올라갑니다.</> },
+  { key: 'brand', title: '병원 이미지가 이어져요', desc: <>블로그와 홈페이지가 한 디자인이라 <br className="ch-mo" />처음부터 끝까지 일관됩니다.</> },
+  { key: 'admin', title: '관리 화면은 하나', desc: <>글쓰기, 홈페이지 수정, 문의 확인을 <br className="ch-mo" />한곳에서 합니다.</> },
 ] as const
 
 /** 카드 위쪽 그림 */
@@ -181,9 +181,8 @@ export default function WithHomepage() {
         .ch-body { margin: 20px auto 0; max-width: 640px; color: #4b5360; font-size: 1.15rem; line-height: 1.8; }
 
         /* 환자가 지나가는 길 */
-        .ch-flow { position: relative; max-width: 960px; margin: 64px auto 0; }
-        .ch-steps { position: relative; list-style: none; padding: 0; margin: 0; display: grid; gap: 28px; }
-        @media (min-width: 768px) { .ch-steps { grid-template-columns: repeat(4, 1fr); gap: 0; } }
+        .ch-flow { position: relative; max-width: 960px; margin: 84px auto 0; }
+        .ch-steps { position: relative; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
         .ch-steps li { position: relative; display: grid; justify-items: center; gap: 6px; opacity: .35; transition: opacity .4s ease; transition-delay: calc(var(--i) * .45s); }
         .ch-flow.is-in .ch-steps li { opacity: 1; }
         .ch-node { position: relative; z-index: 1; width: 64px; height: 64px; border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; background: #f3f5f8; color: #8a919c; margin-bottom: 8px; transition: background .4s ease, color .4s ease, box-shadow .4s ease; transition-delay: calc(var(--i) * .45s); }
@@ -192,24 +191,26 @@ export default function WithHomepage() {
         .ch-steps small { font-size: .9rem; color: #6b7380; }
         /* 칸 사이 선 — 앞 칸이 켜진 뒤 다음 칸 쪽으로 그어진다 */
         .ch-steps li:not(:last-child)::after { content: ''; position: absolute; background: #1f63d6; transform-origin: left top; transition: transform .45s ease; transition-delay: calc(var(--i) * .45s + .2s); }
-        @media (min-width: 768px) {
-          .ch-steps li:not(:last-child)::after { top: 32px; left: calc(50% + 40px); width: calc(100% - 80px); height: 2px; transform: scaleX(0); }
-          .ch-flow.is-in .ch-steps li:not(:last-child)::after { transform: scaleX(1); }
-        }
-        @media (max-width: 767px) {
-          .ch-steps li:not(:last-child)::after { left: 50%; top: 100%; width: 2px; height: 20px; margin-top: 4px; transform: scaleY(0); }
-          .ch-flow.is-in .ch-steps li:not(:last-child)::after { transform: scaleY(1); }
-        }
+        .ch-steps li:not(:last-child)::after { top: 32px; left: calc(50% + 40px); width: calc(100% - 80px); height: 2px; transform: scaleX(0); }
+        .ch-flow.is-in .ch-steps li:not(:last-child)::after { transform: scaleX(1); }
         /* '한 사이트 안' 띠 — 가운데 두 칸(블로그 글·홈페이지)을 감싼다 */
         .ch-site { position: absolute; border: 1.5px dashed #9fc3f6; border-radius: 26px; background: #f5f9ff; opacity: 0; transition: opacity .5s ease 1.6s; }
         .ch-flow.is-in .ch-site { opacity: 1; }
         .ch-site span { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 4px 12px; border-radius: 999px; background: #1f63d6; color: #fff; font-size: .78rem; font-weight: 700; }
-        @media (min-width: 768px) {
-          .ch-site { top: -18px; bottom: -18px; left: 25%; right: 25%; }
-          .ch-site span { top: -13px; }
+        .ch-site { top: -34px; bottom: -18px; left: 25%; right: 25%; } /* 윗변을 넉넉히 올려 이름표와 아이콘 사이를 띄운다 */
+        .ch-site span { top: -13px; }
+        /* 휴대폰 — 세로로 쌓지 않고 PC 처럼 가로 네 칸을 작게. 길게 늘어지지 않고 '한 사이트 안' 띠도 그대로 보인다 */
+        @media (max-width: 767px) {
+          .ch-flow { margin-top: 72px; }
+          .ch-node { width: 46px; height: 46px; border-radius: 14px; margin-bottom: 4px; }
+          .ch-node svg { width: 20px; height: 20px; }
+          .ch-steps li { gap: 3px; padding: 0 2px; }
+          .ch-steps strong { font-size: .86rem; }
+          .ch-steps small { font-size: .7rem; line-height: 1.4; word-break: keep-all; }
+          .ch-steps li:not(:last-child)::after { top: 23px; left: calc(50% + 28px); width: calc(100% - 56px); }
+          .ch-site { top: -30px; bottom: -12px; border-radius: 18px; }
+          .ch-site span { top: -11px; font-size: .66rem; padding: 3px 9px; }
         }
-        /* 휴대폰 — 칸이 세로로 쌓이면 가운데 두 칸만 정확히 감쌀 수 없어 띠는 숨긴다 */
-        @media (max-width: 767px) { .ch-site { display: none; } }
 
         /* 좋은 점 넷 */
         .ch-gains { margin: 64px auto 0; max-width: 960px; display: grid; gap: 14px; text-align: left; }
@@ -299,8 +300,8 @@ export default function WithHomepage() {
         .ch-badge { position: absolute; top: -13px; left: 28px; display: inline-flex; align-items: center; gap: 2px; padding: 5px 11px; border-radius: 999px; background: linear-gradient(90deg, #1f63d6, #6aa2f2, #5fd3c0, #6aa2f2, #1f63d6); background-size: 300% 100%; animation: chBadgeFlow 4s linear infinite; box-shadow: 0 4px 10px rgba(31,99,214,.32); }
         @keyframes chBadgeFlow { from { background-position: 0% 50%; } to { background-position: 150% 50%; } }
         @media (prefers-reduced-motion: reduce) { .ch-badge { animation: none; } }
-        .ch-plan small { font-size: .9rem; font-weight: 700; color: #8a919c; }
-        .ch-plan.is-best small { color: #1f63d6; }
+        .ch-plan small { font-size: .9rem; font-weight: 700; color: #1f63d6; }
+        @media (max-width: 767px) { .ch-plan.is-best { order: -1; } } /* 휴대폰은 한 줄로 쌓이니 추천 카드를 먼저 */
         .ch-plan h4 { margin: 6px 0 20px; font-size: 1.45rem; font-weight: 800; letter-spacing: -0.03em; color: #111418; }
         .ch-plan ul { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 10px; flex: 1; }
         .ch-plan li { display: flex; align-items: center; gap: 8px; font-size: 1rem; color: #3a414c; }

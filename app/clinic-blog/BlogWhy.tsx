@@ -413,8 +413,8 @@ export default function BlogWhy() {
           </h2>
           {/* 웹블로그가 무엇인지 한 줄 — '웹블로그' 에 파란색이 들어올 때 함께 올라온다 */}
           <p className="bwy-def">
-            웹블로그는 <b>우리 병원 홈페이지 주소 안</b>에 있는 블로그입니다.<br />
-            글 쓰는 방법은 같고, <br className="bwy-mo" />글이 쌓이는 곳만 달라집니다.
+            웹블로그는 <b>우리 병원 홈페이지 안</b>의 블로그입니다.<br />
+            글 쓰는 방법은 같고, 글이 쌓이는 곳만 달라집니다.
           </p>
         </div>
 
@@ -494,11 +494,14 @@ export default function BlogWhy() {
         @media (min-width: 801px) { .bwy-mo { display: none; } }
         @media (max-width: 800px) {
           /* 휴대폰 위치는 메인의 '왜 WEFLOW?'(components/home/HomeWhyIntro.tsx) 와 똑같이 — 질문·답 모두 화면 정가운데 */
-          .bwy-ask { padding-bottom: 0; }
+          .bwy-ask { padding-bottom: 0; padding-top: 3vh; } /* 메인과 같은 정가운데에서 아주 조금 아래로 */
+          /* 정의 두 줄 — '웹블로그는 우리 병원 홈페이지 안의 블로그입니다.' / '글 쓰는 방법은 같고, …' 가 각각 한 줄에 들어가게 화면 폭에 맞춘 크기 */
+          .bwy-def { padding: 0 12px; font-size: 3.55vw; letter-spacing: -0.02em; line-height: 1.8; }
+          /* 설명은 쉼표 뒤에서만 줄이 바뀌게 — 화면 폭에 맞춰 조금 작게 */
+          .bwy-desc { font-size: 3.85vw; letter-spacing: -0.02em; }
           .bwy-answer { flex-direction: column; gap: 1.75rem; text-align: center; }
           .bwy-card { width: min(84vw, 420px); border-radius: 20px; }
           .bwy-text { flex: none; }
-          .bwy-answer-title { white-space: normal; }
         }
 
         /* ── 맺음 ── */

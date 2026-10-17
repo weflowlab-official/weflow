@@ -520,7 +520,11 @@ export default function ClinicBlogPage() {
         .cb-plan-chip { padding: 12px 8px; border-radius: 12px; border: 1.5px solid transparent; background: var(--cb-soft); color: var(--cb-sub); font: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; transition: background .15s, color .15s, border-color .15s; word-break: keep-all; }
         .cb-plan-chip:hover { border-color: #d5d9df; }
         .cb-plan-chip.is-on { background: #fff; color: var(--cb-accent); border-color: var(--cb-accent); } /* 고르면 흰 바탕에 파란 테두리·글자 */
-        @media (max-width: 480px) { .cb-plan-chips { grid-template-columns: 1fr; } }
+        /* 휴대폰 — 첫 줄에 '홈페이지 + 웹블로그' 하나, 둘째 줄에 '웹블로그만 · 상담 후 결정' */
+        @media (max-width: 480px) {
+          .cb-plan-chips { grid-template-columns: 1fr 1fr; }
+          .cb-plan-chip:nth-child(2) { grid-column: 1 / -1; order: -1; }
+        }
         .cb-form-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--cb-line); }
         .cb-form-head strong { font-size: 1.25rem; letter-spacing: -0.02em; }
         .cb-form-head span { font-size: .82rem; color: var(--cb-muted); }
@@ -540,9 +544,9 @@ export default function ClinicBlogPage() {
         .cb-field select:focus { background-color: #fff; }
         .cb-field select:invalid { color: #9aa1ac; }
         .cb-field select option { color: var(--cb-text); }
-        .cb-agree { display: flex; gap: 10px; align-items: flex-start; font-size: .88rem; color: var(--cb-sub); line-height: 1.55; }
+        .cb-agree { display: flex; gap: 8px; align-items: center; font-size: .88rem; color: var(--cb-sub); line-height: 1.55; } /* 체크박스를 글자 줄 세로 가운데에 */
         .cb-agree i { color: #e05252; font-style: normal; margin-left: 2px; }
-        .cb-agree input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--cb-accent); flex-shrink: 0; }
+        .cb-agree input { margin: 0; width: 18px; height: 18px; accent-color: var(--cb-accent); flex-shrink: 0; }
         .cb-error { color: #c53030; font-size: .9rem; margin: 0; }
         /* 칸별 안내 — 빠진 필수 칸은 빨간 테두리, 그 아래 빨간 한 줄 */
         .cb-field-err { margin: 6px 2px 0; color: #d64545; font-size: .85rem; font-weight: 600; }
