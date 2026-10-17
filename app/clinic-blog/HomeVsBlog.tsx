@@ -113,7 +113,7 @@ export default function HomeVsBlog() {
 
         {/* 둘 다 똑같이 챙기는 것 */}
         <div className="hv-both">
-          <p className="hv-both-head">WEFLOW는 홈페이지든 웹블로그든, 이렇게 만듭니다</p>
+          <p className="hv-both-head">WEFLOW는 홈페이지든 웹블로그든, <br className="hv-mo" />이렇게 만듭니다</p>
           <ul>
             {BOTH.map(({ Icon, title, desc }) => (
               <li key={title}>
@@ -214,10 +214,10 @@ export default function HomeVsBlog() {
         .hv-both-head { margin: 0 0 20px; font-size: clamp(1.1rem, 1.9vw, 1.22rem); font-weight: 800; letter-spacing: -0.02em; color: #111418; } /* 아래 '둘이 함께면' 맺음 문장(최대 1.4rem)보다는 작게 */
         .hv-both ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         @media (min-width: 900px) { .hv-both ul { grid-template-columns: repeat(4, 1fr); gap: 14px; } }
-        /* 휴대폰 — 옆으로 넘기는 줄. 카드 폭을 화면의 76%로 둬 다음 카드가 1/3쯤 보이게 하고, 스크롤 막대는 숨긴다.
+        /* 휴대폰 — 옆으로 넘기는 줄. 카드 폭을 화면의 62%로 둬 다음 카드가 절반쯤 보이게 하고, 스크롤 막대는 숨긴다.
            화면 양끝까지 붙여 넘기고, 멈출 때는 카드 왼쪽이 본문 여백(20px)에 맞는다 */
         @media (max-width: 767px) {
-          .hv-both ul { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 76%; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px; margin: 0 -20px; padding: 6px 20px 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+          .hv-both ul { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 62%; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px; margin: 0 -20px; padding: 6px 20px 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
           .hv-both ul::-webkit-scrollbar { display: none; }
           .hv-both li { scroll-snap-align: start; }
         }
