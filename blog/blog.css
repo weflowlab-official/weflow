@@ -1,0 +1,231 @@
+/* 이 파일만 Tailwind v4 로 처리된다 (사이트 나머지는 v3). 나누는 기준은 postcss/tailwind-split.
+   패키지 이름 tailwindcss 는 사이트의 v3 가 쓰고 있어, v4 는 tailwindcss-v4 라는 별칭으로 설치했다. */
+@import "tailwindcss-v4";
+
+/* ──────────────────────────────────────────────────────────────
+   디자인 토큰. 브랜드 색은 WEFLOW 사이트 파란색 기준. 여기만 바꾸면 전체 반영.
+   ────────────────────────────────────────────────────────────── */
+:root {
+  --black: #000;
+  --white: #fff;
+  --neutral-50: #f7f7f7;
+  --neutral-100: #f5f5f5;
+  --neutral-200: #e5e5e5;
+  --neutral-300: #d4d4d4;
+  --neutral-400: #a3a3a3;
+  --neutral-500: #737373;
+  --neutral-600: #525252;
+  --neutral-700: #404040;
+  --neutral-800: #262626;
+  --neutral-900: #171717;
+
+  /* 브랜드 색. primary = weflowlab.kr 의 --accent-strong (#1b4ea7, 흰 글씨 대비 7.79:1).
+     secondary = hover·그라데이션용 밝은 블루 — weflowlab.kr/clinic-blog 강조색(#1f63d6, 흰 글씨 대비 약 5.3:1, WCAG AA 통과). */
+  --brand-primary: #1b4ea7;
+  --brand-primary-5: #1b4ea70d;
+  --brand-primary-10: #1b4ea71a;
+  --brand-primary-20: #1b4ea733;
+  --brand-secondary: #1f63d6;
+
+  /* 의미 색 (shadcn 스타일) */
+  --background: var(--white);
+  --foreground: var(--neutral-900);
+  --card: var(--white);
+  --card-foreground: var(--neutral-900);
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--white);
+  --secondary: var(--brand-secondary);
+  --secondary-foreground: var(--white);
+  --muted: var(--neutral-100);
+  --muted-foreground: var(--neutral-500);
+  --accent: var(--neutral-100);
+  --accent-foreground: var(--neutral-900);
+  --destructive: #e40014;
+  --border: var(--neutral-200);
+  --input: var(--neutral-200);
+  --ring: var(--brand-primary);
+
+  /* 폰트 */
+  --font-sans: "Pretendard Variable", Pretendard, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+    sans-serif;
+
+  /* 둥근 모서리 단계 */
+  --radius: 1.5rem;
+  --radius-none: 0;
+  --radius-2xs: 0.25rem;
+  --radius-xs: 0.5rem;
+  --radius-s: 1rem;
+  --radius-ms: 1.25rem;
+  --radius-m: 1.5rem;
+  --radius-l: 2.5rem;
+  --radius-xl: 3rem;
+  --radius-2xl: 4rem;
+  --radius-3xl: 5rem;
+  --radius-full: 9999px;
+
+  /* 섹션 간격 */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-s: 1rem;
+  --space-ms: 1.25rem;
+  --space-m: 1.5rem;
+  --space-ml: 2rem;
+  --space-lm: 2.5rem;
+  --space-l: 3rem;
+  --space-xl: 3.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 5rem;
+  --space-4xl: 6rem;
+  --space-5xl: 7.5rem;
+  --space-6xl: 8.75rem;
+
+  /* 사이트 컨테이너 폭 (max-w-site-* 로 사용) */
+  --container-sm: 23.4375rem;
+  --container-md: 48rem;
+  --container-lg: 64rem;
+  --container-xl: 80rem;
+  --container-2xl: 90rem;
+  --container-3xl: 100rem;
+  --container-4xl: 110rem;
+  --container-full: 120rem;
+}
+
+/* Tailwind 유틸리티에 토큰 연결 (예: bg-primary, text-brand-primary, rounded-m) */
+@theme inline {
+  --font-sans: var(--font-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+
+  --radius-none: var(--radius-none);
+  --radius-2xs: var(--radius-2xs);
+  --radius-xs: var(--radius-xs);
+  --radius-s: var(--radius-s);
+  --radius-ms: var(--radius-ms);
+  --radius-m: var(--radius-m);
+  --radius-l: var(--radius-l);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-3xl: var(--radius-3xl);
+  --radius-full: var(--radius-full);
+
+  /* 애니메이션 (animate-* 로 사용) */
+  --animate-pulse-ring: pulse-ring 2.4s ease-out infinite;
+  --animate-float-y: float-y 5s ease-in-out infinite;
+  --animate-reveal-up: reveal-up 0.6s ease-out backwards;
+  --animate-fade-slide-up: fade-slide-up 0.6s ease-out backwards;
+  --animate-icon-enter: icon-enter 0.6s ease-out backwards;
+  --animate-cta-ripple: cta-ripple 3s cubic-bezier(0.25, 0.6, 0.4, 1) infinite;
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  /* 퀵 버튼 아이콘 흔들림: 3.6초마다 한 번 좌우로 흔들리고 나머지는 정지 */
+  --animate-wiggle: wiggle 3.6s ease-in-out infinite;
+
+  @keyframes pulse-ring {
+    0% { opacity: 1; transform: scale(0.96); }
+    80% { opacity: 0; transform: scale(1.04); }
+    to { opacity: 0; transform: scale(1.04); }
+  }
+  @keyframes float-y {
+    0%, to { transform: translateY(-8px); }
+    50% { transform: translateY(8px); }
+  }
+  @keyframes reveal-up {
+    0% { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes fade-slide-up {
+    0% { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes icon-enter {
+    0% { opacity: 0; transform: scale(0.6); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes cta-ripple {
+    0% { opacity: 0.3; transform: scale(1); }
+    to { opacity: 0; transform: scale(1.4); }
+  }
+  @keyframes accordion-down {
+    0% { height: 0; }
+    to { height: var(--accordion-panel-height, auto); }
+  }
+  @keyframes wiggle {
+    0%, 30%, 100% { transform: rotate(0); }
+    5% { transform: rotate(-14deg); }
+    10% { transform: rotate(12deg); }
+    15% { transform: rotate(-10deg); }
+    20% { transform: rotate(8deg); }
+    25% { transform: rotate(-4deg); }
+  }
+  @keyframes accordion-up {
+    0% { height: var(--accordion-panel-height, auto); }
+    to { height: 0; }
+  }
+}
+
+/* 사이트 컨테이너 폭 유틸리티 (레퍼런스와 동일한 이름) */
+@utility max-w-site-sm { max-width: var(--container-sm); }
+@utility max-w-site-md { max-width: var(--container-md); }
+@utility max-w-site-lg { max-width: var(--container-lg); }
+@utility max-w-site-xl { max-width: var(--container-xl); }
+@utility max-w-site-2xl { max-width: var(--container-2xl); }
+@utility max-w-site-3xl { max-width: var(--container-3xl); }
+@utility max-w-site-4xl { max-width: var(--container-4xl); }
+@utility max-w-site-full { max-width: var(--container-full); }
+
+/* 글 본문(리치텍스트) 스타일. 글 상세의 본문 래퍼에 class="prose-content" */
+.prose-content { color: var(--foreground); line-height: 1.8; }
+.prose-content p:empty::after { content: "\200b"; display: inline-block; }
+.prose-content h1 { color: var(--foreground); margin: 1.5rem 0 0.6rem; scroll-margin-top: 96px; font-size: 1.75rem; font-weight: 700; }
+.prose-content h2 { color: var(--foreground); margin: 1.5rem 0 0.6rem; scroll-margin-top: 96px; font-size: 1.5rem; font-weight: 700; }
+.prose-content h3 { color: var(--foreground); margin: 1.2rem 0 0.5rem; scroll-margin-top: 96px; font-size: 1.2rem; font-weight: 600; }
+.prose-content ul { margin: 0.6rem 0; padding-left: 1.4rem; list-style: disc outside; }
+.prose-content ol { margin: 0.6rem 0; padding-left: 1.4rem; list-style: decimal; }
+.prose-content a { color: var(--primary); text-decoration: underline; }
+.prose-content img { border-radius: var(--radius-m); max-width: 100%; margin: 1rem 0; }
+.prose-content blockquote { border-left: 3px solid var(--border); color: var(--muted-foreground); margin: 0.8rem 0; padding-left: 1rem; }
+/* 표: 머리글 남색 배경, 첫 열 강조. 래퍼(.prose-table)가 모바일 가로 스크롤과 둥근 테두리를 담당 */
+.prose-content table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 0.95em; }
+.prose-content .prose-table table { margin: 0; }
+.prose-content th, .prose-content td { border: 1px solid var(--border); vertical-align: top; text-align: left; padding: 0.7rem 0.9rem; line-height: 1.65; }
+.prose-content th { background: var(--brand-primary-5); color: var(--primary); font-weight: 700; white-space: nowrap; }
+.prose-content tr > td:first-child { font-weight: 600; background: var(--neutral-50); white-space: nowrap; }
+.prose-content tr > *:first-child { border-left: 0; }
+.prose-content tr > *:last-child { border-right: 0; }
+.prose-content tr:first-child > * { border-top: 0; }
+.prose-content tr:last-child > * { border-bottom: 0; }
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  /* 한국어 줄바꿈: 단어 중간에서 끊지 않고 어절 단위로 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 누를 수 있는 요소는 손가락 커서 (Tailwind v4 는 버튼 기본 커서가 화살표) */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary {
+  cursor: pointer;
+}

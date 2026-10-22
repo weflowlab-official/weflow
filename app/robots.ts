@@ -5,7 +5,8 @@ import type { MetadataRoute } from 'next'
 const BASE = 'https://weflowlab.kr'
 
 // 어디를 막을지는 모든 크롤러에게 똑같이 적용한다
-const DISALLOW = ['/admin', '/api/']
+// /blogadmin 은 웹블로그 관리자, /blog/next/ 는 블로그 미리보기·조회수용 내부 경로
+const DISALLOW = ['/admin', '/api/', '/blogadmin', '/blog/next/']
 
 /**
  * AI 답변엔진 크롤러 — 챗GPT·클로드·퍼플렉시티 등이 사이트를 읽고 인용해 가는 통로다.
@@ -35,7 +36,8 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: '*', allow: '/', disallow: DISALLOW },
       { userAgent: AI_CRAWLERS, allow: '/', disallow: DISALLOW },
     ],
-    sitemap: `${BASE}/sitemap.xml`,
+    // 웹블로그 글 목록은 따로 만든다 (app/(blog)/blog/sitemap.ts)
+    sitemap: [`${BASE}/sitemap.xml`, `${BASE}/blog/sitemap.xml`],
     host: BASE,
   }
 }

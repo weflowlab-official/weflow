@@ -30,8 +30,22 @@ const MOVED: Record<string, string> = {
 }
 
 // 경로를 디코딩해 깨진 문자가 있는지 보고, 있으면 홈으로 보낸다
+// 블로그 관리자(Payload) 테마 쿠키 — Payload 기본값은 쿠키가 없으면 기기의 다크 모드를 따라가는데,
+// 첫 방문은 흰 화면으로 시작하게 하되 계정 페이지의 테마 선택(라이트/다크/자동)은 그대로 쓰게 한다 (선택하면 같은 쿠키를 덮어쓴다).
+const PAYLOAD_THEME_COOKIE = 'payload-theme'
+
+function blogAdminTheme(req: NextRequest) {
+  if (req.cookies.has(PAYLOAD_THEME_COOKIE)) return NextResponse.next()
+  // 이번 요청의 서버 렌더에도 light 가 반영되도록 요청 쿠키에 먼저 넣고, 응답에도 심는다
+  req.cookies.set(PAYLOAD_THEME_COOKIE, 'light')
+  const res = NextResponse.next({ request: req })
+  res.cookies.set(PAYLOAD_THEME_COOKIE, 'light', { path: '/', maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' })
+  return res
+}
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
+  if (pathname === '/blogadmin' || pathname.startsWith('/blogadmin/')) return blogAdminTheme(req)
   let decoded = pathname
   try {
     decoded = decodeURIComponent(pathname)

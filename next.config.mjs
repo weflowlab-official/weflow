@@ -1,6 +1,13 @@
+import { withPayload } from '@payloadcms/next/withPayload'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   turbopack: {},
+  experimental: {
+    // 사이트(app/(site))·웹블로그(app/(blog))·블로그 관리자(app/(payload))가 각자 루트 레이아웃을 가져서,
+    // 어디에도 없는 주소의 404 는 app/global-not-found.tsx 가 그린다.
+    globalNotFound: true,
+  },
   images: {
     // Vercel 이미지 최적화 한도를 넘겨(402) 사진이 전부 깨지던 것을 막는다.
     // 끄면 public 의 원본을 그대로 내보낸다 — 리사이즈·WebP 변환이 없으므로
@@ -40,4 +47,5 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+// withPayload: /blog 웹블로그 관리자(Payload CMS)가 Next 안에서 돌도록 설정을 보탠다 (blog/payload.config.ts)
+export default withPayload(nextConfig)

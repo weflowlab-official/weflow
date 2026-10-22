@@ -59,3 +59,8 @@ public/hero.mp4
 
 # 내려받은 사진 원본 — 배포에는 잘라서 압축한 것만 올린다
 public/pexels-*.jpg
+
+# 웹블로그(Payload) 로컬 개발 DB·업로드 임시 폴더 — 운영은 BLOG_DATABASE_URI·Vercel Blob
+blog/payload.db*
+.payload-media-tmp
+public/blog-media/
