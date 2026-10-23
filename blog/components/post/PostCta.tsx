@@ -5,7 +5,6 @@
 import Link from "next/link";
 import {
   IconArchive,
-  IconBrandKakaoTalk,
   IconCategory,
   IconClipboardList,
   IconPencil,
@@ -17,6 +16,7 @@ import {
   IconWorldSearch,
   type Icon,
 } from "@tabler/icons-react";
+import { KakaoIcon } from "@/blog/components/ui/KakaoIcon";
 import { getClinic } from "@/blog/lib/payload";
 import { MobileBreaks } from "@/blog/components/ui/MobileBreaks";
 import { BENEFITS, BENEFITS_TITLE, CTA_TITLE as DEFAULT_TITLE, ctaText as defaultText } from "@/blog/lib/clinicDefaults";
@@ -63,7 +63,7 @@ export async function PostCta({ className = "" }: Props) {
       {/* 상담 */}
       <div className="bg-[var(--brand-primary-5)] px-5 py-8 text-center md:px-8 md:py-10">
         <h2 id={CTA_SECTION_ID} className="m-0! text-xl font-bold leading-snug text-foreground md:text-2xl">
-          {title}
+          <MobileBreaks text={title} />
         </h2>
         <p className="m-0! mt-3! whitespace-pre-line text-[15px] leading-relaxed text-neutral-600 md:text-base">
           <MobileBreaks text={text} />
@@ -83,7 +83,7 @@ export async function PostCta({ className = "" }: Props) {
               rel="noopener noreferrer"
               className="inline-flex h-12 items-center justify-center gap-1.5 whitespace-nowrap rounded-[11px] bg-[#fee500] px-6 text-base font-semibold text-[#191919] no-underline! transition-colors hover:bg-[#f5dc00]"
             >
-              <IconBrandKakaoTalk className="size-5" />
+              <KakaoIcon className="size-5" />
               카카오톡 상담
             </a>
           )}
@@ -92,7 +92,7 @@ export async function PostCta({ className = "" }: Props) {
             className="inline-flex h-12 items-center justify-center gap-1.5 whitespace-nowrap rounded-[11px] border border-primary bg-white px-6 text-base font-semibold text-primary no-underline! transition-colors hover:bg-primary hover:text-white"
           >
             <IconPhone className="size-5" />
-            {clinic.phone}
+            바로 전화
           </a>
         </div>
       </div>

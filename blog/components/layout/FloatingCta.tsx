@@ -1,11 +1,12 @@
 "use client";
 // 화면 고정 빠른 연결 버튼.
 // - 데스크톱(md+): 오른쪽 아래 세로 원형 버튼 (맨 위로 / 무료 견적 / 전화 / 카카오톡). 올리면 왼쪽으로 라벨이 펼쳐진다.
-// - 모바일: 화면 맨 아래 고정 바 3칸 (전화 / 카카오톡 / 무료 견적) + 오른쪽 아래 작은 맨 위로 버튼.
+// - 모바일: 화면 맨 아래 고정 바 2칸 (바로 전화 / 맞춤 견적 받기) + 오른쪽 아래 작은 맨 위로 버튼.
 // 드로어는 두지 않는다 (위치·진료시간은 푸터에 있음).
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { IconArrowUp, IconBrandKakaoTalk, IconClipboardList, IconPhone } from "@tabler/icons-react";
+import { IconArrowUp, IconClipboardList, IconPhone } from "@tabler/icons-react";
+import { KakaoIcon } from "@/blog/components/ui/KakaoIcon";
 import { useSite } from "@/blog/components/SiteProvider";
 
 export function FloatingCta() {
@@ -49,42 +50,34 @@ export function FloatingCta() {
         <Link href={clinic.consultUrl} className={desktopBtn} aria-label="무료 견적 신청">
           <span className={label}>무료 견적 신청</span>
           <span className={`${circle} bg-white text-primary ring-1 ring-[var(--brand-primary-20)]`}>
-            <IconClipboardList className="size-6" />
+            <IconClipboardList className="size-6 animate-wiggle motion-reduce:animate-none" />
           </span>
         </Link>
-        <a href={tel} className={desktopBtn} aria-label={`전화 상담 ${clinic.phone}`}>
-          <span className={label}>{clinic.phone}</span>
+        <a href={tel} className={desktopBtn} aria-label={`24시간 전화 상담 ${clinic.phone}`}>
+          <span className={label}>24시간 상담</span>
           <span className={`${circle} bg-primary text-white`}>
-            {/* 아이콘 흔들림: 전화 먼저, 카카오톡은 1초 뒤 */}
-            <IconPhone className="size-6 animate-wiggle motion-reduce:animate-none" />
+            {/* 아이콘 흔들림 순서: 견적 → 전화(1초 뒤) → 카카오톡(2초 뒤) */}
+            <IconPhone className="size-6 animate-wiggle motion-reduce:animate-none" style={{ animationDelay: "1s" }} />
           </span>
         </a>
         <a href={kakao} target="_blank" rel="noopener noreferrer" className={desktopBtn} aria-label="카카오톡 상담">
           <span className={label}>카카오톡 상담</span>
           <span className={`${circle} bg-[#fee500] text-[#191919]`}>
-            <IconBrandKakaoTalk className="size-6 animate-wiggle motion-reduce:animate-none" style={{ animationDelay: "1s" }} />
+            <KakaoIcon className="size-6 animate-wiggle motion-reduce:animate-none" style={{ animationDelay: "2s" }} />
           </span>
         </a>
       </div>
 
-      {/* ── 모바일: 하단 고정 바 (전화 / 카카오톡 / 무료 견적) ── */}
-      <div className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-3 bg-primary pb-[env(safe-area-inset-bottom)] md:hidden">
+      {/* ── 모바일: 하단 고정 바 (바로 전화 / 맞춤 견적 받기). 카카오톡은 전체 메뉴·글 끝 상담 블록에 있다 ── */}
+      <div className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-2 bg-primary pb-[env(safe-area-inset-bottom)] md:hidden">
         <a href={tel} className="flex h-14 items-center justify-center gap-1.5 bg-white text-[15px] font-bold text-primary active:bg-neutral-100">
           <IconPhone className="size-5 animate-wiggle motion-reduce:animate-none" />
-          전화
-        </a>
-        <a
-          href={kakao}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex h-14 items-center justify-center gap-1.5 bg-[#fee500] text-[15px] font-bold text-[#191919] active:bg-[#f5dc00]"
-        >
-          <IconBrandKakaoTalk className="size-5 animate-wiggle motion-reduce:animate-none" style={{ animationDelay: "1s" }} />
-          카카오톡
+          바로 전화
         </a>
         <Link href={clinic.consultUrl} className="flex h-14 items-center justify-center gap-1.5 bg-primary text-[15px] font-bold text-white active:bg-brand-secondary">
-          <IconClipboardList className="size-5" />
-          무료 견적
+          {/* 흔들림 순서: 전화 → 견적(1초 뒤) */}
+          <IconClipboardList className="size-5 animate-wiggle motion-reduce:animate-none" style={{ animationDelay: "1s" }} />
+          맞춤 견적 받기
         </Link>
       </div>
       {/* 모바일: 맨 위로 (하단 바 위에 작게) */}

@@ -123,8 +123,8 @@ export async function GET(): Promise<Response> {
   }
   log.push(`카테고리 ${categories.length}개`);
 
-  // 5) 작성자: 없을 때만 만든다 (관리자가 고친 내용은 보존). 사진은 WEFLOW 심볼
-  const authorPhoto = await uploadImage(payload, context, "public/logo-navy.png", "WEFLOW 로고");
+  // 5) 작성자: 없을 때만 만든다 (관리자가 고친 내용은 보존). 사진은 남색 바탕 WEFLOW 로고 (public/images/blog/weflow-author.webp)
+  const authorPhoto = await uploadImage(payload, context, "public/images/blog/weflow-author.webp", "WEFLOW 로고 (작성자 사진)");
   const doctorIds = new Map<string, number>();
   for (const [i, d] of doctors.entries()) {
     const found = (await payload.find({ collection: "doctors", where: { slug: { equals: d.slug } }, limit: 1, depth: 0 })).docs[0];

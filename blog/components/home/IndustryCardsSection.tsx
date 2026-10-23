@@ -44,7 +44,7 @@ export function IndustryCardsSection({ categories, posts }: Props) {
               우리 업종부터 골라 보세요
             </h2>
           </Reveal>
-          <p className="mt-3 text-base text-neutral-600 md:text-lg">업종마다 고객이 검색하는 말이 달라, 웹블로그에 쓸 글도 달라집니다.</p>
+          <p className="mt-3 text-base text-neutral-600 md:text-lg">업종마다 고객이 검색하는 말이 달라,<br className="md:hidden" /> 웹블로그에 쓸 글도 달라집니다.</p>
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 md:mt-12 lg:grid-cols-4 lg:gap-4">
@@ -64,7 +64,7 @@ export function IndustryCardsSection({ categories, posts }: Props) {
                   <Link href={`/blog/${c.slug}`} className="mt-4 text-lg font-bold text-foreground after:absolute after:inset-0 after:content-[''] md:text-xl">
                     {c.name}
                   </Link>
-                  {c.description && <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-neutral-600">{c.description}</p>}
+                  {c.description && <p className="mt-1.5 text-sm leading-relaxed text-neutral-600">{c.description}</p>}
                   {c.subs.length > 0 && (
                     <div className="relative z-10 mt-4 flex flex-wrap gap-1.5">
                       {c.subs.slice(0, 4).map((s) => (

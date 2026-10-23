@@ -11,7 +11,7 @@ export function Flow({ fields }: { fields: FlowFields }) {
         <div key={it.id ?? i} className="contents">
           <div className="flex-1 rounded-[11px] border border-[var(--brand-primary-20)] bg-white px-4 py-4 text-center">
             <p className="m-0! text-[15.5px] font-bold leading-snug text-foreground">{it.label}</p>
-            {it.text && <p className="m-0! mt-1.5 text-[13.5px] leading-[1.6] text-neutral-500">{it.text}</p>}
+            {it.text && <p className="m-0! mt-1.5! text-[13.5px] leading-[1.6] text-neutral-500">{it.text}</p>}
           </div>
           {i < items.length - 1 && (
             <div className="flex items-center justify-center text-primary" aria-hidden>

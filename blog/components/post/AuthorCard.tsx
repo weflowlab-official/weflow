@@ -12,17 +12,17 @@ export function AuthorCard({ doctor, className = "" }: Props) {
   return (
     <section
       aria-label="작성자 소개"
-      className={`mt-7 flex flex-col gap-8 border border-neutral-200 bg-background p-4 md:flex-row md:p-8 ${className}`}
+      className={`mt-7 flex flex-col gap-5 rounded-[12px] border border-neutral-200 bg-background p-5 sm:flex-row sm:items-center md:gap-6 md:p-6 ${className}`}
     >
-      {/* 정사각 사진. 소개 + 약력 글 높이에 맞춰 데스크톱 268px (모바일 216px). rounded-sm, 회색 바탕 */}
-      <div className="relative w-54 shrink-0 md:w-67">
+      {/* 정사각 사진. 작게(모바일 128px, 데스크톱 176px) 두고 옆 소개 글과 세로 가운데로 */}
+      <div className="relative w-32 shrink-0 md:w-44">
         {doctor.photo ? (
-          <div className="relative aspect-square w-full overflow-hidden rounded-sm bg-neutral-300">
+          <div className="relative aspect-square w-full overflow-hidden rounded-[10px] bg-neutral-300">
             {/* 세로 프로필 사진을 정사각으로 자를 때 얼굴이 있는 위쪽을 남긴다 */}
-            <MediaImage image={doctor.photo} sizes="(min-width: 768px) 268px, 216px" className="object-top" />
+            <MediaImage image={doctor.photo} sizes="(min-width: 768px) 176px, 128px" className="object-top" />
           </div>
         ) : (
-          <Placeholder label={`${doctor.name} 프로필`} className="aspect-square w-full rounded-sm bg-neutral-300" />
+          <Placeholder label={`${doctor.name} 프로필`} className="aspect-square w-full rounded-[10px] bg-neutral-300" />
         )}
       </div>
       <div className="min-w-0 flex-1">

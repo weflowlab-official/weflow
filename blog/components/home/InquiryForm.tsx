@@ -2,13 +2,14 @@
 // 웹블로그 무료 견적 신청 폼 — weflowlab.kr/clinic-blog 하단 폼(app/(site)/clinic-blog/InquiryForm.tsx)을 업종 공통으로 옮긴 것.
 // 사이트의 다른 문의와 같은 /api/inquiries 로 보내고, 관리자(/admin) 문의 목록에서 구분되도록 type '웹블로그', source 'blog' 로 남긴다.
 // 진료과목 선택 대신 업종을 직접 입력한다(industry 칸). 문의 유형·예산·참고 사이트는 메모에 한 줄씩 들어간다.
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { IconCheck, IconChevronDown } from "@tabler/icons-react";
 import HoneypotField from "@/components/HoneypotField";
 import { HONEYPOT_FIELD, wasSaved } from "@/lib/leadInput";
 import { attributionLine } from "@/lib/attribution";
 import { trackNaverLead } from "@/lib/naverConversion";
 import { formatPhone, isValidPhone } from "@/lib/phone";
+import { PLAN_EVENT } from "./PlanButton";
 
 const PLANS = ["웹블로그 + 홈페이지", "웹블로그만", "홈페이지만", "상담 후 결정"];
 
@@ -27,6 +28,12 @@ export function InquiryForm() {
   const [budget, setBudget] = useState("");
   const [ref, setRef] = useState("");
   const [plan, setPlan] = useState("");
+  // 상품 카드(PlansSection)의 '이걸로 상담받기'에서 고른 문의 유형을 받아 둔다
+  useEffect(() => {
+    const onPlan = (e: Event) => setPlan((e as CustomEvent<string>).detail);
+    window.addEventListener(PLAN_EVENT, onPlan);
+    return () => window.removeEventListener(PLAN_EVENT, onPlan);
+  }, []);
   const [note, setNote] = useState("");
   const [agree, setAgree] = useState(false);
   const [honeypot, setHoneypot] = useState("");
@@ -192,7 +199,7 @@ export function InquiryForm() {
           value={industry}
           onChange={(e) => setIndustry(e.target.value)}
           maxLength={40}
-          placeholder="예: 타이어 매장, 치과, 세무사무소"
+          placeholder="예: 치과, 안과, 타이어 매장"
           className={input}
         />
       </div>
@@ -234,7 +241,7 @@ export function InquiryForm() {
           autoCorrect="off"
           spellCheck={false}
           maxLength={300}
-          placeholder="참고하고 싶은 사이트나 지금 운영 중인 블로그 주소"
+          placeholder="참고할 사이트 주소를 적어주세요"
           value={ref}
           onChange={(e) => setRef(e.target.value)}
           className={input}
@@ -248,7 +255,7 @@ export function InquiryForm() {
           id="bl-note"
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          placeholder="궁금한 점을 편하게 적어 주세요 (선택)"
+          placeholder="궁금한 점을 편하게 적어 주세요"
           maxLength={1500}
           rows={4}
           className={`${input} h-auto resize-y py-3`}
@@ -269,9 +276,10 @@ export function InquiryForm() {
             className="mt-0.5 size-4.5 shrink-0 accent-[var(--brand-primary)]"
           />
           <span>
-            [필수] 개인정보 수집·이용에 동의합니다.<i className="not-italic text-destructive">*</i>{" "}
+            [필수] 개인정보 수집·이용에 동의합니다.<i className="not-italic text-destructive">*</i>
+            <br />
             <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-neutral-500 underline">
-              보기
+              내용 보기
             </a>
           </span>
         </label>

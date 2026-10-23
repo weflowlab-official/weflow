@@ -1,7 +1,6 @@
 "use client";
 // 메인 페이지 히어로: 흰 배경 + 은은한 장식(연한 파란 번짐 2개 + 격자), 가운데 정렬로 제목·소개·검색창·인기 키워드·버튼(무료 견적 / 업종별로 보기).
-import { useState, type FormEvent } from "react";
-import Link from "next/link";
+import { useState, type FormEvent, type MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
   IconSearch,
@@ -12,7 +11,7 @@ import {
   IconSchool,
   IconToolsKitchen2,
   IconClipboardList,
-  IconArrowDown,
+  IconCategory,
 } from "@tabler/icons-react";
 
 // 궤도 위를 도는 업종 아이콘 ("모든 업종"을 그림으로). 궤도가 돌면 같이 돌고, 아이콘 자체는 반대로 돌려 항상 똑바로 선다.
@@ -50,6 +49,7 @@ const ORBITS = [
   },
 ];
 import { useSite } from "@/blog/components/SiteProvider";
+import { HeroPixelTrail } from "@/blog/components/home/HeroPixelTrail";
 import * as defaults from "@/blog/lib/homeDefaults"; // 기본 문구 (Payload 'home' 글로벌이 비어 있을 때)
 
 // 궤도 원 하나: 가운데 기준으로 놓고(translate -50%) 원이 돌며, 원 위의 아이콘 카드는 반대로 돌아 똑바로 선다. motion-reduce 면 정지
@@ -96,6 +96,18 @@ export function HeroSection({ title, text, placeholder }: Props) {
     if (!trimmed) return;
     router.push(`/blog/search?q=${encodeURIComponent(trimmed)}`);
   };
+  // 버튼 → 같은 페이지의 섹션으로 부드럽게 이동 (섹션의 scroll-mt 가 헤더 높이만큼 띄워 준다).
+  // 주소창의 #은 바꿔 두어 새로고침·공유해도 같은 자리로 온다. '동작 줄이기' 설정이면 바로 이동
+  const scrollToSection = (e: MouseEvent<HTMLAnchorElement>) => {
+    const id = e.currentTarget.hash.slice(1);
+    const target = id && document.getElementById(id);
+    if (!target) return; // 섹션이 없으면 브라우저 기본 이동
+    e.preventDefault();
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    history.replaceState(null, "", `#${id}`);
+  };
+
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     goSearch(query);
@@ -113,6 +125,8 @@ export function HeroSection({ title, text, placeholder }: Props) {
           <div className="absolute -left-32 -top-32 size-[480px] rounded-full bg-[var(--brand-primary-10)] blur-3xl" />
           <div className="absolute -bottom-40 -right-24 size-[520px] rounded-full bg-[var(--brand-primary-10)] blur-3xl" />
         </div>
+        {/* 마우스를 따라 켜지는 픽셀 그라데이션 (마우스 기기에서만, components/home/HeroPixelTrail) */}
+        <HeroPixelTrail />
         {/* 그 위 층: 궤도 3개 — 바깥일수록 크고 느리게 (40s / 70s 역방향·점선 / 110s). 궤도마다 업종 아이콘 2개가 함께 돈다 */}
         <div className="absolute left-1/2 top-1/2 z-10 size-0 md:top-[calc(50%-20px)]">
           {ORBITS.map((orbit, i) => (
@@ -121,11 +135,11 @@ export function HeroSection({ title, text, placeholder }: Props) {
         </div>
       </div>
 
-      {/* 세로 가운데보다 살짝 위로: 아래 여백을 위보다 크게 */}
-      <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-site-4xl py-16 text-center md:pt-16 md:pb-26">
+      {/* 세로 가운데보다 살짝 아래로: 위 여백을 아래보다 조금 크게 */}
+      <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-site-4xl pt-[62px] pb-[66px] text-center md:pt-[70px] md:pb-[102px]">
         <div className="mx-auto max-w-3xl">
           <p className="animate-fade-slide-up text-base font-bold text-primary md:text-lg" style={{ animationDuration: "0.6s" }}>
-            {clinic.name} 웹블로그
+            웹블로그·홈페이지
           </p>
           <div className="mt-3 overflow-hidden">
             <h1
@@ -173,8 +187,8 @@ export function HeroSection({ title, text, placeholder }: Props) {
                   key={kw}
                   type="button"
                   onClick={() => goSearch(kw)}
-                  // 모바일은 한 줄에 맞게 3개까지만, md 이상은 전부
-                  className={`rounded-full border border-neutral-300 bg-white px-4 py-1.5 text-sm font-semibold text-neutral-900 transition-colors hover:border-primary hover:bg-primary hover:text-white md:text-base ${i >= 3 ? "hidden md:inline-flex" : ""}`}
+                  // 모바일은 한 줄에 맞게 2개까지만, md 이상은 전부
+                  className={`rounded-full border border-neutral-300 bg-white px-4 py-1.5 text-sm font-semibold text-neutral-900 transition-colors hover:border-primary hover:bg-primary hover:text-white md:text-base ${i >= 2 ? "hidden md:inline-flex" : ""}`}
                 >
                   #{kw}
                 </button>
@@ -183,20 +197,22 @@ export function HeroSection({ title, text, placeholder }: Props) {
           )}
 
           {/* 버튼: 무료 견적(맨 아래 신청 폼으로) / 업종별로 보기(아래 업종 카드로) */}
-          <div className="animate-fade-slide-up mt-8 flex flex-col items-center justify-center gap-2.5 sm:flex-row" style={{ animationDelay: "0.6s", animationDuration: "0.6s" }}>
-            <Link
+          <div className="animate-fade-slide-up mx-auto mt-8 flex max-w-md items-center justify-center gap-2 sm:max-w-none sm:gap-2.5" style={{ animationDelay: "0.6s", animationDuration: "0.6s" }}>
+            <a
               href="#contact"
-              className="inline-flex h-12 w-full max-w-xs items-center justify-center gap-1.5 rounded-full bg-primary px-7 text-base font-bold text-white shadow-[0_6px_20px_0_var(--brand-primary-20)] transition-colors hover:bg-brand-secondary sm:w-auto"
+              onClick={scrollToSection}
+              className="inline-flex h-12 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-primary px-3 text-[15px] font-bold text-white shadow-[0_6px_20px_0_var(--brand-primary-20)] transition-colors hover:bg-brand-secondary sm:flex-none sm:px-7 sm:text-base"
             >
               <IconClipboardList className="size-5" />
               무료 견적 신청
-            </Link>
+            </a>
             <a
               href="#industries"
-              className="inline-flex h-12 w-full max-w-xs items-center justify-center gap-1.5 rounded-full border border-neutral-300 bg-white px-7 text-base font-bold text-neutral-800 transition-colors hover:border-primary hover:text-primary sm:w-auto"
+              onClick={scrollToSection}
+              className="inline-flex h-12 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-neutral-300 bg-white px-3 text-[15px] font-bold text-neutral-800 transition-colors hover:border-primary hover:text-primary sm:flex-none sm:px-7 sm:text-base"
             >
+              <IconCategory className="size-5" />
               업종별로 보기
-              <IconArrowDown className="size-4" />
             </a>
           </div>
         </div>

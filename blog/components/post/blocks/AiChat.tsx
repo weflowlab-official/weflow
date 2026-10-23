@@ -4,10 +4,18 @@
 import { IconFileText, IconSparkles } from "@tabler/icons-react";
 import type { AiChatFields } from "@/blog/lib/postBlocks";
 
-export function AiChat({ fields }: { fields: AiChatFields }) {
+// floatingCaption: 아래 "예시 화면" 문구를 높이 계산에서 빼고 카드 바로 밑에 띄운다.
+// fill: 카드를 부모 높이만큼 늘리고 대화는 그 안 세로 가운데에 둔다.
+// elevated: 카드 안을 흰색으로 하고 그림자를 준다 (색 있는 배경 위에 놓을 때 카드가 묻히지 않게).
+// (셋 다 메인 AI 검색 섹션에서 쓴다. 글 본문에서는 쓰지 않는다)
+type Props = { fields: AiChatFields; floatingCaption?: boolean; fill?: boolean; elevated?: boolean };
+
+export function AiChat({ fields, floatingCaption = false, fill = false, elevated = false }: Props) {
   return (
-    <figure className="my-8">
-      <div className="overflow-hidden rounded-[16px] border border-neutral-200 bg-neutral-50">
+    <figure className={`${floatingCaption ? "relative" : "my-8"} ${fill ? "flex h-full flex-col" : ""}`}>
+      <div
+        className={`overflow-hidden rounded-[16px] border border-neutral-200 ${elevated ? "bg-white shadow-[0_16px_40px_0_var(--brand-primary-10)]" : "bg-neutral-50"} ${fill ? "flex flex-1 flex-col" : ""}`}
+      >
         {/* 상단 바: AI 검색 */}
         <div className="flex items-center gap-2 border-b border-neutral-200 bg-white px-4 py-3 md:px-5">
           <span className="flex size-7 items-center justify-center rounded-full bg-[var(--brand-primary-10)] text-primary">
@@ -16,7 +24,7 @@ export function AiChat({ fields }: { fields: AiChatFields }) {
           <span className="text-sm font-bold text-neutral-800">AI 검색</span>
         </div>
 
-        <div className="space-y-4 px-4 py-5 md:px-6 md:py-6">
+        <div className={`space-y-4 px-4 py-5 md:px-6 md:py-6 ${fill ? "flex flex-1 flex-col justify-center" : ""}`}>
           {/* 손님 질문 (오른쪽) */}
           <div className="flex justify-end">
             <p className="m-0! max-w-[85%] rounded-[18px] rounded-br-[6px] bg-primary px-4 py-2.5 text-[15px] font-medium leading-relaxed text-white md:text-base">
@@ -47,7 +55,7 @@ export function AiChat({ fields }: { fields: AiChatFields }) {
           </div>
         </div>
       </div>
-      <figcaption className="mt-2 text-center text-xs text-neutral-400 md:text-sm">이해를 돕기 위한 예시 화면입니다.</figcaption>
+      <figcaption className={`mt-2 text-center text-xs text-neutral-400 md:text-sm ${floatingCaption ? "absolute inset-x-0 top-full" : ""}`}>이해를 돕기 위한 예시 화면입니다.</figcaption>
     </figure>
   );
 }

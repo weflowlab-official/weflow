@@ -26,11 +26,11 @@ export const BANNERS: { label: string; text: string }[] = [
 // 핵심 요약 (ABOUT)
 export const SUMMARY_TITLE = "웹블로그는|우리 홈페이지 안의 블로그입니다";
 export const summaryText = (clinic: Pick<ClinicInfo, "name" | "address">) =>
-  `글 쓰는 방법은 블로그와 같지만, 글이 쌓이는 곳은 우리 회사 홈페이지 주소 아래입니다.\n${clinic.name}는 검색 노출(SEO)·답변 노출(AEO)·AI 답변 인용(GEO)까지 고려해|웹블로그 구조를 처음부터 설계합니다.`;
+  `글 쓰는 방법은 블로그와 같지만,|글이 쌓이는 곳은 우리 회사 홈페이지 주소 아래입니다.\n${clinic.name}는 검색 노출(SEO)·답변 노출(AEO)·|AI 답변 인용(GEO)까지 고려해|웹블로그 구조를 처음부터 설계합니다.`;
 
 // 장점 카드 4개 (WHY). 아이콘은 components/home/StrengthsSection 에서 순서대로 붙는다.
 export const KEY_POINTS: { title: string; text: string }[] = [
-  { title: "네이버·구글 등록까지", text: "서치어드바이저·서치콘솔 등록을 대신 해 드리고,\n새 글은 사이트맵에 저절로 올라갑니다." },
+  { title: "네이버·구글 등록까지", text: "검색엔진 등록을 대신 해 드리고,\n새 글은 사이트맵에 저절로 올라갑니다." },
   { title: "AI 검색이 읽는 글", text: "핵심 요약·질문과 답변·구조화 데이터로\nAI 검색이 읽고 인용하기 좋게 만듭니다." },
   { title: "SEO·AEO·GEO 구조 설계", text: "검색·답변·AI 인용까지\n처음부터 구조를 설계합니다." },
   { title: "모든 업종 가능", text: "병의원·차량·금융·인테리어·학원까지\n업종에 맞게 카테고리를 짭니다." },
@@ -51,7 +51,7 @@ export const faq = (clinic: Pick<ClinicInfo, "name" | "hours" | "parking" | "dir
   {
     question: "SEO·AEO·GEO가 무엇인가요?",
     answer:
-      "SEO는 검색 결과에 잘 보이게 하는 것, AEO는 '질문에 대한 답'으로 뽑히게 하는 것, GEO는 챗GPT·제미나이 같은 AI가 답변을 만들 때 우리 글을 인용하게 하는 것입니다. WEFLOW 웹블로그는 세 가지를 모두 고려해 글의 구조를 만듭니다.",
+      "SEO는 검색 결과에 잘 보이게 하는 것, AEO는 '질문에 대한 답'으로 뽑히게 하는 것, GEO는 AI가 답변을 만들 때 우리 글을 인용하게 하는 것입니다. WEFLOW 웹블로그는 세 가지를 모두 고려해 글의 구조를 만듭니다.",
   },
   {
     question: "저희 업종도 만들 수 있나요?",

@@ -146,12 +146,15 @@ export default async function PostPage({ params }: PageProps<"/blog/[category]/[
           {/* 2. 제목 + 작성자·날짜 + 공유/링크 복사 */}
           <div className="mb-10 border-b border-neutral-200 pb-10">
             <h1 className="text-2xl font-bold leading-tight md:text-4xl">{post.title}</h1>
-            <div className="mt-4 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-5 py-2 text-base text-neutral-500">
+            {/* 모바일: 작성자(왼쪽)·날짜(오른쪽) 한 줄, 그 아래 줄에 공유 버튼 오른쪽 정렬 / md 이상: 작성자·날짜 왼쪽, 공유 오른쪽 한 줄 */}
+            <div className="mt-4 flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-4">
+              <div className="flex items-center justify-between gap-5 py-2 text-base text-neutral-500 md:justify-start">
                 {doctor && <span>{doctor.name} {doctor.title}</span>}
                 <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
               </div>
-              <ShareButtons title={post.title} />
+              <div className="self-end md:self-auto">
+                <ShareButtons title={post.title} />
+              </div>
             </div>
           </div>
 

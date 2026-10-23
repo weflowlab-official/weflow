@@ -34,7 +34,7 @@ export function Callout({ fields }: { fields: CalloutFields }) {
           {title}
         </p>
       )}
-      <p className={`m-0! whitespace-pre-line text-[15.5px] leading-[1.75] text-neutral-700 ${title ? "mt-2" : ""}`}>{fields.text}</p>
+      <p className={`m-0! whitespace-pre-line text-[15.5px] leading-[1.75] text-neutral-700 ${title ? "mt-1.5!" : ""}`}>{fields.text}</p>
     </aside>
   );
 }

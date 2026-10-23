@@ -4,10 +4,12 @@
 import { IconMessageQuestion, IconFileSearch, IconPhoneCall, type Icon } from "@tabler/icons-react";
 import { AiChat } from "@/blog/components/post/blocks/AiChat";
 import { Reveal } from "@/blog/components/ui/Reveal";
+import { MobileBreaks } from "@/blog/components/ui/MobileBreaks";
 
+// text 의 "|" 는 모바일에서만 줄바꿈 (components/ui/MobileBreaks)
 const STEPS: { Icon: Icon; title: string; text: string }[] = [
-  { Icon: IconMessageQuestion, title: "손님이 AI에게 묻습니다", text: "검색창 대신 챗GPT·제미나이에 바로 질문하는 손님이 늘고 있습니다." },
-  { Icon: IconFileSearch, title: "AI가 우리 글을 읽고 인용합니다", text: "질문에 답하는 글이 우리 홈페이지에 있으면, AI가 그 글을 근거로 답하고 출처로 보여 줍니다." },
+  { Icon: IconMessageQuestion, title: "손님이 AI에게 묻습니다", text: "검색창 대신 AI에게 바로 질문하는 손님이 늘고 있습니다." },
+  { Icon: IconFileSearch, title: "AI가 우리 글을 읽고 인용합니다", text: "질문에 답하는 글이 우리 홈페이지에 있으면,|AI가 그 글을 근거로 답하고 출처로 보여 줍니다." },
   { Icon: IconPhoneCall, title: "같은 사이트에서 상담으로", text: "출처를 누른 손님은 우리 홈페이지 안에서 글을 읽고, 바로 상담까지 이어집니다." },
 ];
 
@@ -23,7 +25,7 @@ const EXAMPLE = {
 export function AiSearchSection() {
   return (
     <section aria-labelledby="home-ai-title" className="bg-[var(--brand-primary-5)] py-16 md:py-24">
-      <div className="mx-auto grid w-full max-w-site-4xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
+      <div className="mx-auto grid w-full max-w-site-4xl grid-cols-[minmax(0,1fr)] items-start gap-10 lg:items-stretch px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
         <div>
           <p className="text-sm font-semibold text-primary md:text-base">AI SEARCH</p>
           <Reveal variant="up">
@@ -43,15 +45,20 @@ export function AiSearchSection() {
                   </span>
                   <span>
                     <strong className="block text-base font-bold text-foreground md:text-lg">{title}</strong>
-                    <span className="mt-1 block text-sm leading-relaxed text-neutral-600 md:text-[15px]">{text}</span>
+                    <span className="mt-1 block text-sm leading-relaxed text-neutral-600 md:text-[15px]">
+                      <MobileBreaks text={text} />
+                    </span>
                   </span>
                 </li>
               </Reveal>
             ))}
           </ol>
         </div>
-        <Reveal variant="fade-up" delay={0.15}>
-          <AiChat fields={EXAMPLE} />
+        {/* 넓은 화면: 카드 윗변은 왼쪽 제목(h2) 윗줄에(아이브로우 한 줄 28px 만큼 내림), 아랫변은 왼쪽 마지막 줄에 맞춘다.
+            오른쪽 칸을 왼쪽 높이만큼 늘리고(items-stretch), 카드가 그 높이를 채운다(fill) */}
+        {/* 아래 "예시 화면" 문구까지 한 덩어리로 보이게 카드·문구를 함께 12px 올림 */}
+        <Reveal variant="fade-up" delay={0.15} className="lg:mt-7 lg:h-[calc(100%-1.75rem)] lg:-translate-y-3">
+          <AiChat fields={EXAMPLE} floatingCaption fill elevated />
         </Reveal>
       </div>
     </section>

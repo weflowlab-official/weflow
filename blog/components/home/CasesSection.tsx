@@ -8,8 +8,17 @@ import { Reveal } from "@/blog/components/ui/Reveal";
 
 const SHOW = 6;
 
+// 블로그 메인에서만 순서를 바꿀 사례: slug → 몇 번째(0부터). 사이트 /cases 순서(data/cases.ts)는 건드리지 않는다
+const PIN: Record<string, number> = { hrentcar: 4 };
+
 export function CasesSection() {
-  const cases = portfolios.filter((p) => p.detail && !p.placeholder && p.images.length > 0).slice(0, SHOW);
+  const real = portfolios.filter((p) => p.detail && !p.placeholder && p.images.length > 0);
+  const ordered = real.filter((p) => !(p.slug in PIN));
+  for (const [slug, at] of Object.entries(PIN).sort((x, y) => x[1] - y[1])) {
+    const c = real.find((p) => p.slug === slug);
+    if (c) ordered.splice(at, 0, c);
+  }
+  const cases = ordered.slice(0, SHOW);
   if (cases.length === 0) return null;
 
   return (
@@ -23,7 +32,7 @@ export function CasesSection() {
                 WEFLOW가 만든 홈페이지
               </h2>
             </Reveal>
-            <p className="mt-3 text-base text-neutral-600 md:text-lg">웹블로그는 이런 홈페이지 안에 붙여 함께 운영할 수 있습니다.</p>
+            <p className="mt-3 text-base text-neutral-600 md:text-lg">웹블로그는 이런 홈페이지 안에 붙여<br className="md:hidden" /> 함께 운영할 수 있습니다.</p>
           </div>
           {/* 사이트 쪽 페이지라 루트 레이아웃이 달라, Link 여도 페이지를 새로 불러온다 */}
           <Link href="/cases" className="group hidden items-center gap-1 text-base font-semibold text-neutral-700 hover:text-primary md:flex">

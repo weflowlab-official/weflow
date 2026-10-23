@@ -40,7 +40,7 @@ export const clinic: ClinicInfo = {
 // 큰 업종 = 카테고리 (lib/industries.ts)
 export const categories: Category[] = INDUSTRY_GROUPS.map(({ slug, name, description, subs }) => ({ slug, name, description, subs }));
 
-export const popularKeywords = ["SEO·AEO·GEO", "AI 검색", "타이어", "네이버 블로그"];
+export const popularKeywords = ["SEO·AEO·GEO", "AI 검색", "병의원", "네이버 블로그"];
 
 // 작성자 (글 하단 '이 글을 쓴 사람' 카드)
 export const doctors: Doctor[] = [

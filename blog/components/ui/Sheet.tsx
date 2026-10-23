@@ -92,11 +92,11 @@ export function Sheet({ open, onClose, side = "bottom", modal = true, title, cla
 
   return createPortal(
     <>
-      {/* 레퍼런스 sheet-overlay: fixed inset-0 z-50 bg-black/10 + fade */}
+      {/* 뒤를 어둡게 + fade. 흐림(backdrop-blur)은 쓰지 않는다 — 휴대폰에서 화면 전체를 매 프레임 다시 그려 메뉴가 멈춘 것처럼 버벅였다 */}
       {modal && (
         <div
           aria-hidden
-          className={`fixed inset-0 z-50 bg-black/10 backdrop-blur-xs transition-opacity duration-100 ${visible ? "opacity-100" : "opacity-0"}`}
+          className={`fixed inset-0 z-50 bg-black/40 transition-opacity duration-200 ${visible ? "opacity-100" : "opacity-0"}`}
         />
       )}
       <div

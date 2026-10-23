@@ -1,7 +1,8 @@
 // 사이트 푸터 (자체 구성). 연한 회색 배경 3열: 로고 + 사업자 정보 / 상담 시간·채널 / 상담 문의(무료 견적 · 카카오톡 · 전화).
 // 하단 바: 법적 링크 + 저작권. 데이터는 Payload 회사 정보(getClinic). 사업자 정보는 weflowlab.kr 푸터와 같은 값.
 import Link from "next/link";
-import { IconBrandKakaoTalk, IconClipboardList, IconPhone } from "@tabler/icons-react";
+import { IconClipboardList, IconPhone } from "@tabler/icons-react";
+import { KakaoIcon } from "@/blog/components/ui/KakaoIcon";
 import { getClinic } from "@/blog/lib/payload";
 import { Container } from "@/blog/components/ui/Container";
 import { BlogLogo } from "@/blog/components/layout/BlogLogo";
@@ -79,7 +80,7 @@ export async function SiteFooter() {
                 rel="noopener noreferrer"
                 className="inline-flex h-11 items-center gap-2 rounded-[11px] bg-[#fee500] px-4 text-sm font-semibold text-[#191919] transition-colors hover:bg-[#f5dc00] md:text-base"
               >
-                <IconBrandKakaoTalk className="size-5" />
+                <KakaoIcon className="size-5" />
                 카카오톡
               </a>
             )}

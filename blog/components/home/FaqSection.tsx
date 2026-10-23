@@ -1,4 +1,5 @@
 // 메인 페이지 "자주 묻는 질문" 섹션 (푸터 바로 위). 왼쪽 아이브로우 + 제목 + 안내, 오른쪽 아코디언.
+import { MobileBreaks } from "@/blog/components/ui/MobileBreaks";
 import { FaqAccordion } from "@/blog/components/ui/FaqAccordion";
 import { getClinic } from "@/blog/lib/payload";
 import { faq as defaultFaq } from "@/blog/lib/homeDefaults"; // 글로벌의 FAQ 가 비어 있을 때의 기본값
@@ -21,7 +22,7 @@ export async function FaqSection({ items }: Props) {
               자주 묻는 질문
             </h2>
             <p className="mt-3 whitespace-pre-line text-base text-neutral-600 md:text-lg">
-              {"웹블로그를 처음 알아보실 때 자주 묻는 내용을 모았습니다.\n더 궁금한 점은 오른쪽 아래 버튼으로 문의해 주세요."}
+              <MobileBreaks text={"웹블로그를 처음 알아보실 때|자주 묻는 내용을 모았습니다.\n더 궁금한 점은 오른쪽 아래 버튼으로 문의해 주세요."} />
             </p>
           </div>
           {/* 오른쪽: 아코디언 */}

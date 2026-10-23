@@ -1,7 +1,8 @@
 // 메인 페이지 맨 아래(푸터 바로 위) 무료 견적 신청 섹션 — weflowlab.kr/clinic-blog 하단 '상담 신청'을 업종 공통으로 옮긴 것.
 // 왼쪽: 안내 + 상담에서 받아 가는 것 + 전화·카카오톡 / 오른쪽: 신청 폼(InquiryForm).
 // 블로그 곳곳의 '무료 견적' 버튼(회사 정보 → 상담 버튼 연결 주소, 기본 /blog#contact)이 여기로 온다.
-import { IconBrandKakaoTalk, IconCheck, IconPhone } from "@tabler/icons-react";
+import { IconCheck, IconPhone } from "@tabler/icons-react";
+import { KakaoIcon } from "@/blog/components/ui/KakaoIcon";
 import { getClinic } from "@/blog/lib/payload";
 import { InquiryForm } from "./InquiryForm";
 
@@ -50,7 +51,7 @@ export async function InquirySection() {
                 rel="noopener noreferrer"
                 className="inline-flex h-12 items-center gap-2 rounded-full bg-[#fee500] px-5 text-base font-bold text-[#191919] transition-colors hover:bg-[#f5dc00]"
               >
-                <IconBrandKakaoTalk className="size-5" />
+                <KakaoIcon className="size-5" />
                 카카오톡 상담
               </a>
             )}
