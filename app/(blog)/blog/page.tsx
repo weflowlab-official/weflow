@@ -1,5 +1,5 @@
 // 블로그 메인(/blog). 헤더/푸터는 app/(blog)/layout.tsx 가 감싸고, 여기서는 본문 섹션만 순서대로 조립한다.
-// 구성: 히어로(검색·무료 견적) → 보안 뉴스·Next.js 비교 → 웹블로그가 검색에 자리 잡는 구조(SEO·AEO·GEO) → 업종 카드 → 병의원 전용(/clinic-blog 로) → AI 검색 장면 → 웹블로그란?(홈페이지 비교·함께하면 좋은 점) → 상품 3종 → 장점 카드 → 가장 많이 본 글 → 최신 글 → 제작 사례 → FAQ → 무료 견적 신청 폼(#contact)
+// 구성: 히어로(검색·무료 견적) → 보안 뉴스·Next.js 비교 → 웹블로그가 검색에 자리 잡는 구조(SEO·AEO·GEO) → 병의원 전용(/clinic-blog 로) → 업종 카드 → AI 검색 장면 → 웹블로그란?(홈페이지 비교·함께하면 좋은 점) → 상품 3종 → 장점 카드 → 가장 많이 본 글 → 최신 글 → 제작 사례 → FAQ → 무료 견적 신청 폼(#contact)
 // 홍보용 흐름: 업종을 골라 들어가거나, 웹블로그가 무엇을 하는지 보고, 사례와 FAQ 를 거쳐 상담으로.
 // 데이터: Payload 'home' 글로벌(getHome) + 글 목록 + 카테고리. 글로벌 값이 비어 있으면 각 섹션의 기본 문구를 쓴다.
 import { Suspense } from "react";
@@ -35,8 +35,9 @@ export default async function HomePage() {
       </Suspense>
       <SecurityNewsSection />
       <HowItWorksSection />
-      <IndustryCardsSection categories={categories} posts={all} />
+      {/* 병의원 전용을 업종 카드보다 먼저 — 웹블로그 수요가 가장 큰 업종이라 먼저 보여 준다 */}
       <ClinicFocusSection />
+      <IndustryCardsSection categories={categories} posts={all} />
       <AiSearchSection />
       {/* AI 장면 → "그 글이 쌓이는 곳이 웹블로그" → 장점 → 실제 글(인기·최신)·사례로 확인 → FAQ → 신청 */}
       <SummarySection title={home.summaryTitle} text={home.summaryText} />

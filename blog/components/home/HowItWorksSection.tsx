@@ -43,9 +43,9 @@ export function HowItWorksSection() {
           <p className="text-sm font-semibold text-primary md:text-base">HOW IT WORKS</p>
           <Reveal variant="up">
             <h2 id="home-how-title" className="mt-1 text-2xl font-bold leading-tight md:text-3xl lg:text-4xl">
-              글만 쓰면, 네이버·구글에
+              글만 쓰면, 네이버·구글에 자리 잡고
               <br />
-              스스로 자리 잡는 구조
+              AI까지 읽어 가는 구조
             </h2>
           </Reveal>
           <p className="mt-4 text-base leading-relaxed text-neutral-600 md:text-lg">
