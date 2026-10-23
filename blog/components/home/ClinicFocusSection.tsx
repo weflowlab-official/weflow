@@ -6,6 +6,11 @@ import Link from "next/link";
 import { IconArrowRight, IconArticle, IconCalendarEvent, IconCheck, IconStethoscope } from "@tabler/icons-react";
 import { subIndustriesOf } from "@/blog/lib/industries";
 import { Reveal } from "@/blog/components/ui/Reveal";
+import { InView } from "@/blog/components/ui/InView";
+
+// 예시 화면 안 요소의 등장 효과 (InView 가 화면에 들어오면 켠다)
+const APPEAR =
+  "opacity-0 translate-y-2 transition-[opacity,translate] duration-500 ease-out group-data-[in=true]/inview:opacity-100 group-data-[in=true]/inview:translate-y-0 motion-reduce:opacity-100 motion-reduce:translate-y-0 motion-reduce:transition-none";
 
 const POINTS = ["진료과목별로 정리되는 카테고리", "글을 읽다가 바로 병원 홈페이지·예약으로", "병원 홈페이지와 한 디자인, 한 관리자 화면"];
 
@@ -32,9 +37,12 @@ export function ClinicFocusSection() {
             </p>
             <Reveal variant="up">
               <h2 id="home-clinic-title" className="mt-2 text-2xl font-bold leading-tight md:text-3xl lg:text-4xl">
-                병의원 웹블로그에 글 하나 올렸을 뿐인데,
+                {/* 모바일: 네 줄로 끊는 자리를 정해 둔다 (그냥 두면 '뿐인데,'·'챙겨진다면?'이 홀로 떨어졌다). 데스크톱: 두 줄 */}
+                병의원 웹블로그에
+                <br className="md:hidden" /> 글 하나 올렸을 뿐인데,
                 <br />
-                <span className="text-[#9fbdf5]">SEO·AEO·GEO</span>까지 한 번에 챙겨진다면?
+                <span className="text-[#9fbdf5]">SEO·AEO·GEO</span>까지
+                <br className="md:hidden" /> 한 번에 챙겨진다면?
               </h2>
             </Reveal>
             {/* 넓은 화면에서 "만들어져," 뒤로 두 줄 — 한 줄이 칸을 넘지 않게 글씨를 조금 줄였다 */}
@@ -88,10 +96,11 @@ export function ClinicFocusSection() {
             )}
           </div>
 
-          {/* 오른쪽: 우리병원.com/blog 예시 화면 */}
+          {/* 오른쪽: 우리병원.com/blog 예시 화면. 화면에 들어오면 글 목록이 차례로 올라오고,
+              첫 글이 '읽는 중'처럼 표시된 뒤 아래 예약 띠가 나타나 버튼이 깜빡인다 (clinic-blog 대화 장면과 같은 방식) */}
           <Reveal variant="fade-up" delay={0.15}>
             <figure aria-label="병의원 웹블로그 예시 화면">
-              <div className="overflow-hidden rounded-[16px] bg-white text-foreground shadow-[0_24px_60px_0_rgba(0,0,0,0.35)]">
+              <InView className="overflow-hidden rounded-[16px] bg-white text-foreground shadow-[0_24px_60px_0_rgba(0,0,0,0.35)]">
                 {/* 브라우저 주소창 */}
                 <div className="flex items-center gap-2 border-b border-neutral-200 bg-neutral-50 px-4 py-3">
                   <span className="flex gap-1.5" aria-hidden>
@@ -111,22 +120,33 @@ export function ClinicFocusSection() {
                     ))}
                   </div>
                   <ul className="mt-2 divide-y divide-neutral-100">
-                    {POSTS.map((p) => (
-                      <li key={p.title} className="py-3">
-                        <p className="truncate text-[15px] font-semibold">{p.title}</p>
-                        <p className="mt-0.5 text-xs text-neutral-400">{p.meta}</p>
+                    {POSTS.map((p, i) => (
+                      <li key={p.title} className={`py-1 ${APPEAR}`} style={{ transitionDelay: `${0.3 + 0.3 * i}s` }}>
+                        {/* 첫 글: 글이 다 올라온 뒤 '지금 읽는 글'처럼 옅게 칠해진다 */}
+                        <div
+                          className={`-mx-2 rounded-[10px] px-2 py-2 transition-colors duration-500 ${i === 0 ? "group-data-[in=true]/inview:bg-[var(--brand-primary-5)]" : ""}`}
+                          style={i === 0 ? { transitionDelay: "1.4s" } : undefined}
+                        >
+                          <p className="truncate text-[15px] font-semibold">{p.title}</p>
+                          <p className="mt-0.5 text-xs text-neutral-400">{p.meta}</p>
+                        </div>
                       </li>
                     ))}
                   </ul>
-                  <div className="mt-3 flex items-center justify-between rounded-[12px] bg-[var(--brand-primary-5)] px-4 py-3">
+                  <div
+                    className={`mt-3 flex items-center justify-between rounded-[12px] bg-[var(--brand-primary-5)] px-4 py-3 ${APPEAR}`}
+                    style={{ transitionDelay: "1.9s" }}
+                  >
                     <span className="text-sm font-semibold text-neutral-700">글을 읽고 바로 예약까지</span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-xs font-bold text-white">
+                    <span className="relative inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-xs font-bold text-white">
+                      {/* 예약 버튼 둘레가 천천히 퍼지며 눈길을 끈다 */}
+                      <span aria-hidden className="absolute -inset-1 hidden rounded-full border-2 border-primary group-data-[in=true]/inview:block group-data-[in=true]/inview:animate-pulse-ring motion-reduce:hidden!" />
                       <IconCalendarEvent className="size-3.5" />
                       진료 예약
                     </span>
                   </div>
                 </div>
-              </div>
+              </InView>
               <figcaption className="mt-2.5 text-center text-xs text-white/50">이해를 돕기 위한 예시 화면입니다.</figcaption>
             </figure>
           </Reveal>

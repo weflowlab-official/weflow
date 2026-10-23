@@ -135,8 +135,8 @@ export function HeroSection({ title, text, placeholder }: Props) {
         </div>
       </div>
 
-      {/* 세로 가운데보다 살짝 아래로: 위 여백을 아래보다 조금 크게 */}
-      <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-site-4xl pt-[62px] pb-[66px] text-center md:pt-[70px] md:pb-[102px]">
+      {/* 모바일: 위아래 여백을 같게 해 글 묶음을 궤도 중심에 / PC: 이전 배치(위 여백을 조금 작게) 그대로 */}
+      <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-site-4xl py-16 text-center md:pt-[70px] md:pb-[102px]">
         <div className="mx-auto max-w-3xl">
           <p className="animate-fade-slide-up text-base font-bold text-primary md:text-lg" style={{ animationDuration: "0.6s" }}>
             웹블로그·홈페이지
@@ -196,8 +196,8 @@ export function HeroSection({ title, text, placeholder }: Props) {
             </div>
           )}
 
-          {/* 버튼: 무료 견적(맨 아래 신청 폼으로) / 업종별로 보기(아래 업종 카드로) */}
-          <div className="animate-fade-slide-up mx-auto mt-8 flex max-w-md items-center justify-center gap-2 sm:max-w-none sm:gap-2.5" style={{ animationDelay: "0.6s", animationDuration: "0.6s" }}>
+          {/* 버튼: 무료 견적(맨 아래 신청 폼으로) / 업종별로 보기(아래 업종 카드로). 모바일은 하단 고정 바가 있어 숨긴다 */}
+          <div className="animate-fade-slide-up mx-auto mt-8 hidden items-center justify-center gap-2.5 md:flex" style={{ animationDelay: "0.6s", animationDuration: "0.6s" }}>
             <a
               href="#contact"
               onClick={scrollToSection}

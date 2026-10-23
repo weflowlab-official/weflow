@@ -229,3 +229,11 @@ button:not(:disabled),
 summary {
   cursor: pointer;
 }
+
+/* AI 검색 대화 블록의 'AI 입력 중' 점: 나타났다가 답변이 나올 때 사라진다 (components/post/blocks/AiChat) */
+@keyframes ai-typing {
+  0% { opacity: 0; }
+  12% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
