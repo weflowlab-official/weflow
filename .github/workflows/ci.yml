@@ -26,8 +26,12 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # 블로그 페이지가 쓰는 PageProps 등 라우트 타입은 Next 가 만들어 준다 (빌드 전이라 먼저 생성)
+      - name: Generate route types
+        run: npx next typegen
+
       - name: Type check
         run: npx tsc --noEmit
 
-      - name: Build
-        run: npm run build
+      # 빌드는 여기서 하지 않는다 — /blog 페이지를 미리 만들 때 블로그 DB(Neon)를 읽어야 하는데,
+      # 그 접속 정보는 Vercel 에만 두고 GitHub 에는 주지 않기로 했다. 빌드 확인은 Vercel 배포가 맡는다 (실패하면 배포가 멈춘다)
