@@ -31,12 +31,13 @@ export function ClinicFocusSection() {
         <div className="grid items-center gap-10 overflow-hidden rounded-[24px] bg-linear-to-br from-primary to-[#0d2858] p-6 text-white md:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:gap-14 lg:p-14">
           {/* 왼쪽: 안내 */}
           <div>
-            <p className="flex items-center gap-1.5 text-sm font-semibold text-white/70 md:text-base">
+            {/* 모바일: 아이브로우·제목만 가운데 정렬 (아래 설명·목록·버튼은 왼쪽 그대로) */}
+            <p className="flex items-center justify-center gap-1.5 text-sm font-semibold text-white/70 md:justify-start md:text-base">
               <IconStethoscope className="size-4" />
               FOR CLINICS
             </p>
             <Reveal variant="up">
-              <h2 id="home-clinic-title" className="mt-2 text-2xl font-bold leading-tight md:text-3xl lg:text-4xl">
+              <h2 id="home-clinic-title" className="mt-4 text-center text-2xl font-bold leading-tight md:text-left md:text-3xl lg:text-4xl">
                 {/* 모바일: 네 줄로 끊는 자리를 정해 둔다 (그냥 두면 '뿐인데,'·'챙겨진다면?'이 홀로 떨어졌다). 데스크톱: 두 줄 */}
                 병의원 웹블로그에
                 <br className="md:hidden" /> 글 하나 올렸을 뿐인데,
@@ -46,7 +47,7 @@ export function ClinicFocusSection() {
               </h2>
             </Reveal>
             {/* 넓은 화면에서 "만들어져," 뒤로 두 줄 — 한 줄이 칸을 넘지 않게 글씨를 조금 줄였다 */}
-            <p className="mt-4 text-sm leading-relaxed text-white/75 md:text-[15px] lg:text-sm xl:text-[15px]">
+            <p className="mt-6 text-sm leading-relaxed text-white/75 md:text-[15px] lg:text-sm xl:text-[15px]">
               글을 올리면 사이트맵·핵심 요약·자주 묻는 질문·구조화 데이터가 함께 만들어져,
               <br className="hidden md:block" /> 네이버·구글 검색과 AI 답변까지 대비합니다. 병의원 전용 페이지에서 자세히 안내해 드립니다.
             </p>
