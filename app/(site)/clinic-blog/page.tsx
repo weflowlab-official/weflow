@@ -4,6 +4,8 @@ import InquiryForm from './InquiryForm'
 import InView from './InView'
 import BlogWhy from './BlogWhy'
 import ClinicHeader from './ClinicHeader'
+import ClinicFooter from './ClinicFooter'
+import { CLINIC_BASE_CSS } from './base-css'
 import HeroWorries from './HeroWorries'
 import ClinicFaq from './ClinicFaq'
 import HomeVsBlog from './HomeVsBlog'
@@ -297,75 +299,12 @@ export default function ClinicBlogPage() {
         </div>
       </section>
 
-      {/* 사업자 정보 + 오른쪽에 개인정보처리방침 — 메인 사이트로 나가는 유일한 링크라 새 탭으로 연다 */}
-      <footer className="cb-foot">
-        <div className="cb-wrap cb-foot-inner">
-          {/* 넓은 화면에서는 · 로 이어 한 줄, 휴대폰에서는 항목마다 한 줄씩 */}
-          <p className="cb-foot-info">
-            <span>WEFLOW</span>
-            <span>대표 신서준</span>
-            <span>사업자등록번호 884-07-03480</span>
-            <span>contact@weflowlab.kr</span>
-          </p>
-          <a href="/privacy" target="_blank" rel="noopener noreferrer">개인정보처리방침</a>
-        </div>
-      </footer>
+      <ClinicFooter />
 
       {/* 오른쪽 아래 떠 있는 상담 버튼 — 첫 화면과 상담 폼에서는 숨는다 */}
       <FloatingCta />
 
-      <style>{`
-        .cb {
-          --cb-text: #111418;
-          --cb-sub: #4b5360;
-          --cb-muted: #8a919c;
-          --cb-line: #e9ebef;
-          --cb-soft: #f7f8fa;
-          --cb-accent: #1f63d6;
-          --cb-bubble-me: #1f63d6;
-          --cb-bubble-you: #f1f3f6;
-          background: #fff;
-          color: var(--cb-text);
-          min-height: 100vh;
-        }
-        .cb-wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
-        .cb-pc { display: none; }
-        @media (min-width: 768px) { .cb-pc { display: inline; } }
-        /* 휴대폰에서만 줄을 바꾸는 자리 */
-        @media (min-width: 768px) { .cb-mo { display: none; } }
-
-        /* 헤더 — 양끝까지 꽉 찬 얇은 띠. 처음엔 투명, 내리면 흰 바탕 + 아래 선 (ClinicHeader 가 is-scrolled 를 붙인다).
-           내용 위로 겹치므로 첫 화면은 그만큼 내려 시작한다 */
-        .cb-top { position: fixed; top: 0; left: 0; right: 0; z-index: 30; background: transparent; border-bottom: 1px solid transparent; transition: background .25s ease, border-color .25s ease, transform .35s cubic-bezier(.16,1,.3,1); }
-        .cb-top.is-hidden { transform: translateY(-100%); }
-        .cb-top.is-scrolled { background: rgba(255,255,255,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom-color: var(--cb-line); }
-        /* 헤더만 본문(1080px)보다 넓게 — 로고와 버튼을 양끝으로 더 벌린다 */
-        .cb-top .cb-top-inner { max-width: 1440px; padding: 0 clamp(20px, 3vw, 48px); }
-        .cb-top-inner { height: 76px; display: flex; align-items: center; justify-content: space-between; }
-        .cb-brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.35rem; color: var(--cb-text); text-decoration: none; cursor: pointer; letter-spacing: -0.02em; }
-        .cb-brand-sep { width: 1px; height: 14px; background: #d5d9df; margin: 0 4px; }
-        .cb-brand-sub { font-weight: 600; font-size: 1.02rem; color: var(--cb-muted); letter-spacing: -0.01em; }
-        .cb-top-btn { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 20px; border-radius: 999px; background: var(--cb-text); color: #fff; font-weight: 700; font-size: 1.02rem; text-decoration: none; transition: background .15s; }
-        .cb-top-btn:hover { background: var(--cb-accent); }
-        /* 휴대폰 — 버튼을 작게 */
-        @media (max-width: 640px) { .cb-top-btn { height: 36px; padding: 0 14px; font-size: .86rem; gap: 4px; } }
-        .cb-menu { display: none; gap: 40px; }
-        /* 넓은 화면 — 3칸 격자(양쪽 같은 폭)로 메뉴를 로고·버튼 폭과 상관없이 정확히 가운데에 둔다 */
-        @media (min-width: 960px) {
-          .cb-menu { display: flex; align-items: center; }
-          .cb-top-inner { display: grid; grid-template-columns: 1fr auto 1fr; }
-          .cb-brand { justify-self: start; }
-        }
-        /* 메뉴가 다섯 개라, 메뉴가 처음 보이는 폭(960~1199px)에서는 간격·글자를 줄여 로고·버튼과 겹치지 않게 */
-        @media (min-width: 960px) and (max-width: 1199px) { .cb-menu { gap: 26px; } .cb-menu a { font-size: .9rem !important; } }
-        .cb-menu a { position: relative; color: var(--cb-sub); font-weight: 600; font-size: .95rem; text-decoration: none; padding: 6px 0; transition: color .15s; }
-        .cb-menu a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--cb-text); transform: scaleX(0); transition: transform .25s ease; }
-        .cb-menu a:hover { color: var(--cb-text); }
-        .cb-menu a:hover::after { transform: scaleX(1); }
-        .cb-top-btn svg { transition: transform .3s cubic-bezier(.16,1,.3,1); }
-        .cb-top-btn:hover svg { transform: translateX(3px); }
-        @media (max-width: 420px) { .cb-brand-sep, .cb-brand-sub { display: none; } }
-
+      <style>{CLINIC_BASE_CSS + `
         .cb-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--cb-accent); color: #fff; font-weight: 700; padding: 14px 24px; border-radius: 10px; border: 0; cursor: pointer; text-decoration: none; transition: transform .12s, background .15s; white-space: nowrap; }
         .cb-btn:hover { background: #1852b5; }
         .cb-btn:active { transform: scale(.97); }
@@ -388,6 +327,8 @@ export default function ClinicBlogPage() {
         .cb-tag { font-weight: 700; font-size: clamp(1.05rem, 1.6vw, 1.3rem); letter-spacing: -0.01em; color: var(--cb-accent); margin: 0 0 22px; }
         /* 세 줄 제목 — 한 줄이 넓은 화면 양옆 말풍선(HeroWorries)에 닿지 않게, 휴대폰에서는 줄이 다시 꺾이지 않게 크기를 잡았다 */
         .cb-h1 { font-size: clamp(1.8rem, 5.6vw, 4rem); line-height: 1.22; font-weight: 800; letter-spacing: -0.04em; margin: 0 0 24px; }
+        /* 휴대폰 — 화면 폭에 맞춰 더 크게. 가장 긴 줄('글 하나 올렸을 뿐인데,')이 360px 폰에서도 한 줄에 들어가는 만큼 */
+        @media (max-width: 767px) { .cb-h1 { font-size: clamp(1.8rem, 9vw, 2.3rem); } }
         /* 두 버튼을 같은 폭으로 — 같은 크기 두 칸 격자라, 글자가 긴 왼쪽 버튼 폭에 오른쪽이 맞춰진다 */
         .cb-hero-btns { display: inline-grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
         .cb-hero-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 15px 28px; border-radius: 999px; border: 1.5px solid #d5d9df; background: rgba(255,255,255,.85); color: var(--cb-text); font-weight: 700; font-size: 1.05rem; text-decoration: none; transition: border-color .15s, background .15s; }
@@ -580,6 +521,10 @@ export default function ClinicBlogPage() {
         .cb-field select option { color: var(--cb-text); }
         .cb-agree { display: flex; gap: 8px; align-items: center; font-size: .88rem; color: var(--cb-sub); line-height: 1.55; } /* 체크박스를 글자 줄 세로 가운데에 */
         .cb-agree i { color: #e05252; font-style: normal; margin-left: 2px; }
+        .cb-agree:has(.cb-agree-view) { align-items: flex-start; } /* 두 줄이 되면 체크박스를 첫 줄에 맞춘다 */
+        .cb-agree:has(.cb-agree-view) input { margin-top: 2px; }
+        .cb-agree-view { color: var(--cb-muted); text-decoration: underline; text-underline-offset: 3px; }
+        .cb-agree-view:hover { color: var(--cb-sub); }
         .cb-agree input { margin: 0; width: 18px; height: 18px; accent-color: var(--cb-accent); flex-shrink: 0; }
         .cb-error { color: #c53030; font-size: .9rem; margin: 0; }
         /* 칸별 안내 — 빠진 필수 칸은 빨간 테두리, 그 아래 빨간 한 줄 */
@@ -607,23 +552,16 @@ export default function ClinicBlogPage() {
         .cb-done-steps li.is-done { color: var(--cb-text); }
         .cb-done-steps li.is-done b { background: #1f63d6; border-color: #1f63d6; color: #fff; }
         .cb-done-steps li.is-now { color: #1f63d6; }
+        /* 진행 단계와 선으로 나누고 넉넉히 띄운다. '.cb-done > p' 의 margin: 0 보다 세게 걸리도록 .cb-done 을 붙였다 */
+        .cb-done .cb-done-more { max-width: 420px; margin: 24px auto 12px; padding-top: 24px; border-top: 1px solid var(--cb-line); font-size: .9rem; font-weight: 600; color: var(--cb-muted); }
+        /* 버튼 두 개 — 휴대폰에서도 가로 두 칸, 같은 폭 */
+        .cb-done-links { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 420px; margin: 0 auto; }
+        .cb-done-link { display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 13px 10px; border-radius: 999px; border: 1.5px solid #d5d9df; font-size: .92rem; font-weight: 700; color: var(--cb-text); text-decoration: none; white-space: nowrap; transition: border-color .15s, color .15s; }
+        @media (max-width: 420px) { .cb-done-links { gap: 8px; } .cb-done-link { padding: 12px 6px; font-size: .84rem; gap: 2px; } .cb-done-link svg { width: 14px; height: 14px; } }
+        .cb-done-link:hover { border-color: #1f63d6; color: #1f63d6; }
         .cb-done-steps li.is-now b { border-color: #1f63d6; color: #1f63d6; animation: cbDoneNow 1.6s ease-in-out infinite; }
         @keyframes cbDoneNow { 0%, 100% { box-shadow: 0 0 0 0 rgba(31,99,214,.25); } 50% { box-shadow: 0 0 0 6px rgba(31,99,214,0); } }
         @media (prefers-reduced-motion: reduce) { .cb-done-check circle, .cb-done-check::after, .cb-done-steps li.is-now b { animation: none; } .cb-done-check path { animation: none; stroke-dashoffset: 0; } }
-
-        .cb-foot { border-top: 1px solid var(--cb-line); color: var(--cb-muted); padding: 28px 0 36px; font-size: .85rem; }
-        @media (max-width: 768px) { .cb-foot { padding-bottom: calc(36px + 56px); } } /* 휴대폰 하단 두 칸 바(56px)에 가리지 않게 */
-        .cb-foot p { margin: 0; }
-        .cb-foot-info span + span::before { content: '·'; margin: 0 .5em; }
-        @media (max-width: 640px) {
-          .cb-foot-info span { display: block; line-height: 1.8; }
-          .cb-foot-info span + span::before { content: none; }
-        }
-        /* 개인정보처리방침은 늘 오른쪽 위 — 휴대폰에서 정보가 여러 줄이 돼도 첫 줄(WEFLOW)과 같은 높이에 남는다 */
-        .cb-foot-inner { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px 24px; }
-        .cb-foot a { flex: none; white-space: nowrap; }
-        .cb-foot a { color: var(--cb-muted); text-decoration: none; font-weight: 600; }
-        .cb-foot a:hover { color: var(--cb-sub); text-decoration: underline; }
 
         /* 움직임을 줄여 달라고 설정한 방문자에게는 처음부터 다 보여 준다 */
         @media (prefers-reduced-motion: reduce) {

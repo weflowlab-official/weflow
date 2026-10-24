@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { ArrowUpRight } from 'lucide-react'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
 import { attributionLine } from '@/lib/attribution'
@@ -36,6 +37,13 @@ export default function InquiryForm() {
   // 칸별 안내 — 비어 있는 필수 칸 바로 아래에 띄운다. 그 칸을 다시 고치면 지운다
   const [errs, setErrs] = useState<{ name?: string; phone?: string; agree?: string }>({})
   const [done, setDone] = useState(false)
+
+  // 신청이 끝나면 완료 화면이 화면 한가운데 오게 — 폼보다 짧아져 위쪽이 화면 밖에 걸리기 쉽다
+  useEffect(() => {
+    if (!done) return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    document.getElementById('contact-form')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' })
+  }, [done])
 
   // 상품 카드에서 고른 문의 유형을 받아 둔다
   useEffect(() => {
@@ -113,6 +121,12 @@ export default function InquiryForm() {
           <li className="is-now"><b>2</b>담당자 연락</li>
           <li><b>3</b>맞춤 구성 안내</li>
         </ol>
+        {/* 신청이 끝난 뒤라 바깥으로 보내도 괜찮다 — 메인 사이트와 전 업종 웹블로그, 둘 다 새 탭으로 연다 */}
+        <p className="cb-done-more">WEFLOW가 궁금하다면?</p>
+        <div className="cb-done-links">
+          <a href="/" target="_blank" rel="noopener noreferrer" className="cb-done-link">WEFLOW 홈페이지 <ArrowUpRight size={16} /></a>
+          <a href="/blog" target="_blank" rel="noopener noreferrer" className="cb-done-link">전 업종 웹블로그 <ArrowUpRight size={16} /></a>
+        </div>
       </div>
     )
   }
@@ -213,7 +227,7 @@ export default function InquiryForm() {
           id="cb-note"
           value={note}
           onChange={e => setNote(e.target.value)}
-          placeholder="운영 중인 블로그·홈페이지 주소나 궁금한 점을 적어 주세요 (선택)"
+          placeholder="운영 중인 블로그·홈페이지 주소나 궁금한 점을 적어 주세요"
           maxLength={1500}
         />
       </div>
@@ -229,7 +243,12 @@ export default function InquiryForm() {
             aria-invalid={!!errs.agree}
             aria-describedby={errs.agree ? 'cb-agree-err' : undefined}
           />
-          <span>[필수] 개인정보 수집·이용에 동의합니다.<i>*</i></span>
+          <span>
+            [필수] 개인정보 수집·이용에 동의합니다.<i>*</i>
+            <br />
+            {/* 웹블로그(/blog) 문의 폼과 같은 자리 — 새 탭으로 열어 쓰던 폼이 날아가지 않게 */}
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="cb-agree-view">내용 보기</a>
+          </span>
         </label>
         {errs.agree && <p id="cb-agree-err" className="cb-field-err">* {errs.agree}</p>}
       </div>

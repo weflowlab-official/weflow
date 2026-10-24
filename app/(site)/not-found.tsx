@@ -1,9 +1,8 @@
-import Link from 'next/link'
-import { Home, ArrowRight } from 'lucide-react'
+import NotFoundActions from './NotFoundActions'
 
 /**
  * 404 페이지 — 없는 주소로 들어와도 사이트 톤을 유지하고,
- * 메인·맞춤 견적으로 자연스럽게 되돌려 보낸다.
+ * 메인·맞춤 견적으로 자연스럽게 되돌려 보낸다 (병·의원 웹블로그 아래 주소는 그 페이지로 — NotFoundActions).
  */
 export default function NotFound() {
   return (
@@ -74,12 +73,7 @@ export default function NotFound() {
             marginTop: 'clamp(1.75rem, 4vw, 2.5rem)',
           }}
         >
-          <Link href="/" className="btn-primary nf-btn">
-            <Home size={18} strokeWidth={2.2} /> 메인으로 가기
-          </Link>
-          <Link href="/diagnosis" className="btn-primary nf-btn nf-btn--ghost">
-            맞춤 견적 받기 <ArrowRight size={18} strokeWidth={2.5} />
-          </Link>
+          <NotFoundActions />
         </div>
       </div>
 

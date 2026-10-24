@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 
 /**
  * 병의원 웹블로그 페이지의 자주 묻는 질문 — 메인의 자주 묻는 질문(components/home/HomeFaqSection.tsx)과 같은 모양이다.
@@ -8,17 +8,18 @@ import { ArrowRight } from 'lucide-react'
  *
  * 질문을 누르면 답이 부드럽게 펼쳐지고, 한 번에 하나만 열린다. 열리면 + 가 45° 돌아 × 가 된다.
  * 접혀 있어도 답변 글은 HTML 에 그대로 실린다 (높이만 0 으로 접는다).
+ * link 가 있는 답변은 줄을 바꿔 새 탭 링크를 단다 (접혀 있을 때는 Tab 으로 들어가지 않게 tabIndex -1).
  * 메인과 달리 상담 버튼은 이 페이지 아래 상담 폼(#contact)으로 내려간다 — 메인 사이트로 나가지 않는다.
  */
 
-const FAQ = [
+const FAQ: { q: string; a: string; link?: { href: string; label: string } }[] = [
+  { q: '웹블로그도 네이버 검색에 나오나요?', a: '네. 네이버·구글이 잘 읽을 수 있도록 검색 구조부터 설계하고, 오픈할 때 검색엔진 등록까지 마칩니다. 다만 검색 순위는 글의 내용과 꾸준함에 따라 달라집니다.' },
   { q: '지금 쓰는 네이버 블로그는 그만둬야 하나요?', a: '아니요, 함께 운영하셔도 됩니다. 웹블로그는 우리 병원 주소에서 따로 운영됩니다.' },
   { q: '이미 병원 홈페이지가 있어요. 웹블로그만 만들 수 있나요?', a: '네. 기존 홈페이지 주소 아래(예: 병원주소/blog)에 붙이거나 별도 주소로 만들 수 있습니다. 상담을 통해 병원에 더 맞는 방식을 안내해 드립니다.' },
-  { q: '웹블로그 없이 홈페이지만 만들 수도 있나요?', a: '네. 홈페이지만 먼저 만들고, 필요할 때 웹블로그를 같은 디자인으로 이어 붙일 수 있습니다.' },
-  { q: '웹블로그도 네이버 검색에 나오나요?', a: '네. 네이버·구글이 잘 읽을 수 있도록 검색 구조부터 설계하고, 오픈할 때 검색엔진 등록까지 마칩니다. 다만 검색 순위는 글의 내용과 꾸준함에 따라 달라집니다.' },
-  { q: '병원 말고 다른 업종도 만들 수 있나요?', a: '네. 웹블로그는 차량·금융·인테리어·학원 등 업종에 맞게 카테고리와 글 구조를 설계해 만들 수 있습니다.' },
+  { q: '웹블로그 없이 홈페이지만 만들 수도 있나요?', a: '네. 홈페이지만 먼저 만들고, 필요할 때 웹블로그를 같은 디자인으로 이어 붙일 수 있습니다.', link: { href: '/', label: 'WEFLOW가 만든 홈페이지 보기' } },
   { q: '제작 기간과 비용은 어느 정도인가요?', a: '카테고리 수, 디자인 범위, 홈페이지 연동 방식에 따라 달라집니다. 상담을 통해 우리 병원에 맞춰 안내해 드립니다.' },
   { q: '오픈한 뒤에 수정이 필요하면 어떻게 하나요?', a: '오픈 후에도 디자인 수정이나 기능 추가가 필요하면 상담을 통해 도와드립니다.' },
+  { q: '병원 말고 다른 업종도 만들 수 있나요?', a: '네. 웹블로그는 차량·금융·인테리어·학원 등 업종에 맞게 카테고리와 글 구조를 설계해 만들 수 있습니다.', link: { href: '/blog', label: '전 업종 웹블로그 보기' } },
 ]
 
 export default function ClinicFaq() {
@@ -57,7 +58,17 @@ export default function ClinicFaq() {
                 <div id={`cf-a-${i}`} className="cf-a" role="region" aria-hidden={!on}>
                   <div className="cf-a__in">
                     <span className="cf-a__mark" aria-hidden="true">A</span>
-                    <p>{f.a}</p>
+                    <p>
+                      {f.a}
+                      {f.link && (
+                        <>
+                          <br />
+                          <a href={f.link.href} target="_blank" rel="noopener noreferrer" className="cf-a__link" tabIndex={on ? 0 : -1}>
+                            {f.link.label} <ArrowUpRight size={15} />
+                          </a>
+                        </>
+                      )}
+                    </p>
                   </div>
                 </div>
               </li>
@@ -104,6 +115,8 @@ export default function ClinicFaq() {
         .cf-item.is-open .cf-a__in { opacity: 1; transition: opacity .4s .1s; }
         .cf-a__mark { color: #1f63d6; opacity: .45; line-height: 1.6; }
         .cf-a__in p { margin: 0; padding-bottom: clamp(1.25rem, 2.4vw, 1.75rem); font-size: clamp(.95rem, 1.3vw, 1.05rem); line-height: 1.75; color: #4b5360; word-break: keep-all; }
+
+        .cf-a__link { display: inline-flex; align-items: center; gap: 2px; font-weight: 700; color: #1f63d6; text-decoration: underline; text-underline-offset: 4px; white-space: nowrap; }
 
         /* 좁은 화면 — 제목 → 목록 → 물어보기 순으로 한 줄에 쌓는다 */
         @media (max-width: 860px) {

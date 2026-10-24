@@ -1,4 +1,4 @@
-import { PenLine, Settings2, Globe, Sparkles, ArrowRight } from 'lucide-react'
+import { PenLine, Settings2, Globe, Sparkles, ArrowRight, ArrowUpRight } from 'lucide-react'
 import InView from './InView'
 
 /**
@@ -62,6 +62,20 @@ export default function HowItWorks() {
           ))}
         </div>
         <p className="chw-note">검색 순위와 AI 인용 여부는 각 검색엔진·AI 서비스가 정합니다.<br className="cb-mo" /> 웹블로그는 그 기회를 넓히는 구조를 만듭니다.</p>
+
+        {/* 실제로 돌아가는 견본 — WEFLOW 가 운영하는 웹블로그(/blog). 이 페이지를 떠나지 않게 새 탭으로 연다 */}
+        <div className="chw-demo">
+          <div className="chw-demo-text">
+            <p className="chw-demo-tag">LIVE DEMO</p>
+            <p className="chw-demo-title">
+              핵심 요약·자주 묻는 질문·구조화 데이터가 들어간 글을<br className="cb-pc" />
+              <b> WEFLOW 웹블로그</b>에서<br className="cb-mo" /> 직접 확인해 보세요.
+            </p>
+          </div>
+          <a href="/blog" target="_blank" rel="noopener noreferrer" className="chw-demo-btn">
+            실제 웹블로그 보기 <ArrowUpRight size={20} />
+          </a>
+        </div>
       </div>
 
       <style>{`
@@ -101,6 +115,16 @@ export default function HowItWorks() {
         .chw-card li { position: relative; padding-left: 14px; font-size: .95rem; font-weight: 600; color: var(--cb-text); }
         .chw-card li::before { content: ''; position: absolute; left: 0; top: .6em; width: 6px; height: 6px; border-radius: 50%; background: var(--cb-accent); }
         .chw-note { margin: 20px 0 0; font-size: .85rem; color: var(--cb-muted); }
+        /* 실제 웹블로그 견본으로 가는 큰 띠 — 파란 그라데이션 카드에 큰 글씨 + 흰 버튼 */
+        .chw-demo { display: flex; flex-direction: column; align-items: center; gap: 24px; max-width: 1080px; margin: 56px auto 0; padding: 36px 24px; border-radius: 24px; background: linear-gradient(135deg, #1f63d6, #0d2858); color: #fff; box-shadow: 0 24px 60px rgba(31,99,214,.25); }
+        @media (min-width: 960px) { .chw-demo { flex-direction: row; justify-content: space-between; gap: 40px; padding: 44px 52px; text-align: left; } }
+        .chw-demo-tag { margin: 0; font-size: .8rem; font-weight: 800; letter-spacing: .2em; color: #9fbdf5; }
+        .chw-demo-title { margin: 10px 0 0; font-size: clamp(1.2rem, 2.4vw, 1.55rem); line-height: 1.45; font-weight: 700; letter-spacing: -0.02em; }
+        .chw-demo-title b { color: #fff; font-weight: 900; text-decoration: underline; text-decoration-color: #9fbdf5; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+        .chw-demo-btn { flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 18px 34px; border-radius: 999px; background: #fff; color: #0d2858; font-weight: 800; font-size: 1.12rem; text-decoration: none; box-shadow: 0 10px 24px rgba(0,0,0,.18); transition: transform .15s, box-shadow .15s; }
+        .chw-demo-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,.24); }
+        .chw-demo-btn svg { transition: transform .25s ease; }
+        .chw-demo-btn:hover svg { transform: translate(2px, -2px); }
         @media (prefers-reduced-motion: reduce) { .chw-step-wrap { opacity: 1; transform: none; transition: none; } }
       `}</style>
     </section>

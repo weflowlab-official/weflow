@@ -1,4 +1,4 @@
-import { Search, FileText, Hospital, CalendarCheck, Check, Lock, PenLine, LayoutTemplate, Inbox, Star } from 'lucide-react'
+import { Search, FileText, Hospital, CalendarCheck, Check, Lock, PenLine, LayoutTemplate, Inbox, Star, ArrowUpRight } from 'lucide-react'
 import InView from './InView'
 import PlanButton from './PlanButton'
 
@@ -174,10 +174,14 @@ export default function WithHomepage() {
             </div>
           ))}
         </div>
+        {/* WEFLOW 가 만든 홈페이지 견본 — 광고 랜딩이라 이 페이지를 떠나지 않게 새 탭으로 연다 */}
+        <a href="/" target="_blank" rel="noopener noreferrer" className="ch-home-link">
+          WEFLOW가 만든 홈페이지 보기 <ArrowUpRight size={16} />
+        </a>
       </div>
 
       <style>{`
-        .ch { background: #fff; padding: clamp(5rem, 10vw, 8.75rem) 20px; text-align: center; }
+        .ch { background: #fff; padding: clamp(5rem, 10vw, 8.75rem) 20px; text-align: center; border-top: 1px solid #e9ebef; } /* 앞 섹션(홈페이지 vs 웹블로그)도 흰 바탕이라 선으로 나눈다 */
         .ch-inner { max-width: 1120px; margin: 0 auto; }
         .ch-mo { display: inline; }
         @media (min-width: 768px) { .ch-mo { display: none; } }
@@ -321,6 +325,8 @@ export default function WithHomepage() {
         .ch-plan-btn--fill:hover { background: #1f63d6; border-color: #1f63d6; }
         .ch-plan-btn svg { transition: transform .3s cubic-bezier(.16,1,.3,1); }
         .ch-plan-btn:hover svg { transform: translateX(3px); }
+        .ch-home-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 28px; font-size: .95rem; font-weight: 700; color: #4b5360; text-decoration: underline; text-decoration-color: #c9ced6; text-underline-offset: 5px; transition: color .15s, text-decoration-color .15s; }
+        .ch-home-link:hover { color: #1f63d6; text-decoration-color: #1f63d6; }
 
         @media (prefers-reduced-motion: reduce) {
           .ch-steps li, .ch-node, .ch-site, .ch-steps li::after, .ch-gain, .gv * { transition: none !important; animation: none !important; }

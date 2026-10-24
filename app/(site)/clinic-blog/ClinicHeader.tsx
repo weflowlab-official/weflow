@@ -9,6 +9,8 @@ import { ArrowRight, Menu, X, ClipboardList, Phone } from 'lucide-react'
  * 가운데 메뉴는 페이지 안의 섹션(id)으로만 이동한다 — 넓은 화면에서만 보인다.
  * 좁은 화면에서는 상담 버튼 오른쪽에 햄버거 버튼을 두고, 누르면 오른쪽에서 메뉴 판이 밀려 나온다
  * (메인 사이트 모바일 메뉴와 같은 구성 — 위에 로고·닫기, 가운데 메뉴, 아래 바로 전화 · 무료 견적 신청 버튼).
+ * base: 404 처럼 이 페이지 밖에서 쓸 때 '/clinic-blog' 를 넘긴다 — 메뉴·버튼이 이 페이지의 각 섹션으로, 로고는 이 페이지 맨 위로 간다.
+ *   본 페이지에서는 비워 둔다 (#id 만 쓰면 광고 주소의 ?utm 같은 꼬리가 그대로 남는다).
  */
 /** 대표 번호 — 메인 헤더(components/Navbar.tsx)와 같은 번호 */
 const TEL = '010-2971-7280'
@@ -23,16 +25,17 @@ const MENU = [
   { href: '#faq', label: '자주 묻는 질문' },
 ]
 
-/** 로고 — 누르면 이 페이지 맨 위로 부드럽게 올라간다 (메인 사이트로 가지 않는다) */
-function Brand({ onClick }: { onClick?: () => void }) {
+/** 로고 — 누르면 이 페이지 맨 위로 부드럽게 올라간다 (메인 사이트로 가지 않는다). base 가 있으면 그 주소로 이동 */
+function Brand({ onClick, base }: { onClick?: () => void; base: string }) {
   return (
     <a
-      href="#"
+      href={base || '#'}
       className="cb-brand"
-      aria-label="맨 위로"
+      aria-label={base ? '병의원 웹블로그 처음으로' : '맨 위로'}
       onClick={e => {
-        e.preventDefault()
         onClick?.()
+        if (base) return
+        e.preventDefault()
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }}
     >
@@ -45,7 +48,7 @@ function Brand({ onClick }: { onClick?: () => void }) {
   )
 }
 
-export default function ClinicHeader() {
+export default function ClinicHeader({ base = '' }: { base?: string }) {
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [open, setOpen] = useState(false) // 모바일 메뉴 판
@@ -85,16 +88,16 @@ export default function ClinicHeader() {
     <>
       <header className={`cb-top ${scrolled ? 'is-scrolled' : ''} ${hidden ? 'is-hidden' : ''}`}>
         <div className="cb-wrap cb-top-inner">
-          <Brand />
+          <Brand base={base} />
           <nav className="cb-menu" aria-label="페이지 안 이동">
             {MENU.map(m => (
-              <a key={m.href} href={m.href}>{m.label}</a>
+              <a key={m.href} href={base + m.href}>{m.label}</a>
             ))}
           </nav>
           {/* 오른쪽 묶음 — 대표 번호(넓은 화면에서만) · 견적 버튼 · 햄버거(좁은 화면에서만) */}
           <div className="cb-top-right">
             <a href={`tel:${TEL}`} className="cb-tel"><Phone size={17} /> {TEL}</a>
-            <a href="#contact-form" className="cb-top-btn">
+            <a href={`${base}#contact-form`} className="cb-top-btn">
               무료 견적 신청 <ArrowRight size={15} />
             </a>
           <button type="button" className="cb-burger" aria-label="메뉴 열기" aria-expanded={open} onClick={() => setOpen(true)}>
@@ -108,27 +111,59 @@ export default function ClinicHeader() {
       <div className={`cb-drawer-dim ${open ? 'is-open' : ''}`} onClick={close} aria-hidden="true" />
       <aside className={`cb-drawer ${open ? 'is-open' : ''}`} aria-label="메뉴" aria-hidden={!open}>
         <div className="cb-drawer-head">
-          <Brand onClick={close} />
+          <Brand onClick={close} base={base} />
           <button type="button" className="cb-drawer-close" aria-label="메뉴 닫기" onClick={close} tabIndex={open ? 0 : -1}>
             <X size={26} />
           </button>
         </div>
         <nav className="cb-drawer-nav">
           {MENU.map(m => (
-            <a key={m.href} href={m.href} onClick={close} tabIndex={open ? 0 : -1}>{m.label}</a>
+            <a key={m.href} href={base + m.href} onClick={close} tabIndex={open ? 0 : -1}>{m.label}</a>
           ))}
         </nav>
         <div className="cb-drawer-foot">
           <a href={`tel:${TEL}`} className="cb-drawer-btn cb-drawer-btn--tel" tabIndex={open ? 0 : -1}>
             <Phone size={19} fill="currentColor" /> 바로 전화
           </a>
-          <a href="#contact-form" className="cb-drawer-btn cb-drawer-btn--fill" onClick={close} tabIndex={open ? 0 : -1}>
+          <a href={`${base}#contact-form`} className="cb-drawer-btn cb-drawer-btn--fill" onClick={close} tabIndex={open ? 0 : -1}>
             <ClipboardList size={19} /> 무료 견적 신청
           </a>
         </div>
       </aside>
 
       <style>{`
+        /* 헤더 — 양끝까지 꽉 찬 얇은 띠. 처음엔 투명, 내리면 흰 바탕 + 아래 선 (ClinicHeader 가 is-scrolled 를 붙인다).
+           내용 위로 겹치므로 첫 화면은 그만큼 내려 시작한다 */
+        .cb-top { position: fixed; top: 0; left: 0; right: 0; z-index: 30; background: transparent; border-bottom: 1px solid transparent; transition: background .25s ease, border-color .25s ease, transform .35s cubic-bezier(.16,1,.3,1); }
+        .cb-top.is-hidden { transform: translateY(-100%); }
+        .cb-top.is-scrolled { background: rgba(255,255,255,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom-color: var(--cb-line); }
+        /* 헤더만 본문(1080px)보다 넓게 — 로고와 버튼을 양끝으로 더 벌린다 */
+        .cb-top .cb-top-inner { max-width: 1440px; padding: 0 clamp(20px, 3vw, 48px); }
+        .cb-top-inner { height: 76px; display: flex; align-items: center; justify-content: space-between; }
+        .cb-brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.35rem; color: var(--cb-text); text-decoration: none; cursor: pointer; letter-spacing: -0.02em; }
+        .cb-brand-sep { width: 1px; height: 14px; background: #d5d9df; margin: 0 4px; }
+        .cb-brand-sub { font-weight: 600; font-size: 1.02rem; color: var(--cb-muted); letter-spacing: -0.01em; }
+        .cb-top-btn { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 20px; border-radius: 999px; background: var(--cb-text); color: #fff; font-weight: 700; font-size: 1.02rem; text-decoration: none; transition: background .15s; }
+        .cb-top-btn:hover { background: var(--cb-accent); }
+        /* 휴대폰 — 버튼을 작게 */
+        @media (max-width: 640px) { .cb-top-btn { height: 36px; padding: 0 14px; font-size: .86rem; gap: 4px; } }
+        .cb-menu { display: none; gap: 40px; }
+        /* 넓은 화면 — 3칸 격자(양쪽 같은 폭)로 메뉴를 로고·버튼 폭과 상관없이 정확히 가운데에 둔다 */
+        @media (min-width: 960px) {
+          .cb-menu { display: flex; align-items: center; }
+          .cb-top-inner { display: grid; grid-template-columns: 1fr auto 1fr; }
+          .cb-brand { justify-self: start; }
+        }
+        /* 메뉴가 다섯 개라, 메뉴가 처음 보이는 폭(960~1199px)에서는 간격·글자를 줄여 로고·버튼과 겹치지 않게 */
+        @media (min-width: 960px) and (max-width: 1199px) { .cb-menu { gap: 26px; } .cb-menu a { font-size: .9rem !important; } }
+        .cb-menu a { position: relative; color: var(--cb-sub); font-weight: 600; font-size: .95rem; text-decoration: none; padding: 6px 0; transition: color .15s; }
+        .cb-menu a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--cb-text); transform: scaleX(0); transition: transform .25s ease; }
+        .cb-menu a:hover { color: var(--cb-text); }
+        .cb-menu a:hover::after { transform: scaleX(1); }
+        .cb-top-btn svg { transition: transform .3s cubic-bezier(.16,1,.3,1); }
+        .cb-top-btn:hover svg { transform: translateX(3px); }
+        @media (max-width: 420px) { .cb-brand-sep, .cb-brand-sub { display: none; } }
+
         .cb-top-right { display: flex; align-items: center; justify-self: end; }
         /* 대표 번호 — 메인 헤더처럼 견적 버튼 왼쪽. 메뉴와 겹치지 않을 만큼 넓은 화면(1100px 이상)에서만 */
         .cb-tel { display: none; align-items: center; gap: 6px; margin-right: 20px; color: #111418; font-size: 1.08rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
