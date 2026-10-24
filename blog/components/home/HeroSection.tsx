@@ -139,7 +139,7 @@ export function HeroSection({ title, text, placeholder }: Props) {
       <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-site-4xl py-16 text-center md:pt-[70px] md:pb-[102px]">
         <div className="mx-auto max-w-3xl">
           <p className="animate-fade-slide-up text-base font-bold text-primary md:text-lg" style={{ animationDuration: "0.6s" }}>
-            웹블로그·홈페이지
+            WEFLOW 웹블로그
           </p>
           <div className="mt-3 overflow-hidden">
             <h1
