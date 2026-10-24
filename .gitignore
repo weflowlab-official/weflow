@@ -64,3 +64,8 @@ public/pexels-*.jpg
 blog/payload.db*
 .payload-media-tmp
 public/blog-media/
+
+# 웹블로그 글 이미지 작업 폴더 — 사진 원본·결과 이미지는 저장소에 올리지 않는다 (스크립트·문구만 올린다)
+design/blog-thumbnails/photos/
+design/blog-thumbnails/썸네일/
+design/blog-thumbnails/out/
