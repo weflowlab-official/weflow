@@ -13,10 +13,13 @@ import { ArrowRight, Menu, X, ClipboardList, Phone } from 'lucide-react'
 /** 대표 번호 — 메인 헤더(components/Navbar.tsx)와 같은 번호 */
 const TEL = '010-2971-7280'
 
+// 페이지 순서와 같게: 이런 고민(WHY NOW 01~03) → 웹블로그란 → SEO·AEO·GEO(HOW IT WORKS) → 홈페이지와 함께 → FAQ.
+// '진행 과정'은 메뉴로 찾아갈 만큼 궁금한 내용이 아니라 뺐다 (스크롤로 지나며 본다)
 const MENU = [
-  { href: '#webblog', label: '웹블로그란' },
+  { href: '#story', label: '이런 고민' },
+  { href: '#webblog', label: '웹블로그란?' },
+  { href: '#how', label: 'SEO·AEO·GEO' },
   { href: '#with-homepage', label: '홈페이지와 함께' },
-  { href: '#process', label: '진행 과정' },
   { href: '#faq', label: '자주 묻는 질문' },
 ]
 

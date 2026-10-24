@@ -466,7 +466,7 @@ export default function BlogWhy() {
       </div>
 
       <style>{`
-        .bwy { position: relative; height: calc(100svh * (1 + var(--bw-len))); background: #fff; }
+        .bwy { position: relative; height: calc(100svh * (1 + var(--bw-len))); background: #fff; border-top: 1px solid #e9ebef; }
         .bwy-pin { position: sticky; top: 0; height: 100svh; overflow: hidden; background: #fff; color: #111418; }
 
         /* ── 질문 ── */

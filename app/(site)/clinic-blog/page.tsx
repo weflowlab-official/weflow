@@ -9,6 +9,9 @@ import ClinicFaq from './ClinicFaq'
 import HomeVsBlog from './HomeVsBlog'
 import FloatingCta from './FloatingCta'
 import WithHomepage from './WithHomepage'
+import SecurityNews from './SecurityNews'
+import HowItWorks from './HowItWorks'
+import SearchMock from './SearchMock'
 
 /**
  * 병의원 전용 웹블로그 홍보 페이지 — /clinic-blog
@@ -18,7 +21,7 @@ import WithHomepage from './WithHomepage'
  * 그래서 이 페이지 안에서도 메인 사이트로 가는 링크를 두지 않는다 — 나가는 길은 문의 폼과 카카오톡뿐이다.
  *
  * 기능을 나열하지 않고 대화 장면으로 풀어 간다 —
- * 환자의 검색 → 원장님의 고민 → 노출이 빠진 날 → 웹블로그란·왜 웹블로그(BlogWhy) → 홈페이지와 함께하면 + 상품(WithHomepage)
+ * 지금 놓치고 있는 것 셋 — 환자의 AI 검색(WHY NOW 01) → 노출이 빠진 날(02, 원장님 고민 장면은 숨김) → 옛 기술(PHP) 보안(03, SecurityNews) → 웹블로그란·왜 웹블로그(BlogWhy) → 글만 쓰면 자리 잡는 구조(HowItWorks) → 홈페이지 vs 웹블로그(HomeVsBlog) → 홈페이지와 함께하면 + 상품(WithHomepage)
  * → 진행 과정 → 자주 묻는 질문 → 상담. 헤더 메뉴(ClinicHeader)가 각 덩어리의 id(webblog·with-homepage·process·faq·contact)로 이동한다.
  * 장면마다 말풍선이 스크롤에 맞춰 차례로 올라온다 (InView 가 'is-in' 을 붙이고, 순서는 아래 CSS 의 --i 로 늦춘다).
  * 색은 맨 아래 <style> 의 .cb 묶음 안에서만 정의해 다른 페이지에 새지 않게 했다.
@@ -57,7 +60,7 @@ const PATIENT_LINES: Line[] = [
   { who: 'patient', text: '오 설명 잘 돼 있네. 여기 한번 가 볼까?' },
 ]
 
-/** 장면 2 — 원장님과 실장님의 대화. 상자 없이 큰 말풍선을 대본처럼 주고받는다 */
+/** 장면 2 — 원장님과 실장님의 대화. 상자 없이 큰 말풍선을 대본처럼 주고받는다 (지금은 장면을 숨겨 두어 쓰이지 않는다 — 아래 주석 참고) */
 const OFFICE_LINES: Line[] = [
   { who: 'director', text: '블로그 시작한 지 1년 됐는데, 블로그 보고 왔다는 환자 있었어요?', time: '오전 9:02' },
   { who: 'manager', text: '글은 매달 꼬박꼬박 올라가고 있어요…', time: '오전 9:05' },
@@ -124,9 +127,11 @@ export default function ClinicBlogPage() {
         <HeroWorries />
         <div className="cb-wrap cb-hero-inner">
           <p className="cb-tag">병의원 웹블로그 · 홈페이지 제작</p>
+          {/* 글 하나로 SEO·AEO·GEO 까지 — 웹블로그 메인(/blog)의 병의원 섹션과 같은 메시지 */}
           <h1 className="cb-h1">
-            블로그 글은 쌓이는데<br />
-            <span className="cb-mark">예약은 그대로</span>라면
+            글 하나 올렸을 뿐인데,<br />
+            <span className="cb-mark">SEO·AEO·GEO</span>까지<br />
+            한 번에 챙겨진다면?
           </h1>
           {/* 바로 문의하려는 분은 상담으로, 더 알아보려는 분은 웹블로그 설명으로 */}
           <div className="cb-hero-btns">
@@ -141,18 +146,20 @@ export default function ClinicBlogPage() {
         </span>
       </section>
 
-      {/* ── 홈페이지 vs 웹블로그 — 둘이 무엇이 다른지 창 두 개로 ── */}
-      <HomeVsBlog />
+      {/* 흐름: 약속(히어로) → 지금 놓치고 있는 것 셋(WHY NOW 01 AI · 02 플랫폼 · 03 보안) → 그래서, 웹블로그 → 어떻게 자리 잡나 → 홈페이지와 함께 → 진행 → FAQ → 상담 */}
 
       {/* ── 장면 1 — 가운데 휴대폰 화면 안에서 환자가 검색한다 ── */}
       <section id="story" className="cb-scene cb-scene-alt cb-phone-scene">
         <div className="cb-wrap">
-          <p className="cb-chapter">STORY 01</p>
-          <h2 className="cb-h2">환자는 병원보다{'\n'}검색을 먼저 만납니다</h2>
+          <p className="cb-chapter">WHY NOW 01</p>
+          <h2 className="cb-h2">요즘 환자는{'\n'}<span className="cb-hl">검색창과 AI에게</span> 먼저 묻습니다</h2>
           <p className="cb-body">
             진료를 결심한 환자는 <br className="cb-mo" />바로 전화하지 않습니다.<br />
-            증상과 치료법부터 검색하고, <br className="cb-mo" />거기서 만난 글을 쓴 병원을 기억합니다.
+            증상과 치료법을 검색하고 AI에게도 물어본 뒤, <br className="cb-mo" />거기서 만난 글을 쓴 병원을 기억합니다.
           </p>
+          {/* 넓은 화면: 왼쪽 PC 검색 결과 + 오른쪽 휴대폰 AI 검색 / 좁은 화면: 휴대폰만 */}
+          <div className="cb-ai-visual">
+          <SearchMock />
           <div className="cb-phone">
             <div className="cb-phone-screen">
               <div className="cb-phone-status"><i /></div>
@@ -173,11 +180,12 @@ export default function ClinicBlogPage() {
               <p className="cb-phone-input">무엇이든 물어보세요</p>
             </div>
           </div>
+          </div>
           <p className="cb-phone-note">환자가 기억하는 건, <br className="cb-mo" />이 글을 쓴 <b>다른 병원</b>입니다.</p>
         </div>
       </section>
 
-      {/* ── 장면 2 — 가운데에서 큰 말풍선을 주고받는다 ── */}
+      {/* ── 장면 2 (원장님·실장님 대화) — 바로 다음 '빌린 공간' 장면과 이야기가 겹쳐 숨겨 둔다 (2026-10-23). 되살리려면 주석만 풀면 된다 ──
       <section className="cb-scene cb-talk-scene">
         <div className="cb-wrap">
           <p className="cb-chapter">STORY 02</p>
@@ -189,16 +197,19 @@ export default function ClinicBlogPage() {
           <Chat lines={OFFICE_LINES} className="cb-talk" />
         </div>
       </section>
+      */}
 
       {/* ── 장면 3 — 방문자 그래프가 떨어지고, 알림이 뜨고, 대화가 이어진다 ── */}
-      <section className="cb-scene cb-scene-alt">
+      {/* 앞의 AI 장면(회색)과 붙어 한 덩어리로 보이지 않게 흰 바탕. 다음은 보안(어두운 바탕) */}
+      <section className="cb-scene">
         <div className="cb-wrap cb-scene-grid">
           <div className="cb-scene-text">
-            <p className="cb-chapter">STORY 03</p>
-            <h2 className="cb-h2">빌린 공간에 쓴 글은{'\n'}병원의 것이 아닙니다</h2>
+            <p className="cb-chapter">WHY NOW 02</p>
+            <h2 className="cb-h2">그렇다고 <span className="cb-hl">블로그에만</span> 쌓으면,{'\n'}그 글은 병원의 것이 아닙니다</h2>
             <p className="cb-body">
-              플랫폼 정책이 바뀌거나 계정에 문제가 생기면, 몇 년 동안 쌓은 글이 한순간에 힘을 잃습니다.
-              병원이 손쓸 수 있는 게 없습니다.
+              플랫폼 정책이 바뀌거나 계정에 문제가 생기면,<br />
+              몇 년 동안 쌓은 글이 한순간에 힘을 잃습니다.<br />
+              <span className="cb-hl">병원이 손쓸 수 있는 게 없습니다.</span>
             </p>
           </div>
           <InView className="cb-drop-col">
@@ -225,8 +236,17 @@ export default function ClinicBlogPage() {
         </div>
       </section>
 
+      {/* ── WHY NOW 03: 그럼 홈페이지는? 옛 기술(PHP) 보안 — 기사 4장 + 옛 방식 vs Next.js (어두운 바탕) ── */}
+      <SecurityNews />
+
       {/* ── 그래서, 웹블로그 — 화면을 붙잡아 두고 답 네 개를 차례로 (메인의 '왜 WEFLOW?' 와 같은 방식) ── */}
       <BlogWhy />
+
+      {/* ── 어떻게 자리 잡나: 글만 쓰면 네이버·구글에 자리 잡고 AI 까지 읽어 가는 구조 — 히어로의 약속을 여기서 보여 준다 ── */}
+      <HowItWorks />
+
+      {/* ── 홈페이지 vs 웹블로그 — 둘이 무엇이 다른지 창 두 개로, 바로 아래 '홈페이지와 함께하면'으로 잇는다 ── */}
+      <HomeVsBlog />
 
       {/* ── 홈페이지와 함께하면 + 상품 두 가지 ── */}
       <WithHomepage />
@@ -329,14 +349,16 @@ export default function ClinicBlogPage() {
         .cb-top-btn:hover { background: var(--cb-accent); }
         /* 휴대폰 — 버튼을 작게 */
         @media (max-width: 640px) { .cb-top-btn { height: 36px; padding: 0 14px; font-size: .86rem; gap: 4px; } }
-        .cb-menu { display: none; gap: 48px; }
+        .cb-menu { display: none; gap: 40px; }
         /* 넓은 화면 — 3칸 격자(양쪽 같은 폭)로 메뉴를 로고·버튼 폭과 상관없이 정확히 가운데에 둔다 */
         @media (min-width: 960px) {
           .cb-menu { display: flex; align-items: center; }
           .cb-top-inner { display: grid; grid-template-columns: 1fr auto 1fr; }
           .cb-brand { justify-self: start; }
         }
-        .cb-menu a { position: relative; color: var(--cb-sub); font-weight: 600; font-size: 1.08rem; text-decoration: none; padding: 6px 0; transition: color .15s; }
+        /* 메뉴가 다섯 개라, 메뉴가 처음 보이는 폭(960~1199px)에서는 간격·글자를 줄여 로고·버튼과 겹치지 않게 */
+        @media (min-width: 960px) and (max-width: 1199px) { .cb-menu { gap: 26px; } .cb-menu a { font-size: .9rem !important; } }
+        .cb-menu a { position: relative; color: var(--cb-sub); font-weight: 600; font-size: .95rem; text-decoration: none; padding: 6px 0; transition: color .15s; }
         .cb-menu a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--cb-text); transform: scaleX(0); transition: transform .25s ease; }
         .cb-menu a:hover { color: var(--cb-text); }
         .cb-menu a:hover::after { transform: scaleX(1); }
@@ -350,18 +372,22 @@ export default function ClinicBlogPage() {
         .cb-btn:disabled { opacity: .6; cursor: default; }
 
         /* 히어로 — 가운데 정렬, 아래로 내려가라는 선 하나 */
-        /* 제목 묶음을 화면 세로 정가운데보다 16px 위에 둔다 (아래 여백 32px) — 38px 위·아래는 둘 다 어긋나 보였다 */
-        .cb-hero { position: relative; overflow: hidden; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 0 0 32px; }
+        /* 제목 묶음을 화면 세로 정가운데보다 6px 위에 둔다 (아래 여백 12px). 예전엔 16px 위(아래 여백 32px)였는데,
+           제목이 세 줄이 되며 위로 붙어 보여 10px 내렸다. 아래 SCROLL 표시도 같은 만큼 내려 둘 사이 간격을 지킨다 */
+        .cb-hero { position: relative; overflow: hidden; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 0 0 12px; }
         .cb-hero-inner { position: relative; z-index: 1; width: 100%; }
 
         /* 제목 강조 — 형광펜이 왼쪽에서 오른쪽으로 칠해진다 */
         .cb-mark { position: relative; z-index: 0; white-space: nowrap; }
         .cb-mark::after { content: ''; position: absolute; z-index: -1; left: -.08em; right: -.08em; bottom: .06em; height: .36em; border-radius: .1em; background: #cfe0fb; transform: scaleX(0); transform-origin: left; animation: cbMark .9s cubic-bezier(.65,0,.35,1) .5s forwards; }
         @keyframes cbMark { to { transform: scaleX(1); } }
+        /* 본문 강조 — 섹션의 결론 문장에만 하나씩. 글자 아래쪽 절반에 연한 파랑을 깐다 */
+        .cb-hl { color: var(--cb-text); font-weight: 700; background: linear-gradient(transparent 58%, #cfe0fb 58%); padding: 0 .1em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
         /* 좁은 화면 — 제목을 위에 두고, 그 아래 채팅 목록 */
         /* 좁은 화면에서는 말풍선이 없으므로 넓은 화면과 같이 제목 묶음을 세로 가운데에 둔다 */
         .cb-tag { font-weight: 700; font-size: clamp(1.05rem, 1.6vw, 1.3rem); letter-spacing: -0.01em; color: var(--cb-accent); margin: 0 0 22px; }
-        .cb-h1 { font-size: clamp(2.5rem, 6.8vw, 4.6rem); line-height: 1.22; font-weight: 800; letter-spacing: -0.04em; margin: 0 0 24px; }
+        /* 세 줄 제목 — 한 줄이 넓은 화면 양옆 말풍선(HeroWorries)에 닿지 않게, 휴대폰에서는 줄이 다시 꺾이지 않게 크기를 잡았다 */
+        .cb-h1 { font-size: clamp(1.8rem, 5.6vw, 4rem); line-height: 1.22; font-weight: 800; letter-spacing: -0.04em; margin: 0 0 24px; }
         /* 두 버튼을 같은 폭으로 — 같은 크기 두 칸 격자라, 글자가 긴 왼쪽 버튼 폭에 오른쪽이 맞춰진다 */
         .cb-hero-btns { display: inline-grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
         .cb-hero-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 15px 28px; border-radius: 999px; border: 1.5px solid #d5d9df; background: rgba(255,255,255,.85); color: var(--cb-text); font-weight: 700; font-size: 1.05rem; text-decoration: none; transition: border-color .15s, background .15s; }
@@ -375,7 +401,8 @@ export default function ClinicBlogPage() {
           .cb-hero-btn { padding: 12px 8px; font-size: .9rem; white-space: nowrap; }
         }
         /* 스크롤 유도 — 'SCROLL' 글자 아래로 선이 흘러내린다 */
-        .cb-scroll { position: absolute; left: 50%; bottom: 88px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        /* 제목이 세 줄이 되며 묶음 아래 끝이 약 40px 내려와, 붙어 보이지 않게 그만큼 더 아래에 둔다 */
+        .cb-scroll { position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 12px; }
         .cb-scroll em { font-style: normal; font-size: .72rem; font-weight: 700; letter-spacing: .32em; margin-right: -.32em; color: var(--cb-muted); }
         .cb-scroll i { display: block; width: 1px; height: 56px; background: linear-gradient(var(--cb-accent), transparent); animation: cb-drop 1.8s ease-in-out infinite; transform-origin: top; }
         @keyframes cb-drop { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
@@ -463,7 +490,12 @@ export default function ClinicBlogPage() {
         /* 장면 1 — 가운데 정렬, 휴대폰 화면 */
         .cb-phone-scene { text-align: center; }
         .cb-phone-scene .cb-body { max-width: 600px; margin-left: auto; margin-right: auto; }
-        .cb-phone { width: min(340px, 100%); margin: 56px auto 0; padding: 11px; border-radius: 48px; background: #111418; box-shadow: 0 30px 80px rgba(17,20,24,.18); text-align: left; }
+        /* 넓은 화면: 둘째 줄("증상과 치료법을 검색하고 … 기억합니다.")이 한 줄에 들어가게 폭을 넓힌다 */
+        @media (min-width: 768px) { .cb-phone-scene .cb-body { max-width: 860px; } }
+        /* PC 검색 화면(SearchMock) + 휴대폰 — 넓은 화면에서 나란히, 위아래 가운데 맞춤 */
+        .cb-ai-visual { margin-top: 56px; }
+        @media (min-width: 960px) { .cb-ai-visual { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 48px; align-items: center; } }
+        .cb-phone { width: min(340px, 100%); margin: 0 auto; padding: 11px; border-radius: 48px; background: #111418; box-shadow: 0 30px 80px rgba(17,20,24,.18); text-align: left; }
         .cb-phone-screen { background: #fff; border-radius: 38px; overflow: hidden; display: flex; flex-direction: column; min-height: 600px; }
         .cb-phone-status { height: 40px; display: flex; justify-content: center; align-items: center; }
         .cb-phone-status i { width: 90px; height: 24px; border-radius: 999px; background: #111418; }
@@ -473,7 +505,7 @@ export default function ClinicBlogPage() {
         .cb-phone .cb-bubble-wrap { max-width: 86%; }
         .cb-phone .cb-bubble { font-size: .92rem; }
         .cb-phone-input { margin: 0 14px 18px; padding: 12px 18px; border-radius: 999px; background: var(--cb-soft); color: var(--cb-muted); font-size: .9rem; }
-        .cb-phone-note { margin: 56px 0 0; /* 설명 두 줄 ↔ 휴대폰 간격(.cb-phone 의 56px)과 같게 */ font-size: 1.22rem; color: var(--cb-sub); }
+        .cb-phone-note { margin: 56px 0 0; /* 설명 두 줄 ↔ 그림 간격(.cb-ai-visual 의 56px)과 같게 */ font-size: 1.22rem; color: var(--cb-sub); }
         .cb-phone-note b { color: #e05252; }
 
         /* 공통 섹션 여백 */

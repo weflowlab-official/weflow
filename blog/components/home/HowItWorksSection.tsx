@@ -58,7 +58,7 @@ export function HowItWorksSection() {
         <ol className="mx-auto mt-10 flex max-w-[1320px] flex-col gap-3 md:mt-14 md:flex-row md:items-stretch md:gap-0">
           {STEPS.map(({ Icon, title, text }, i) => (
             <Fragment key={title}>
-              <Reveal variant="fade-up" delay={0.08 * i} className="md:flex-1">
+              <Reveal variant="fade-up" delay={0.08 * i} className="md:min-w-0 md:flex-1">
                 <li className="flex h-full gap-4 rounded-[14px] border border-neutral-200 bg-white p-5 md:flex-col md:gap-0 md:p-5">
                   <span className="relative flex size-12 shrink-0 items-center justify-center rounded-[12px] bg-[var(--brand-primary-10)] text-primary">
                     <Icon className="size-6" stroke={1.75} />
