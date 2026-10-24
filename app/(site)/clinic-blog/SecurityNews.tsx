@@ -7,6 +7,7 @@ import InView from './InView'
  * 웹블로그 메인(/blog)의 보안 섹션(blog/components/home/SecurityNewsSection.tsx)과 같은 내용을 이 페이지 디자인으로 옮긴 것.
  * 기사 4장은 같은 이미지(public/images/blog/news-php-0N.webp)를 쓴다 — 제목·부제만 잘랐고 기사 사진·기자 사진은 뺐다.
  * 문구 기준: "Next.js 는 절대 안전" 이라고 하지 않는다. "PHP 를 쓰지 않으니 PHP 취약점 걱정은 없다" 까지만 말한다.
+ * who: 누구의 홈페이지인지 — 병의원 페이지는 '병원', 메인 '웹블로그란?' 은 '우리 회사'.
  * 두 열의 기사 높이 합이 같아(411+411 = 402+420) 오른쪽 열을 내린 만큼 위·아래 엇갈림이 같다.
  */
 
@@ -31,16 +32,16 @@ const NEW = [
   '서버·보안 업데이트는 WEFLOW 월 운영관리에서 계속 챙깁니다',
 ]
 
-export default function SecurityNews() {
+export default function SecurityNews({ who = '병원' }: { who?: string }) {
   return (
     <section id="security" className="cbs" aria-labelledby="cbs-title">
       <div className="cb-wrap">
         <p className="cbs-chapter"><AlertTriangle size={15} /> WHY NOW 03</p>
-        <p className="cbs-lead">그럼 병원 홈페이지는 괜찮을까요?</p>
+        <p className="cbs-lead">그럼 {who} 홈페이지는 괜찮을까요?</p>
         <h2 id="cbs-title" className="cbs-h2">&lsquo;PHP 보안 취약점&rsquo;<br />뉴스는 끊이지 않습니다</h2>
         <p className="cbs-body">
           국내 PHP 서버 상당수가 업데이트되지 않은<br className="cb-mo" /> 옛 버전이라는 보도가 잇따랐습니다.<br />
-          오래된 기술로 만든 병원 홈페이지는<br className="cb-mo" /> 보안 업데이트를 놓치는 순간 위험해집니다.
+          오래된 기술로 만든 {who} 홈페이지는<br className="cb-mo" /> 보안 업데이트를 놓치는 순간 위험해집니다.
         </p>
 
         {/* 기사 4장 — 넓은 화면은 2열(오른쪽 열을 내려 엇갈리게), 휴대폰은 옆으로 넘기는 카드 */}

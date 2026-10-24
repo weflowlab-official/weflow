@@ -6,6 +6,7 @@ import FloatingButtons from './FloatingButtons'
 import PcPromoWidgets from './PcPromoWidgets'
 import AdCarouselJsonLd from './AdCarouselJsonLd'
 import ScrollRestorer from './ScrollRestorer'
+import WebBlogPopup from './WebBlogPopup'
 
 /**
  * 모든 페이지를 감싸는 공통 껍데기 — 헤더 · 본문 · 푸터 · 하단 바.
@@ -33,6 +34,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       <Footer />
       <FloatingButtons />
       <PcPromoWidgets />
+      {/* 메인 홈에서만 뜨는 '웹블로그란?' 새 탭 알림 */}
+      <WebBlogPopup />
     </>
   )
 }

@@ -1,6 +1,7 @@
-import { Search, FileText, Hospital, CalendarCheck, Check, Lock, PenLine, LayoutTemplate, Inbox, Star, ArrowUpRight } from 'lucide-react'
+import { Check, Lock, PenLine, LayoutTemplate, Inbox, Star, ArrowUpRight } from 'lucide-react'
 import InView from './InView'
 import PlanButton from './PlanButton'
+import { WH_CLINIC, type WithHomepageCopy } from './homeCopy'
 
 /**
  * '홈페이지와 함께하면' + 그 바로 아래 상품 두 가지 — WHY WEB BLOG 뒤, PROCESS 앞.
@@ -12,33 +13,27 @@ import PlanButton from './PlanButton'
  * 헤더의 '홈페이지 결합' 메뉴가 여기(#with-homepage)로 온다.
  */
 
-const STEPS = [
-  { Icon: Search, label: '검색', sub: '“임플란트 붓기”' },
-  { Icon: FileText, label: '블로그 글', sub: '수술 후 관리법' },
-  { Icon: Hospital, label: '홈페이지', sub: '의료진 · 장비 · 오시는 길' },
-  { Icon: CalendarCheck, label: '예약', sub: '진료 예약' },
-]
 
 /**
  * 좋은 점 네 장 — 카드 위쪽에 그 말을 보여 주는 작은 화면 그림이 붙는다.
  * 묶음(.ch-gains)이 화면에 들어오면(.is-in) 그림이 움직인다: 주소가 바뀌고, 막대가 차오르고, 색이 맞춰지고, 문의 수가 뜬다.
  */
 const GAINS = [
-  { key: 'stay', title: '밖으로 나가지 않아요', desc: <>글을 읽은 환자가 <br className="ch-mo" />같은 사이트 안에서 바로 병원 정보를 봅니다.</> },
+  { key: 'stay', title: '밖으로 나가지 않아요', desc: null },
   { key: 'grow', title: '홈페이지도 같이 강해져요', desc: <>같은 주소에 글이 쌓일수록 <br className="ch-mo" />홈페이지의 검색 신뢰도가 올라갑니다.</> },
-  { key: 'brand', title: '병원 이미지가 이어져요', desc: <>블로그와 홈페이지가 한 디자인이라 <br className="ch-mo" />처음부터 끝까지 일관됩니다.</> },
+  { key: 'brand', title: '', desc: <>블로그와 홈페이지가 한 디자인이라 <br className="ch-mo" />처음부터 끝까지 일관됩니다.</> },
   { key: 'admin', title: '관리 화면은 하나', desc: <>글쓰기, 홈페이지 수정, 문의 확인을 <br className="ch-mo" />한곳에서 합니다.</> },
 ] as const
 
 /** 카드 위쪽 그림 */
-function GainVisual({ kind }: { kind: (typeof GAINS)[number]['key'] }) {
+function GainVisual({ kind, copy }: { kind: (typeof GAINS)[number]['key']; copy: WithHomepageCopy }) {
   if (kind === 'stay')
     return (
       // 주소창 — 뒷부분만 /blog/implant → /doctors 로 바뀌고, 앞의 우리병원.com 은 그대로
       <div className="gv gv-stay">
         <span className="gv-bar">
           <Lock size={12} />
-          <b>우리병원.com</b>/<span className="gv-path"><em>blog/implant</em><em>doctors</em></span>
+          <b>{copy.domain}</b>/<span className="gv-path"><em>{copy.path[0]}</em><em>{copy.path[1]}</em></span>
         </span>
         <span className="gv-same">같은 사이트</span>
       </div>
@@ -88,44 +83,31 @@ function GainVisual({ kind }: { kind: (typeof GAINS)[number]['key'] }) {
   )
 }
 
-const PLANS = [
-  {
-    name: '웹블로그',
-    plan: '웹블로그만',
-    for: '이미 병원 홈페이지가 있다면',
-    items: ['진료과목별 웹블로그', '쉬운 글쓰기 관리자 화면', '기존 홈페이지와 연결', 'SEO·AEO·GEO 구조 설계'],
-  },
-  {
-    name: '웹블로그 + 홈페이지',
-    plan: '웹블로그 + 홈페이지',
-    for: '새로 만들거나 리뉴얼한다면',
-    items: ['홈페이지와 웹블로그를 한 디자인으로', '관리자 화면 하나로 모두 관리', '문의·예약이 한곳에 쌓임', 'SEO·AEO·GEO 구조 설계'],
-    best: true,
-  },
-  {
-    name: '홈페이지',
-    plan: '홈페이지만',
-    for: '홈페이지부터 만들고 싶다면',
-    items: ['병원 맞춤 디자인 홈페이지', '의료진 · 진료 안내 · 오시는 길', '문의·예약 접수', 'SEO·AEO·GEO 구조 설계'],
-  },
+// 상품 세 장 — 이름은 고정, 누구를 위한지와 항목은 업종 글귀(copy.plans)에서
+const PLAN_BASE = [
+  { name: '웹블로그', plan: '웹블로그만' },
+  { name: '웹블로그 + 홈페이지', plan: '웹블로그 + 홈페이지', best: true },
+  { name: '홈페이지', plan: '홈페이지만' },
 ]
 
-export default function WithHomepage() {
+export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepageCopy }) {
+  const STEPS = copy.steps
+  const PLANS = copy.plans && PLAN_BASE.map((p, i) => ({ ...p, ...copy.plans![i] }))
   return (
     <section id="with-homepage" className="ch">
       <div className="ch-inner">
         <p className="ch-eyebrow">WITH HOMEPAGE</p>
         <h2 className="ch-title">
-          블로그가 데려온 환자를,<br />
-          <span>홈페이지가 예약으로</span>
+          {copy.title[0]}<br />
+          <span>{copy.title[1]}</span>
         </h2>
         <p className="ch-body">
-          웹블로그와 홈페이지를 함께 두면, <br className="ch-mo" />검색에서 예약까지 한 사이트 안에서 이어집니다.
+          {copy.body}
         </p>
 
         {/* 환자가 지나가는 길 — 칸이 차례로 켜지고, 가운데 두 칸은 '한 사이트 안' 띠로 묶인다 */}
         <InView className="ch-flow">
-          <div className="ch-site" aria-hidden="true"><span>우리병원.com 한 사이트 안</span></div>
+          <div className="ch-site" aria-hidden="true"><span>{copy.domain} 한 사이트 안</span></div>
           <ol className="ch-steps">
             {STEPS.map(({ Icon, ...s }, i) => (
               <li key={s.label} style={{ '--i': i } as React.CSSProperties}>
@@ -141,43 +123,48 @@ export default function WithHomepage() {
         <div className="ch-gains">
           {GAINS.map(g => (
             <InView key={g.key} className="ch-gain">
-              <GainVisual kind={g.key} />
-              <strong>{g.title}</strong>
-              <p>{g.desc}</p>
+              <GainVisual kind={g.key} copy={copy} />
+              <strong>{g.title || copy.brandTitle}</strong>
+              <p>{g.desc ?? copy.stayDesc}</p>
             </InView>
           ))}
         </div>
 
-        {/* 상품 두 가지 */}
-        <div className="ch-plans-head">
-          <h3>웹블로그만, 홈페이지만, <br className="ch-mo" />또는 함께</h3>
-        </div>
-        <div className="ch-plans">
-          {PLANS.map(p => (
-            <div key={p.name} className={`ch-plan${p.best ? ' is-best' : ''}`}>
-              {p.best && (
-                // 별 다섯 개 — 메인 가격 안내(/pricing)의 강조 카드 태그와 같은 모양
-                <span className="ch-badge" aria-label="추천">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} size={14} fill="#ffd23f" strokeWidth={0} />
+        {/* 상품 카드 · 홈페이지 견본 링크 — 상담 폼이 같은 페이지에 있는 병의원 랜딩에서만 (메인 '웹블로그란?' 은 copy.plans 가 없어 뺀다) */}
+        {PLANS && (
+          <>
+          {/* 상품 두 가지 */}
+          <div className="ch-plans-head">
+            <h3>웹블로그만, 홈페이지만, <br className="ch-mo" />또는 함께</h3>
+          </div>
+          <div className="ch-plans">
+            {PLANS.map(p => (
+              <div key={p.name} className={`ch-plan${p.best ? ' is-best' : ''}`}>
+                {p.best && (
+                  // 별 다섯 개 — 메인 가격 안내(/pricing)의 강조 카드 태그와 같은 모양
+                  <span className="ch-badge" aria-label="추천">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} size={14} fill="#ffd23f" strokeWidth={0} />
+                    ))}
+                  </span>
+                )}
+                <small>{p.for}</small>
+                <h4>{p.name}</h4>
+                <ul>
+                  {p.items.map(it => (
+                    <li key={it}><Check size={16} /> {it}</li>
                   ))}
-                </span>
-              )}
-              <small>{p.for}</small>
-              <h4>{p.name}</h4>
-              <ul>
-                {p.items.map(it => (
-                  <li key={it}><Check size={16} /> {it}</li>
-                ))}
-              </ul>
-              <PlanButton plan={p.plan} fill={p.best} />
-            </div>
-          ))}
-        </div>
-        {/* WEFLOW 가 만든 홈페이지 견본 — 광고 랜딩이라 이 페이지를 떠나지 않게 새 탭으로 연다 */}
-        <a href="/" target="_blank" rel="noopener noreferrer" className="ch-home-link">
-          WEFLOW가 만든 홈페이지 보기 <ArrowUpRight size={16} />
-        </a>
+                </ul>
+                <PlanButton plan={p.plan} fill={p.best} />
+              </div>
+            ))}
+          </div>
+          {/* WEFLOW 가 만든 홈페이지 견본 — 광고 랜딩이라 이 페이지를 떠나지 않게 새 탭으로 연다 */}
+          <a href="/" target="_blank" rel="noopener noreferrer" className="ch-home-link">
+            WEFLOW가 만든 홈페이지 보기 <ArrowUpRight size={16} />
+          </a>
+          </>
+        )}
       </div>
 
       <style>{`

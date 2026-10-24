@@ -7,19 +7,20 @@ import InView from './InView'
  * 특정 포털의 로고·디자인을 흉내 내지 않는 일반 검색 화면으로 그렸다 (병원 이름도 ○○안과 처럼 가렸다).
  * 검색창 테두리·버튼만 초록(#03c75a)으로 칠해 "네이버에서 찾아본다"는 느낌만 준다 (로고·글자는 쓰지 않는다).
  * 화면에 들어오면 결과가 위에서부터 차례로 올라온다 (InView 가 is-in 을 붙이고 --i 로 늦춘다).
+ * 검색어·결과·'우리 글 없음' 문구는 props 로 받는다 — 병의원 페이지는 안과, 메인 '웹블로그란?' 은 업종 공통 예시.
  * 넓은 화면(960px 이상): 휴대폰 왼쪽에 같은 높이의 PC 화면으로.
  * 좁은 화면: 휴대폰 위에 짧은 카드로 (결과 2개 + "우리 병원 글은 보이지 않습니다", 탭·썸네일 없이) — 위아래로 읽으면 "검색 → AI" 순서가 된다.
  */
 
-const QUERY = '백내장 수술 후 관리'
+export type SearchResult = { blog: string; ago: string; title: string; text: string }
 
-const RESULTS = [
+export const CLINIC_RESULTS: SearchResult[] = [
   { blog: '○○안과 블로그', ago: '2일 전', title: '백내장 수술 후 일주일, 이것만 지켜 주세요', text: '수술 직후 생활에서 주의할 점과 안약 넣는 방법, 다음 진료 때 확인할 것을 정리했습니다.' },
   { blog: '△△안과 블로그', ago: '5일 전', title: '노안 백내장 수술, 인공수정체는 어떻게 고를까', text: '단초점·다초점 렌즈의 차이와 생활 방식에 따라 고려할 점을 쉽게 설명합니다.' },
   { blog: '□□안과 블로그', ago: '1주 전', title: '백내장 수술 뒤 눈이 뿌옇게 보인다면', text: '수술 후 시야가 흐릿하게 느껴질 때 확인해야 할 경우와 진료가 필요한 신호를 알려 드립니다.' },
 ]
 
-export default function SearchMock() {
+export default function SearchMock({ query, results, emptyText }: { query: string; results: SearchResult[]; emptyText: string }) {
   return (
     <div className="csm" aria-label="PC 검색 결과 예시 화면">
       {/* 브라우저 창 */}
@@ -29,7 +30,7 @@ export default function SearchMock() {
       </div>
       <div className="csm-page">
         <div className="csm-search">
-          <span className="csm-q">{QUERY}</span>
+          <span className="csm-q">{query}</span>
           <span className="csm-btn" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2.4" /><path d="M20 20l-4-4" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /></svg>
           </span>
@@ -38,7 +39,7 @@ export default function SearchMock() {
           <span>통합</span><span className="is-on">블로그</span><span>이미지</span><span>동영상</span>
         </div>
         <InView className="csm-list">
-          {RESULTS.map((r, i) => (
+          {results.map((r, i) => (
             <div key={r.title} className="csm-item" style={{ '--i': i } as React.CSSProperties}>
               <div className="csm-body">
                 <p className="csm-meta"><span className="csm-ava">{r.blog.slice(0, 2)}</span>{r.blog} · {r.ago}</p>
@@ -49,8 +50,8 @@ export default function SearchMock() {
             </div>
           ))}
           {/* 우리 병원 글은 없다 — 결과가 다 올라온 뒤 마지막에 나타난다 */}
-          <div className="csm-item csm-empty" style={{ '--i': RESULTS.length + 1 } as React.CSSProperties}>
-            <p>우리 병원 글은 보이지 않습니다</p>
+          <div className="csm-item csm-empty" style={{ '--i': results.length + 1 } as React.CSSProperties}>
+            <p>{emptyText}</p>
           </div>
         </InView>
       </div>

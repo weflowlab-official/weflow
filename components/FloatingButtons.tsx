@@ -1,7 +1,7 @@
 'use client'
 import type { CSSProperties } from 'react'
 import Link from 'next/link'
-import { Phone, ClipboardCheck, CalendarCheck } from 'lucide-react'
+import { Phone, ClipboardCheck, CalendarCheck, NotebookPen } from 'lucide-react'
 
 // PC 우측 세로 플로팅 — 전화·상담. bg/fg는 버튼 색.
 // metal 을 주면 금속 테두리와 광택이 붙는다(.fab-metal + .fab-gold/.fab-silver).
@@ -12,7 +12,10 @@ import { Phone, ClipboardCheck, CalendarCheck } from 'lucide-react'
 // 있고, Tailwind 는 소스에 글자 그대로 적힌 클래스만 남기고 나머지를 빌드에서 지운다.
 // `fab-${metal}` 처럼 조립하면 클래스가 통째로 사라져 테두리·글자가 안 보이게 된다.
 const GLASS = 'rgba(14,14,16,0.82)'
-const ITEMS = [
+const ITEMS: { href: string; label: string; icon: typeof Phone; size: number; bg: string; fg: string; wiggle?: boolean; metal?: string; tel?: boolean; solidIcon?: boolean }[] = [
+  // 웹블로그(/blog) — PC 에서만(이 묶음 자체가 PC 전용). 아래 두 버튼과 같은 금속 버튼, 테두리·광택만 파랑.
+  // /blog 는 루트 레이아웃이 달라 어차피 페이지를 새로 불러오므로 <a> 로 그린다 (tel 과 같은 갈래)
+  { href: '/blog', label: '웹블로그', icon: NotebookPen, size: 24, bg: GLASS, fg: '#8db8f2', metal: 'fab-metal fab-blue', tel: true },
   { href: '/diagnosis', label: '맞춤 견적', icon: ClipboardCheck, size: 26, bg: GLASS, fg: '#c9a262', wiggle: true, metal: 'fab-metal fab-gold' },
   // 수화기는 실루엣 하나뿐이라 안쪽을 파내지 않는다 (solidIcon) — 파면 가늘어 보인다
   { href: 'tel:010-2971-7280', label: '24시간 상담', icon: Phone, size: 25, bg: GLASS, fg: '#a3a3aa', tel: true, metal: 'fab-metal fab-silver', solidIcon: true },

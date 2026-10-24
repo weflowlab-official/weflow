@@ -122,8 +122,9 @@ export default function PcPromoWidgets() {
         /* ── 우측 가운데 회사명 카드 (흰 바탕) ── */
         .pc-side-widget {
           position: fixed;
-          /* 세로 가운데보다 조금 아래 — px 고정(210px)은 모니터가 클수록 위로 붙어 보였다 */
-          top: 55%;
+          /* 세로 위치는 % 로 — px 고정(210px)은 모니터가 클수록 위로 붙어 보였다.
+             10-24: 아래 원형 버튼이 셋(웹블로그 추가)으로 늘어 55% → 50% 로 올렸다 */
+          top: 50%;
           transform: translateY(-50%);
           right: 16px;
           z-index: 150;

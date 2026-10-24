@@ -1,6 +1,7 @@
-import { Search, Gauge, PenLine, CalendarCheck } from 'lucide-react'
+import { Search, Gauge, ShieldCheck, CalendarCheck } from 'lucide-react'
 import { Fragment } from 'react'
 import InView from './InView'
+import { HV_CLINIC, type HomeVsBlogCopy } from './homeCopy'
 
 /**
  * '홈페이지와 웹블로그, 뭐가 다른가요?' — 히어로 바로 아래.
@@ -11,17 +12,13 @@ import InView from './InView'
  * 카드마다 아래에 역할 · 담는 내용 · 바뀌는 주기 세 줄을 넣어 나란히 비교하고, 마지막 줄에서 '함께면' 으로 다음 이야기를 연다.
  */
 
-const ROWS = [
-  { label: '역할', home: '병원을 소개하고 믿음을 줍니다', blog: '검색에서 새 환자를 데려옵니다' },
-  { label: '담는 내용', home: '의료진 · 진료 안내 · 오시는 길', blog: '질환 · 치료 · 관리법 이야기' },
-  { label: '바뀌는 주기', home: '한 번 만들고 필요할 때 고칩니다', blog: '글이 꾸준히 쌓입니다' },
-]
 
 /** 홈페이지든 웹블로그든 WEFLOW 가 똑같이 챙기는 것 — 표 아래에 네 칸으로 */
-const BOTH = [
+const BOTH: { Icon: typeof Search; title: string; desc: string; tight?: boolean }[] = [
   { Icon: Search, title: 'SEO·AEO·GEO 구조 설계', desc: '네이버·구글·AI 검색이 잘 읽는 구조로' },
   { Icon: Gauge, title: '빠른 로딩 · 모바일 최적화', desc: '사진이 많아도 휴대폰에서 빠르게' },
-  { Icon: PenLine, title: '쉬운 관리자 페이지', desc: '글과 사진·문구를 병원에서 직접' },
+  // 관리자 페이지는 넣지 않는다 — 홈페이지는 관리자에서 글·사진·문구를 바꾸는 구조가 아니라 둘의 공통점이 아니다
+  { Icon: ShieldCheck, title: '최신 기술 · 보안 연결', desc: 'PHP 없이 Next.js로, 모든 페이지 HTTPS', tight: true },
   { Icon: CalendarCheck, title: '문의 · 예약 연결', desc: '보던 화면에서 바로 상담으로' },
 ]
 
@@ -32,18 +29,12 @@ const TOGETHER = [
   { text: ' 이어집니다.', bold: false },
 ]
 
-const POSTS = [
-  { tag: '사랑니', title: '사랑니는 꼭 빼야 하나요?' },
-  { tag: '임플란트', title: '임플란트 수술 후 일주일' },
-  { tag: '교정', title: '투명교정, 몇 살까지 될까요?' },
-  { tag: '잇몸', title: '양치할 때 피가 난다면' },
-]
 
 /** 카드 안 비교 세 줄 — 따로 떨어진 표 대신 카드마다 넣어, 두 카드가 같은 줄 순서로 나란히 비교된다 */
-function Facts({ side }: { side: 'home' | 'blog' }) {
+function Facts({ side, rows }: { side: 'home' | 'blog'; rows: HomeVsBlogCopy['rows'] }) {
   return (
     <dl className="hv-facts">
-      {ROWS.map(r => (
+      {rows.map(r => (
         <div key={r.label}>
           <dt>{r.label}</dt>
           <dd>{r[side]}</dd>
@@ -53,14 +44,16 @@ function Facts({ side }: { side: 'home' | 'blog' }) {
   )
 }
 
-export default function HomeVsBlog() {
+export default function HomeVsBlog({ copy = HV_CLINIC }: { copy?: HomeVsBlogCopy }) {
+  // 맺음 문장 — 굵은 부분만 업종에 따라 바뀐다
+  const together = TOGETHER.map((t, i) => (i === 1 ? { ...t, text: copy.together } : t))
   return (
     <section id="difference" className="hv">
       <div className="hv-inner">
         <p className="hv-eyebrow">HOMEPAGE vs WEB BLOG</p>
         <h2 className="hv-title">
-          홈페이지는 <span>병원의 얼굴</span>,<br />
-          웹블로그는 <span>환자를 데려오는 길</span>
+          홈페이지는 <span>{copy.homeIs}</span>,<br />
+          웹블로그는 <span>{copy.blogIs}</span>
         </h2>
 
         <InView className="hv-pair">
@@ -68,36 +61,36 @@ export default function HomeVsBlog() {
           <div className="hv-card">
             <span className="hv-label">홈페이지</span>
             <div className="hv-win">
-              <div className="hv-bar"><i /><i /><i /><span>우리병원.com</span></div>
+              <div className="hv-bar"><i /><i /><i /><span>{copy.domain}</span></div>
               <div className="hv-home">
                 <div className="hv-h-nav hv-step" style={{ '--d': '0.3s' } as React.CSSProperties}>
-                  <b>우리병원치과</b><u /><u /><u />
+                  <b>{copy.brand}</b><u /><u /><u />
                 </div>
                 <div className="hv-h-banner hv-step" style={{ '--d': '1.05s' } as React.CSSProperties}>
-                  <strong>건강한 미소를<br />오래 지켜드립니다</strong>
-                  <em>진료 예약</em>
+                  <strong>{copy.banner[0]}<br />{copy.banner[1]}</strong>
+                  <em>{copy.bannerCta}</em>
                 </div>
                 <div className="hv-h-quick hv-step" style={{ '--d': '1.8s' } as React.CSSProperties}>
-                  <span>의료진</span><span>진료 안내</span><span>오시는 길</span>
+                  {copy.quick.map(t => <span key={t}>{t}</span>)}
                 </div>
               </div>
             </div>
             <p className="hv-cap">한 번 완성하면 <b>늘 그 자리에</b></p>
-            <Facts side="home" />
+            <Facts side="home" rows={copy.rows} />
           </div>
 
           {/* 웹블로그 — 새 글이 위로 하나씩 밀려 들어온다 */}
           <div className="hv-card hv-card--blog">
             <span className="hv-label">웹블로그</span>
             <div className="hv-win">
-              <div className="hv-bar"><i /><i /><i /><span>우리병원.com/blog</span></div>
+              <div className="hv-bar"><i /><i /><i /><span>{copy.domain}/blog</span></div>
               <div className="hv-blog">
                 <div className="hv-b-head">
-                  <b>우리병원치과 블로그</b>
+                  <b>{copy.brand} 블로그</b>
                   <span className="hv-count">글 <span className="hv-count-strip"><i>12</i><i>13</i><i>14</i><i>15</i></span>개</span>
                 </div>
                 <div className="hv-b-list">
-                  {POSTS.map((p, i) => (
+                  {copy.posts.map((p, i) => (
                     <div key={p.title} className="hv-post" style={{ '--i': i } as React.CSSProperties}>
                       <span className="hv-thumb" />
                       <span className="hv-post-text"><small>{p.tag}</small>{p.title}</span>
@@ -107,7 +100,7 @@ export default function HomeVsBlog() {
               </div>
             </div>
             <p className="hv-cap">쓸수록 <b>늘어나는 검색 유입</b></p>
-            <Facts side="blog" />
+            <Facts side="blog" rows={copy.rows} />
           </div>
         </InView>
 
@@ -115,19 +108,19 @@ export default function HomeVsBlog() {
         <div className="hv-both">
           <p className="hv-both-head">WEFLOW는 홈페이지든 웹블로그든, <br className="hv-mo" />이렇게 만듭니다</p>
           <ul>
-            {BOTH.map(({ Icon, title, desc }) => (
+            {BOTH.map(({ Icon, title, desc, tight }) => (
               <li key={title}>
                 <span className="hv-both-icon"><Icon size={20} /></span>
                 <strong>{title}</strong>
-                <small>{desc}</small>
+                <small className={tight ? 'is-tight' : undefined}>{desc}</small>
               </li>
             ))}
           </ul>
         </div>
         {/* 맺음 문장 — 화면에 들어오면 한 글자씩 써진다 */}
         <InView className="hv-together-wrap">
-          <p className="hv-together" aria-label={TOGETHER.map(t => t.text).join('')}>
-            {TOGETHER.flatMap(seg => [...seg.text].map((ch, k, arr) => ({ ch, bold: seg.bold, br: seg.br && k === arr.length - 1 }))).map((c, i) => (
+          <p className="hv-together" aria-label={together.map(t => t.text).join('')}>
+            {together.flatMap(seg => [...seg.text].map((ch, k, arr) => ({ ch, bold: seg.bold, br: seg.br && k === arr.length - 1 }))).map((c, i) => (
               <Fragment key={i}>
                 <span aria-hidden="true" className={c.bold ? 'hv-ch hv-ch--b' : 'hv-ch'} style={{ '--i': i } as React.CSSProperties}>
                   {c.ch}
@@ -223,7 +216,8 @@ export default function HomeVsBlog() {
         }
         .hv-mo { display: inline; }
         @media (min-width: 768px) { .hv-mo { display: none; } }
-        .hv-both li { display: grid; justify-items: center; align-content: center; gap: 8px; padding: 34px 14px; min-height: 180px; border-radius: 18px; background: #f5f9ff; border: 1px solid #e3ecfb; }
+        /* 위에서부터 쌓는다 — 설명이 두 줄인 칸이 있어도 네 칸의 아이콘·제목·설명 첫 줄 높이가 같게 */
+        .hv-both li { display: grid; justify-items: center; align-content: start; gap: 8px; padding: 34px 14px; min-height: 180px; border-radius: 18px; background: #f5f9ff; border: 1px solid #e3ecfb; }
         /* 마우스를 올리면 — 카드가 떠오르며 흰 바탕 · 파란 테두리 · 그림자, 아이콘은 통 튀며 살짝 기운다 */
         .hv-both li { transition: transform .3s cubic-bezier(.16,1,.3,1), background .25s ease, border-color .25s ease, box-shadow .3s ease; }
         .hv-both li:hover { transform: translateY(-6px); background: #fff; border-color: #1f63d6; box-shadow: 0 18px 40px rgba(31,99,214,.14); }
@@ -232,7 +226,11 @@ export default function HomeVsBlog() {
         @media (prefers-reduced-motion: reduce) { .hv-both li { transition: none; } .hv-both li:hover { transform: none; } .hv-both li:hover .hv-both-icon { animation: none; } }
         .hv-both-icon { width: 42px; height: 42px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: #1f63d6; color: #fff; margin-bottom: 4px; }
         .hv-both strong { font-size: .95rem; font-weight: 800; letter-spacing: -0.02em; color: #111418; word-break: keep-all; }
-        .hv-both small { font-size: .82rem; color: #6b7380; word-break: keep-all; }
+        .hv-both small { font-size: .82rem; line-height: 1.5; color: #6b7380; word-break: keep-all; }
+        /* 설명이 긴 칸(보안) — 글씨를 한 단계 줄여 다른 칸처럼 한 줄로. 아주 좁은 휴대폰에서는 줄이 바뀌어도 된다 */
+        /* 줄 높이는 다른 칸 설명(.82rem × 1.5)과 같게 — 글씨만 작아지면 줄이 낮아져 위로 붙어 보인다 */
+        .hv-both small.is-tight { font-size: .74rem; line-height: calc(.82rem * 1.5); letter-spacing: -0.02em; white-space: nowrap; position: relative; top: 0.8px; } /* 눈으로 맞춰 0.8px 내림 */
+        @media (max-width: 639px) { .hv-both small.is-tight { white-space: normal; } }
         .hv-together { margin: 52px 0 0; font-size: clamp(1.15rem, 2.2vw, 1.4rem); font-weight: 700; letter-spacing: -0.02em; color: #3a414c; word-break: keep-all; }
         .hv-ch--b { color: #1f63d6; font-weight: 800; }
         /* 한 글자씩 — 글자마다 0.045초씩 늦게 나타난다 */

@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
 import { MessagesSquare, FolderTree, PenTool, Rocket, Check, ClipboardList, BookOpen, Phone } from 'lucide-react'
 import InquiryForm from './InquiryForm'
-import InView from './InView'
 import BlogWhy from './BlogWhy'
 import ClinicHeader from './ClinicHeader'
 import ClinicFooter from './ClinicFooter'
-import { CLINIC_BASE_CSS } from './base-css'
+import { CLINIC_BASE_CSS, SCENE_CSS } from './base-css'
 import HeroWorries from './HeroWorries'
 import ClinicFaq from './ClinicFaq'
 import HomeVsBlog from './HomeVsBlog'
@@ -13,7 +12,8 @@ import FloatingCta from './FloatingCta'
 import WithHomepage from './WithHomepage'
 import SecurityNews from './SecurityNews'
 import HowItWorks from './HowItWorks'
-import SearchMock from './SearchMock'
+import { AiSearchScene, PlatformDropScene, type Line } from './Scenes'
+import { CLINIC_RESULTS } from './SearchMock'
 
 /**
  * 병의원 전용 웹블로그 홍보 페이지 — /clinic-blog
@@ -43,38 +43,33 @@ export const metadata: Metadata = {
   },
 }
 
-/** 말하는 사람 — 왼쪽(상대)·오른쪽(나) 위치와 동그라미 안 글자 */
-const SPEAKERS = {
-  patient: { name: '환자', short: '환자', side: 'right' },
-  ai: { name: 'AI 검색', short: 'AI', side: 'left' },
-  director: { name: '원장님', short: '원장', side: 'right' },
-  manager: { name: '실장님', short: '실장', side: 'left' },
-} as const
-type Speaker = keyof typeof SPEAKERS
-/** source 가 있으면 말풍선 대신 '출처 카드' 로 그린다 (AI 답변이 인용한 글) */
-type Line = { who: Speaker; text: string; cta?: string; source?: string; time?: string }
+/** 말하는 사람 — 이름과 동그라미 안 글자 (Scenes.tsx 의 Line 에 그대로 넣는다) */
+const PATIENT = { who: 'me', name: '환자', short: '환자' } as const
+const AI = { who: 'ai', name: 'AI 검색', short: 'AI' } as const
+const DIRECTOR = { who: 'boss', name: '원장님', short: '원장' } as const
+const MANAGER = { who: 'staff', name: '실장님', short: '실장' } as const
 
 /** 장면 1 — 환자 시점이라 휴대폰 화면 안에서 대화가 진행된다 */
 const PATIENT_LINES: Line[] = [
-  { who: 'patient', text: '임플란트 수술하고 붓기는 며칠이나 가?' },
-  { who: 'ai', text: '보통 2~3일째 가장 붓고, 일주일 안에 가라앉습니다. 아래 글을 참고해 보세요.' },
-  { who: 'ai', text: '임플란트 수술 후 관리법 총정리', source: '다른 병원 블로그' },
-  { who: 'patient', text: '오 설명 잘 돼 있네. 여기 한번 가 볼까?' },
+  { ...PATIENT, text: '임플란트 수술하고 붓기는 며칠이나 가?' },
+  { ...AI, text: '보통 2~3일째 가장 붓고, 일주일 안에 가라앉습니다. 아래 글을 참고해 보세요.' },
+  { ...AI, text: '임플란트 수술 후 관리법 총정리', source: '다른 병원 블로그' },
+  { ...PATIENT, text: '오 설명 잘 돼 있네. 여기 한번 가 볼까?' },
 ]
 
-/** 장면 2 — 원장님과 실장님의 대화. 상자 없이 큰 말풍선을 대본처럼 주고받는다 (지금은 장면을 숨겨 두어 쓰이지 않는다 — 아래 주석 참고) */
+/** 장면 2 — 원장님과 실장님의 대화 (지금은 장면을 숨겨 두어 쓰이지 않는다 — 아래 주석 참고) */
 const OFFICE_LINES: Line[] = [
-  { who: 'director', text: '블로그 시작한 지 1년 됐는데, 블로그 보고 왔다는 환자 있었어요?', time: '오전 9:02' },
-  { who: 'manager', text: '글은 매달 꼬박꼬박 올라가고 있어요…', time: '오전 9:05' },
-  { who: 'director', text: '어제 검색해 봤는데 우리 글은 안 나오던데요.', time: '오전 9:05' },
-  { who: 'manager', text: '왜 그런지 한번 알아볼게요 😥', time: '오전 9:11' },
+  { ...DIRECTOR, text: '블로그 시작한 지 1년 됐는데, 블로그 보고 왔다는 환자 있었어요?', time: '오전 9:02' },
+  { ...MANAGER, text: '글은 매달 꼬박꼬박 올라가고 있어요…', time: '오전 9:05' },
+  { ...DIRECTOR, text: '어제 검색해 봤는데 우리 글은 안 나오던데요.', time: '오전 9:05' },
+  { ...MANAGER, text: '왜 그런지 한번 알아볼게요 😥', time: '오전 9:11' },
 ]
 
 /** 장면 3 — 방문자 그래프가 뚝 떨어진 뒤 이어지는 대화 */
 const DROP_LINES: Line[] = [
-  { who: 'manager', text: '원장님, 블로그 노출이 갑자기 다 빠졌어요.' },
-  { who: 'director', text: '3년 동안 쓴 글인데요?' },
-  { who: 'manager', text: '플랫폼 쪽 문제라 저희가 할 수 있는 게 없대요.' },
+  { ...MANAGER, text: '원장님, 블로그 노출이 갑자기 다 빠졌어요.' },
+  { ...DIRECTOR, text: '3년 동안 쓴 글인데요?' },
+  { ...MANAGER, text: '플랫폼 쪽 문제라 저희가 할 수 있는 게 없대요.' },
 ]
 
 const STEPS = [
@@ -83,39 +78,6 @@ const STEPS = [
   { Icon: PenTool, title: '디자인·제작', desc: '병원 분위기에 맞춰\n웹블로그와 글쓰기 화면을 만듭니다.' },
   { Icon: Rocket, title: '오픈', desc: '도메인 연결과 검색엔진 등록까지 마치고, 웹블로그를 오픈합니다.' },
 ]
-
-/** 대화창 하나 — 말풍선이 --i 순서대로 늦게 올라온다. className 으로 장면마다 모양을 바꾼다 */
-function Chat({ lines, className = '' }: { lines: Line[]; className?: string }) {
-  return (
-    <InView className={`cb-chat ${className}`}>
-      {lines.map((l, i) => {
-        const s = SPEAKERS[l.who]
-        return (
-          <div
-            key={i}
-            className={`cb-line cb-${s.side} cb-who-${l.who}`}
-            style={{ '--i': i } as React.CSSProperties}
-          >
-            <span className="cb-avatar" aria-hidden="true">{s.short}</span>
-            <div className="cb-bubble-wrap">
-              <span className="cb-name">{s.name}</span>
-              {l.source ? (
-                <p className="cb-bubble cb-src">
-                  <small>출처 · {l.source}</small>
-                  {l.text}
-                </p>
-              ) : (
-                <p className="cb-bubble">{l.text}</p>
-              )}
-              {l.cta && <span className="cb-bubble-cta">{l.cta}</span>}
-              {l.time && <time className="cb-time">{l.time}</time>}
-            </div>
-          </div>
-        )
-      })}
-    </InView>
-  )
-}
 
 export default function ClinicBlogPage() {
   return (
@@ -150,42 +112,18 @@ export default function ClinicBlogPage() {
 
       {/* 흐름: 약속(히어로) → 지금 놓치고 있는 것 셋(WHY NOW 01 AI · 02 플랫폼 · 03 보안) → 그래서, 웹블로그 → 어떻게 자리 잡나 → 홈페이지와 함께 → 진행 → FAQ → 상담 */}
 
-      {/* ── 장면 1 — 가운데 휴대폰 화면 안에서 환자가 검색한다 ── */}
-      <section id="story" className="cb-scene cb-scene-alt cb-phone-scene">
-        <div className="cb-wrap">
-          <p className="cb-chapter">WHY NOW 01</p>
-          <h2 className="cb-h2">요즘 환자는{'\n'}<span className="cb-hl">검색창과 AI에게</span> 먼저 묻습니다</h2>
-          <p className="cb-body">
-            진료를 결심한 환자는 <br className="cb-mo" />바로 전화하지 않습니다.<br />
-            증상과 치료법을 검색하고 AI에게도 물어본 뒤, <br className="cb-mo" />거기서 만난 글을 쓴 병원을 기억합니다.
-          </p>
-          {/* 넓은 화면: 왼쪽 PC 검색 결과 + 오른쪽 휴대폰 AI 검색 / 좁은 화면: 휴대폰만 */}
-          <div className="cb-ai-visual">
-          <SearchMock />
-          <div className="cb-phone">
-            <div className="cb-phone-screen">
-              <div className="cb-phone-status"><i /></div>
-              <p className="cb-phone-head">
-                {/* AI 서비스들이 흔히 쓰는 네 꼭짓점 반짝이 — 특정 회사 로고가 아닌 일반 모양으로 그렸다 */}
-                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                  <defs>
-                    <linearGradient id="cbSpark" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stopColor="#4f8cff" />
-                      <stop offset="100%" stopColor="#9b6bff" />
-                    </linearGradient>
-                  </defs>
-                  <path d="M12 1.5c.6 5.6 4.9 9.9 10.5 10.5-5.6.6-9.9 4.9-10.5 10.5C11.4 16.9 7.1 12.6 1.5 12 7.1 11.4 11.4 7.1 12 1.5z" fill="url(#cbSpark)" />
-                </svg>
-                AI 검색
-              </p>
-              <Chat lines={PATIENT_LINES} />
-              <p className="cb-phone-input">무엇이든 물어보세요</p>
-            </div>
-          </div>
-          </div>
-          <p className="cb-phone-note">환자가 기억하는 건, <br className="cb-mo" />이 글을 쓴 <b>다른 병원</b>입니다.</p>
-        </div>
-      </section>
+      {/* ── 장면 1 — PC 검색 결과 + 휴대폰 AI 검색 (Scenes.tsx) ── */}
+      <AiSearchScene
+        id="story"
+        title={<>요즘 환자는{'\n'}<span className="cb-hl">검색창과 AI에게</span> 먼저 묻습니다</>}
+        body={<>
+          진료를 결심한 환자는 <br className="cb-mo" />바로 전화하지 않습니다.<br />
+          증상과 치료법을 검색하고 AI에게도 물어본 뒤, <br className="cb-mo" />거기서 만난 글을 쓴 병원을 기억합니다.
+        </>}
+        search={{ query: '백내장 수술 후 관리', results: CLINIC_RESULTS, emptyText: '우리 병원 글은 보이지 않습니다' }}
+        lines={PATIENT_LINES}
+        note={<>환자가 기억하는 건, <br className="cb-mo" />이 글을 쓴 <b>다른 병원</b>입니다.</>}
+      />
 
       {/* ── 장면 2 (원장님·실장님 대화) — 바로 다음 '빌린 공간' 장면과 이야기가 겹쳐 숨겨 둔다 (2026-10-23). 되살리려면 주석만 풀면 된다 ──
       <section className="cb-scene cb-talk-scene">
@@ -201,42 +139,16 @@ export default function ClinicBlogPage() {
       </section>
       */}
 
-      {/* ── 장면 3 — 방문자 그래프가 떨어지고, 알림이 뜨고, 대화가 이어진다 ── */}
-      {/* 앞의 AI 장면(회색)과 붙어 한 덩어리로 보이지 않게 흰 바탕. 다음은 보안(어두운 바탕) */}
-      <section className="cb-scene">
-        <div className="cb-wrap cb-scene-grid">
-          <div className="cb-scene-text">
-            <p className="cb-chapter">WHY NOW 02</p>
-            <h2 className="cb-h2">그렇다고 <span className="cb-hl">블로그에만</span> 쌓으면,{'\n'}그 글은 병원의 것이 아닙니다</h2>
-            <p className="cb-body">
-              플랫폼 정책이 바뀌거나 계정에 문제가 생기면,<br />
-              몇 년 동안 쌓은 글이 한순간에 힘을 잃습니다.<br />
-              <span className="cb-hl">병원이 손쓸 수 있는 게 없습니다.</span>
-            </p>
-          </div>
-          <InView className="cb-drop-col">
-            <div className="cb-drop">
-              <div className="cb-drop-head">
-                <span>블로그 방문자</span>
-                <small>최근 12개월</small>
-              </div>
-              <svg className="cb-drop-chart" viewBox="0 0 400 170" preserveAspectRatio="none" aria-hidden="true">
-                <defs>
-                  <linearGradient id="cbDropFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#1f63d6" stopOpacity=".16" />
-                    <stop offset="100%" stopColor="#1f63d6" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <path className="cb-drop-area" d="M0,140 L40,128 L80,120 L120,104 L160,96 L200,82 L240,70 L280,56 L310,46 L325,150 L360,154 L400,156 L400,170 L0,170 Z" fill="url(#cbDropFill)" />
-                <path className="cb-drop-line" d="M0,140 L40,128 L80,120 L120,104 L160,96 L200,82 L240,70 L280,56 L310,46 L325,150 L360,154 L400,156" fill="none" stroke="#1f63d6" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-              </svg>
-              <span className="cb-drop-mark">노출 제한</span>
-              <p className="cb-drop-toast">⚠ 블로그 검색 노출이 제한되었습니다</p>
-            </div>
-            <Chat lines={DROP_LINES} className="cb-after-drop" />
-          </InView>
-        </div>
-      </section>
+      {/* ── 장면 3 — 방문자 그래프가 떨어지고 대화가 이어진다 (Scenes.tsx). 앞의 AI 장면(회색)과 나뉘게 흰 바탕 ── */}
+      <PlatformDropScene
+        title={<>그렇다고 <span className="cb-hl">블로그에만</span> 쌓으면,{'\n'}그 글은 병원의 것이 아닙니다</>}
+        body={<>
+          플랫폼 정책이 바뀌거나 계정에 문제가 생기면,<br />
+          몇 년 동안 쌓은 글이 한순간에 힘을 잃습니다.<br />
+          <span className="cb-hl">병원이 손쓸 수 있는 게 없습니다.</span>
+        </>}
+        lines={DROP_LINES}
+      />
 
       {/* ── WHY NOW 03: 그럼 홈페이지는? 옛 기술(PHP) 보안 — 기사 4장 + 옛 방식 vs Next.js (어두운 바탕) ── */}
       <SecurityNews />
@@ -304,7 +216,7 @@ export default function ClinicBlogPage() {
       {/* 오른쪽 아래 떠 있는 상담 버튼 — 첫 화면과 상담 폼에서는 숨는다 */}
       <FloatingCta />
 
-      <style>{CLINIC_BASE_CSS + `
+      <style>{CLINIC_BASE_CSS + SCENE_CSS + `
         .cb-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--cb-accent); color: #fff; font-weight: 700; padding: 14px 24px; border-radius: 10px; border: 0; cursor: pointer; text-decoration: none; transition: transform .12s, background .15s; white-space: nowrap; }
         .cb-btn:hover { background: #1852b5; }
         .cb-btn:active { transform: scale(.97); }
@@ -316,12 +228,6 @@ export default function ClinicBlogPage() {
         .cb-hero { position: relative; overflow: hidden; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 0 0 12px; }
         .cb-hero-inner { position: relative; z-index: 1; width: 100%; }
 
-        /* 제목 강조 — 형광펜이 왼쪽에서 오른쪽으로 칠해진다 */
-        .cb-mark { position: relative; z-index: 0; white-space: nowrap; }
-        .cb-mark::after { content: ''; position: absolute; z-index: -1; left: -.08em; right: -.08em; bottom: .06em; height: .36em; border-radius: .1em; background: #cfe0fb; transform: scaleX(0); transform-origin: left; animation: cbMark .9s cubic-bezier(.65,0,.35,1) .5s forwards; }
-        @keyframes cbMark { to { transform: scaleX(1); } }
-        /* 본문 강조 — 섹션의 결론 문장에만 하나씩. 글자 아래쪽 절반에 연한 파랑을 깐다 */
-        .cb-hl { color: var(--cb-text); font-weight: 700; background: linear-gradient(transparent 58%, #cfe0fb 58%); padding: 0 .1em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
         /* 좁은 화면 — 제목을 위에 두고, 그 아래 채팅 목록 */
         /* 좁은 화면에서는 말풍선이 없으므로 넓은 화면과 같이 제목 묶음을 세로 가운데에 둔다 */
         .cb-tag { font-weight: 700; font-size: clamp(1.05rem, 1.6vw, 1.3rem); letter-spacing: -0.01em; color: var(--cb-accent); margin: 0 0 22px; }
@@ -347,107 +253,6 @@ export default function ClinicBlogPage() {
         .cb-scroll em { font-style: normal; font-size: .72rem; font-weight: 700; letter-spacing: .32em; margin-right: -.32em; color: var(--cb-muted); }
         .cb-scroll i { display: block; width: 1px; height: 56px; background: linear-gradient(var(--cb-accent), transparent); animation: cb-drop 1.8s ease-in-out infinite; transform-origin: top; }
         @keyframes cb-drop { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
-
-        /* 섹션 작은 제목 — 영어 대문자, 글자 사이를 벌린다 (히어로의 SCROLL 과 같은 결) */
-        .cb-chapter { font-weight: 700; font-size: .85rem; letter-spacing: .22em; color: var(--cb-accent); margin: 0 0 16px; }
-        .cb-h2 { font-size: clamp(1.7rem, 3.8vw, 2.5rem); line-height: 1.32; font-weight: 800; letter-spacing: -0.035em; margin: 0; white-space: pre-line; }
-        .cb-body { color: var(--cb-sub); font-size: 1.05rem; line-height: 1.8; margin: 20px 0 0; }
-
-        /* 장면 — 왼쪽 글, 오른쪽 대화창 */
-        .cb-scene { padding: 96px 0; }
-        .cb-scene-alt { background: var(--cb-soft); }
-        /* STORY 01~03 의 설명 글 크기를 하나로 맞춘다 */
-        .cb-scene .cb-body { font-size: 1.15rem; }
-        @media (min-width: 960px) { .cb-scene { padding: 140px 0; } }
-        .cb-scene-grid { display: grid; gap: 40px; align-items: center; }
-        @media (min-width: 960px) { .cb-scene-grid { grid-template-columns: 1fr 1fr; gap: 80px; } }
-        /* 글과 그림이 위아래로 쌓이는 화면 — STORY 01·02 처럼 글을 가운데로 */
-        @media (max-width: 959px) { .cb-scene-text { text-align: center; } }
-
-        .cb-chat { display: flex; flex-direction: column; gap: 14px; background: #fff; border: 1px solid var(--cb-line); border-radius: 24px; padding: 28px 20px; box-shadow: 0 20px 50px rgba(17,20,24,.06); }
-        @media (min-width: 768px) { .cb-chat { padding: 36px 32px; } }
-        .cb-line { display: flex; gap: 10px; align-items: flex-end; opacity: 0; transform: translateY(14px); transition: opacity .45s ease, transform .45s ease; transition-delay: calc(var(--i) * .55s); }
-        .cb-chat.is-in .cb-line { opacity: 1; transform: none; }
-        .cb-right { flex-direction: row-reverse; }
-        .cb-avatar { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: .7rem; font-weight: 800; background: #e8edf5; color: #44506a; }
-        .cb-who-ai .cb-avatar { background: #111418; color: #fff; }
-        .cb-who-director .cb-avatar, .cb-who-patient .cb-avatar { background: #e6eefc; color: var(--cb-accent); }
-        .cb-bubble-wrap { display: flex; flex-direction: column; max-width: 78%; }
-        .cb-right .cb-bubble-wrap { align-items: flex-end; }
-        .cb-name { font-size: .75rem; color: var(--cb-muted); margin: 0 4px 4px; }
-        .cb-bubble { margin: 0; padding: 12px 16px; border-radius: 18px; line-height: 1.55; font-size: .97rem; background: var(--cb-bubble-you); border-bottom-left-radius: 6px; }
-        .cb-right .cb-bubble { background: var(--cb-bubble-me); color: #fff; border-bottom-left-radius: 18px; border-bottom-right-radius: 6px; }
-        .cb-bubble-cta { margin-top: 8px; display: inline-block; background: #fff; color: var(--cb-accent); border: 1.5px solid var(--cb-accent); font-weight: 700; font-size: .88rem; padding: 8px 16px; border-radius: 999px; }
-
-        /* 장면 2 — 상자 없이 가운데에서 큰 말풍선 */
-        .cb-talk-scene { text-align: center; }
-        .cb-talk-scene .cb-body { max-width: 600px; margin-left: auto; margin-right: auto; }
-        .cb-talk { max-width: 720px; margin: 64px auto 0; background: none; border: 0; box-shadow: none; padding: 0; gap: 22px; text-align: left; }
-        .cb-talk .cb-avatar { width: 44px; height: 44px; font-size: .8rem; }
-        .cb-talk .cb-bubble { font-size: clamp(1.02rem, 1.8vw, 1.2rem); padding: 16px 22px; border-radius: 24px; }
-        .cb-talk .cb-left .cb-bubble { border-bottom-left-radius: 8px; }
-        .cb-talk .cb-right .cb-bubble { border-bottom-right-radius: 8px; }
-        .cb-talk .cb-name { font-size: .85rem; font-weight: 700; }
-        .cb-time { font-size: .75rem; color: var(--cb-muted); margin: 6px 6px 0; }
-        /* 휴대폰 — 아바타·말풍선 여백을 줄여 말풍선 폭을 넓게 쓴다 */
-        /* 휴대폰 — 아바타를 빼고(이름만 남김) 말풍선을 메신저처럼 작고 좁게. 좌우로 엇갈려 대화처럼 보이게 한다 */
-        @media (max-width: 640px) {
-          .cb-talk { margin-top: 40px; gap: 14px; }
-          .cb-talk .cb-avatar { display: none; }
-          .cb-talk .cb-bubble-wrap { max-width: 78%; }
-          .cb-talk .cb-bubble { font-size: .95rem; padding: 11px 15px; border-radius: 18px; }
-          .cb-talk .cb-left .cb-bubble { border-bottom-left-radius: 6px; }
-          .cb-talk .cb-right .cb-bubble { border-bottom-right-radius: 6px; }
-          .cb-talk .cb-name { font-size: .78rem; }
-          .cb-time { font-size: .7rem; margin-top: 4px; }
-        }
-
-        /* 장면 3 — 방문자 그래프가 그려지다 뚝 떨어진다 */
-        .cb-drop-col { display: grid; gap: 20px; }
-        .cb-drop { position: relative; background: #fff; border: 1px solid var(--cb-line); border-radius: 24px; padding: 24px 24px 20px; box-shadow: 0 20px 50px rgba(17,20,24,.06); overflow: hidden; }
-        .cb-drop-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
-        .cb-drop-head span { font-weight: 800; }
-        .cb-drop-head small { color: var(--cb-muted); font-size: .8rem; }
-        .cb-drop-chart { display: block; width: 100%; height: 170px; overflow: visible; }
-        .cb-drop-line { stroke-dasharray: 900; stroke-dashoffset: 900; }
-        .cb-drop-area { opacity: 0; }
-        .cb-drop-col.is-in .cb-drop-line { transition: stroke-dashoffset 2s cubic-bezier(.45,.05,.3,1); stroke-dashoffset: 0; }
-        .cb-drop-col.is-in .cb-drop-area { transition: opacity .8s ease 1.2s; opacity: 1; }
-        .cb-drop-mark { position: absolute; left: 78%; top: 76px; padding: 4px 10px; border-radius: 999px; background: #fdecec; color: #d64545; font-size: .78rem; font-weight: 800; opacity: 0; transform: translateY(6px); transition: opacity .4s ease, transform .4s ease; }
-        .cb-drop-col.is-in .cb-drop-mark { opacity: 1; transform: none; transition-delay: 1.6s; }
-        .cb-drop-toast { position: absolute; left: 16px; right: 16px; top: 14px; margin: 0; padding: 12px 16px; border-radius: 14px; background: #111418; color: #fff; font-size: .9rem; font-weight: 700; opacity: 0; transform: translateY(-120%); transition: opacity .5s ease, transform .5s cubic-bezier(.16,1,.3,1); }
-        .cb-drop-col.is-in .cb-drop-toast { opacity: 1; transform: none; transition-delay: 2.1s; }
-        /* 그래프가 다 떨어진 뒤에 대화가 시작된다 */
-        /* 그래프와 대화는 한 묶음(.cb-drop-col)이 화면에 들어오는 순간 같이 시작해, 2.6초에 같이 끝난다.
-           그래프: 선 0~2s, 노출 제한 표시 1.6~2.0s, 알림 2.1~2.6s
-           대화: 세 줄이 0s · 1.075s · 2.15s 에 올라와 각각 .45s 걸린다 → 마지막이 2.6s 에 끝 */
-        .cb-drop-col .cb-after-drop .cb-line { opacity: 0; transform: translateY(14px); transition-delay: calc(var(--i) * 1.075s); }
-        .cb-drop-col.is-in .cb-after-drop .cb-line { opacity: 1; transform: none; }
-
-        /* 출처 카드 — AI 답변이 인용한 글 */
-        .cb-bubble.cb-src { background: #fff; border: 1.5px solid var(--cb-line); font-weight: 700; }
-        .cb-src small { display: block; font-size: .75rem; font-weight: 700; color: #e05252; margin-bottom: 2px; }
-
-        /* 장면 1 — 가운데 정렬, 휴대폰 화면 */
-        .cb-phone-scene { text-align: center; }
-        .cb-phone-scene .cb-body { max-width: 600px; margin-left: auto; margin-right: auto; }
-        /* 넓은 화면: 둘째 줄("증상과 치료법을 검색하고 … 기억합니다.")이 한 줄에 들어가게 폭을 넓힌다 */
-        @media (min-width: 768px) { .cb-phone-scene .cb-body { max-width: 860px; } }
-        /* PC 검색 화면(SearchMock) + 휴대폰 — 넓은 화면에서 나란히, 위아래 가운데 맞춤 */
-        .cb-ai-visual { margin-top: 56px; }
-        @media (min-width: 960px) { .cb-ai-visual { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 48px; align-items: center; } }
-        .cb-phone { width: min(340px, 100%); margin: 0 auto; padding: 11px; border-radius: 48px; background: #111418; box-shadow: 0 30px 80px rgba(17,20,24,.18); text-align: left; }
-        .cb-phone-screen { background: #fff; border-radius: 38px; overflow: hidden; display: flex; flex-direction: column; min-height: 600px; }
-        .cb-phone-status { height: 40px; display: flex; justify-content: center; align-items: center; }
-        .cb-phone-status i { width: 90px; height: 24px; border-radius: 999px; background: #111418; }
-        .cb-phone-head { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0; padding: 4px 0 12px; text-align: center; font-weight: 800; font-size: .95rem; border-bottom: 1px solid var(--cb-line); }
-        .cb-phone .cb-chat { flex: 1; border: 0; border-radius: 0; box-shadow: none; padding: 20px 14px; gap: 10px; }
-        .cb-phone .cb-avatar, .cb-phone .cb-name { display: none; }
-        .cb-phone .cb-bubble-wrap { max-width: 86%; }
-        .cb-phone .cb-bubble { font-size: .92rem; }
-        .cb-phone-input { margin: 0 14px 18px; padding: 12px 18px; border-radius: 999px; background: var(--cb-soft); color: var(--cb-muted); font-size: .9rem; }
-        .cb-phone-note { margin: 56px 0 0; /* 설명 두 줄 ↔ 그림 간격(.cb-ai-visual 의 56px)과 같게 */ font-size: 1.22rem; color: var(--cb-sub); }
-        .cb-phone-note b { color: #e05252; }
 
         /* 공통 섹션 여백 */
         .cb-sec { padding: 96px 0; }
@@ -565,10 +370,6 @@ export default function ClinicBlogPage() {
 
         /* 움직임을 줄여 달라고 설정한 방문자에게는 처음부터 다 보여 준다 */
         @media (prefers-reduced-motion: reduce) {
-          .cb-line { opacity: 1; transform: none; transition: none; }
-          .cb-mark::after { animation: none; transform: none; }
-          .cb-drop-line { stroke-dashoffset: 0; }
-          .cb-drop-area, .cb-drop-mark, .cb-drop-toast { opacity: 1; transform: none; }
           .cb-scroll i { animation: none; }
         }
       `}</style>

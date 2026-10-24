@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, Phone, X, CalendarCheck } from "lucide-react";
 
-type NavLink = { href: string; label: string; gold?: boolean };
+type NavLink = { href: string; label: string; gold?: boolean; isNew?: boolean };
 type NavGroup = { label: string; children: NavLink[] };
 
 // 상단 메뉴 목록 (데스크탑 가로 메뉴 / 모바일 드로어가 같이 쓴다).
@@ -29,10 +29,40 @@ const NAV_ITEMS: (NavLink | NavGroup)[] = [
       { href: "/guide", label: "제작 라인업" },
     ],
   },
+  // 웹블로그 소개 — 업종 공통 웹블로그 설명 탭 (병의원 전용 /clinic-blog 는 광고 랜딩이라 메뉴에 두지 않는다)
+  // isNew: 메뉴 옆 작은 NEW 표시 — 새 탭을 알리는 동안만 둔다 (2026-10-24 추가, 한두 달 뒤 떼기)
+  { href: "/webblog", label: "웹블로그란?", isNew: true },
   // 예약 신청(/booking)은 메뉴에서 내리고 그 자리에 사이트 점검을 뒀다 — 페이지 자체는 남아 있다
   // gold: 다른 메뉴보다 눈에 띄게 굵은 금색으로 그린다 (PC·모바일 공통)
   { href: "/check", label: "사이트 점검", gold: true },
 ];
+
+/** 새 메뉴 표시 — 메뉴 글자 바로 위, 첫 글자와 같은 시작점에 작은 파란 NEW. left 는 메뉴 글자의 왼쪽 여백 */
+function NewBadge({ left, top }: { left: string; top: string }) {
+  return (
+    <span
+      aria-label="새 메뉴"
+      style={{
+        position: "absolute",
+        left,
+        top,
+        color: "#1f63d6",
+        fontSize: "0.62rem",
+        fontWeight: 800,
+        letterSpacing: "0.04em",
+        lineHeight: 1,
+        pointerEvents: "none",
+      }}
+    >
+      {/* 글자마다 따로 — N → E → W 차례로 튄다 */}
+      {["N", "E", "W"].map((ch, i) => (
+        <span key={ch} className="nav-new-ch" style={{ animationDelay: `${i * 0.12}s` }}>
+          {ch}
+        </span>
+      ))}
+    </span>
+  );
+}
 
 // 강조 메뉴 색 — 흰 헤더·드로어 위에서 읽히는 중간 톤 금색 (상담 버튼 글씨와 같은 계열)
 const NAV_GOLD = "#ad8640";
@@ -142,6 +172,7 @@ export default function Navbar() {
       }}
       className="callout"
       style={{
+        position: "relative",
         display: "block",
         // 묶음 안의 줄은 한 단 들여 쓴다
         padding: sub ? "0.7rem 1.5rem 0.7rem 2.4rem" : "0.9rem 1.5rem",
@@ -156,6 +187,8 @@ export default function Navbar() {
       }}
     >
       {l.label}
+      {/* 드로어 줄의 글자는 왼쪽 테두리 3px + 여백 뒤에서 시작한다 */}
+      {l.isNew && <NewBadge left={sub ? "2.4rem" : "1.5rem"} top="0.4rem" />}
     </Link>
   );
 
@@ -244,8 +277,10 @@ export default function Navbar() {
                     key={item.href}
                     href={item.href}
                     onClick={handleClick(item.href)}
-                    className="headline"
+                    // 드롭다운 없는 메뉴도 마우스를 올리면 묶음 메뉴처럼 진해진다 (.nav-link, 아래 <style>)
+                    className={`headline nav-link${item.gold ? " nav-link--gold" : ""}`}
                     style={{
+                      position: "relative",
                       padding: "0.5rem var(--nav-pad)",
                       borderRadius: "6px",
                       fontSize: "var(--nav-font)",
@@ -261,6 +296,7 @@ export default function Navbar() {
                     }}
                   >
                     {item.label}
+                    {item.isNew && <NewBadge left="var(--nav-pad)" top="0.05rem" />}
                   </Link>
                 );
               }
@@ -619,10 +655,11 @@ export default function Navbar() {
         @media (max-width: 768px) { .show-mobile-flex { display: flex !important; } }
         /* PC 메뉴·대표 번호의 글씨, 메뉴의 좌우 여백·사이 간격 — 넓은 화면(1200px 이상)에서는 키운다.
            그보다 좁으면 번호·견적 버튼과 부딪혀서 작게 둔다 (값은 헤더 전체에서 쓰도록 .nav-header 에 건다) */
-        .nav-header { --nav-font: 1rem; --nav-pad: 0.7rem; --nav-gap: 1rem; }
+        /* 10-24: 메뉴가 다섯 개(웹블로그란? 추가)가 되어 글씨·간격을 한 단계씩 줄였다 */
+        .nav-header { --nav-font: 0.95rem; --nav-pad: 0.55rem; --nav-gap: 0.6rem; }
         @media (min-width: 1200px) {
           /* 사이 간격 2.6rem — 아래 화살표 보정(-0.75rem × 2)으로 줄어드는 폭을 메워, 메뉴 묶음 전체 폭을 약 620px 로 유지한다 */
-          .nav-header { --nav-font: 1.0625rem; --nav-pad: 1.1rem; --nav-gap: 2.6rem; }
+          .nav-header { --nav-font: 1rem; --nav-pad: 0.9rem; --nav-gap: 1.8rem; }
         }
         /* 로고 — 메뉴를 키운 넓은 화면에서는 로고도 같이 키워 무게를 맞춘다 */
         .nav-logo-img { width: 27px; height: 27px; }
@@ -633,6 +670,16 @@ export default function Navbar() {
         /* 화살표(▾)가 달린 묶음은 화살표 몫만큼 다음 메뉴가 멀어 보인다 —
            다음 메뉴를 조금 당겨, 글자와 글자 사이가 고르게 보이게 한다 */
         .nav-group-link { margin-right: -0.75rem; }
+        /* 인라인 색보다 앞서야 해서 !important — 회색 메뉴는 검정으로, 금색 강조 메뉴(사이트 점검)는 한 톤 진한 금색으로 */
+        .nav-link:not(.nav-link--gold):hover { color: #111 !important; }
+        .nav-link--gold:hover { color: #8a6a2e !important; }
+        /* NEW — 글자마다 차례로 톡 튀고, 셋 다 튄 뒤 잠깐 쉬기를 반복 */
+        .nav-new-ch { display: inline-block; animation: navNewBounce 2.2s ease-in-out infinite; }
+        @keyframes navNewBounce {
+          0%, 24%, 100% { transform: translateY(0); }
+          10% { transform: translateY(-3px); }
+        }
+        @media (prefers-reduced-motion: reduce) { .nav-new-ch { animation: none; } }
         /* 태블릿 폭에서는 메뉴·상담 버튼만 남기고 번호는 숨긴다 */
         @media (max-width: 1024px) { .nav-tel { display: none !important; } }
         /* 드롭다운 안의 줄 — 올리면 옅은 회색 바탕 */

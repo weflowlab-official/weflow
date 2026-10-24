@@ -6,22 +6,25 @@ import InView from './InView'
  * 웹블로그 메인(/blog)의 HOW IT WORKS(blog/components/home/HowItWorksSection.tsx)를 이 페이지 디자인으로 옮긴 것.
  * 위: 4단계(글 작성 → 자동 생성 → 네이버·구글 수집 → 검색·AI 답변 노출 기회) / 아래: SEO·AEO·GEO 카드 3장.
  * 문구 기준: 순위·노출을 약속하지 않는다 ("자리 잡는 구조", "노출 기회").
+ * who·customer: 병의원 페이지는 '우리 병원'·'환자가', 메인 '웹블로그란?' 은 '우리'·'손님이' (조사까지 넘긴다).
  */
 
-const STEPS = [
+const steps = (who: string) => [
   { Icon: PenLine, title: '글 작성', text: '관리자 페이지에서\n제목·본문·자주 묻는 질문만 채웁니다.' },
   { Icon: Settings2, title: '자동으로 함께 생성', text: '사이트맵·구조화 데이터·요약이\n글과 함께 저절로\n만들어집니다.' },
   { Icon: Globe, title: '네이버·구글이 수집', text: '서치어드바이저·서치콘솔에 등록된 사이트를\n검색엔진이 읽어 갑니다.' },
-  { Icon: Sparkles, title: '검색·AI 답변에 노출 기회', text: '검색 결과와 AI 답변의 출처로\n우리 병원 글이 쓰일 기회가 생깁니다.' },
+  { Icon: Sparkles, title: '검색·AI 답변에 노출 기회', text: `검색 결과와 AI 답변의 출처로\n${who} 글이 쓰일\n기회가 생깁니다.` },
 ]
 
-const OPTIMIZE = [
-  { tag: 'SEO', name: '검색 노출', desc: '네이버·구글 검색 결과에 잘 보이게', auto: ['환자가 쓰는 말로 짓는 제목·소제목', '새 글마다 사이트맵 자동 갱신', '모바일에서도 빠른 로딩'] },
+const optimize = (customer: string) => [
+  { tag: 'SEO', name: '검색 노출', desc: '네이버·구글 검색 결과에 잘 보이게', auto: [`${customer} 쓰는 말로 짓는 제목·소제목`, '새 글마다 사이트맵 자동 갱신', '모바일에서도 빠른 로딩'] },
   { tag: 'AEO', name: '답변 노출', desc: "질문에 대한 '답'으로 뽑히게", auto: ['글 맨 위 핵심 요약', '글마다 자주 묻는 질문', 'FAQ 구조화 데이터 자동 생성'] },
   { tag: 'GEO', name: 'AI 답변 인용', desc: 'AI가 답할 때 인용하게', auto: ['AI가 읽기 좋은 글자 중심 구조', '작성자·발행일·출처 정보', 'AI 검색 로봇이 읽을 수 있게 공개'] },
 ]
 
-export default function HowItWorks() {
+export default function HowItWorks({ who = '우리 병원', customer = '환자가' }: { who?: string; customer?: string }) {
+  const STEPS = steps(who)
+  const OPTIMIZE = optimize(customer)
   return (
     <section id="how" className="chw" aria-labelledby="chw-title">
       <div className="cb-wrap chw-wrap">

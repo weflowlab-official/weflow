@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { ArrowRight, Lock, CalendarCheck, Check } from 'lucide-react'
+import { CLINIC_WHY, type BlogWhyCopy, type DemoCopy } from './blogWhyCopy'
 
 /**
  * '그래서, 웹블로그' 화면 — 메인의 '왜 WEFLOW?'(components/home/HomeWhyIntro.tsx) 와 같은 방식이다.
@@ -11,6 +12,7 @@ import { ArrowRight, Lock, CalendarCheck, Check } from 'lucide-react'
  *  3) 질문이 위로 빠지고, 답 네 개가 하나씩 올라왔다가 올라간다 — 답마다 왼쪽 카드 안의 화면이 돈다.
  *  4) 맺음 — 상담으로 내려가는 버튼이 남는다.
  *
+ * 글귀(데모 속 가게·글 제목, 설명, 맺음)는 copy 로 받는다 — blogWhyCopy.tsx 의 CLINIC_WHY(기본)·GENERAL_WHY.
  * 메인과 달리 바탕을 어둡게 바꾸지 않는다 — 병원 페이지는 처음부터 끝까지 흰 바탕으로 둔다.
  * 값은 스크롤 위치로 직접 계산해 넣는다 — 올리면 그대로 되감긴다.
  */
@@ -19,27 +21,23 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n))
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3)
 
 /** 01 · 주소가 바뀌고, 그 아래로 글이 쌓인다 */
-function OwnDemo() {
-  const posts = [
-    { tag: '임플란트', title: '임플란트 수술 후 일주일, 이것만 지켜 주세요', excerpt: '수술 직후 2~3일은 붓기가 가장 심합니다. 냉찜질은 20분씩…', meta: '2026.10.12 · 조회 1,284' },
-    { tag: '스케일링', title: '스케일링, 얼마나 자주 받아야 할까요?', excerpt: '건강보험으로 1년에 한 번 받을 수 있는 스케일링, 주기는…', meta: '2026.10.05 · 조회 862' },
-    { tag: '사랑니', title: '사랑니는 꼭 빼야 하나요?', excerpt: '똑바로 난 사랑니라면 굳이 뺄 필요는 없습니다. 다만…', meta: '2026.09.28 · 조회 2,031' },
-  ]
+function OwnDemo({ d }: { d: DemoCopy }) {
+  const posts = d.posts
   return (
     <div className="bw bw-own" aria-hidden="true">
       <div className="bw-top">
         <i /><i /><i />
         <span className="bw-url">
           {/* 빨간 줄은 글자 묶음 안에 둬서 주소 길이만큼만 그어진다 */}
-          <span className="bw-own-old"><span className="bw-old-text">blog.플랫폼.com/우리병원<b className="bw-strike" /></span></span>
+          <span className="bw-own-old"><span className="bw-old-text">{d.oldUrl}<b className="bw-strike" /></span></span>
           {/* 자물쇠와 주소를 한 덩어리로 — 사이에 간격이 끼면 'com/ blog' 처럼 떨어져 보인다 */}
-          <span className="bw-own-new"><span className="bw-new-text"><Lock size={11} /> 우리병원.com/<strong>blog</strong></span></span>
+          <span className="bw-own-new"><span className="bw-new-text"><Lock size={11} /> {d.domain}/<strong>blog</strong></span></span>
         </span>
       </div>
       <div className="bw-body">
         <div className="bw-blog-head">
-          <strong>우리병원치과 블로그</strong>
-          <span className="bw-own-chip"><Check size={11} /> 우리 병원 소유</span>
+          <strong>{d.brand} 블로그</strong>
+          <span className="bw-own-chip"><Check size={11} /> {d.ownChip}</span>
         </div>
         {posts.map((p, i) => (
           <div key={p.title} className={`bw-art bw-own-r${i + 1}`}>
@@ -58,7 +56,7 @@ function OwnDemo() {
 }
 
 /** 02 · 환자가 묻고, AI 가 우리 병원 글을 출처로 답한다 */
-function SearchDemo() {
+function SearchDemo({ d }: { d: DemoCopy }) {
   return (
     <div className="bw bw-ai" aria-hidden="true">
       <div className="bw-top">
@@ -78,19 +76,19 @@ function SearchDemo() {
         </span>
       </div>
       <div className="bw-body">
-        <p className="bw-q">임플란트 하고 붓기 며칠 가?</p>
+        <p className="bw-q">{d.q}</p>
         <span className="bw-dots"><i /><i /><i /></span>
-        <p className="bw-a">보통 2~3일째 가장 붓고, 일주일 안에 가라앉아요.</p>
+        <p className="bw-a">{d.a}</p>
         <div className="bw-src">
           <span className="bw-src-label">출처</span>
-          <strong>우리병원치과 블로그</strong>
-          <span>임플란트 수술 후 일주일, 이것만 지켜 주세요</span>
+          <strong>{d.brand} 블로그</strong>
+          <span>{d.posts[0].title}</span>
         </div>
       </div>
       {/* 입력창 — 질문이 한 자씩 쳐진 뒤 보내기를 누르면 위로 말풍선이 올라간다 */}
       <div className="bw-input">
         <span className="bw-input-ph">무엇이든 물어보세요</span>
-        <span className="bw-input-typed">임플란트 하고 붓기 며칠 가?</span>
+        <span className="bw-input-typed">{d.q}</span>
         <i className="bw-send">
           <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </i>
@@ -100,31 +98,13 @@ function SearchDemo() {
 }
 
 /** 03 · 탭이 바뀌면 그 진료의 글만 모인다 */
-function CategoryDemo() {
-  // 탭별 글 — 02번 블로그 목록과 같은 모양(분류 · 제목 · 미리보기 · 날짜·조회)으로 그린다
-  const lists = [
-    [
-      { title: '임플란트 수술 후 일주일, 이것만 지켜 주세요', excerpt: '수술 직후 2~3일은 붓기가 가장 심합니다…', meta: '2026.10.12 · 조회 1,284' },
-      { title: '임플란트 수명은 얼마나 될까요?', excerpt: '관리만 잘하면 10년 이상 쓰는 경우가 많습니다…', meta: '2026.09.30 · 조회 945' },
-      { title: '뼈이식이 필요한 경우', excerpt: '잇몸뼈가 부족하면 임플란트를 단단히 심기 어렵…', meta: '2026.09.18 · 조회 611' },
-    ],
-    [
-      { title: '투명교정과 일반교정, 무엇이 다를까요?', excerpt: '눈에 덜 띄는 대신 하루 착용 시간을 지켜야…', meta: '2026.10.08 · 조회 1,102' },
-      { title: '교정 중에 양치하는 법', excerpt: '장치 사이에 낀 음식물은 치간칫솔로…', meta: '2026.09.25 · 조회 734' },
-      { title: '성인 교정, 늦지 않았을까요?', excerpt: '잇몸과 뼈가 건강하다면 나이는 크게 상관없…', meta: '2026.09.11 · 조회 1,560' },
-    ],
-    [
-      { title: '양치할 때 피가 난다면 확인할 3가지', excerpt: '잇몸에서 피가 나는 건 염증의 첫 신호일 수…', meta: '2026.10.10 · 조회 2,214' },
-      { title: '잇몸이 내려앉는 이유', excerpt: '세게 문지르는 칫솔질이 원인이 되기도 합니다…', meta: '2026.09.27 · 조회 873' },
-      { title: '스케일링 후 이가 시린 이유', excerpt: '치석이 덮고 있던 부분이 드러나면서 잠시…', meta: '2026.09.14 · 조회 1,038' },
-    ],
-  ]
-  const tabs = ['임플란트', '교정', '잇몸치료']
+function CategoryDemo({ d }: { d: DemoCopy }) {
+  const { tabs, lists } = d
   return (
     <div className="bw bw-cat" aria-hidden="true">
       <div className="bw-top">
         <i /><i /><i />
-        <span className="bw-url">우리병원.com/blog</span>
+        <span className="bw-url">{d.domain}/blog</span>
       </div>
       <div className="bw-body">
         {/* 탭 쪽으로 살짝 확대해 보여 준다 (아래 글은 잘려도 된다) */}
@@ -160,44 +140,44 @@ function CategoryDemo() {
 }
 
 /** 04 · 글 아래 버튼을 누르면 원래 쓰던 병원 홈페이지로 넘어간다 */
-function ReserveDemo() {
+function ReserveDemo({ d }: { d: DemoCopy }) {
   return (
     <div className="bw bw-rsv" aria-hidden="true">
       <div className="bw-top">
         <i /><i /><i />
         <span className="bw-url">
-          <span className="bw-u bw-u-blog">우리병원.com/blog/implant</span>
-          <span className="bw-u bw-u-home"><Lock size={11} /> 우리병원.com</span>
+          <span className="bw-u bw-u-blog">{d.domain}/blog/{d.rsv.path}</span>
+          <span className="bw-u bw-u-home"><Lock size={11} /> {d.domain}</span>
         </span>
       </div>
       <div className="bw-body">
-        <small className="bw-rsv-tag">임플란트</small>
-        <strong className="bw-rsv-title">임플란트 수술 후 일주일,<br />이것만 지켜 주세요</strong>
+        <small className="bw-rsv-tag">{d.rsv.tag}</small>
+        <strong className="bw-rsv-title">{d.rsv.title[0]}<br />{d.rsv.title[1]}</strong>
         {/* 본문 네 줄이 한 줄씩 쭉 쭉 써진 뒤 버튼이 눌린다 */}
         <i className="bw-line bw-rsv-l1" style={{ width: '92%' }} />
         <i className="bw-line bw-rsv-l2" style={{ width: '84%' }} />
         <i className="bw-line bw-rsv-l3" style={{ width: '88%' }} />
         <i className="bw-line bw-rsv-l4" style={{ width: '60%' }} />
-        <span className="bw-rsv-btn">우리병원치과 홈페이지 바로가기 <ArrowRight size={13} /></span>
+        <span className="bw-rsv-btn">{d.brand} 홈페이지 바로가기 <ArrowRight size={13} /></span>
 
         {/* 넘어간 뒤 — 병원이 원래 쓰던 홈페이지 첫 화면 */}
         <div className="bw-home">
           <div className="bw-home-nav">
-            <strong>우리병원치과</strong>
-            <span>병원 소개</span><span>진료 안내</span><span>블로그</span>
+            <strong>{d.brand}</strong>
+            {d.home.nav.map(t => <span key={t}>{t}</span>)}
           </div>
           <div className="bw-home-hero">
-            <small>강남역 3번 출구 · 야간 진료</small>
-            <strong>건강한 미소를 오래 지켜드립니다</strong>
-            <span className="bw-home-cta"><CalendarCheck size={12} /> 진료 예약</span>
+            <small>{d.home.small}</small>
+            <strong>{d.home.title}</strong>
+            <span className="bw-home-cta"><CalendarCheck size={12} /> {d.home.cta}</span>
           </div>
           <div className="bw-home-quick">
-            <span>진료 시간</span><span>오시는 길</span><span>의료진</span>
+            {d.home.quick.map(t => <span key={t}>{t}</span>)}
           </div>
           {/* 오늘 진료 안내 + 공지 한 줄 — 실제 병원 홈페이지 첫 화면에 흔히 있는 자리 */}
           <div className="bw-home-info">
-            <p><i className="bw-home-dot" /> <b>지금 진료 중</b> 평일 09:30 – 19:00 · 토 09:30 – 14:00</p>
-            <p><em>공지</em> 10월 9일(목) 한글날 휴진 안내</p>
+            <p><i className="bw-home-dot" /> <b>{d.home.now}</b> {d.home.hours}</p>
+            <p><em>공지</em> {d.home.notice}</p>
           </div>
         </div>
       </div>
@@ -211,12 +191,12 @@ function ReserveDemo() {
  *  장면 1 (0~48%): 새 글을 쓰고 발행 → 왼쪽 블로그 목록 맨 위에 새 글이 들어온다
  *  장면 2 (50~100%): 배너 사진을 고르고 문구를 바꿔 저장 → 왼쪽 홈페이지 배너가 바뀐다
  */
-function AdminDemo() {
+function AdminDemo({ d }: { d: DemoCopy }) {
   return (
     <div className="bw bw-adm" aria-hidden="true">
       <div className="bw-top">
         <i /><i /><i />
-        <span className="bw-url"><Lock size={11} style={{ marginRight: '.3em', color: '#12a37a' }} /> 우리병원.com/admin</span>
+        <span className="bw-url"><Lock size={11} style={{ marginRight: '.3em', color: '#12a37a' }} /> {d.domain}/admin</span>
       </div>
       <div className="bw-body bw-adm-body">
         {/* 왼쪽 — 실제 화면 */}
@@ -224,31 +204,31 @@ function AdminDemo() {
           <span className="bw-adm-tag"><i /> 실제 화면</span>
           {/* 장면 1 — 블로그 목록 */}
           <div className="bw-adm-lp bw-adm-lp1">
-            <b className="bw-adm-lp-title">우리병원치과 블로그</b>
+            <b className="bw-adm-lp-title">{d.brand} 블로그</b>
             <div className="bw-adm-new">
-              <div className="bw-adm-post"><span className="bw-adm-th bw-adm-th-new" /><span><em>NEW</em>사랑니는 꼭 빼야 하나요?</span></div>
+              <div className="bw-adm-post"><span className="bw-adm-th bw-adm-th-new" /><span><em>NEW</em>{d.adm.newPost}</span></div>
             </div>
-            <div className="bw-adm-post"><span className="bw-adm-th" /><span>임플란트 수술 후 일주일</span></div>
-            <div className="bw-adm-post"><span className="bw-adm-th bw-adm-th-2" /><span>스케일링, 얼마나 자주?</span></div>
+            <div className="bw-adm-post"><span className="bw-adm-th" /><span>{d.adm.posts[0]}</span></div>
+            <div className="bw-adm-post"><span className="bw-adm-th bw-adm-th-2" /><span>{d.adm.posts[1]}</span></div>
           </div>
           {/* 장면 2 — 홈페이지 배너 */}
           <div className="bw-adm-lp bw-adm-lp2">
-            <div className="bw-adm-nav"><b>우리병원치과</b><i /><i /><i /></div>
+            <div className="bw-adm-nav"><b>{d.brand}</b><i /><i /><i /></div>
             <div className="bw-adm-banner">
               <i className="bw-adm-bg-a" /><i className="bw-adm-bg-b" />
               {/* 문구와 버튼을 한 묶음으로 배너 세로 가운데에 — 옛 문구·새 문구는 같은 자리에 겹쳐 둔다 */}
               <div className="bw-adm-bcontent">
                 <span className="bw-adm-btxt">
-                  <span className="bw-adm-bt bw-adm-bt-old">건강한 미소를<br />오래 지켜드립니다</span>
-                  <span className="bw-adm-bt bw-adm-bt-new">10월부터<br />야간 진료 시작</span>
+                  <span className="bw-adm-bt bw-adm-bt-old">{d.adm.oldBanner[0]}<br />{d.adm.oldBanner[1]}</span>
+                  <span className="bw-adm-bt bw-adm-bt-new">{d.adm.newBanner[0]}<br />{d.adm.newBanner[1]}</span>
                 </span>
                 {/* 오른쪽 설정의 '버튼 문구' 와 같은 버튼 */}
-                <span className="bw-adm-bbtn">진료 예약하기</span>
+                <span className="bw-adm-bbtn">{d.adm.button}</span>
               </div>
             </div>
             <div className="bw-adm-quick"><i /><i /><i /></div>
             {/* 배너 아래로 이어지는 내용 — 의료진 소개 · 공지. 아래가 흐려지며 잘려 '더 있다' 는 느낌을 준다 */}
-            <b className="bw-adm-sec">의료진 소개</b>
+            <b className="bw-adm-sec">{d.adm.section}</b>
             <div className="bw-adm-docs">
               <span><i /><u /><u /></span>
               <span><i /><u /><u /></span>
@@ -264,7 +244,7 @@ function AdminDemo() {
           {/* 장면 1 — 새 글 */}
           <div className="bw-adm-ep bw-adm-ep1">
             <label>제목</label>
-            <span className="bw-adm-input"><span className="bw-adm-type1">사랑니는 꼭 빼야 하나요?</span></span>
+            <span className="bw-adm-input"><span className="bw-adm-type1">{d.adm.newPost}</span></span>
             <label>본문</label>
             <div className="bw-adm-area">
               <i className="bw-line bw-adm-l1" style={{ width: '92%' }} />
@@ -286,12 +266,12 @@ function AdminDemo() {
             <div className="bw-adm-thumbs"><i className="bw-adm-tb1" /><i className="bw-adm-tb2" /><i className="bw-adm-tb3" /></div>
             <label>배너 문구</label>
             <span className="bw-adm-input">
-              <span className="bw-adm-old">건강한 미소를 오래 지켜드립니다</span>
-              <span className="bw-adm-type2">10월부터 야간 진료 시작</span>
+              <span className="bw-adm-old">{d.adm.oldBanner.join(' ')}</span>
+              <span className="bw-adm-type2">{d.adm.newBanner.join(' ')}</span>
             </span>
             {/* 아래가 비지 않게 — 배너에 딸린 설정 두 가지 (움직이지 않는 칸) */}
             <label>버튼 문구</label>
-            <span className="bw-adm-input bw-adm-input--static">진료 예약하기</span>
+            <span className="bw-adm-input bw-adm-input--static">{d.adm.button}</span>
             <span className="bw-adm-toggle"><span>메인 화면에 바로 노출</span><i /></span>
             <span className="bw-adm-btn bw-adm-save">저장하기</span>
           </div>
@@ -302,13 +282,14 @@ function AdminDemo() {
 }
 
 // 순서 — 앞의 STORY 01~03 고민에 같은 순서로 답한다: 노출(01) → 예약(02) → 안정성(03), 그다음 직접 관리 · 카테고리 정리
-const ANSWERS = [
-  { id: 'search', title: 'SEO·AEO·GEO\n구조 설계', desc: <>네이버·구글은 물론 AI 답변에서도,{'\n'}우리 병원 글이 출처로 인용되도록<br className="bwy-mo" /> 구조부터 설계합니다.</>, Demo: SearchDemo },
-  { id: 'reserve', title: '읽다가 바로\n홈페이지로 연결', desc: '글마다 병원 홈페이지로 가는 버튼이 붙어,\n마음먹은 순간을 놓치지 않습니다.', Demo: ReserveDemo },
-  { id: 'own', title: '병원 자산으로\n남는 글', desc: '빌린 블로그가 아니라 병원 주소 아래에 쌓여,\n플랫폼 정책이 바뀌어도 그대로 남습니다.', Demo: OwnDemo },
-  { id: 'admin', title: '관리자 페이지에서\n직접 작성 · 수정', desc: '블로그 글은 물론 홈페이지의 사진과 문구도,\n관리자 페이지에서 바로 바꿉니다.', Demo: AdminDemo },
-  { id: 'category', title: '진료과목별\n카테고리 정리', desc: '환자가 검색하는 말 그대로 나눠,\n관련 글을 이어서 읽게 합니다.', Demo: CategoryDemo },
-]
+const ANSWER_ORDER = [
+  { id: 'search', Demo: SearchDemo },
+  { id: 'reserve', Demo: ReserveDemo },
+  { id: 'own', Demo: OwnDemo },
+  { id: 'admin', Demo: AdminDemo },
+  { id: 'category', Demo: CategoryDemo },
+] as const
+const ANSWER_COUNT = ANSWER_ORDER.length
 
 // 진행 구간 — 단위는 '화면 높이의 몇 배'. 섹션이 화면에 붙은 뒤로 스크롤한 거리 기준이다.
 const LIT_AT = 0.35 // '웹블로그' 에 강조색
@@ -319,10 +300,11 @@ const ANS_LEN = 0.75 // 답 하나가 차지하는 길이
 const ANS_IN = 0.3 // 그중 들어오는 데 쓰는 비율
 const ANS_OUT = 0.25 // 그중 나가는 데 쓰는 비율
 const END_HOLD = 0.5 // 맺음 장면이 다 들어온 뒤 머무는 길이
-const END_FROM = ANS_FROM + ANS_LEN * ANSWERS.length
+const END_FROM = ANS_FROM + ANS_LEN * ANSWER_COUNT
 const PIN_LEN = END_FROM + ANS_LEN * ANS_IN + END_HOLD
 
-export default function BlogWhy() {
+export default function BlogWhy({ copy = CLINIC_WHY }: { copy?: BlogWhyCopy }) {
+  const ANSWERS = ANSWER_ORDER.map(a => ({ ...a, ...copy.answers[a.id] }))
   const sectionRef = useRef<HTMLElement>(null)
   const askRef = useRef<HTMLDivElement>(null)
   const answerRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -415,7 +397,7 @@ export default function BlogWhy() {
           </h2>
           {/* 웹블로그가 무엇인지 한 줄 — '웹블로그' 에 파란색이 들어올 때 함께 올라온다 */}
           <p className="bwy-def">
-            웹블로그는 <b>우리 병원 홈페이지 안</b>의 블로그입니다.<br />
+            웹블로그는 <b>{copy.where}</b>의 블로그입니다.<br />
             글 쓰는 방법은 같고, 글이 쌓이는 곳만 달라집니다.
           </p>
         </div>
@@ -430,7 +412,7 @@ export default function BlogWhy() {
               className="bwy-answer"
             >
               <div className="bwy-card">
-                <a.Demo />
+                <a.Demo d={copy.demo} />
               </div>
               <div className="bwy-text">
                 <p className="bwy-num">
@@ -447,20 +429,20 @@ export default function BlogWhy() {
         {/* 맺음 — 파란 원이 퍼진 바탕 위에 큰 문구 · 장점 칩 네 개 · 상담 버튼 */}
         <div ref={endBgRef} className="bwy-end-bg" aria-hidden="true" />
         <div ref={endRef} className="bwy-end">
-          <p className="bwy-end-eyebrow">WEFLOW FOR CLINIC</p>
+          <p className="bwy-end-eyebrow">{copy.end.eyebrow}</p>
           <h3 className="bwy-end-title">
-            블로그를, <span>병원 안으로.</span>
+            {copy.end.lead}<span>{copy.end.accent}</span>
           </h3>
-          <p className="bwy-end-desc">우리 병원도 웹블로그로 바꿔 볼까요?</p>
+          <p className="bwy-end-desc">{copy.end.desc}</p>
           <ul className="bwy-end-chips">
-            {['AI 검색 인용', '홈페이지 연결', '병원 자산으로', '직접 관리'].map((t, i) => (
+            {copy.end.chips.map((t, i) => (
               <li key={t} style={{ '--i': i } as React.CSSProperties}>
                 <Check size={15} /> {t}
               </li>
             ))}
           </ul>
-          <a href="#contact-form" className="bwy-btn">
-            무료 견적 신청 <ArrowRight size={20} />
+          <a href={copy.end.href} className="bwy-btn">
+            {copy.end.label} <ArrowRight size={20} />
           </a>
         </div>
       </div>

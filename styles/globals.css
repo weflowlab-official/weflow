@@ -884,7 +884,7 @@
   }
   /* ── 금속 테두리 플로팅 버튼 ──
      .fab-metal 이 모양(테두리·광택·아이콘 채우기)을 만들고, .fab-gold / .fab-silver 는
-     색만 정한다. 색을 쓰는 자리가 다섯 군데라 값을 나눠 두지 않으면 한 곳만 고치고 지나치기 쉽다.
+     색만 정한다 (.fab-blue — 웹블로그 버튼). 색을 쓰는 자리가 다섯 군데라 값을 나눠 두지 않으면 한 곳만 고치고 지나치기 쉽다.
      .fab 의 배경·글자색을 덮어야 하므로 반드시 .fab 뒤에 온다.
      PC 전용 — 모바일에서는 .floating-cta 자체가 숨겨지고 하단 바가 대신 뜬다. */
   .fab-gold {
@@ -902,6 +902,14 @@
     --metal-hi: #f2f2f4;
     --metal-hi-rgb: 242, 242, 244;
     --metal-glow: rgba(196, 196, 204, 0.22);
+  }
+  .fab-blue {
+    /* 웹블로그 버튼 — 연한 하늘색 계열 (금·은 버튼 옆에서 튀지 않게 밝은 톤) */
+    --metal-dark: #5b8fdc;
+    --metal-mid: #8db8f2;
+    --metal-hi: #eef5ff;
+    --metal-hi-rgb: 238, 245, 255;
+    --metal-glow: rgba(141, 184, 242, 0.22);
   }
   .fab-metal {
     position: relative;
