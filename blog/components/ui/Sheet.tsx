@@ -22,12 +22,19 @@ export function Sheet({ open, onClose, side = "bottom", modal = true, title, cla
   const [prevOpen, setPrevOpen] = useState(open);
   const panelRef = useRef<HTMLDivElement>(null);
   const openedAt = useRef(0); // 열린 시각. 여는 탭의 꼬리 이벤트가 곧바로 "바깥 클릭"으로 잡혀 닫히는 것을 막는다
+  const openRef = useRef(open); // 지금 열려 있는지 — 늦게 도는 '닫힘 뒤 언마운트' 타이머가 확인한다
+  useEffect(() => {
+    openRef.current = open;
+  });
 
   // open 변화를 렌더 중에 반영: 열리면 즉시 마운트, 닫히면 즉시 숨김 상태로 (전환 시작)
   if (open !== prevOpen) {
     setPrevOpen(open);
     if (open) setMounted(true);
     else setVisible(false);
+  } else if (open && !mounted) {
+    // 열려 있는데 떼어진 상태 — 아래 언마운트 타이머가 열림과 엇갈린 경우 바로 다시 붙인다
+    setMounted(true);
   }
 
   // 열림: 마운트된 다음 프레임에 visible → 슬라이드 인. 닫힘: 전환이 끝난 뒤 언마운트.
@@ -47,7 +54,11 @@ export function Sheet({ open, onClose, side = "bottom", modal = true, title, cla
         window.clearTimeout(fallback);
       };
     }
-    const t = window.setTimeout(() => setMounted(false), DURATION);
+    // 닫힘 전환이 끝나면 뗀다. 단, 그사이 다시 열렸으면 그대로 둔다 —
+    // 페이지가 뜨자마자(첫 렌더의 이 타이머가 아직 살아 있을 때) 햄버거를 누르면 방금 연 메뉴가 사라졌다 (2026-10-24, 휴대폰에서 '햄버거가 안 눌린다')
+    const t = window.setTimeout(() => {
+      if (!openRef.current) setMounted(false);
+    }, DURATION);
     return () => window.clearTimeout(t);
   }, [open]);
 

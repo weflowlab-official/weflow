@@ -6,7 +6,7 @@ import FloatingButtons from './FloatingButtons'
 import PcPromoWidgets from './PcPromoWidgets'
 import AdCarouselJsonLd from './AdCarouselJsonLd'
 import ScrollRestorer from './ScrollRestorer'
-import WebBlogPopup from './WebBlogPopup'
+// import WebBlogPopup from './WebBlogPopup' // 팝업 잠시 끔 — 아래 사용처 참고
 
 /**
  * 모든 페이지를 감싸는 공통 껍데기 — 헤더 · 본문 · 푸터 · 하단 바.
@@ -34,8 +34,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       <Footer />
       <FloatingButtons />
       <PcPromoWidgets />
-      {/* 메인 홈에서만 뜨는 '웹블로그란?' 새 탭 알림 */}
-      <WebBlogPopup />
+      {/* 메인 홈에서만 뜨는 '웹블로그란?' 새 탭 알림 — 잠시 꺼 둔다 (2026-10-24). 다시 켤 때는 아래 줄과 import 주석만 풀면 된다
+      <WebBlogPopup /> */}
     </>
   )
 }

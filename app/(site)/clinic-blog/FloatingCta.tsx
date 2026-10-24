@@ -1,16 +1,17 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { MessagesSquare, Phone, ClipboardList } from 'lucide-react'
+import { MessagesSquare, Phone, ClipboardList, NotebookPen } from 'lucide-react'
 
 /** 대표 번호 — 헤더와 같은 번호 */
 const TEL = '010-2971-7280'
 
 /**
  * 늘 떠 있는 상담 버튼 — 화면 크기에 따라 모양이 다르다 (메인 사이트 components/FloatingButtons.tsx 와 같은 구성).
- *  · PC: 오른쪽 아래 동그란 버튼 두 개(무료 견적 · 24시간 상담 전화). 아이콘이 위아래 차례로 흔들리고, 마우스를 올리면 왼쪽으로 이름표가 펼쳐진다.
+ *  · PC: 오른쪽 아래 동그란 버튼 셋(웹블로그 · 무료 견적 · 24시간 상담 전화). 웹블로그는 새 탭으로 연다. 아이콘이 위아래 차례로 흔들리고, 마우스를 올리면 왼쪽으로 이름표가 펼쳐진다.
  *        첫 화면에는 같은 역할의 버튼이 이미 있으니 숨겨 두고, 첫 화면을 반쯤 지나면 올라온다.
  *        견적 폼이 화면에 보이는 동안에는 바로 앞에 폼이 있으니 다시 내려간다.
  *  · 모바일: 화면 맨 아래에 붙는 두 칸 바(바로 전화 · 무료 견적 신청). 늘 같은 자리에 있다.
+ *          동그란 버튼은 웹블로그 하나만 바 위 오른쪽에 띄운다 (상담 둘은 바에 이미 있다).
  */
 export default function FloatingCta() {
   const [past, setPast] = useState(false) // 첫 화면을 지났는지
@@ -35,8 +36,12 @@ export default function FloatingCta() {
 
   return (
     <>
-      {/* PC — 오른쪽 아래 동그란 버튼 두 개 */}
+      {/* PC — 오른쪽 아래 동그란 버튼 셋 */}
       <div className={`fc-wrap ${show ? 'is-on' : ''}`} aria-hidden={!show}>
+        <a href="/blog" target="_blank" rel="noopener noreferrer" className="fc fc--blog" aria-label="웹블로그 (새 탭)" tabIndex={show ? 0 : -1}>
+          <span className="fc-label">웹블로그</span>
+          <span className="fc-icon"><NotebookPen size={25} /></span>
+        </a>
         <a href="#contact-form" className="fc fc--form" aria-label="무료 견적 신청" tabIndex={show ? 0 : -1}>
           <span className="fc-label">무료 견적 신청</span>
           <span className="fc-icon"><MessagesSquare size={28} /></span>
@@ -70,11 +75,14 @@ export default function FloatingCta() {
         .fc--form:hover { background: #1852b5; }
         .fc--tel { background: #fff; color: #111418; box-shadow: 0 10px 28px rgba(17,20,24,.14); }
         .fc--tel .fc-icon { color: #16a34a; }
-        /* 눈에 띄게 — 두 버튼 아이콘이 흔들흔들 (전화는 반 박자 늦게 흔들려 둘이 번갈아 움직인다) */
-        /* 순서대로 — 견적 버튼이 흔들린 뒤 멈추면 전화 버튼이 이어서 흔들린다 (3.2초에 한 바퀴, 각자 앞쪽 절반만 흔들림) */
-        .fc-wrap.is-on .fc-icon svg { animation: fcWiggle 3.2s ease-in-out infinite; transform-origin: 50% 60%; }
-        .fc-wrap.is-on .fc--tel .fc-icon svg { animation-delay: 1.6s; }
-        @keyframes fcWiggle { 0%, 45%, 100% { transform: rotate(0deg); } 7.5% { transform: rotate(-14deg); } 15% { transform: rotate(12deg); } 22.5% { transform: rotate(-9deg); } 30% { transform: rotate(6deg); } 37.5% { transform: rotate(-3deg); } }
+        /* 웹블로그 — 하늘색 바탕 + 진한 파란 아이콘 (흰 화면 위에서도 또렷하게) */
+        .fc--blog { background: #b9d3fa; color: #1b4ea7; box-shadow: 0 10px 28px rgba(31,99,214,.22); }
+        .fc--blog:hover { background: #a3c4f7; }
+        /* 눈에 띄게 — 위에서부터 차례로 흔들린다: 웹블로그 → 견적 → 전화 (4.8초에 한 바퀴, 버튼마다 1.6초씩) */
+        .fc-wrap.is-on .fc-icon svg { animation: fcWiggle 4.8s ease-in-out infinite; transform-origin: 50% 60%; }
+        .fc-wrap.is-on .fc--form .fc-icon svg { animation-delay: 1.6s; }
+        .fc-wrap.is-on .fc--tel .fc-icon svg { animation-delay: 3.2s; }
+        @keyframes fcWiggle { 0%, 30%, 100% { transform: rotate(0deg); } 5% { transform: rotate(-14deg); } 10% { transform: rotate(12deg); } 15% { transform: rotate(-9deg); } 20% { transform: rotate(6deg); } 25% { transform: rotate(-3deg); } }
 
         /* ── 모바일 하단 두 칸 바 (메인 사이트 하단 바와 같은 크기) ── */
         .fc-bar { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: #fff; box-shadow: 0 -6px 20px rgba(17,20,24,.1); padding-bottom: max(0px, calc(env(safe-area-inset-bottom) - 12px)); }
@@ -83,7 +91,11 @@ export default function FloatingCta() {
         .fc-bar-btn--tel svg { color: #16a34a; }
         .fc-bar-btn--form { background: #1f63d6; color: #fff; }
         @media (max-width: 768px) {
-          .fc-wrap { display: none; }
+          /* 휴대폰 — 동그란 버튼은 웹블로그만, 아래 두 칸 바 바로 위 오른쪽에 */
+          .fc-wrap { bottom: calc(56px + max(0px, env(safe-area-inset-bottom) - 12px) + 14px); right: 14px; }
+          .fc-wrap .fc:not(.fc--blog) { display: none; }
+          .fc--blog, .fc--blog .fc-icon { width: 52px; height: 52px; }
+          .fc--blog .fc-label { display: none; }
           .fc-bar { display: flex; }
         }
         @media (prefers-reduced-motion: reduce) {

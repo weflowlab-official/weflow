@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { MessagesSquare, FolderTree, PenTool, Rocket, Check, ClipboardList, BookOpen, Phone } from 'lucide-react'
+import { MessagesSquare, FolderTree, PenTool, Rocket, Check, ClipboardList, NotebookPen, Phone } from 'lucide-react'
 import InquiryForm from './InquiryForm'
 import BlogWhy from './BlogWhy'
 import ClinicHeader from './ClinicHeader'
@@ -97,10 +97,10 @@ export default function ClinicBlogPage() {
             <span className="cb-mark">SEO·AEO·GEO</span>까지<br />
             한 번에 챙겨진다면?
           </h1>
-          {/* 바로 문의하려는 분은 상담으로, 더 알아보려는 분은 웹블로그 설명으로 */}
+          {/* 바로 문의하려는 분은 상담으로, 직접 보고 싶은 분은 실제 웹블로그(/blog, 새 탭)로 */}
           <div className="cb-hero-btns">
             <a href="#contact-form" className="cb-hero-btn cb-hero-btn--fill"><ClipboardList size={18} /> 무료 견적 신청</a>
-            <a href="#webblog" className="cb-hero-btn"><BookOpen size={18} /> 웹블로그란?</a>
+            <a href="/blog" target="_blank" rel="noopener noreferrer" className="cb-hero-btn"><NotebookPen size={18} /> 실제 웹블로그 보기</a>
           </div>
         </div>
         {/* 아래로 내려가라는 선 — 제목 묶음의 높이에 끼지 않게 바닥에 따로 띄운다 */}

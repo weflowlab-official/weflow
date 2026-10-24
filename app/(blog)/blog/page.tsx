@@ -33,21 +33,22 @@ export default async function HomePage() {
       <Suspense>
         <HeroSection title={home.heroTitle} text={home.heroText} placeholder={home.searchPlaceholder} />
       </Suspense>
+      {/* 실제 글(가장 많이 본 글·최신 글)을 히어로 바로 아래에 — 들어오자마자 글을 보여 준다 */}
+      <PopularPostsSection posts={popular} />
+      <Suspense>
+        <LatestPostsSection posts={latest} />
+      </Suspense>
       <SecurityNewsSection />
       <HowItWorksSection />
       {/* 병의원 전용을 업종 카드보다 먼저 — 웹블로그 수요가 가장 큰 업종이라 먼저 보여 준다 */}
       <ClinicFocusSection />
       <IndustryCardsSection categories={categories} posts={all} />
       <AiSearchSection />
-      {/* AI 장면 → "그 글이 쌓이는 곳이 웹블로그" → 장점 → 실제 글(인기·최신)·사례로 확인 → FAQ → 신청 */}
+      {/* AI 장면 → "그 글이 쌓이는 곳이 웹블로그" → 장점 → 사례로 확인 → FAQ → 신청 */}
       <SummarySection title={home.summaryTitle} text={home.summaryText} />
       {/* 웹블로그만 / 웹블로그 + 홈페이지(추천) / 홈페이지만 — 고르면 아래 견적 폼 문의 유형이 미리 골라진다 */}
       <PlansSection />
       <StrengthsSection keyPoints={home.keyPoints} />
-      <PopularPostsSection posts={popular} />
-      <Suspense>
-        <LatestPostsSection posts={latest} />
-      </Suspense>
       <CasesSection />
       <FaqSection items={home.faq} />
       <InquirySection />

@@ -19,6 +19,7 @@ import { RelatedSidebar } from "@/blog/components/post/RelatedSidebar";
 import { MoreContents } from "@/blog/components/post/MoreContents";
 import { ViewCounter } from "@/blog/components/post/ViewCounter";
 import { COMMON_FAQ } from "@/blog/lib/clinicDefaults";
+import { formatDate } from "@/blog/lib/formatDate"; // 한국 시간 기준 "2026.10.17"
 
 // 발행된 모든 글을 빌드 시 정적 생성 (이후 글은 Payload 저장 훅의 revalidatePath 로 생성)
 export async function generateStaticParams() {
@@ -184,9 +185,3 @@ export default async function PostPage({ params }: PageProps<"/blog/[category]/[
   );
 }
 
-// "2026.10.17" 형식
-function formatDate(iso: string) {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "";
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-}
