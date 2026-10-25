@@ -81,7 +81,7 @@ export function SecurityNewsSection() {
               <br className="md:hidden" /> PHP 취약점 걱정이 없습니다
             </h3>
             <p className="mt-4 text-center text-base text-white/70 md:text-lg">
-              WEFLOW 홈페이지와 웹블로그는<br className="md:hidden" />{" "}
+              WEFLOW 웹블로그와 홈페이지는<br className="md:hidden" />{" "}
               <strong className="font-bold text-white underline decoration-[#7fa6ef] decoration-2 underline-offset-4">
                 PHP를 쓰지 않습니다.
               </strong>
@@ -106,7 +106,7 @@ export function SecurityNewsSection() {
                 <IconShieldCheck className="size-4" />
                 WEFLOW
               </p>
-              <p className="mt-1 text-lg font-bold md:text-xl">Next.js로 만든 홈페이지·웹블로그</p>
+              <p className="mt-1 text-lg font-bold md:text-xl">Next.js로 만든 웹블로그·홈페이지</p>
               <ul className="mt-5 space-y-3">
                 {NEW.map((t) => (
                   <li key={t} className="flex gap-2.5 text-sm leading-relaxed text-white/90 md:text-[15px]">

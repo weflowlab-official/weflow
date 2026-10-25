@@ -1,66 +1,26 @@
 // 검색 결과 페이지 (/search?q=검색어). 상단 검색 영역(메인 히어로 톤) + 세로 카드 4열 목록 + View more.
 // 검색어가 없으면 전체 글을 최신순으로, 결과가 없으면 "검색 결과가 없습니다" 상태를 보여준다 (레퍼런스 동작).
+//
+// 페이지는 검색어와 상관없이 한 번만 만들어 두고(다른 목록 페이지처럼 캐시), 전체 글 목록을 실어 보낸다.
+// 실제 거르기는 브라우저(SearchResults)가 한다 — 검색할 때마다 DB 를 조회하던 때는 2~4초씩 걸렸다.
+// 본문(content)은 목록 카드에 쓰지 않아 빼고 보낸다 (페이지가 무거워지지 않게).
 import { Suspense } from "react";
-import Link from "next/link";
 import type { Metadata } from "next";
-import { IconArrowRight } from "@tabler/icons-react";
-import { getSiteData, searchPosts } from "@/blog/lib/payload";
+import { getAllPosts, getSiteData } from "@/blog/lib/payload";
 import { SearchHero } from "@/blog/components/posts/SearchHero";
-import { PostListWithMore } from "@/blog/components/posts/PostListWithMore";
-import { EmptyPosts } from "@/blog/components/posts/EmptyPosts";
+import { SearchResults } from "@/blog/components/posts/SearchResults";
 
 export const metadata: Metadata = { title: "업종·주제 검색" };
 
-export default async function SearchPage({ searchParams }: PageProps<"/blog/search">) {
+export default async function SearchPage() {
   // 인기 키워드는 사이트 공통 데이터(home 글로벌, 비어 있으면 기본값)
-  const { popularKeywords } = await getSiteData();
+  const [{ popularKeywords }, all] = await Promise.all([getSiteData(), getAllPosts()]);
+  const posts = all.map(({ content: _content, ...p }) => p);
 
   return (
+    // useSearchParams 를 쓰는 부분은 Suspense 안에 — 정적 페이지로 만들 수 있게
     <Suspense fallback={<SearchHero query="" keywords={popularKeywords} />}>
-      <SearchContent keywords={popularKeywords} searchParams={searchParams} />
+      <SearchResults posts={posts} keywords={popularKeywords} />
     </Suspense>
-  );
-}
-
-async function SearchContent({ keywords, searchParams }: { keywords: string[] } & Pick<PageProps<"/blog/search">, "searchParams">) {
-  const { q } = await searchParams;
-  const query = (typeof q === "string" ? q : "").trim();
-
-  // 검색어 없으면 전체 글(최신순), 있으면 제목/요약/태그 부분 일치 결과
-  const results = await searchPosts(query);
-
-  return (
-    <>
-      <SearchHero query={query} keywords={keywords} resultCount={query ? results.length : undefined} />
-
-      {/* 레퍼런스: 결과 영역 py-12 md:py-20 */}
-      <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-site-4xl py-12 md:py-20">
-        {results.length > 0 ? (
-          // 다른 목록 페이지와 같은 세로 카드 4열
-          <PostListWithMore key={query} posts={results} initialCount={8} step={8} />
-        ) : query ? (
-          // 결과 없음 상태
-          <div className="flex flex-col items-center gap-7.5 py-12 text-center md:py-20">
-            <div className="flex flex-col gap-1 text-xl font-semibold leading-snug text-neutral-800 md:text-3xl">
-              <p>
-                <span className="text-brand-primary">{query}</span>
-                <span>에 대한 검색 결과가 없습니다.</span>
-              </p>
-              <p>다른 이야기도 살펴볼까요?</p>
-            </div>
-            <Link
-              href="/blog/posts"
-              className="inline-flex items-center gap-2 rounded-full bg-neutral-100 px-7 py-3 text-base font-medium text-neutral-800 transition-colors hover:bg-primary hover:text-primary-foreground md:text-lg"
-            >
-              다른 이야기 보러가기
-              <IconArrowRight className="size-5" />
-            </Link>
-          </div>
-        ) : (
-          // 검색어도 글도 없음 (시드 전)
-          <EmptyPosts />
-        )}
-      </div>
-    </>
   );
 }

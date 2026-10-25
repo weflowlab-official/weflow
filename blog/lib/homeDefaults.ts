@@ -7,8 +7,9 @@
 import type { ClinicInfo, FaqItem } from "./types";
 
 // 히어로
-export const heroTitle = (_clinic: Pick<ClinicInfo, "name">) => "우리 업종에\n웹블로그가 필요한 이유";
-export const HERO_TEXT = "네이버·구글에 등록되고 AI 검색이 읽는 웹블로그. 업종별로 어떻게 쓰이는지 직접 확인해 보세요.";
+// 메인 사이트 '웹블로그란?'(app/(site)/webblog) 히어로와 같은 문구 (2026-10-25)
+export const heroTitle = (_clinic: Pick<ClinicInfo, "name">) => "웹블로그, 생소하시죠?\n경쟁업체보다 먼저 검색되는 방법";
+export const HERO_TEXT = "우리 홈페이지 안에 쌓이는 블로그. 글 하나만 올려도 네이버·구글 검색과 AI 답변에 맞춰집니다.";
 export const SEARCH_PLACEHOLDER = "업종이나 궁금한 점을 검색해 보세요";
 
 // 배너 슬라이드 (이미지는 관리자에서 올린다. 없으면 회색 자리표시)

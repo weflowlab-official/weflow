@@ -62,43 +62,53 @@ export function AiSearchScene({ id, title, body, search, lines, note }: {
         <p className="cb-chapter">WHY NOW 01</p>
         <h2 className="cb-h2">{title}</h2>
         <p className="cb-body">{body}</p>
-        {/* 넓은 화면: 왼쪽 PC 검색 결과 + 오른쪽 휴대폰 AI 검색 / 좁은 화면: 위아래로 */}
-        <div className="cb-ai-visual">
-          <SearchMock {...search} />
-          <div className="cb-phone">
-            <div className="cb-phone-screen">
-              <div className="cb-phone-status"><i /></div>
-              <p className="cb-phone-head">
-                {/* AI 서비스들이 흔히 쓰는 네 꼭짓점 반짝이 — 특정 회사 로고가 아닌 일반 모양으로 그렸다 */}
-                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                  <defs>
-                    <linearGradient id="cbSpark" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stopColor="#4f8cff" />
-                      <stop offset="100%" stopColor="#9b6bff" />
-                    </linearGradient>
-                  </defs>
-                  <path d="M12 1.5c.6 5.6 4.9 9.9 10.5 10.5-5.6.6-9.9 4.9-10.5 10.5C11.4 16.9 7.1 12.6 1.5 12 7.1 11.4 11.4 7.1 12 1.5z" fill="url(#cbSpark)" />
-                </svg>
-                AI 검색
-              </p>
-              <Chat lines={lines} />
-              <p className="cb-phone-input">무엇이든 물어보세요</p>
-            </div>
-          </div>
-        </div>
+        <AiVisual search={search} lines={lines} />
         <p className="cb-phone-note">{note}</p>
       </div>
     </section>
   )
 }
 
+/**
+ * WHY NOW 01 의 그림만 — PC 검색 결과 + 휴대폰 AI 검색. 웹블로그(/blog) 메인 'AI 검색' 섹션도 이것만 가져다 쓴다.
+ * 모양은 SCENE_CSS, 색은 .cb 의 --cb-* 변수 (쓰는 쪽이 감싸는 요소에 넣어 준다).
+ */
+export function AiVisual({ search, lines }: { search: { query: string; results: SearchResult[]; emptyText: string }; lines: Line[] }) {
+  return (
+    // 넓은 화면: 왼쪽 PC 검색 결과 + 오른쪽 휴대폰 AI 검색 / 좁은 화면: 위아래로
+    <div className="cb-ai-visual">
+      <SearchMock {...search} />
+      <div className="cb-phone">
+        <div className="cb-phone-screen">
+          <div className="cb-phone-status"><i /></div>
+          <p className="cb-phone-head">
+            {/* AI 서비스들이 흔히 쓰는 네 꼭짓점 반짝이 — 특정 회사 로고가 아닌 일반 모양으로 그렸다 */}
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <defs>
+                <linearGradient id="cbSpark" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#4f8cff" />
+                  <stop offset="100%" stopColor="#9b6bff" />
+                </linearGradient>
+              </defs>
+              <path d="M12 1.5c.6 5.6 4.9 9.9 10.5 10.5-5.6.6-9.9 4.9-10.5 10.5C11.4 16.9 7.1 12.6 1.5 12 7.1 11.4 11.4 7.1 12 1.5z" fill="url(#cbSpark)" />
+            </svg>
+            AI 검색
+          </p>
+          <Chat lines={lines} />
+          <p className="cb-phone-input">무엇이든 물어보세요</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /** WHY NOW 02 — 플랫폼 블로그에만 쌓으면 노출이 빠지는 날 손쓸 수 없다 */
-export function PlatformDropScene({ title, body, lines }: { title: ReactNode; body: ReactNode; lines: Line[] }) {
+export function PlatformDropScene({ title, body, lines, chapter = 'WHY NOW 02' }: { title: ReactNode; body: ReactNode; lines: Line[]; chapter?: string }) {
   return (
     <section className="cb-scene">
       <div className="cb-wrap cb-scene-grid">
         <div className="cb-scene-text">
-          <p className="cb-chapter">WHY NOW 02</p>
+          <p className="cb-chapter">{chapter}</p>
           <h2 className="cb-h2">{title}</h2>
           <p className="cb-body">{body}</p>
         </div>

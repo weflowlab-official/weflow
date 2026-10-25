@@ -86,7 +86,7 @@ export const GENERAL_WHY: BlogWhyCopy = {
     reserve: { title: '읽다가 바로\n홈페이지로 연결', desc: '글마다 홈페이지로 가는 버튼이 붙어,\n마음먹은 순간을 놓치지 않습니다.' },
     own: { title: '우리 자산으로\n남는 글', desc: '빌린 블로그가 아니라 우리 주소 아래에 쌓여,\n플랫폼 정책이 바뀌어도 그대로 남습니다.' },
     admin: { title: '관리자 페이지에서\n직접 작성 · 수정', desc: '블로그 글은 물론 홈페이지의 사진과 문구도,\n관리자 페이지에서 바로 바꿉니다.' },
-    category: { title: '서비스별\n카테고리 정리', desc: '손님이 검색하는 말 그대로 나눠,\n관련 글을 이어서 읽게 합니다.' },
+    category: { title: '서비스별\n카테고리 정리', desc: '고객이 검색하는 말 그대로 나눠,\n관련 글을 이어서 읽게 합니다.' },
   },
   end: { eyebrow: 'WEFLOW WEB BLOG', lead: '블로그를, ', accent: '우리 사이트 안으로.', desc: '우리 업종도 웹블로그로 바꿔 볼까요?', chips: ['AI 검색 인용', '홈페이지 연결', '우리 자산으로', '직접 관리'], href: '/diagnosis', label: '맞춤 견적 받기' },
   demo: {

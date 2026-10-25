@@ -26,7 +26,7 @@ export function ClinicFocusSection() {
   const specialties = subIndustriesOf("clinic");
 
   return (
-    <section aria-labelledby="home-clinic-title" className="py-16 md:py-24">
+    <section aria-labelledby="home-clinic-title" className="bg-[var(--brand-primary-5)] py-16 md:py-24">
       <div className="mx-auto w-full max-w-site-4xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-10 overflow-hidden rounded-[24px] bg-linear-to-br from-primary to-[#0d2858] p-6 text-white md:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:gap-14 lg:p-14">
           {/* 왼쪽: 안내 */}

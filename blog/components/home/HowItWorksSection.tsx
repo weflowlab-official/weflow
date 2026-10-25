@@ -5,6 +5,7 @@
 import { IconPencil, IconSettingsAutomation, IconWorldSearch, IconSparkles, IconArrowRight, type Icon } from "@tabler/icons-react";
 import { Fragment } from "react";
 import { Reveal } from "@/blog/components/ui/Reveal";
+import { MobileBreaks } from "@/blog/components/ui/MobileBreaks";
 
 // text 의 \n 은 데스크톱(가로 카드)에서만 줄바꿈 — 모바일은 카드가 넓어 한 줄로 흐르게 둔다
 const STEPS: { Icon: Icon; title: string; text: string }[] = [
@@ -19,7 +20,7 @@ const OPTIMIZE = [
     tag: "SEO",
     name: "검색 노출",
     desc: "네이버·구글 검색 결과에 잘 보이게",
-    auto: ["손님이 쓰는 말로 짓는 제목·소제목 구조", "새 글마다 사이트맵 자동 갱신", "모바일에서도 빠른 로딩"],
+    auto: ["고객이 쓰는 말로 짓는 제목·소제목 구조", "새 글마다 사이트맵 자동 갱신", "모바일에서도 빠른 로딩"],
   },
   {
     tag: "AEO",
@@ -37,7 +38,7 @@ const OPTIMIZE = [
 
 export function HowItWorksSection() {
   return (
-    <section aria-labelledby="home-how-title" className="py-16 md:py-24">
+    <section aria-labelledby="home-how-title" className="bg-neutral-50 py-16 md:py-24">
       <div className="mx-auto w-full max-w-site-4xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm font-semibold text-primary md:text-base">HOW IT WORKS</p>
@@ -102,7 +103,7 @@ export function HowItWorksSection() {
             </Reveal>
           ))}
         </div>
-        <p className="mt-5 text-center text-xs text-neutral-400 md:text-sm">검색 순위와 AI 인용 여부는 각 검색엔진·AI 서비스가 정합니다. 웹블로그는 그 기회를 넓히는 구조를 만듭니다.</p>
+        <p className="mt-5 text-center text-xs text-neutral-400 md:text-sm"><MobileBreaks text="검색 순위와 AI 인용 여부는 각 검색엔진·AI 서비스가 정합니다.|웹블로그는 그 기회를 넓히는 구조를 만듭니다." /></p>
       </div>
     </section>
   );

@@ -50,6 +50,7 @@ const ORBITS = [
 ];
 import { useSite } from "@/blog/components/SiteProvider";
 import { HeroPixelTrail } from "@/blog/components/home/HeroPixelTrail";
+import { MobileBreaks } from "@/blog/components/ui/MobileBreaks";
 import * as defaults from "@/blog/lib/homeDefaults"; // 기본 문구 (Payload 'home' 글로벌이 비어 있을 때)
 
 // 궤도 원 하나: 가운데 기준으로 놓고(translate -50%) 원이 돌며, 원 위의 아이콘 카드는 반대로 돌아 똑바로 선다. motion-reduce 면 정지
@@ -142,8 +143,9 @@ export function HeroSection({ title, text, placeholder }: Props) {
             WEFLOW 웹블로그
           </p>
           <div className="mt-3 overflow-hidden">
+            {/* 모바일 글자 크기는 화면 폭에 맞춰(6vw) — 둘째 줄 '경쟁업체보다 먼저 검색되는 방법'이 한 줄에 들어가게 */}
             <h1
-              className="animate-reveal-up whitespace-pre-line text-3xl font-bold leading-tight text-neutral-900 md:text-4xl lg:text-5xl"
+              className="animate-reveal-up whitespace-pre-line text-[clamp(1.25rem,6vw,1.875rem)] font-bold sm:text-3xl leading-tight text-neutral-900 md:text-4xl lg:text-5xl"
               style={{ animationDuration: "0.6s" }}
             >
               {heroTitle}
@@ -151,7 +153,8 @@ export function HeroSection({ title, text, placeholder }: Props) {
           </div>
           <div className="mt-5 overflow-hidden">
             <p className="animate-reveal-up text-base leading-relaxed text-neutral-600 md:text-lg" style={{ animationDelay: "0.2s", animationDuration: "0.6s" }}>
-              {heroText}
+              {/* 모바일: 문장(". ")마다 줄을 바꾼다 — 관리자에 저장된 문구에도 그대로 적용되게 */}
+              <MobileBreaks text={heroText.replace(/\. /g, ".|")} />
             </p>
           </div>
 

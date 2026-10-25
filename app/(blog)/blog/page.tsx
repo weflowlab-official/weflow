@@ -1,5 +1,5 @@
 // 블로그 메인(/blog). 헤더/푸터는 app/(blog)/layout.tsx 가 감싸고, 여기서는 본문 섹션만 순서대로 조립한다.
-// 구성: 히어로(검색·무료 견적) → 보안 뉴스·Next.js 비교 → 웹블로그가 검색에 자리 잡는 구조(SEO·AEO·GEO) → 병의원 전용(/clinic-blog 로) → 업종 카드 → AI 검색 장면 → 웹블로그란?(홈페이지 비교·함께하면 좋은 점) → 상품 3종 → 장점 카드 → 가장 많이 본 글 → 최신 글 → 제작 사례 → FAQ → 무료 견적 신청 폼(#contact)
+// 구성: 히어로(검색·무료 견적) → 가장 많이 본 글 → 최신 글 → 보안 뉴스·Next.js 비교 → AI 검색 장면 → 플랫폼 블로그의 한계 → 그래서 웹블로그(답 다섯) → 검색에 자리 잡는 구조(SEO·AEO·GEO) → 웹블로그란?(홈페이지 비교·흐름·함께하면 좋은 점) → 업종 카드 → 병의원 전용(/clinic-blog 로) → 상품 3종 → 제작 사례 → FAQ → 무료 견적 신청 폼(#contact)
 // 홍보용 흐름: 업종을 골라 들어가거나, 웹블로그가 무엇을 하는지 보고, 사례와 FAQ 를 거쳐 상담으로.
 // 데이터: Payload 'home' 글로벌(getHome) + 글 목록 + 카테고리. 글로벌 값이 비어 있으면 각 섹션의 기본 문구를 쓴다.
 import { Suspense } from "react";
@@ -10,11 +10,12 @@ import { HowItWorksSection } from "@/blog/components/home/HowItWorksSection";
 import { IndustryCardsSection } from "@/blog/components/home/IndustryCardsSection";
 import { ClinicFocusSection } from "@/blog/components/home/ClinicFocusSection";
 import { AiSearchSection } from "@/blog/components/home/AiSearchSection";
+import { PlatformDropSection } from "@/blog/components/home/PlatformDropSection";
+import { WhyWebBlogSection } from "@/blog/components/home/WhyWebBlogSection";
 import { PopularPostsSection } from "@/blog/components/home/PopularPostsSection";
 import { LatestPostsSection } from "@/blog/components/home/LatestPostsSection";
 import { SummarySection } from "@/blog/components/home/SummarySection";
 import { PlansSection } from "@/blog/components/home/PlansSection";
-import { StrengthsSection } from "@/blog/components/home/StrengthsSection";
 import { CasesSection } from "@/blog/components/home/CasesSection";
 import { FaqSection } from "@/blog/components/home/FaqSection";
 import { InquirySection } from "@/blog/components/home/InquirySection";
@@ -38,17 +39,20 @@ export default async function HomePage() {
       <Suspense>
         <LatestPostsSection posts={latest} />
       </Suspense>
+      {/* 지금 놓치고 있는 것 셋: 오래된 홈페이지(PHP) 보안 → AI 검색 → 플랫폼 블로그의 한계 */}
       <SecurityNewsSection />
-      <HowItWorksSection />
-      {/* 병의원 전용을 업종 카드보다 먼저 — 웹블로그 수요가 가장 큰 업종이라 먼저 보여 준다 */}
-      <ClinicFocusSection />
-      <IndustryCardsSection categories={categories} posts={all} />
       <AiSearchSection />
-      {/* AI 장면 → "그 글이 쌓이는 곳이 웹블로그" → 장점 → 사례로 확인 → FAQ → 신청 */}
+      <PlatformDropSection />
+      {/* 그래서 웹블로그(답 다섯) → 어떻게 검색에 자리 잡는지(SEO·AEO·GEO) */}
+      <WhyWebBlogSection />
+      <HowItWorksSection />
+      {/* 홈페이지와 함께하면 */}
       <SummarySection title={home.summaryTitle} text={home.summaryText} />
+      {/* 우리 업종도 되나? — 전 업종 카드 먼저, 그다음 특히 병의원은 전용 페이지(/clinic-blog)로 */}
+      <IndustryCardsSection categories={categories} posts={all} />
+      <ClinicFocusSection />
       {/* 웹블로그만 / 웹블로그 + 홈페이지(추천) / 홈페이지만 — 고르면 아래 견적 폼 문의 유형이 미리 골라진다 */}
       <PlansSection />
-      <StrengthsSection keyPoints={home.keyPoints} />
       <CasesSection />
       <FaqSection items={home.faq} />
       <InquirySection />

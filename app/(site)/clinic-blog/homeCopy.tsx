@@ -45,7 +45,7 @@ export const HV_GENERAL: HomeVsBlogCopy = {
   homeIs: '우리 회사의 얼굴',
   blogIs: '손님을 데려오는 길',
   rows: [
-    { label: '역할', home: '회사를 소개하고 믿음을 줍니다', blog: '검색에서 새 손님을 데려옵니다' },
+    { label: '역할', home: '회사를 소개하고 믿음을 줍니다', blog: '검색에서 새 고객을 데려옵니다' },
     { label: '담는 내용', home: '회사 소개 · 서비스 안내 · 오시는 길', blog: '자주 묻는 질문 · 사례 · 노하우' },
     { label: '바뀌는 주기', home: '한 번 만들고 필요할 때 고칩니다', blog: '글이 꾸준히 쌓입니다' },
   ],

@@ -91,7 +91,6 @@ const PLAN_BASE = [
 ]
 
 export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepageCopy }) {
-  const STEPS = copy.steps
   const PLANS = copy.plans && PLAN_BASE.map((p, i) => ({ ...p, ...copy.plans![i] }))
   return (
     <section id="with-homepage" className="ch">
@@ -105,19 +104,7 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
           {copy.body}
         </p>
 
-        {/* 환자가 지나가는 길 — 칸이 차례로 켜지고, 가운데 두 칸은 '한 사이트 안' 띠로 묶인다 */}
-        <InView className="ch-flow">
-          <div className="ch-site" aria-hidden="true"><span>{copy.domain} 한 사이트 안</span></div>
-          <ol className="ch-steps">
-            {STEPS.map(({ Icon, ...s }, i) => (
-              <li key={s.label} style={{ '--i': i } as React.CSSProperties}>
-                <span className="ch-node"><Icon size={24} /></span>
-                <strong>{s.label}</strong>
-                <small>{s.sub}</small>
-              </li>
-            ))}
-          </ol>
-        </InView>
+        <HomepageFlow copy={copy} />
 
         {/* 카드마다 따로 화면에 들어올 때 움직인다 — 묶음으로 한 번에 켜면 아래 카드는 내려가 볼 때 이미 끝나 있다 */}
         <div className="ch-gains">
@@ -167,7 +154,7 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
         )}
       </div>
 
-      <style>{`
+      <style>{CH_FLOW_CSS + `
         .ch { background: #fff; padding: clamp(5rem, 10vw, 8.75rem) 20px; text-align: center; border-top: 1px solid #e9ebef; } /* 앞 섹션(홈페이지 vs 웹블로그)도 흰 바탕이라 선으로 나눈다 */
         .ch-inner { max-width: 1120px; margin: 0 auto; }
         .ch-mo { display: inline; }
@@ -176,40 +163,6 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
         .ch-title { margin: 0; font-size: clamp(1.7rem, 3.8vw, 2.5rem); line-height: 1.32; font-weight: 800; letter-spacing: -0.035em; color: #111418; }
         .ch-title span { color: #1f63d6; }
         .ch-body { margin: 20px auto 0; max-width: 640px; color: #4b5360; font-size: 1.15rem; line-height: 1.8; }
-
-        /* 환자가 지나가는 길 */
-        .ch-flow { position: relative; max-width: 960px; margin: 84px auto 0; }
-        .ch-steps { position: relative; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
-        /* align-content: start — 설명이 두 줄인 칸(홈페이지)만 아이콘·이름이 위로 떠 보이지 않게, 네 칸 모두 위에서부터 같은 선으로 쌓는다 */
-        .ch-steps li { position: relative; display: grid; align-content: start; justify-items: center; gap: 6px; opacity: .35; transition: opacity .4s ease; transition-delay: calc(var(--i) * .45s); }
-        .ch-flow.is-in .ch-steps li { opacity: 1; }
-        .ch-node { position: relative; z-index: 1; width: 64px; height: 64px; border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; background: #f3f5f8; color: #8a919c; margin-bottom: 8px; transition: background .4s ease, color .4s ease, box-shadow .4s ease; transition-delay: calc(var(--i) * .45s); }
-        .ch-flow.is-in .ch-node { background: #1f63d6; color: #fff; box-shadow: 0 12px 28px rgba(31,99,214,.25); }
-        .ch-steps strong { font-size: 1.1rem; font-weight: 800; color: #111418; }
-        .ch-steps small { font-size: .9rem; color: #6b7380; }
-        /* 칸 사이 선 — 앞 칸이 켜진 뒤 다음 칸 쪽으로 그어진다 */
-        .ch-steps li:not(:last-child)::after { content: ''; position: absolute; background: #1f63d6; transform-origin: left top; transition: transform .45s ease; transition-delay: calc(var(--i) * .45s + .2s); }
-        .ch-steps li:not(:last-child)::after { top: 32px; left: calc(50% + 40px); width: calc(100% - 80px); height: 2px; transform: scaleX(0); }
-        .ch-flow.is-in .ch-steps li:not(:last-child)::after { transform: scaleX(1); }
-        /* '한 사이트 안' 띠 — 가운데 두 칸(블로그 글·홈페이지)을 감싼다 */
-        .ch-site { position: absolute; border: 1.5px dashed #9fc3f6; border-radius: 26px; background: #f5f9ff; opacity: 0; transition: opacity .5s ease 1.6s; }
-        .ch-flow.is-in .ch-site { opacity: 1; }
-        .ch-site span { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 4px 12px; border-radius: 999px; background: #1f63d6; color: #fff; font-size: .78rem; font-weight: 700; }
-        .ch-site { top: -34px; bottom: -18px; left: 25%; right: 25%; } /* 윗변을 넉넉히 올려 이름표와 아이콘 사이를 띄운다 */
-        .ch-site span { top: -13px; }
-        /* 휴대폰 — 세로로 쌓지 않고 PC 처럼 가로 네 칸을 작게. 길게 늘어지지 않고 '한 사이트 안' 띠도 그대로 보인다 */
-        @media (max-width: 767px) {
-          .ch-flow { margin-top: 56px; }
-          .ch-gains { margin-top: 48px; }
-          .ch-node { width: 46px; height: 46px; border-radius: 14px; margin-bottom: 4px; }
-          .ch-node svg { width: 20px; height: 20px; }
-          .ch-steps li { gap: 3px; padding: 0 2px; }
-          .ch-steps strong { font-size: .86rem; }
-          .ch-steps small { font-size: .7rem; line-height: 1.4; word-break: keep-all; }
-          .ch-steps li:not(:last-child)::after { top: 23px; left: calc(50% + 28px); width: calc(100% - 56px); }
-          .ch-site { top: -30px; bottom: -12px; border-radius: 18px; }
-          .ch-site span { top: -11px; font-size: .66rem; padding: 3px 9px; }
-        }
 
         /* 좋은 점 넷 */
         .ch-gains { margin: 64px auto 0; max-width: 960px; display: grid; gap: 14px; text-align: left; }
@@ -324,3 +277,61 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
     </section>
   )
 }
+
+/**
+ * 손님이 지나가는 길(검색 → 블로그 글 → 홈페이지 → 상담) 네 칸만 — 웹블로그(/blog) 메인 '웹블로그란?' 섹션도 이것만 가져다 쓴다.
+ * 모양은 CH_FLOW_CSS (쓰는 쪽이 <style> 에 넣는다).
+ */
+export function HomepageFlow({ copy }: { copy: WithHomepageCopy }) {
+  // 칸이 차례로 켜지고, 가운데 두 칸은 '한 사이트 안' 띠로 묶인다
+  return (
+    <InView className="ch-flow">
+      <div className="ch-site" aria-hidden="true"><span>{copy.domain} 한 사이트 안</span></div>
+      <ol className="ch-steps">
+        {copy.steps.map(({ Icon, ...s }, i) => (
+          <li key={s.label} style={{ '--i': i } as React.CSSProperties}>
+            <span className="ch-node"><Icon size={24} /></span>
+            <strong>{s.label}</strong>
+            <small>{s.sub}</small>
+          </li>
+        ))}
+      </ol>
+    </InView>
+  )
+}
+
+export const CH_FLOW_CSS = `
+        /* 환자가 지나가는 길 */
+        .ch-flow { position: relative; max-width: 960px; margin: 84px auto 0; }
+        .ch-steps { position: relative; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+        /* align-content: start — 설명이 두 줄인 칸(홈페이지)만 아이콘·이름이 위로 떠 보이지 않게, 네 칸 모두 위에서부터 같은 선으로 쌓는다 */
+        .ch-steps li { position: relative; display: grid; align-content: start; justify-items: center; gap: 6px; opacity: .35; transition: opacity .4s ease; transition-delay: calc(var(--i) * .45s); }
+        .ch-flow.is-in .ch-steps li { opacity: 1; }
+        .ch-node { position: relative; z-index: 1; width: 64px; height: 64px; border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; background: #f3f5f8; color: #8a919c; margin-bottom: 8px; transition: background .4s ease, color .4s ease, box-shadow .4s ease; transition-delay: calc(var(--i) * .45s); }
+        .ch-flow.is-in .ch-node { background: #1f63d6; color: #fff; box-shadow: 0 12px 28px rgba(31,99,214,.25); }
+        .ch-steps strong { font-size: 1.1rem; font-weight: 800; color: #111418; }
+        .ch-steps small { font-size: .9rem; color: #6b7380; }
+        /* 칸 사이 선 — 앞 칸이 켜진 뒤 다음 칸 쪽으로 그어진다 */
+        .ch-steps li:not(:last-child)::after { content: ''; position: absolute; background: #1f63d6; transform-origin: left top; transition: transform .45s ease; transition-delay: calc(var(--i) * .45s + .2s); }
+        .ch-steps li:not(:last-child)::after { top: 32px; left: calc(50% + 40px); width: calc(100% - 80px); height: 2px; transform: scaleX(0); }
+        .ch-flow.is-in .ch-steps li:not(:last-child)::after { transform: scaleX(1); }
+        /* '한 사이트 안' 띠 — 가운데 두 칸(블로그 글·홈페이지)을 감싼다 */
+        .ch-site { position: absolute; border: 1.5px dashed #9fc3f6; border-radius: 26px; background: #f5f9ff; opacity: 0; transition: opacity .5s ease 1.6s; }
+        .ch-flow.is-in .ch-site { opacity: 1; }
+        .ch-site span { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 4px 12px; border-radius: 999px; background: #1f63d6; color: #fff; font-size: .78rem; font-weight: 700; }
+        .ch-site { top: -34px; bottom: -18px; left: 25%; right: 25%; } /* 윗변을 넉넉히 올려 이름표와 아이콘 사이를 띄운다 */
+        .ch-site span { top: -13px; }
+        /* 휴대폰 — 세로로 쌓지 않고 PC 처럼 가로 네 칸을 작게. 길게 늘어지지 않고 '한 사이트 안' 띠도 그대로 보인다 */
+        @media (max-width: 767px) {
+          .ch-flow { margin-top: 56px; }
+          .ch-gains { margin-top: 48px; }
+          .ch-node { width: 46px; height: 46px; border-radius: 14px; margin-bottom: 4px; }
+          .ch-node svg { width: 20px; height: 20px; }
+          .ch-steps li { gap: 3px; padding: 0 2px; }
+          .ch-steps strong { font-size: .86rem; }
+          .ch-steps small { font-size: .7rem; line-height: 1.4; word-break: keep-all; }
+          .ch-steps li:not(:last-child)::after { top: 23px; left: calc(50% + 28px); width: calc(100% - 56px); }
+          .ch-site { top: -30px; bottom: -12px; border-radius: 18px; }
+          .ch-site span { top: -11px; font-size: .66rem; padding: 3px 9px; }
+        }
+`

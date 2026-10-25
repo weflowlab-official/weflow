@@ -56,53 +56,7 @@ export default function HomeVsBlog({ copy = HV_CLINIC }: { copy?: HomeVsBlogCopy
           웹블로그는 <span>{copy.blogIs}</span>
         </h2>
 
-        <InView className="hv-pair">
-          {/* 홈페이지 — 차례로 자리 잡고 멈춘다 */}
-          <div className="hv-card">
-            <span className="hv-label">홈페이지</span>
-            <div className="hv-win">
-              <div className="hv-bar"><i /><i /><i /><span>{copy.domain}</span></div>
-              <div className="hv-home">
-                <div className="hv-h-nav hv-step" style={{ '--d': '0.3s' } as React.CSSProperties}>
-                  <b>{copy.brand}</b><u /><u /><u />
-                </div>
-                <div className="hv-h-banner hv-step" style={{ '--d': '1.05s' } as React.CSSProperties}>
-                  <strong>{copy.banner[0]}<br />{copy.banner[1]}</strong>
-                  <em>{copy.bannerCta}</em>
-                </div>
-                <div className="hv-h-quick hv-step" style={{ '--d': '1.8s' } as React.CSSProperties}>
-                  {copy.quick.map(t => <span key={t}>{t}</span>)}
-                </div>
-              </div>
-            </div>
-            <p className="hv-cap">한 번 완성하면 <b>늘 그 자리에</b></p>
-            <Facts side="home" rows={copy.rows} />
-          </div>
-
-          {/* 웹블로그 — 새 글이 위로 하나씩 밀려 들어온다 */}
-          <div className="hv-card hv-card--blog">
-            <span className="hv-label">웹블로그</span>
-            <div className="hv-win">
-              <div className="hv-bar"><i /><i /><i /><span>{copy.domain}/blog</span></div>
-              <div className="hv-blog">
-                <div className="hv-b-head">
-                  <b>{copy.brand} 블로그</b>
-                  <span className="hv-count">글 <span className="hv-count-strip"><i>12</i><i>13</i><i>14</i><i>15</i></span>개</span>
-                </div>
-                <div className="hv-b-list">
-                  {copy.posts.map((p, i) => (
-                    <div key={p.title} className="hv-post" style={{ '--i': i } as React.CSSProperties}>
-                      <span className="hv-thumb" />
-                      <span className="hv-post-text"><small>{p.tag}</small>{p.title}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <p className="hv-cap">쓸수록 <b>늘어나는 검색 유입</b></p>
-            <Facts side="blog" rows={copy.rows} />
-          </div>
-        </InView>
+        <HomeVsBlogPair copy={copy} />
 
         {/* 둘 다 똑같이 챙기는 것 */}
         <div className="hv-both">
@@ -133,13 +87,110 @@ export default function HomeVsBlog({ copy = HV_CLINIC }: { copy?: HomeVsBlogCopy
         </InView>
       </div>
 
-      <style>{`
+      <style>{HV_PAIR_CSS + `
         .hv { background: #fff; padding: clamp(5rem, 10vw, 8rem) 20px; text-align: center; border-top: 1px solid #e9ebef; overflow: hidden; } /* 양옆 밖에서 날아오는 카드가 가로 스크롤을 만들지 않게 */
         .hv-inner { max-width: 1000px; margin: 0 auto; }
         .hv-eyebrow { margin: 0 0 16px; font-weight: 700; font-size: .85rem; letter-spacing: .22em; color: #1f63d6; }
         .hv-title { margin: 0; font-size: clamp(1.6rem, 3.6vw, 2.4rem); line-height: 1.38; font-weight: 800; letter-spacing: -0.035em; color: #111418; }
         .hv-title span { color: #1f63d6; }
 
+        .hv-both { margin: 56px auto 0; } /* 위 카드 두 장 · 표와 같은 폭 */
+        .hv-both-head { margin: 0 0 20px; font-size: clamp(1.1rem, 1.9vw, 1.22rem); font-weight: 800; letter-spacing: -0.02em; color: #111418; } /* 아래 '둘이 함께면' 맺음 문장(최대 1.4rem)보다는 작게 */
+        .hv-both ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media (min-width: 900px) { .hv-both ul { grid-template-columns: repeat(4, 1fr); gap: 14px; } }
+        /* 휴대폰 — 옆으로 넘기는 줄. 카드 폭을 화면의 62%로 둬 다음 카드가 절반쯤 보이게 하고, 스크롤 막대는 숨긴다.
+           화면 양끝까지 붙여 넘기고, 멈출 때는 카드 왼쪽이 본문 여백(20px)에 맞는다 */
+        @media (max-width: 767px) {
+          .hv-both ul { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 62%; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px; margin: 0 -20px; padding: 6px 20px 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+          .hv-both ul::-webkit-scrollbar { display: none; }
+          .hv-both li { scroll-snap-align: start; }
+        }
+        .hv-mo { display: inline; }
+        @media (min-width: 768px) { .hv-mo { display: none; } }
+        /* 위에서부터 쌓는다 — 설명이 두 줄인 칸이 있어도 네 칸의 아이콘·제목·설명 첫 줄 높이가 같게 */
+        .hv-both li { display: grid; justify-items: center; align-content: start; gap: 8px; padding: 34px 14px; min-height: 180px; border-radius: 18px; background: #f5f9ff; border: 1px solid #e3ecfb; }
+        /* 마우스를 올리면 — 카드가 떠오르며 흰 바탕 · 파란 테두리 · 그림자, 아이콘은 통 튀며 살짝 기운다 */
+        .hv-both li { transition: transform .3s cubic-bezier(.16,1,.3,1), background .25s ease, border-color .25s ease, box-shadow .3s ease; }
+        .hv-both li:hover { transform: translateY(-6px); background: #fff; border-color: #1f63d6; box-shadow: 0 18px 40px rgba(31,99,214,.14); }
+        .hv-both li:hover .hv-both-icon { animation: hvIconPop .5s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes hvIconPop { 0% { transform: none; } 45% { transform: translateY(-6px) scale(1.12) rotate(-8deg); } 100% { transform: none; } }
+        @media (prefers-reduced-motion: reduce) { .hv-both li { transition: none; } .hv-both li:hover { transform: none; } .hv-both li:hover .hv-both-icon { animation: none; } }
+        .hv-both-icon { width: 42px; height: 42px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: #1f63d6; color: #fff; margin-bottom: 4px; }
+        .hv-both strong { font-size: .95rem; font-weight: 800; letter-spacing: -0.02em; color: #111418; word-break: keep-all; }
+        .hv-both small { font-size: .82rem; line-height: 1.5; color: #6b7380; word-break: keep-all; }
+        /* 설명이 긴 칸(보안) — 글씨를 한 단계 줄여 다른 칸처럼 한 줄로. 아주 좁은 휴대폰에서는 줄이 바뀌어도 된다 */
+        /* 줄 높이는 다른 칸 설명(.82rem × 1.5)과 같게 — 글씨만 작아지면 줄이 낮아져 위로 붙어 보인다 */
+        .hv-both small.is-tight { font-size: .74rem; line-height: calc(.82rem * 1.5); letter-spacing: -0.02em; white-space: nowrap; position: relative; top: 0.8px; } /* 눈으로 맞춰 0.8px 내림 */
+        @media (max-width: 639px) { .hv-both small.is-tight { white-space: normal; } }
+        .hv-together { margin: 52px 0 0; font-size: clamp(1.15rem, 2.2vw, 1.4rem); font-weight: 700; letter-spacing: -0.02em; color: #3a414c; word-break: keep-all; }
+        .hv-ch--b { color: #1f63d6; font-weight: 800; }
+        /* 한 글자씩 — 글자마다 0.045초씩 늦게 나타난다 */
+        .hv-ch { opacity: 0; transition: opacity .05s linear; transition-delay: calc(var(--i) * .045s); }
+        .hv-together-wrap.is-in .hv-ch { opacity: 1; }
+        @media (prefers-reduced-motion: reduce) { .hv-ch { opacity: 1; transition: none; } }
+
+      `}</style>
+    </section>
+  )
+}
+
+/**
+ * 카드 두 장(홈페이지 창 · 웹블로그 창 + 비교 세 줄)만 — 웹블로그(/blog) 메인 '웹블로그란?' 섹션도 이것만 가져다 쓴다.
+ * 모양은 HV_PAIR_CSS (쓰는 쪽이 <style> 에 넣는다).
+ */
+export function HomeVsBlogPair({ copy }: { copy: HomeVsBlogCopy }) {
+  return (
+    <InView className="hv-pair">
+      {/* 홈페이지 — 차례로 자리 잡고 멈춘다 */}
+      <div className="hv-card">
+        <span className="hv-label">홈페이지</span>
+        <div className="hv-win">
+          <div className="hv-bar"><i /><i /><i /><span>{copy.domain}</span></div>
+          <div className="hv-home">
+            <div className="hv-h-nav hv-step" style={{ '--d': '0.3s' } as React.CSSProperties}>
+              <b>{copy.brand}</b><u /><u /><u />
+            </div>
+            <div className="hv-h-banner hv-step" style={{ '--d': '1.05s' } as React.CSSProperties}>
+              <strong>{copy.banner[0]}<br />{copy.banner[1]}</strong>
+              <em>{copy.bannerCta}</em>
+            </div>
+            <div className="hv-h-quick hv-step" style={{ '--d': '1.8s' } as React.CSSProperties}>
+              {copy.quick.map(t => <span key={t}>{t}</span>)}
+            </div>
+          </div>
+        </div>
+        <p className="hv-cap">한 번 완성하면 <b>늘 그 자리에</b></p>
+        <Facts side="home" rows={copy.rows} />
+      </div>
+
+      {/* 웹블로그 — 새 글이 위로 하나씩 밀려 들어온다 */}
+      <div className="hv-card hv-card--blog">
+        <span className="hv-label">웹블로그</span>
+        <div className="hv-win">
+          <div className="hv-bar"><i /><i /><i /><span>{copy.domain}/blog</span></div>
+          <div className="hv-blog">
+            <div className="hv-b-head">
+              <b>{copy.brand} 블로그</b>
+              <span className="hv-count">글 <span className="hv-count-strip"><i>12</i><i>13</i><i>14</i><i>15</i></span>개</span>
+            </div>
+            <div className="hv-b-list">
+              {copy.posts.map((p, i) => (
+                <div key={p.title} className="hv-post" style={{ '--i': i } as React.CSSProperties}>
+                  <span className="hv-thumb" />
+                  <span className="hv-post-text"><small>{p.tag}</small>{p.title}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <p className="hv-cap">쓸수록 <b>늘어나는 검색 유입</b></p>
+        <Facts side="blog" rows={copy.rows} />
+      </div>
+    </InView>
+  )
+}
+
+export const HV_PAIR_CSS = `
         /* 창 두 개 */
         /* 맞붙기 — 홈페이지는 왼쪽 밖, 웹블로그는 오른쪽 밖에서 날아와 가운데서 부딪히고 살짝 튕겼다 제자리.
            카드 안 움직임은 부딪힌 뒤(--hit)에 시작해, 양쪽 모두 부딪힌 뒤 2.3초에 함께 끝난다
@@ -203,41 +254,6 @@ export default function HomeVsBlog({ copy = HV_CLINIC }: { copy?: HomeVsBlogCopy
         .hv-facts dt { font-size: .82rem; font-weight: 700; color: #8a919c; }
         .hv-facts dd { margin: 0; font-size: .95rem; font-weight: 600; line-height: 1.5; color: #111418; word-break: keep-all; }
         .hv-card--blog .hv-facts dt { color: #1f63d6; }
-        .hv-both { margin: 56px auto 0; } /* 위 카드 두 장 · 표와 같은 폭 */
-        .hv-both-head { margin: 0 0 20px; font-size: clamp(1.1rem, 1.9vw, 1.22rem); font-weight: 800; letter-spacing: -0.02em; color: #111418; } /* 아래 '둘이 함께면' 맺음 문장(최대 1.4rem)보다는 작게 */
-        .hv-both ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        @media (min-width: 900px) { .hv-both ul { grid-template-columns: repeat(4, 1fr); gap: 14px; } }
-        /* 휴대폰 — 옆으로 넘기는 줄. 카드 폭을 화면의 62%로 둬 다음 카드가 절반쯤 보이게 하고, 스크롤 막대는 숨긴다.
-           화면 양끝까지 붙여 넘기고, 멈출 때는 카드 왼쪽이 본문 여백(20px)에 맞는다 */
-        @media (max-width: 767px) {
-          .hv-both ul { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 62%; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px; margin: 0 -20px; padding: 6px 20px 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-          .hv-both ul::-webkit-scrollbar { display: none; }
-          .hv-both li { scroll-snap-align: start; }
-        }
-        .hv-mo { display: inline; }
-        @media (min-width: 768px) { .hv-mo { display: none; } }
-        /* 위에서부터 쌓는다 — 설명이 두 줄인 칸이 있어도 네 칸의 아이콘·제목·설명 첫 줄 높이가 같게 */
-        .hv-both li { display: grid; justify-items: center; align-content: start; gap: 8px; padding: 34px 14px; min-height: 180px; border-radius: 18px; background: #f5f9ff; border: 1px solid #e3ecfb; }
-        /* 마우스를 올리면 — 카드가 떠오르며 흰 바탕 · 파란 테두리 · 그림자, 아이콘은 통 튀며 살짝 기운다 */
-        .hv-both li { transition: transform .3s cubic-bezier(.16,1,.3,1), background .25s ease, border-color .25s ease, box-shadow .3s ease; }
-        .hv-both li:hover { transform: translateY(-6px); background: #fff; border-color: #1f63d6; box-shadow: 0 18px 40px rgba(31,99,214,.14); }
-        .hv-both li:hover .hv-both-icon { animation: hvIconPop .5s cubic-bezier(.34,1.56,.64,1); }
-        @keyframes hvIconPop { 0% { transform: none; } 45% { transform: translateY(-6px) scale(1.12) rotate(-8deg); } 100% { transform: none; } }
-        @media (prefers-reduced-motion: reduce) { .hv-both li { transition: none; } .hv-both li:hover { transform: none; } .hv-both li:hover .hv-both-icon { animation: none; } }
-        .hv-both-icon { width: 42px; height: 42px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: #1f63d6; color: #fff; margin-bottom: 4px; }
-        .hv-both strong { font-size: .95rem; font-weight: 800; letter-spacing: -0.02em; color: #111418; word-break: keep-all; }
-        .hv-both small { font-size: .82rem; line-height: 1.5; color: #6b7380; word-break: keep-all; }
-        /* 설명이 긴 칸(보안) — 글씨를 한 단계 줄여 다른 칸처럼 한 줄로. 아주 좁은 휴대폰에서는 줄이 바뀌어도 된다 */
-        /* 줄 높이는 다른 칸 설명(.82rem × 1.5)과 같게 — 글씨만 작아지면 줄이 낮아져 위로 붙어 보인다 */
-        .hv-both small.is-tight { font-size: .74rem; line-height: calc(.82rem * 1.5); letter-spacing: -0.02em; white-space: nowrap; position: relative; top: 0.8px; } /* 눈으로 맞춰 0.8px 내림 */
-        @media (max-width: 639px) { .hv-both small.is-tight { white-space: normal; } }
-        .hv-together { margin: 52px 0 0; font-size: clamp(1.15rem, 2.2vw, 1.4rem); font-weight: 700; letter-spacing: -0.02em; color: #3a414c; word-break: keep-all; }
-        .hv-ch--b { color: #1f63d6; font-weight: 800; }
-        /* 한 글자씩 — 글자마다 0.045초씩 늦게 나타난다 */
-        .hv-ch { opacity: 0; transition: opacity .05s linear; transition-delay: calc(var(--i) * .045s); }
-        .hv-together-wrap.is-in .hv-ch { opacity: 1; }
-        @media (prefers-reduced-motion: reduce) { .hv-ch { opacity: 1; transition: none; } }
-
         @media (prefers-reduced-motion: reduce) {
           .hv-step, .hv-post { transition: none; }
           .hv-step { opacity: 1; transform: none; }
@@ -245,7 +261,4 @@ export default function HomeVsBlog({ copy = HV_CLINIC }: { copy?: HomeVsBlogCopy
           .hv-post { max-height: 40px; opacity: 1; }
           .hv-count-strip i { animation: none !important; transform: translateY(-300%); }
         }
-      `}</style>
-    </section>
-  )
-}
+`

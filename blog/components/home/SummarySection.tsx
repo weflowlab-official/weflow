@@ -1,7 +1,10 @@
 // 메인 페이지 "웹블로그란?". 흰 배경: 아이브로우 + 제목 + 요약 문단(관리자 '메인 페이지 → 소개·요약'), 그 아래 홈페이지 vs 웹블로그 비교.
-// 비교는 weflowlab.kr/clinic-blog 의 '홈페이지와 웹블로그, 뭐가 다른가요?' 를 업종 공통 문구로 옮긴 것.
+// 비교는 메인 사이트 /webblog 의 HOMEPAGE vs WEB BLOG 두 창(app/(site)/clinic-blog/HomeVsBlog 의 HomeVsBlogPair)을 같이 쓴다.
 // 글자로 정리된 소개라 AI 검색·검색엔진이 요약을 인용하기 쉽다 (AEO 목적도 겸함).
-import { IconBrowser, IconLayoutDashboard, IconLink, IconNotebook, IconPalette, IconPlus, type Icon as TablerIcon } from "@tabler/icons-react";
+import { IconLayoutDashboard, IconLink, IconPalette, type Icon as TablerIcon } from "@tabler/icons-react";
+import { HomeVsBlogPair, HV_PAIR_CSS } from "@/app/(site)/clinic-blog/HomeVsBlog";
+import { HomepageFlow, CH_FLOW_CSS } from "@/app/(site)/clinic-blog/WithHomepage";
+import { HV_GENERAL, WH_GENERAL } from "@/app/(site)/clinic-blog/homeCopy";
 import { Reveal } from "@/blog/components/ui/Reveal";
 import { TypingText } from "@/blog/components/ui/TypingText";
 import { MobileBreaks } from "@/blog/components/ui/MobileBreaks";
@@ -20,21 +23,14 @@ const TOGETHER: { Icon: TablerIcon; title: string; text: string }[] = [
   { Icon: IconLayoutDashboard, title: "관리 화면은 하나", text: "글쓰기, 홈페이지 수정, 문의 확인을\n관리자 화면 한곳에서 합니다." },
 ];
 
-// 비교 행: [항목, 홈페이지, 웹블로그]
-const ROWS: [string, string, string][] = [
-  ["주소", "우리회사.com", "우리회사.com/blog"],
-  ["역할", "회사를 소개하고 믿음을 줍니다", "검색에서 새 고객을 데려옵니다"],
-  ["담는 내용", "회사 소개 · 서비스 · 오시는 길", "고객이 묻는 질문에 답하는 글"],
-  ["바뀌는 주기", "한 번 만들고 필요할 때 고칩니다", "글이 꾸준히 쌓입니다"],
-];
-
 export async function SummarySection({ title, text }: Props) {
   const clinic = await getClinic();
   const summaryTitle = title || defaults.SUMMARY_TITLE;
   const summaryText = text || defaults.summaryText(clinic);
 
   return (
-    <section aria-labelledby="home-summary-title" className="py-16 md:py-24">
+    // overflow-hidden: 양옆 밖에서 날아오는 두 창이 가로 스크롤을 만들지 않게
+    <section aria-labelledby="home-summary-title" className="overflow-hidden py-16 md:py-24">
       <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-site-4xl">
         {/* 소개: 가운데 정렬 (아이브로우 → 제목 → 문단) */}
         <div className="mx-auto max-w-3xl text-center">
@@ -50,18 +46,11 @@ export async function SummarySection({ title, text }: Props) {
           </Reveal>
         </div>
 
-        {/* 홈페이지 vs 웹블로그: 두 카드 + 가운데 "+" */}
+        {/* 홈페이지 vs 웹블로그: 양옆에서 날아와 맞붙는 두 창 + 비교 세 줄 (메인 사이트 /webblog 의 HOMEPAGE vs WEB BLOG 그대로) */}
+        <div className="mx-auto max-w-[1000px]">
+          <HomeVsBlogPair copy={HV_GENERAL} />
+        </div>
         <Reveal variant="fade-up" delay={0.2}>
-          {/* 카드 한 장 폭을 보안 섹션 비교 박스(합쳐 1000px → 한 장 492px)와 맞춘다: 492×2 + 가운데 "+" 40 + 간격 16×2 = 1056 */}
-          <div className="mx-auto mt-10 grid max-w-[1056px] items-stretch gap-3 md:mt-14 md:grid-cols-[1fr_auto_1fr] md:gap-4">
-            <CompareCard label="홈페이지" sub="회사의 얼굴" Icon={IconBrowser} col={1} />
-            <div className="flex items-center justify-center text-neutral-400" aria-hidden>
-              <span className="flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white">
-                <IconPlus className="size-5" />
-              </span>
-            </div>
-            <CompareCard label="웹블로그" sub="고객을 데려오는 길" Icon={IconNotebook} col={2} highlight />
-          </div>
           {/* 섹션의 결론 한 줄 — 크게, 핵심 구절은 형광펜처럼 밑에 색을 깐다 */}
           <p className="mt-8 text-center text-lg font-bold leading-snug text-foreground md:mt-10 md:text-2xl">
             둘이 함께면,
@@ -69,6 +58,11 @@ export async function SummarySection({ title, text }: Props) {
             <span className="bg-[linear-gradient(transparent_58%,var(--brand-primary-20)_58%)] px-0.5 text-primary">검색에서 상담까지 한 사이트 안에서</span> 이어집니다.
           </p>
         </Reveal>
+
+        {/* 손님이 지나가는 길: 검색 → 블로그 글 → 홈페이지 → 상담 (메인 사이트 /webblog 의 WITH HOMEPAGE 흐름 그림) */}
+        <div className="summary-flow">
+          <HomepageFlow copy={WH_GENERAL} />
+        </div>
 
         {/* 함께하면 좋은 점 3가지 (weflowlab.kr/clinic-blog '홈페이지와 함께하면'을 업종 공통으로) */}
         <div className="mx-auto mt-8 grid max-w-[1056px] gap-3 md:mt-10 md:grid-cols-3 md:gap-4">
@@ -99,30 +93,13 @@ export async function SummarySection({ title, text }: Props) {
           </dl>
         )}
       </div>
+      {/* 두 창의 모양 — 메인 사이트와 같은 값 */}
+      <style>{HV_PAIR_CSS + CH_FLOW_CSS + `
+        /* 흐름 그림 아래 '함께하면 좋은 점' 카드와의 간격은 카드 쪽 mt 가 맡는다 */
+        .summary-flow .ch-flow { margin-top: 88px; }
+        @media (max-width: 767px) { .summary-flow .ch-flow { margin-top: 64px; } }
+        .summary-flow { margin-bottom: 40px; }
+      `}</style>
     </section>
-  );
-}
-
-function CompareCard({ label, sub, Icon, col, highlight = false }: { label: string; sub: string; Icon: typeof IconBrowser; col: 1 | 2; highlight?: boolean }) {
-  return (
-    <div className={`rounded-[16px] border p-5 md:p-6 ${highlight ? "border-[var(--brand-primary-20)] bg-[var(--brand-primary-5)]" : "border-neutral-200 bg-white"}`}>
-      <div className="flex items-center gap-3">
-        <span className={`flex size-11 items-center justify-center rounded-[12px] ${highlight ? "bg-primary text-white" : "bg-neutral-100 text-neutral-700"}`}>
-          <Icon className="size-6" stroke={1.75} />
-        </span>
-        <span>
-          <strong className="block text-lg font-bold text-foreground md:text-xl">{label}</strong>
-          <span className="block text-sm text-neutral-500">{sub}</span>
-        </span>
-      </div>
-      <dl className="mt-5 space-y-3">
-        {ROWS.map((r) => (
-          <div key={r[0]} className="flex gap-3 border-t border-neutral-200/70 pt-3 text-sm md:text-[15px]">
-            <dt className="w-20 shrink-0 text-neutral-500">{r[0]}</dt>
-            <dd className={`font-medium ${highlight ? "text-foreground" : "text-neutral-700"}`}>{r[col]}</dd>
-          </div>
-        ))}
-      </dl>
-    </div>
   );
 }

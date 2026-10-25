@@ -81,14 +81,16 @@ export function SiteHeader() {
             <div className="flex min-w-0 items-center gap-2 sm:gap-3 lg:gap-6">
               <Link href="/blog" aria-label="웹블로그 홈으로 이동" className="flex shrink-0 items-center">
                 {/* 남색 띠용 흰 심볼 + 글자 */}
-                <BlogLogo tone="light" />
+                {/* 휴대폰은 "웹블로그" 글자를 빼고 그 자리에 홈페이지 바로가기를 둔다 */}
+                <BlogLogo tone="light" subMobile={false} />
               </Link>
               <a
                 {...homepageLinkProps(clinic.homepageUrl)}
                 aria-label="홈페이지 바로가기"
-                className="hidden min-w-0 items-center gap-1.5 rounded-full border border-white/40 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-white hover:text-primary sm:flex lg:gap-2 lg:px-5 lg:py-2 lg:text-sm xl:px-6 xl:py-2.5 xl:text-base xl:tracking-[-0.18px]"
+                className="flex min-w-0 shrink-0 items-center gap-1 rounded-full border border-white/40 bg-white/10 px-2.5 py-1 text-xs font-semibold text-white transition-colors hover:bg-white hover:text-primary sm:gap-1.5 sm:px-3 sm:py-1.5 lg:gap-2 lg:px-5 lg:py-2 lg:text-sm xl:px-6 xl:py-2.5 xl:text-base xl:tracking-[-0.18px]"
               >
-                <span className="min-w-0 truncate">홈페이지 바로가기</span>
+                {/* 휴대폰은 짧게 "홈페이지" */}
+                <span className="min-w-0 truncate"><span className="sm:hidden">홈페이지</span><span className="hidden sm:inline">홈페이지 바로가기</span></span>
                 <IconArrowRight className="size-2.5 shrink-0 lg:size-[15px]" stroke={2.5} />
               </a>
             </div>
