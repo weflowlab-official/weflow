@@ -94,8 +94,8 @@ export default function ClinicBlogPage() {
           {/* 글 하나로 SEO·AEO·GEO 까지 — 웹블로그 메인(/blog)의 병의원 섹션과 같은 메시지 */}
           <h1 className="cb-h1">
             글 하나 올렸을 뿐인데,<br />
-            <span className="cb-mark">SEO·AEO·GEO</span>까지<br />
-            한 번에 챙겨진다면?
+            AI·네이버·구글까지<br />
+            <span className="cb-mark">SEO·AEO·GEO</span>로<br className="cb-mo" /> 챙겨진다면?
           </h1>
           {/* 바로 문의하려는 분은 상담으로, 직접 보고 싶은 분은 실제 웹블로그(/blog, 새 탭)로 */}
           <div className="cb-hero-btns">
@@ -234,7 +234,7 @@ export default function ClinicBlogPage() {
         /* 세 줄 제목 — 한 줄이 넓은 화면 양옆 말풍선(HeroWorries)에 닿지 않게, 휴대폰에서는 줄이 다시 꺾이지 않게 크기를 잡았다 */
         .cb-h1 { font-size: clamp(1.8rem, 5.6vw, 4rem); line-height: 1.22; font-weight: 800; letter-spacing: -0.04em; margin: 0 0 24px; }
         /* 휴대폰 — 화면 폭에 맞춰 더 크게. 가장 긴 줄('글 하나 올렸을 뿐인데,')이 360px 폰에서도 한 줄에 들어가는 만큼 */
-        @media (max-width: 767px) { .cb-h1 { font-size: clamp(1.8rem, 9vw, 2.3rem); } }
+        @media (max-width: 767px) { .cb-h1 { font-size: clamp(1.7rem, 8.2vw, 2.2rem); } } /* 휴대폰은 네 줄 — 가장 긴 줄('글 하나 올렸을 뿐인데,')이 360px 폰에서도 한 줄에 */
         /* 두 버튼을 같은 폭으로 — 같은 크기 두 칸 격자라, 글자가 긴 왼쪽 버튼 폭에 오른쪽이 맞춰진다 */
         .cb-hero-btns { display: inline-grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
         .cb-hero-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 15px 28px; border-radius: 999px; border: 1.5px solid #d5d9df; background: rgba(255,255,255,.85); color: var(--cb-text); font-weight: 700; font-size: 1.05rem; text-decoration: none; transition: border-color .15s, background .15s; }

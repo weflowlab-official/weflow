@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { ArrowRight, Menu, X, ClipboardList, Phone } from 'lucide-react'
+import { ArrowRight, Menu, X, ClipboardList, Phone, ExternalLink } from 'lucide-react'
 
 /**
  * 병의원 블로그 페이지 상단 띠 — 브랜드와 상담 버튼만 있고, 메인 사이트로 가는 링크는 두지 않는다.
@@ -120,6 +120,10 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
           {MENU.map(m => (
             <a key={m.href} href={base + m.href} onClick={close} tabIndex={open ? 0 : -1}>{m.label}</a>
           ))}
+          {/* 실제 웹블로그 — 메뉴 줄처럼, 새 탭으로 */}
+          <a href="/blog" target="_blank" rel="noopener noreferrer" className="cb-drawer-ext" onClick={close} tabIndex={open ? 0 : -1}>
+            웹블로그 바로가기 <ExternalLink size={17} />
+          </a>
         </nav>
         <div className="cb-drawer-foot">
           <a href={`tel:${TEL}`} className="cb-drawer-btn cb-drawer-btn--tel" tabIndex={open ? 0 : -1}>
@@ -190,6 +194,7 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
         .cb-drawer-nav { flex: 1; display: flex; flex-direction: column; padding: 16px 0; overflow-y: auto; }
         .cb-drawer-nav a { padding: 18px 28px; font-size: 1.15rem; font-weight: 600; color: #111418; text-decoration: none; }
         .cb-drawer-nav a:active { background: #f7f8fa; }
+        .cb-drawer-nav .cb-drawer-ext { display: flex; align-items: center; gap: 6px; color: #1f63d6; }
         .cb-drawer-foot { display: grid; gap: 10px; padding: 18px 20px max(22px, env(safe-area-inset-bottom)); border-top: 1px solid #e9ebef; }
         .cb-drawer-btn { display: flex; align-items: center; justify-content: center; gap: 8px; height: 56px; border-radius: 16px; border: 1.5px solid #d5d9df; color: #111418; font-size: 1.05rem; font-weight: 700; text-decoration: none; }
         .cb-drawer-btn--fill { background: #1f63d6; border-color: #1f63d6; color: #fff; }
