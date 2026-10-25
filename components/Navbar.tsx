@@ -3,9 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Menu, Phone, X, CalendarCheck } from "lucide-react";
+import { ChevronDown, Menu, Phone, X, CalendarCheck, ArrowUpRight } from "lucide-react";
 
-type NavLink = { href: string; label: string; gold?: boolean; isNew?: boolean };
+type NavLink = { href: string; label: string; gold?: boolean; isNew?: boolean; external?: boolean };
 type NavGroup = { label: string; children: NavLink[] };
 
 // 상단 메뉴 목록 (데스크탑 가로 메뉴 / 모바일 드로어가 같이 쓴다).
@@ -30,8 +30,13 @@ const NAV_ITEMS: (NavLink | NavGroup)[] = [
     ],
   },
   // 웹블로그 소개 — 업종 공통 웹블로그 설명 탭 (병의원 전용 /clinic-blog 는 광고 랜딩이라 메뉴에 두지 않는다)
-  // isNew: 메뉴 옆 작은 NEW 표시 — 새 탭을 알리는 동안만 둔다 (2026-10-24 추가, 한두 달 뒤 떼기)
-  { href: "/webblog", label: "웹블로그란?", isNew: true },
+  // isNew: 메뉴 글자 위 작은 NEW 표시 — 새 메뉴를 알리는 동안만 둔다 (2026-10-25 추가, 한두 달 뒤 떼기)
+  // 실제 웹블로그(/blog)와 병의원 웹블로그 안내(/clinic-blog)로 바로 간다
+  // external: 새 창으로 열고 글자 옆에 새 창 아이콘을 단다
+  { href: "/blog", label: "웹블로그", isNew: true, external: true },
+  { href: "/clinic-blog", label: "병의원 웹블로그", isNew: true, external: true },
+  // '웹블로그란?' 탭(/webblog)은 메뉴에서만 내렸다 — 페이지 코드는 남아 있다 (2026-10-25)
+  // { href: "/webblog", label: "웹블로그란?", isNew: true },
   // 예약 신청(/booking)은 메뉴에서 내리고 그 자리에 사이트 점검을 뒀다 — 페이지 자체는 남아 있다
   // gold: 다른 메뉴보다 눈에 띄게 굵은 금색으로 그린다 (PC·모바일 공통)
   { href: "/check", label: "사이트 점검", gold: true },
@@ -166,6 +171,7 @@ export default function Navbar() {
     <Link
       key={l.href}
       href={l.href}
+      {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       onClick={(e) => {
         close();
         handleClick(l.href)(e);
@@ -186,7 +192,12 @@ export default function Navbar() {
         transition: "background 0.15s",
       }}
     >
-      {l.label}
+      {/* 글자와 새 창 아이콘을 한 덩어리로 — 아이콘만 다음 줄로 떨어지지 않게 */}
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 3, whiteSpace: "nowrap" }}>
+        {l.label}
+        {/* 한글 글자는 상자 안에서 위쪽에 놓여 보여, 아이콘을 2.5px 올려 눈높이를 맞춘다 (크기는 아래 견적 버튼의 달력 아이콘과 같은 16px) */}
+        {l.external && <ArrowUpRight size={16} strokeWidth={2.2} style={{ flex: "none", opacity: 0.6, transform: "translateY(-2.5px)" }} aria-label="새 창" />}
+      </span>
       {/* 드로어 줄의 글자는 왼쪽 테두리 3px + 여백 뒤에서 시작한다 */}
       {l.isNew && <NewBadge left={sub ? "2.4rem" : "1.5rem"} top="0.4rem" />}
     </Link>
@@ -276,6 +287,7 @@ export default function Navbar() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                     onClick={handleClick(item.href)}
                     // 드롭다운 없는 메뉴도 마우스를 올리면 묶음 메뉴처럼 진해진다 (.nav-link, 아래 <style>)
                     className={`headline nav-link${item.gold ? " nav-link--gold" : ""}`}
@@ -295,7 +307,10 @@ export default function Navbar() {
                       transition: "color 0.15s",
                     }}
                   >
-                    {item.label}
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 2, whiteSpace: "nowrap" }}>
+                      {item.label}
+                      {item.external && <ArrowUpRight size={14} strokeWidth={2.2} style={{ flex: "none", opacity: 0.6 }} aria-label="새 창" />}
+                    </span>
                     {item.isNew && <NewBadge left="var(--nav-pad)" top="0.05rem" />}
                   </Link>
                 );
@@ -655,11 +670,11 @@ export default function Navbar() {
         @media (max-width: 768px) { .show-mobile-flex { display: flex !important; } }
         /* PC 메뉴·대표 번호의 글씨, 메뉴의 좌우 여백·사이 간격 — 넓은 화면(1200px 이상)에서는 키운다.
            그보다 좁으면 번호·견적 버튼과 부딪혀서 작게 둔다 (값은 헤더 전체에서 쓰도록 .nav-header 에 건다) */
-        /* 10-24: 메뉴가 다섯 개(웹블로그란? 추가)가 되어 글씨·간격을 한 단계씩 줄였다 */
-        .nav-header { --nav-font: 0.95rem; --nav-pad: 0.55rem; --nav-gap: 0.6rem; }
+        /* 10-24: 메뉴가 다섯 개가 되어 글씨·간격을 한 단계씩 줄였다. 10-25: 여섯 개(웹블로그·병의원 웹블로그)라 간격을 한 번 더 줄였다 */
+        .nav-header { --nav-font: 0.95rem; --nav-pad: 0.45rem; --nav-gap: 0.4rem; }
         @media (min-width: 1200px) {
           /* 사이 간격 2.6rem — 아래 화살표 보정(-0.75rem × 2)으로 줄어드는 폭을 메워, 메뉴 묶음 전체 폭을 약 620px 로 유지한다 */
-          .nav-header { --nav-font: 1rem; --nav-pad: 0.9rem; --nav-gap: 1.8rem; }
+          .nav-header { --nav-font: 1rem; --nav-pad: 0.75rem; --nav-gap: 1.2rem; }
         }
         /* 로고 — 메뉴를 키운 넓은 화면에서는 로고도 같이 키워 무게를 맞춘다 */
         .nav-logo-img { width: 27px; height: 27px; }

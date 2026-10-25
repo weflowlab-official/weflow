@@ -86,8 +86,8 @@ export interface Portfolio {
  */
 // 칩 목록 — 아직 사례가 없는 업종도 포함해 보여준다 (사례는 채워지는 대로 추가)
 export const categoryOrder = [
-  '기업/비즈니스', '쇼핑몰/결제', '인테리어', '캠핑/레저', '차량/타이어', '금융/보험',
-  '의료/병원', '뷰티/미용', '학원/교육', '음식점/카페', '법률/세무', '부동산',
+  '기업/비즈니스', '인테리어', '차량/타이어', '캠핑/레저', '금융/보험', '의료/병원',
+  '쇼핑몰/결제', '뷰티/미용', '학원/교육', '음식점/카페', '법률/세무', '부동산',
   '펜션/숙박', '헬스/피트니스', '반려동물', '제조/공장', '웨딩/스튜디오', '이벤트/행사', '청소/이사',
 ]
 
@@ -154,6 +154,77 @@ export const portfolios: Portfolio[] = [
         '/images/cases/cases-atelier/cases-atelier-08.webp',
         '/images/cases/cases-atelier/cases-atelier-09.webp',
         '/images/cases/cases-atelier/cases-atelier-10.webp',
+      ],
+    },
+  },
+  {
+    slug: 'unitec',
+    name: '유니텍CCTV',
+    category: '기업/비즈니스',
+    plan: '홈페이지',
+    desc: '전국 방문 CCTV 설치·렌탈·수리 전문',
+    url: 'https://unitechcctv.co.kr/',
+    images: [
+      '/images/cases/cases-unitec/cases-unitec-01.webp',
+      '/images/cases/cases-unitec/cases-unitec-02.webp',
+      '/images/cases/cases-unitec/cases-unitec-03.webp',
+      '/images/cases/cases-unitec/cases-unitec-04.webp',
+      '/images/cases/cases-unitec/cases-unitec-05.webp',
+      '/images/cases/cases-unitec/cases-unitec-06.webp',
+      '/images/cases/cases-unitec/cases-unitec-07.webp',
+      '/images/cases/cases-unitec/cases-unitec-08.webp',
+      '/images/cases/cases-unitec/cases-unitec-09.webp',
+      '/images/cases/cases-unitec/cases-unitec-10.webp',
+      '/images/cases/cases-unitec/cases-unitec-11.webp',
+      '/images/cases/cases-unitec/cases-unitec-12.webp',
+      '/images/cases/cases-unitec/cases-unitec-13.webp',
+      '/images/cases/cases-unitec/cases-unitec-14.webp',
+      '/images/cases/cases-unitec/cases-unitec-15.webp',
+      '/images/cases/cases-unitec/cases-unitec-16.webp',
+      '/images/cases/cases-unitec/cases-unitec-17.webp',
+    ],
+    detail: {
+      summary: '문제 제기에서 해결, 문의까지 한 흐름으로 짠 CCTV 설치 홈페이지입니다.',
+      duration: '1주',
+      poster: { from: '#0b1f3a', to: '#14606b', ink: '#f2f7f8', mark: 'CCTV' },
+      quotes: [
+        '한눈에 직관적으로 보였으면 좋겠어요',
+        '오래된 느낌의 홈페이지는 피하고 싶어요',
+        '처음부터 끝까지 기획에 가장 신경 써 주세요',
+        '문의하고 싶어지는 문구와 구성을 원해요',
+        '신뢰감 있게, 설치하고 싶어지도록 이끌어 주세요',
+      ],
+      background:
+        '대표님과 이야기를 가장 많이 나눈 프로젝트입니다. 요청은 처음부터 끝까지 "기획"이었습니다. 문제를 먼저 보여 주고, 해결을 보여 주고, 문의로 잇는 흐름입니다.\nCCTV는 필요하다고 느낀 순간 검색합니다. 그래서 첫 화면은 손님이 걱정하는 장면으로 열고, 믿을 근거와 내 공간의 비용을 차례로 보여 준 뒤 상담으로 이어지게 짰습니다.',
+      points: [
+        {
+          title: '문제로 시작하는 첫 화면',
+          body:
+            '"자리 비운 사이 생기는 일, 이제 CCTV로 지키세요." 장비 설명보다 손님이 걱정하는 장면을 먼저 꺼냈습니다. 바로 아래에 내 공간 견적 계산과 상담 신청 버튼을 두었습니다.',
+        },
+        {
+          title: '숫자와 이름으로 쌓는 신뢰',
+          body:
+            '누적 시공·수리 건수, 지금 들어오는 상담 신청 현황, 함께한 기업 로고, 고객이 보낸 카카오톡 후기를 차례로 보여 줍니다. "믿어도 될까?"에 말 대신 근거로 답합니다.',
+        },
+        {
+          title: '내 공간 견적을 바로',
+          body:
+            '공간·평수·설치 환경을 고르면 추천 대수와 렌탈·설치 견적이 나옵니다. 타사 렌탈과 월 요금을 나란히 비교해, 상담 전에 이미 마음이 기울게 했습니다.',
+        },
+        {
+          title: '어느 화면에서든 상담으로',
+          body:
+            '전화·카카오톡·견적 버튼을 화면 오른쪽에 늘 띄웠습니다. 옛날 홈페이지처럼 메뉴를 뒤지지 않아도, 읽다가 마음이 생긴 순간 바로 문의할 수 있습니다.',
+        },
+      ],
+      features: ['CCTV 견적 계산기', '렌탈 월 요금 비교', '실시간 상담 신청 현황', '업종별 시공 사례', '고객 후기', '자주 묻는 질문', '상담 문의 접수', '전화·카카오톡 상담 연결'],
+      results: [
+        '/images/cases/cases-unitec/cases-unitec-01.webp',
+        '/images/cases/cases-unitec/cases-unitec-02.webp',
+        '/images/cases/cases-unitec/cases-unitec-06.webp',
+        '/images/cases/cases-unitec/cases-unitec-09.webp',
+        '/images/cases/cases-unitec/cases-unitec-13.webp',
       ],
     },
   },
@@ -477,6 +548,62 @@ export const portfolios: Portfolio[] = [
         '/images/cases/cases-hrentcar/cases-hrentcar-05.webp',
         '/images/cases/cases-hrentcar/cases-hrentcar-06.webp',
         '/images/cases/cases-hrentcar/cases-hrentcar-07.webp',
+      ],
+    },
+  },
+  {
+    slug: 'solasido',
+    name: '솔라시도',
+    category: '기업/비즈니스',
+    plan: '홈페이지',
+    desc: '해남에서 행사 기획·보컬·악기 지도를 함께하는 엔터테인먼트',
+    url: 'https://sollasido.vercel.app/',
+    images: [
+      '/images/cases/cases-solasido/cases-solasido-01.webp',
+      '/images/cases/cases-solasido/cases-solasido-02.webp',
+      '/images/cases/cases-solasido/cases-solasido-03.webp',
+      '/images/cases/cases-solasido/cases-solasido-04.webp',
+      '/images/cases/cases-solasido/cases-solasido-05.webp',
+      '/images/cases/cases-solasido/cases-solasido-06.webp',
+      '/images/cases/cases-solasido/cases-solasido-07.webp',
+      '/images/cases/cases-solasido/cases-solasido-08.webp',
+    ],
+    detail: {
+      summary: '무대의 분위기를 화면으로 옮긴, 고급스러운 엔터테인먼트 홈페이지입니다.',
+      duration: '1주',
+      poster: { from: '#120f14', to: '#3b2a1c', ink: '#f6efe6', mark: 'STAGE' },
+      quotes: ['고급스러운 분위기였으면 해요', '행사 소식은 팝업으로 알리고 싶어요', '스크롤을 내리는 재미가 있었으면 좋겠어요'],
+      background:
+        '행사를 기획하고, 밴드로 직접 무대에 서고, 보컬과 악기를 가르치는 팀입니다. 요청은 짧았지만 분명했습니다. 고급스러울 것, 스크롤을 내리는 맛이 있을 것, 그리고 행사 소식을 팝업으로 알릴 것.',
+      points: [
+        {
+          title: '무대 조명 같은 첫 화면',
+          body:
+            '어두운 바탕에 주황·청록 빛이 번지는 첫 화면을 만들고, 제목 사이에 공연 사진 조각을 끼웠습니다. 들어오자마자 공연장에 들어선 느낌이 들게 했습니다.',
+        },
+        {
+          title: '내리는 맛이 있는 구성',
+          body:
+            '사진과 글이 번갈아 나오고, 어두운 섹션과 밝은 섹션이 교차합니다. 스크롤을 내릴 때마다 장면이 바뀌어 끝까지 내려가 보게 됩니다.',
+        },
+        {
+          title: '행사 소식은 팝업으로',
+          body:
+            '첫 방문 때 가요제 포스터가 팝업으로 뜨고, "다시 보지 않기"로 닫을 수 있습니다. 같은 소식은 공지·이벤트 게시판에도 남아 언제든 다시 볼 수 있습니다.',
+        },
+        {
+          title: '세 가지 일을 한눈에',
+          body:
+            '행사기획·보컬지도·악기지도를 나눠 소개하고, 문의할 때도 분야를 골라 남기게 했습니다. 행사 의뢰와 레슨 문의가 섞이지 않습니다.',
+        },
+      ],
+      features: ['메인 팝업', '공지·이벤트 게시판', '공연 갤러리', '분야별 온라인 문의', '전화·카카오톡 상담 연결'],
+      results: [
+        '/images/cases/cases-solasido/cases-solasido-01.webp',
+        '/images/cases/cases-solasido/cases-solasido-02.webp',
+        '/images/cases/cases-solasido/cases-solasido-03.webp',
+        '/images/cases/cases-solasido/cases-solasido-06.webp',
+        '/images/cases/cases-solasido/cases-solasido-08.webp',
       ],
     },
   },

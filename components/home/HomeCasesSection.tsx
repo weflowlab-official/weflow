@@ -4,11 +4,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { portfolios, type Portfolio } from '@/data/cases'
 
-// 메인에 올리는 사례 — 자체 도메인으로 운영 중인 실제 사례만 위에서부터 다섯 개.
-// (샘플 카드와 임시 주소(vercel.app)에 올라가 있는 사례는 뺀다)
-const FEATURED = portfolios
-  .filter(p => !p.placeholder && p.url && !p.url.includes('vercel.app'))
-  .slice(0, 5)
+// 메인에 올리는 사례 여섯 개 — 모바일(옆으로 넘기는 순서)은 MOBILE_ORDER, PC 는 PC_ORDER 차례로 놓는다.
+// PC 는 KPSC 를 맨 앞에 두고 커튼장인 → 유니텍CCTV → 타이어캠프 순서
+const MOBILE_ORDER = ['atelier', 'unitec', 'tirecamp', 'kpsc', 'saedure', 'ksmobility']
+const PC_ORDER = ['kpsc', 'atelier', 'unitec', 'tirecamp', 'saedure', 'ksmobility']
+const FEATURED = MOBILE_ORDER.map(slug => portfolios.find(p => p.slug === slug)).filter((p): p is Portfolio => !!p)
 
 // 카드에 세로로 이어 붙일 사진 세 장 — 사례별 사진 번호(파일 이름 끝의 01, 02 … 와 같은 번호).
 // 적어 두지 않은 사례는 앞에서부터 세 장을 쓴다.
@@ -18,6 +18,7 @@ const SHOTS: Record<string, [number, number, number]> = {
   kpsc: [1, 5, 10],
   saedure: [1, 2, 7],
   ksmobility: [1, 3, 5],
+  unitec: [1, 5, 9],
   hrentcar: [1, 4, 6],
 }
 
@@ -31,6 +32,7 @@ const HOME_THUMBS = new Set([
   'cases-saedure-01.webp', 'cases-saedure-02.webp', 'cases-saedure-07.webp',
   'cases-ksmobility-01.webp', 'cases-ksmobility-03.webp', 'cases-ksmobility-05.webp',
   'cases-hrentcar-01.webp', 'cases-hrentcar-04.webp', 'cases-hrentcar-06.webp',
+  'cases-unitec-01.webp', 'cases-unitec-05.webp', 'cases-unitec-09.webp',
 ])
 /** 줄여 둔 사진이 있으면 그 주소를, 없으면 원본 주소를 돌려준다 */
 const homeThumb = (src: string) => {
@@ -81,6 +83,10 @@ function CaseCard({ p }: { p: Portfolio }) {
       href={`/cases/${p.slug}`}
       aria-label={`${p.name} 제작 사례 보기`}
       className={`hc-card${shown ? ' is-in' : ''}`}
+      // 놓이는 차례 — 모바일·PC 가 다르다 (아래 CSS 의 order)
+      style={{ '--o-mo': MOBILE_ORDER.indexOf(p.slug), '--o-pc': PC_ORDER.indexOf(p.slug) } as React.CSSProperties}
+      // 끌어서 넘긴 직후의 클릭은 막는다 (카드를 잡고 옆으로 밀다 놓았는데 상세로 들어가 버리지 않게)
+      onClick={e => { if (e.currentTarget.closest('.hc-viewport')?.hasAttribute('data-dragged')) e.preventDefault() }}
     >
       <span className="hc-media">
         <span className="hc-shots">
@@ -164,6 +170,29 @@ export default function HomeCasesSection() {
       onSwipe()
     }
 
+    // PC — 마우스로 잡고 옆으로 끌어 넘긴다 (휴대폰은 손가락으로 넘기는 기본 동작)
+    let dragX = 0, dragLeft = 0, dragging = false
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse' || mobile.matches) return
+      dragging = true; dragX = e.clientX; dragLeft = viewport.scrollLeft
+      viewport.removeAttribute('data-dragged')
+    }
+    const onMove = (e: PointerEvent) => {
+      if (!dragging) return
+      const dx = e.clientX - dragX
+      if (Math.abs(dx) > 5) { viewport.setAttribute('data-dragged', ''); viewport.classList.add('is-dragging') }
+      viewport.scrollLeft = dragLeft - dx
+    }
+    const onUp = () => {
+      dragging = false
+      viewport.classList.remove('is-dragging')
+      // 클릭 막기 표시는 이번 클릭이 지나간 뒤에 지운다
+      setTimeout(() => viewport.removeAttribute('data-dragged'), 0)
+    }
+    viewport.addEventListener('pointerdown', onDown)
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
+
     measure()
     // 글꼴이 늦게 도착하면 글자 폭이 달라지므로 다시 맞춘다
     document.fonts?.ready.then(fitMark)
@@ -172,8 +201,12 @@ export default function HomeCasesSection() {
     return () => {
       window.removeEventListener('resize', measure)
       viewport.removeEventListener('scroll', onSwipe)
+      viewport.removeEventListener('pointerdown', onDown)
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
     }
   }, [])
+
 
   return (
     <section className="hc-section" aria-labelledby="hc-title">
@@ -260,18 +293,23 @@ export default function HomeCasesSection() {
           line-height: 1.2;
           word-break: keep-all;
         }
-        /* ── 카드 줄 — PC 는 다섯 장을 화면 한가운데에 한 줄로 놓는다 (옆으로 넘기지 않는다).
-              카드 폭을 화면 폭의 20.25% 로 잡아 줄 전체가 화면보다 넓다 (5장 + 틈 4개 ≈ 108%) —
-              가운데 정렬이라 양쪽으로 똑같이 넘쳐, 첫째·다섯째 카드가 화면 끝에서 약 1/5 씩 잘린다 ── */
+        /* ── 카드 줄 — 여섯 장이라 PC 도 옆으로 넘긴다 (마우스로 끌기 · 트랙패드).
+              카드 폭은 화면 폭의 20.25% 그대로 — 한 화면에 네 장 반쯤 보여 더 있다는 게 드러난다 ── */
         .hc-stage { position: relative; }
-        .hc-viewport { position: relative; z-index: 1; }
+        .hc-viewport { position: relative; z-index: 1; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; cursor: grab; }
+        .hc-viewport::-webkit-scrollbar { display: none; }
+        .hc-viewport.is-dragging { cursor: grabbing; }
+        .hc-viewport.is-dragging .hc-card { pointer-events: none; }
         .hc-track {
           display: flex;
-          justify-content: center;
+          justify-content: flex-start;
+          width: max-content;
           gap: var(--hc-gap);
           /* 위아래 여백은 호버 그림자·등장 이동이 잘리지 않을 자리 */
-          padding: 8px 0 24px;
+          padding: 8px 4vw 24px;
         }
+        .hc-card { order: var(--o-pc); }
+
 
         /* ── 뒤에 깔리는 큰 글씨 — 하늘색 테두리만 있는 글씨 ── */
         .hc-mark {
@@ -337,15 +375,6 @@ export default function HomeCasesSection() {
         .hc-card.is-in:hover .hc-shots { transform: scale(1.045); }
         .hc-shot { position: relative; display: block; flex: 1 1 0; min-height: 0; }
 
-        /* ── PC — 첫째와 셋째 카드의 자리를 바꾼다 (한가운데 오는 셋째 카드를 눈에 띄는 것으로).
-              모바일은 옆으로 넘기는 순서라 데이터 순서 그대로 둔다 ── */
-        @media (min-width: 701px) {
-          .hc-card:nth-child(1) { order: 3; }
-          .hc-card:nth-child(2) { order: 2; }
-          .hc-card:nth-child(3) { order: 1; }
-          .hc-card:nth-child(4) { order: 4; }
-          .hc-card:nth-child(5) { order: 5; }
-        }
 
         /* ── 모바일 — 손가락으로 옆으로 넘긴다. 첫 카드는 왼쪽 여백(1.25rem)만 두고 붙어서 시작한다 ── */
         @media (max-width: 700px) {
@@ -371,7 +400,8 @@ export default function HomeCasesSection() {
             width: max-content;
             padding: 8px 1.25rem 12px;
           }
-          .hc-card { width: 64vw; }
+          .hc-card { width: 64vw; order: var(--o-mo); }
+          .hc-viewport { cursor: auto; }
           .hc-media { border-radius: 16px; }
         }
 

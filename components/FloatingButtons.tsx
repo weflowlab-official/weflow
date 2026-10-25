@@ -1,7 +1,7 @@
 'use client'
 import type { CSSProperties } from 'react'
 import Link from 'next/link'
-import { Phone, ClipboardCheck, CalendarCheck, NotebookPen } from 'lucide-react'
+import { Phone, ClipboardCheck, CalendarCheck, NotebookPen, ExternalLink } from 'lucide-react'
 
 // PC 우측 세로 플로팅 — 전화·상담. bg/fg는 버튼 색.
 // metal 을 주면 금속 테두리와 광택이 붙는다(.fab-metal + .fab-gold/.fab-silver).
@@ -24,7 +24,7 @@ const ITEMS: { href: string; label: string; icon: typeof Phone; size: number; bg
 /**
  * 고정 CTA — 화면 크기에 따라 모양이 다르다.
  * · PC: 우측 세로 원형 버튼 3개(전화·카톡·상담). hover 하면 라벨이 왼쪽으로 펼쳐진다.
- * · 모바일: 화면 맨 아래에 붙는 두 칸 바(바로 전화 · 맞춤 견적 받기).
+ * · 모바일: 화면 맨 아래에 붙는 두 칸 바(맞춤 견적 받기 · 웹블로그 바로가기).
  *   원형 버튼이 스크롤을 따라다니며 내용을 가리는 것보다, 늘 같은 자리의 큰 바가 누르기 쉽다.
  * 전화/외부 링크는 <a>, 내부 경로는 <Link>로 나눠 그린다.
  */
@@ -62,14 +62,15 @@ export default function FloatingButtons() {
 
       {/* 모바일 — 화면 맨 아래 두 칸 바 (PC 에선 CSS 로 숨김) */}
       <div className="mobile-cta-bar">
-        <a href="tel:010-2971-7280" className="mobile-cta-bar__btn mobile-cta-bar__btn--call">
-          <Phone size={20} strokeWidth={2.2} />
-          바로 전화
-        </a>
+        {/* 왼쪽 맞춤 견적, 오른쪽 웹블로그(새 탭 — 나가는 링크라 화살표 아이콘). 전화는 PC 원형 버튼·헤더 번호로 */}
         <Link href="/diagnosis" className="mobile-cta-bar__btn mobile-cta-bar__btn--form">
           <CalendarCheck size={20} strokeWidth={2.2} />
           맞춤 견적 받기
         </Link>
+        <a href="/blog" target="_blank" rel="noopener noreferrer" className="mobile-cta-bar__btn mobile-cta-bar__btn--blog">
+          웹블로그 바로가기
+          <ExternalLink size={18} strokeWidth={2.2} />
+        </a>
       </div>
     </>
   )

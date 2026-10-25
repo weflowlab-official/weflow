@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { ArrowRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { readStore, writeStore } from '@/lib/safeStorage'
 
 // "오늘 하루 보지 않기"를 누른 시각 — 그 값(다음 자정)이 지나기 전엔 다시 안 뜬다
@@ -11,7 +11,7 @@ const HIDE_KEY = 'weflow_webblog_popup_hide_until'
 /**
  * 새 탭 '웹블로그란?'(/webblog) 알림 팝업 — 메인 홈(/)에 들어올 때만 뜬다 (PC·모바일 공통).
  * 이미지 없이 코드로 그린다 — 연한 격자·파란 번짐 위에 천천히 도는 원 두 개를 글씨 바로 뒤에 깔고,
- * 문구는 '웹블로그란?' 히어로와 같게 (누르고 들어가면 같은 문장이 이어진다). 카드 어디를 눌러도 /webblog 로 간다.
+ * 문구는 '웹블로그란?' 히어로와 같게 (누르고 들어가면 같은 문장이 이어진다). 카드 어디를 눌러도 실제 웹블로그(/blog)가 새 창으로 열린다 ('웹블로그란?' 탭은 메뉴에서 내렸다).
  * · 닫기 / ✕ : 이번 방문(탭) 동안 안 뜸   · 바깥 클릭 · 카드 누르기 : 이번 화면만 닫음(홈에 다시 오면 뜸)   · 오늘 하루 보지 않기 : 다음 자정까지
  * 예전 이벤트 팝업(EventPopup.tsx)과 같은 틀이다.
  */
@@ -64,7 +64,7 @@ export default function WebBlogPopup() {
         <button type="button" className="wbp-x" aria-label="닫기" onClick={close}>✕</button>
 
         {/* 누르고 들어간 뒤 홈으로 돌아오면 다시 뜬다 — 이번 화면만 닫는다 (닫기·✕ 와 다르게) */}
-        <Link href="/webblog" className="wbp-card" onClick={() => setOpen(false)}>
+        <Link href="/blog" target="_blank" rel="noopener noreferrer" className="wbp-card" onClick={() => setOpen(false)}>
           {/* 배경 — 격자 · 번짐 · 글씨 뒤의 원 두 개 */}
           <span className="wbp-bg" aria-hidden="true">
             <i className="wbp-grid" />
@@ -76,11 +76,11 @@ export default function WebBlogPopup() {
             <i className="wbp-ring wbp-ring--sm"><b /></i>
           </span>
 
-          <span className="wbp-tag">NEW · WEFLOW 웹블로그</span>
+          <span className="wbp-tag">NEW · WEFLOW 웹블로그 출시</span>
           <strong className="wbp-title">웹블로그, 생소하시죠?</strong>
           <strong className="wbp-title wbp-title--2"><span>경쟁업체보다 먼저</span><br />검색되는 방법</strong>
           <span className="wbp-desc">글 하나만 올려도 네이버·구글 검색과 AI 답변까지</span>
-          <span className="wbp-btn">웹블로그 알아보기 <ArrowRight size={17} /></span>
+          <span className="wbp-btn">웹블로그 둘러보기 <ArrowUpRight size={17} /></span>
         </Link>
 
         <div className="wbp-bar">
@@ -125,7 +125,7 @@ export default function WebBlogPopup() {
         .wbp-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 26px; padding: 15px 30px; border-radius: 999px; background: #111418; color: #fff; font-size: 1rem; font-weight: 700; transition: background .15s; }
         .wbp-card:hover .wbp-btn { background: #1f63d6; }
         .wbp-btn svg { transition: transform .25s ease; }
-        .wbp-card:hover .wbp-btn svg { transform: translateX(3px); }
+        .wbp-card:hover .wbp-btn svg { transform: translate(2px, -2px); }
 
         .wbp-bar { display: flex; overflow: hidden; border-radius: 0 0 20px 20px; border-top: 1px solid #eef0f3; background: #fff; }
         .wbp-bar button { flex: 1; padding: 15px 0; border: 0; background: none; font-size: .92rem; cursor: pointer; }

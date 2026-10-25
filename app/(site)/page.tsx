@@ -1,4 +1,4 @@
-// 메인 페이지 (/) — 히어로 → 신뢰 밴드 → 제작 사례 → 왜 WEFLOW → 일하는 방식·솔루션 → 자주 묻는 질문 → 마지막 CTA.
+// 메인 페이지 (/) — 히어로 → 신뢰 밴드 → 제작 사례 → 웹블로그 출시 묶음(보안·출시·병의원) → 왜 WEFLOW → 일하는 방식·솔루션 → 자주 묻는 질문 → 마지막 CTA.
 // 각 섹션의 실제 내용은 components/home/* 에 있고, 여기선 순서만 잡는다.
 // (리뉴얼 전의 솔루션·제작 라인업·혜택·가격·비교·제휴·제작 과정·회사소개 섹션은 메인에서 내렸다 — 파일은 그대로 있다)
 "use client";
@@ -10,6 +10,7 @@ import HomeWhyIntro from "@/components/home/HomeWhyIntro";
 import HomeCardSections from "@/components/home/HomeCardSections";
 import HomeFaqSection from "@/components/home/HomeFaqSection";
 import FinalCTA from "@/components/home/FinalCTA";
+import HomeWebBlogSections from "@/components/home/HomeWebBlogSections";
 
 export default function HomePage() {
   // 이 페이지에 있는 동안만 body에 스크롤 스냅 클래스를 붙인다
@@ -71,6 +72,9 @@ export default function HomePage() {
 
       {/* 제작 사례 — 자체 도메인으로 운영 중인 실제 사례 다섯 개 (PC 는 한 줄에 다섯 장, 모바일은 옆으로 넘긴다) */}
       <HomeCasesSection />
+
+      {/* 웹블로그 출시 묶음 — PHP 보안 뉴스 → 웹블로그 출시(/blog 로) → 병의원 전용(/clinic-blog 로) */}
+      <HomeWebBlogSections />
 
       {/* '왜 WEFLOW?' 도입 — 문장이 양옆에서 들어오고 바탕이 어두워지며 아래 섹션들로 넘어간다 */}
       <HomeWhyIntro />
