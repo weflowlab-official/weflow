@@ -6,6 +6,7 @@
 // thumbnail: public 아래 이미지 경로. 시드가 이 파일을 Payload 미디어로 올려 썸네일로 붙인다 (alt 로 같은 미디어를 찾으므로 글마다 alt 를 다르게).
 import { lx } from "./lexical";
 import type { LexicalState } from "./lexical";
+import { subIndustryArticles } from "./subIndustryArticles"; // 세부업종 글 18편 (치과 글과 같은 뼈대)
 
 export type Article = {
   slug: string;
@@ -1494,4 +1495,7 @@ export const articles: Article[] = [
       lx.p(`AI가 인용하기 좋은 글의 구조는 <a href="/blog/guide/${GUIDE_SEO_SLUG}">AI는 어떤 글을 골라 인용할까? SEO·AEO·GEO 쉽게 정리</a>에서 이어서 볼 수 있습니다.`),
     ]),
   },
+
+  // ─────────────────────────── 세부업종 글 18편 (lib/subIndustryArticles.ts) ───────────────────────────
+  ...subIndustryArticles,
 ];

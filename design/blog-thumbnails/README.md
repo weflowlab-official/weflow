@@ -295,3 +295,254 @@ No text, no letters, no logos, no watermarks, no screens showing readable text.
   - 구성 — 웹블로그만 · 홈페이지만 · 함께
   - 설계 — SEO·AEO·GEO 구조
 - 하단 띠: WEFLOW 웹블로그
+
+---
+
+## 세부 업종 글 18개 (18~35) — 사진 프롬프트 (GPT)
+
+위 1~13 과 같은 형식. 뽑은 사진은 `photos/<slug>.png` 로 저장. 사진 톤은 앞 글들과 겹치지 않게 골랐다.
+slug 는 `why-web-blog-for-<세부업종 slug>` (blog/lib/industries.ts) — 글을 만들 때도 같은 slug 를 쓴다.
+
+### 18. 피부과·성형외과 웹블로그 — `why-web-blog-for-dermatology.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a dermatologist in a white coat in a bright, minimal skin clinic consultation room, looking thoughtful.
+Color mood: soft pastel pale rose tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 19. 한의원 웹블로그 — `why-web-blog-for-korean-medicine.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a Korean medicine doctor in a white coat in a calm, bright clinic with plain wooden herbal drawers in the background.
+Color mood: soft pastel pale celadon tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 20. 정형외과·통증의학과 웹블로그 — `why-web-blog-for-orthopedics.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a doctor standing beside a treatment bed in a bright rehabilitation room, thinking.
+Color mood: soft pastel pale cornflower blue tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 21. 안과 웹블로그 — `why-web-blog-for-ophthalmology.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: an eye doctor in a white coat beside an eye examination device in a bright clinic room.
+Color mood: soft pastel pale periwinkle tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 22. 내과·소아청소년과 웹블로그 — `why-web-blog-for-internal-pediatrics.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a friendly doctor with a stethoscope in a bright family clinic room with a few soft toys on a shelf.
+Color mood: soft pastel pale lemon tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 23. 법률·세무 웹블로그 — `why-web-blog-for-law-tax.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a lawyer in a blazer at a tidy office desk with paper files and a calculator, thinking.
+Color mood: soft pastel pale taupe tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 24. 부동산 웹블로그 — `why-web-blog-for-real-estate.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a real estate agent holding a folder in a bright, empty new apartment living room.
+Color mood: soft pastel soft cream tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 25. 제조·공장 웹블로그 — `why-web-blog-for-manufacturing.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a production manager in a work uniform checking parts at a clean workbench in a bright factory.
+Color mood: soft pastel pale silver gray tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 26. 쇼핑몰 웹블로그 — `why-web-blog-for-shopping-mall.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: an online shop owner packing products into plain boxes at a bright home office desk with a laptop.
+Color mood: soft pastel light orchid tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 27. 청소·이사 웹블로그 — `why-web-blog-for-cleaning-moving.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a moving and cleaning company worker carrying a plain cardboard box in a bright, empty apartment.
+Color mood: soft pastel pale seafoam tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 28. 반려동물 웹블로그 — `why-web-blog-for-pet.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a pet groomer gently holding a small fluffy dog in a bright grooming shop.
+Color mood: soft pastel soft honey tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 29. 웨딩·스튜디오 웹블로그 — `why-web-blog-for-wedding-studio.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a wedding photographer holding a camera in a bright, airy photo studio with a plain white backdrop.
+Color mood: soft pastel pale champagne tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 30. 이벤트·행사 웹블로그 — `why-web-blog-for-event.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: an event planner arranging pastel balloons and table decorations in a bright event hall.
+Color mood: soft pastel pale tangerine tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 31. 뷰티·미용 웹블로그 — `why-web-blog-for-beauty.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a hair stylist holding a comb in a bright, minimal hair salon, thinking.
+Color mood: soft pastel soft mauve tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 32. 헬스·피트니스 웹블로그 — `why-web-blog-for-fitness.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a personal trainer in sportswear standing in a bright, clean gym.
+Color mood: soft pastel pale lime tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 33. 학원 웹블로그 — `why-web-blog-for-academy.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a teacher standing beside a blank whiteboard in a bright small classroom.
+Color mood: soft pastel pale turquoise tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 34. 음식점·카페 웹블로그 — `why-web-blog-for-restaurant-cafe.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a cafe owner in an apron behind the counter of a bright cafe, holding a cup.
+Color mood: soft pastel soft caramel tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 35. 펜션·숙박 웹블로그 — `why-web-blog-for-pension-stay.png`
+
+```
+A soft, bright square photo (1:1, 2000x2000px), editorial stock-photo style, natural light.
+Scene: a guesthouse owner standing on the wooden deck of a bright countryside pension.
+Color mood: soft pastel soft pistachio tones overall — background, clothing and props in gentle pastel colors, low contrast, airy and calm.
+Composition: the person is on the RIGHT half of the frame; the LEFT half is a clean, softly blurred, plain background area (text will be placed there later).
+Korean / East Asian person, natural expression, realistic, not overly posed.
+No text, no letters, no logos, no watermarks, no signs with writing, no screens showing readable text.
+```
+
+### 18~35 글별 문구 · 사진
+
+| # | slug | ① 라벨 | ① 작은 제목 (2줄) | ① 강조 글씨 | ① 영문 | 사진 장면 | 사진 톤 |
+|---|---|---|---|---|---|---|---|
+| 18 | why-web-blog-for-dermatology | 피부과 홍보, 고민이라면? | 검색에서 환자를 / 데려오는 방법 | 피부과·성형외과 웹블로그 | web blog for skin clinics | a dermatologist in a white coat in a bright, minimal skin clinic consultation room, looking thoughtful | pale rose |
+| 19 | why-web-blog-for-korean-medicine | 한의원 홍보, 고민이라면? | 검색에서 환자를 / 데려오는 방법 | 한의원 웹블로그 | web blog for korean medicine | a Korean medicine doctor in a white coat in a calm, bright clinic with plain wooden herbal drawers in the background | pale celadon |
+| 20 | why-web-blog-for-orthopedics | 정형외과 홍보, 고민이라면? | 검색에서 환자를 / 데려오는 방법 | 정형외과·통증의학과 웹블로그 | web blog for orthopedics | a doctor standing beside a treatment bed in a bright rehabilitation room, thinking | pale cornflower blue |
+| 21 | why-web-blog-for-ophthalmology | 안과 홍보, 고민이라면? | 검색에서 환자를 / 데려오는 방법 | 안과 웹블로그 | web blog for eye clinics | an eye doctor in a white coat beside an eye examination device in a bright clinic room | pale periwinkle |
+| 22 | why-web-blog-for-internal-pediatrics | 내과 홍보, 고민이라면? | 검색에서 환자를 / 데려오는 방법 | 내과·소아청소년과 웹블로그 | web blog for family clinics | a friendly doctor with a stethoscope in a bright family clinic room with a few soft toys on a shelf | pale lemon |
+| 23 | why-web-blog-for-law-tax | 법률·세무 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 법률·세무 웹블로그 | web blog for law & tax | a lawyer in a blazer at a tidy office desk with paper files and a calculator, thinking | pale taupe |
+| 24 | why-web-blog-for-real-estate | 부동산 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 부동산 웹블로그 | web blog for real estate | a real estate agent holding a folder in a bright, empty new apartment living room | soft cream |
+| 25 | why-web-blog-for-manufacturing | 제조·공장 홍보, 고민이라면? | 검색에서 거래처를 / 데려오는 방법 | 제조·공장 웹블로그 | web blog for manufacturers | a production manager in a work uniform checking parts at a clean workbench in a bright factory | pale silver gray |
+| 26 | why-web-blog-for-shopping-mall | 쇼핑몰 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 쇼핑몰 웹블로그 | web blog for online shops | an online shop owner packing products into plain boxes at a bright home office desk with a laptop | light orchid |
+| 27 | why-web-blog-for-cleaning-moving | 청소·이사 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 청소·이사 웹블로그 | web blog for cleaning & moving | a moving and cleaning company worker carrying a plain cardboard box in a bright, empty apartment | pale seafoam |
+| 28 | why-web-blog-for-pet | 반려동물 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 반려동물 웹블로그 | web blog for pet business | a pet groomer gently holding a small fluffy dog in a bright grooming shop | soft honey |
+| 29 | why-web-blog-for-wedding-studio | 웨딩·스튜디오 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 웨딩·스튜디오 웹블로그 | web blog for wedding studios | a wedding photographer holding a camera in a bright, airy photo studio with a plain white backdrop | pale champagne |
+| 30 | why-web-blog-for-event | 이벤트·행사 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 이벤트·행사 웹블로그 | web blog for event planners | an event planner arranging pastel balloons and table decorations in a bright event hall | pale tangerine |
+| 31 | why-web-blog-for-beauty | 뷰티·미용 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 뷰티·미용 웹블로그 | web blog for beauty salons | a hair stylist holding a comb in a bright, minimal hair salon, thinking | soft mauve |
+| 32 | why-web-blog-for-fitness | 헬스·피트니스 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 헬스·피트니스 웹블로그 | web blog for fitness | a personal trainer in sportswear standing in a bright, clean gym | pale lime |
+| 33 | why-web-blog-for-academy | 학원 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 학원 웹블로그 | web blog for academies | a teacher standing beside a blank whiteboard in a bright small classroom | pale turquoise |
+| 34 | why-web-blog-for-restaurant-cafe | 음식점·카페 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 음식점·카페 웹블로그 | web blog for restaurants & cafes | a cafe owner in an apron behind the counter of a bright cafe, holding a cup | soft caramel |
+| 35 | why-web-blog-for-pension-stay | 펜션·숙박 홍보, 고민이라면? | 검색에서 고객을 / 데려오는 방법 | 펜션·숙박 웹블로그 | web blog for stays | a guesthouse owner standing on the wooden deck of a bright countryside pension | soft pistachio |
+
+### 18~35 ② 핵심 4가지 카드 — 업종별 바뀌는 말 (03은 모든 글이 같다)
+
+| # | (고객) | 01 검색 예시 | 04 연결 |
+|---|---|---|---|
+| 18 피부과·성형외과 | 환자 | "여드름 흉터 치료 기간" | 예약 상담 |
+| 19 한의원 | 환자 | "교통사고 한의원 치료" | 예약 상담 |
+| 20 정형외과·통증의학과 | 환자 | "어깨 통증 원인" | 예약 상담 |
+| 21 안과 | 환자 | "백내장 수술 후 관리" | 예약 상담 |
+| 22 내과·소아청소년과 | 환자 | "아이 열 날 때 병원 가는 기준" | 예약 상담 |
+| 23 법률·세무 | 고객 | "종합소득세 신고 방법" | 상담 신청 |
+| 24 부동산 | 고객 | "전세 계약 시 확인할 것" | 상담 신청 |
+| 25 제조·공장 | 거래처 | "(제품명) 제작 업체" | 견적 문의 |
+| 26 쇼핑몰 | 고객 | "(제품) 고르는 법" | 구매 문의 |
+| 27 청소·이사 | 고객 | "입주 청소 비용" | 견적 문의 |
+| 28 반려동물 | 고객 | "강아지 미용 주기" | 예약 문의 |
+| 29 웨딩·스튜디오 | 고객 | "웨딩 촬영 준비물" | 상담 예약 |
+| 30 이벤트·행사 | 고객 | "돌잔치 장소 고르는 법" | 견적 문의 |
+| 31 뷰티·미용 | 고객 | "손상모 펌 주기" | 예약 문의 |
+| 32 헬스·피트니스 | 고객 | "PT 처음 받는 법" | 상담 예약 |
+| 33 학원 | 고객 | "중학생 수학 선행" | 상담 신청 |
+| 34 음식점·카페 | 고객 | "단체 모임 식당" | 예약 문의 |
+| 35 펜션·숙박 | 고객 | "가족 펜션 추천" | 예약 문의 |

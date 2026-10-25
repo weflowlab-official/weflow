@@ -1,7 +1,7 @@
 // 뽑은 이미지(out/)를 웹블로그 글에 붙인다 — Payload REST API(/api/blog)로 미디어를 올리고 글을 고친다.
 //  · 썸네일(thumbnail): 그 글의 ① <slug>-1.png
 //  · 상단 이미지 슬라이드(images): ① → ② common-2 → ③ common-3
-// 공통 ②·③은 한 번만 올려 모든 글이 같이 쓴다. 이미 붙어 있는 썸네일·슬라이드는 이것으로 바뀐다.
+// 공통 ②·③은 한 번만 올려 모든 글이 같이 쓴다 (이미 올라가 있으면 그것을 쓴다. 카드를 새로 바꿨으면 FRESH=1). 이미 붙어 있는 썸네일·슬라이드는 이것으로 바뀐다.
 //
 // DB 에 직접 붙지 않고 배포된 사이트(또는 로컬 dev 서버)의 API 를 거친다 — 관리자 계정으로 로그인해서 쓴다.
 // 올리기 전에 2000px PNG 를 1600px WebP 로 줄인다 (Vercel 함수 요청 크기 4.5MB 제한 안으로. Payload 가 다시 WebP 로 만든다).
@@ -49,6 +49,17 @@ async function upload(file, alt) {
   return doc.id
 }
 
+// 공통 ②·③ 카드 — 같은 alt 의 미디어가 이미 있으면 다시 올리지 않고 그것을 쓴다 (돌릴 때마다 같은 그림이 쌓이지 않게).
+// 카드 그림을 새로 바꿨다면 FRESH=1 로 돌려 새로 올린다.
+async function uploadOnce(file, alt) {
+  if (process.env.FRESH !== '1') {
+    const found = await api('GET', `/media?where[alt][equals]=${encodeURIComponent(alt)}&sort=-createdAt&limit=1&depth=0`)
+    const id = found.docs?.[0]?.id
+    if (id) { console.log(`  있음 ${file} → media ${id} (다시 올리지 않음)`); return id }
+  }
+  return upload(file, alt)
+}
+
 ;(async () => {
   console.log(`대상: ${API}${DRY ? ' (DRY — 올리지 않음)' : ''}`)
   if (!DRY) {
@@ -59,8 +70,8 @@ async function upload(file, alt) {
   const targets = posts.filter(p => !only.length || only.includes(p.slug))
   for (const p of targets) if (!fs.existsSync(path.join(DIR, 'out', `${p.slug}-1.png`))) throw new Error(`out/${p.slug}-1.png 가 없습니다`)
 
-  const c2 = DRY ? 'common-2' : await upload('common-2.png', '웹블로그가 필요한 이유 — SEO 검색 노출 · AI 답변 인용 · 최신 기술과 보안 · 바로 상담 연결')
-  const c3 = DRY ? 'common-3' : await upload('common-3.png', 'WEFLOW 웹블로그 상담 안내 — Tel. 010-2971-7280')
+  const c2 = DRY ? 'common-2' : await uploadOnce('common-2.png', '웹블로그가 필요한 이유 — SEO 검색 노출 · AI 답변 인용 · 최신 기술과 보안 · 바로 상담 연결')
+  const c3 = DRY ? 'common-3' : await uploadOnce('common-3.png', 'WEFLOW 웹블로그 상담 안내 — Tel. 010-2971-7280')
 
   for (const p of targets) {
     const found = DRY ? { docs: [{ id: '?' }] } : await api('GET', `/posts?where[slug][equals]=${encodeURIComponent(p.slug)}&depth=0&limit=1`)
