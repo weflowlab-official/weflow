@@ -99,7 +99,7 @@ export const WH_GENERAL: WithHomepageCopy = {
   title: ['블로그가 데려온 손님을,', '홈페이지가 상담으로'],
   body: <>웹블로그와 홈페이지를 함께 두면, <br className="ch-mo" />검색에서 상담까지 한 사이트 안에서 이어집니다.</>,
   steps: [
-    { Icon: Search, label: '검색', sub: '“욕실 리모델링”' },
+    { Icon: Search, label: '검색', sub: '“욕실 리모델링 기간”' },
     { Icon: FileText, label: '블로그 글', sub: '공정별 기간 정리' },
     { Icon: Building2, label: '홈페이지', sub: '시공 사례 · 오시는 길' },
     { Icon: MessageSquare, label: '상담', sub: '견적 문의' },
