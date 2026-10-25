@@ -50,8 +50,8 @@ export default function HomePhpSection() {
             <span>지금 안전할까요?</span>
           </h2>
           <p className="hp-lead">
-            국내 PHP 서버 상당수가 업데이트되지 않은 옛 버전이라는 보도가 잇따랐습니다.<br className="hp-pc" />
-            {' '}오래된 기술로 만든 홈페이지는 보안 업데이트를 놓치는 순간 위험해집니다.
+            국내 PHP 서버 상당수가 업데이트되지 않은<br className="hp-mo" /> 옛 버전이라는 보도가 잇따랐습니다.<br />
+            오래된 기술로 만든 홈페이지는<br className="hp-mo" /> 보안 업데이트를 놓치는 순간 위험해집니다.
           </p>
         </header>
 
@@ -85,7 +85,7 @@ export default function HomePhpSection() {
 
         {/* 옛 방식 vs WEFLOW */}
         <h3 className="hp-sub">
-          WEFLOW는 처음부터 <span>최신 기술(Next.js)</span>로 만들어<br className="hp-pc" /> PHP 취약점 걱정이 없습니다
+          WEFLOW는 처음부터<br className="hp-mo" /> <span>최신 기술(Next.js)</span>로 만들어<br /> PHP 취약점 걱정이 없습니다
         </h3>
         <div ref={cmpRef} className={`hp-cmp${cmpShown ? ' is-in' : ''}`}>
           <div className="hp-card hp-cmp__box" style={{ '--d': 0 } as React.CSSProperties}>
@@ -131,14 +131,17 @@ export default function HomePhpSection() {
         .hp-stats strong { flex: none; font-size: clamp(1.8rem, 3.4vw, 2.4rem); font-weight: 800; letter-spacing: -0.03em; color: #ff7a7a; line-height: 1; }
         .hp-stats span { font-size: .88rem; line-height: 1.45; color: rgba(255,255,255,.72); word-break: keep-all; }
         @media (max-width: 520px) { .hp-stats { grid-template-columns: 1fr; } }
+        /* 휴대폰 — 수치 카드·출처는 아이콘 칸만큼 왼쪽으로 넓혀, 박스 안 가로폭을 다 쓴다 (왼쪽 끝을 아이콘 시작점에 맞춤: 아이콘 48 + 간격 18) */
+        @media (max-width: 767px) { .hp-stats, .hp-src { margin-left: -66px; } .hp-src { text-align: center; } }
         .hp-src { display: block; margin-top: .7rem; font-size: .75rem; color: rgba(255,255,255,.4); }
 
         .hp-news { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(.85rem, 1.8vw, 1.4rem); margin-top: clamp(2.5rem, 5vw, 3.5rem); }
         .hp-news__card { margin: 0; padding: clamp(.75rem, 1.4vw, 1rem); }
         /* 네 장을 같은 크기로 — 같은 비율(가로 900 : 세로 411) 칸에 기사 위쪽부터 채운다 */
-        .hp-news__shot { position: relative; display: block; overflow: hidden; aspect-ratio: 900 / 411; border-radius: 12px; background: #fff; }
+        /* 바탕은 칠하지 않는다 — 흰 바탕이면 어두운 기사 가장자리에 흰 줄(소수점 픽셀 틈)이 비친다. 그림도 1% 키워 틈을 덮는다 */
+        .hp-news__shot { position: relative; display: block; overflow: hidden; aspect-ratio: 900 / 411; border-radius: 12px; }
         /* 마우스를 올리면 기사가 살짝 다가온다 */
-        .hp-news__shot img { transition: transform .6s cubic-bezier(.16,1,.3,1); }
+        .hp-news__shot img { transform: scale(1.01); transition: transform .6s cubic-bezier(.16,1,.3,1); }
         .hp-news__card:hover .hp-news__shot img { transform: scale(1.06); }
         .hp-news__card figcaption { margin: .7rem .25rem 0; font-size: .88rem; font-weight: 600; color: rgba(255,255,255,.5); }
         .hp-note { margin: 1rem 0 0; text-align: center; font-size: .82rem; color: rgba(255,255,255,.4); }

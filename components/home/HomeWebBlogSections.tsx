@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import Image from 'next/image'
 import { IconStethoscope, IconCheck, IconArrowUpRight, IconArticle, IconCalendarEvent, IconSparkles } from '@tabler/icons-react'
 import { subIndustriesOf } from '@/blog/lib/industries'
@@ -19,7 +20,7 @@ const LAUNCH_POSTS = [
   { src: '/images/home/webblog-post-1.webp', tag: '병의원 · 치과', title: '치과에 웹블로그가 필요한 이유', mo: '' },
   { src: '/images/home/webblog-post-2.webp', tag: '생활·서비스 · 인테리어', title: '인테리어 업체에 웹블로그가 필요한 이유', mo: '인테리어 업체에 웹블로그가···' },
   { src: '/images/home/webblog-post-3.webp', tag: '웹블로그 가이드', title: 'AI는 어떤 글을 골라 인용할까?', mo: '' },
-  { src: '/images/home/webblog-post-4.webp', tag: '차량·레저 · 캠핑장', title: '캠핑장에 웹블로그가 필요한 이유', mo: '' },
+  { src: '/images/home/webblog-post-4.webp', tag: '차량·레저 · 캠핑장', title: '캠핑장에 웹블로그가 필요한 이유', mo: '캠핑장에 웹블로그가 필요한···' },
   { src: '/images/home/webblog-post-5.webp', tag: '금융·전문직 · 보험', title: '보험설계사에게 웹블로그가 필요한 이유', mo: '' },
   { src: '/images/home/webblog-post-6.webp', tag: '웹블로그 가이드', title: '네이버 블로그와 웹블로그, 뭐가 다를까?', mo: '' },
 ]
@@ -100,8 +101,12 @@ export default function HomeWebBlogSections() {
                 <a href="/blog/clinic" target="_blank" rel="noopener noreferrer" className="hcf-btn"><IconArticle size={18} /> 병의원 글 둘러보기</a>
               </div>
               <div className="hcf-chips">
-                {SPECIALTIES.map(s => (
-                  <a key={s.slug} href={`/blog/clinic?sub=${s.slug}`} target="_blank" rel="noopener noreferrer" className={s.slug === 'internal-pediatrics' ? 'hcf-mo-only' : undefined}>{s.name}</a>
+                {SPECIALTIES.map((s, i) => (
+                  <Fragment key={s.slug}>
+                    <a href={`/blog/clinic?sub=${s.slug}`} target="_blank" rel="noopener noreferrer" className={s.slug === 'internal-pediatrics' ? 'hcf-mo-only' : undefined}>{s.name}</a>
+                    {/* 휴대폰 — 세 개씩 두 줄로 끊는다 */}
+                    {i === 2 && <span className="hcf-chips-br" aria-hidden="true" />}
+                  </Fragment>
                 ))}
               </div>
             </div>
@@ -201,6 +206,9 @@ export default function HomeWebBlogSections() {
         .hcf-chips a { padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); font-size: .82rem; text-decoration: none; transition: background .15s, color .15s; }
         .hcf-chips a:hover { background: #fff; color: #1b4ea7; }
         @media (min-width: 768px) { .hcf-chips .hcf-mo-only { display: none; } }
+        /* 휴대폰 — 진료과 칩 여섯 개를 세 개씩 두 줄로 (셋째 칩 뒤 .hcf-chips-br 에서 줄을 끊는다). 둘째 줄이 한 줄에 들어가는 만큼만 줄인다 */
+        .hcf-chips-br { display: none; }
+        @media (max-width: 767px) { .hcf-chips { gap: 6px; } .hcf-chips a { padding: 4px 10px; font-size: .78rem; } .hcf-chips-br { display: block; flex-basis: 100%; height: 0; margin-top: -6px; } }
         .hcf-fig { margin: 0; }
         .hcf-win { overflow: hidden; border-radius: 16px; background: #fff; color: #111418; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
         .hcf-wbar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #e5e7eb; background: #fafafa; }

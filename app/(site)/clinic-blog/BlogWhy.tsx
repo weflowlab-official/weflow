@@ -431,7 +431,7 @@ export default function BlogWhy({ copy = CLINIC_WHY }: { copy?: BlogWhyCopy }) {
         <div ref={endRef} className="bwy-end">
           <p className="bwy-end-eyebrow">{copy.end.eyebrow}</p>
           <h3 className="bwy-end-title">
-            {copy.end.lead}<span>{copy.end.accent}</span>
+            {copy.end.lead}<br className="bwy-mo" /><span>{copy.end.accent}</span>
           </h3>
           <p className="bwy-end-desc">{copy.end.desc}</p>
           <ul className="bwy-end-chips">

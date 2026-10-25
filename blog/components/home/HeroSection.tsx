@@ -143,9 +143,9 @@ export function HeroSection({ title, text, placeholder }: Props) {
             WEFLOW 웹블로그
           </p>
           <div className="mt-3 overflow-hidden">
-            {/* 모바일 글자 크기는 화면 폭에 맞춰(6vw) — 둘째 줄 '경쟁업체보다 먼저 검색되는 방법'이 한 줄에 들어가게 */}
+            {/* 모바일 글자 크기는 화면 폭에 맞춰 — 둘째 줄 '경쟁업체보다 먼저 검색되는 방법'(글자 크기의 약 12.8배 폭)이 본문 폭(화면 - 32px)에 꽉 차게 */}
             <h1
-              className="animate-reveal-up whitespace-pre-line text-[clamp(1.25rem,6vw,1.875rem)] font-bold sm:text-3xl leading-tight text-neutral-900 md:text-4xl lg:text-5xl"
+              className="animate-reveal-up whitespace-pre-line text-[length:min(1.875rem,calc((100vw_-_2rem)/13.2))] font-bold sm:text-3xl leading-tight text-neutral-900 md:text-4xl lg:text-5xl"
               style={{ animationDuration: "0.6s" }}
             >
               {heroTitle}
@@ -153,8 +153,8 @@ export function HeroSection({ title, text, placeholder }: Props) {
           </div>
           <div className="mt-5 overflow-hidden">
             <p className="animate-reveal-up text-base leading-relaxed text-neutral-600 md:text-lg" style={{ animationDelay: "0.2s", animationDuration: "0.6s" }}>
-              {/* 모바일: 문장(". ")마다 줄을 바꾼다 — 관리자에 저장된 문구에도 그대로 적용되게 */}
-              <MobileBreaks text={heroText.replace(/\. /g, ".|")} />
+              {/* 모바일: 문장(". ")마다, 그리고 '글 하나만 올려도' 뒤에서 줄을 바꾼다 — 관리자에 저장된 문구에도 그대로 적용되게 */}
+              <MobileBreaks text={heroText.replace(/\. /g, ".|").replace("올려도 ", "올려도|")} />
             </p>
           </div>
 

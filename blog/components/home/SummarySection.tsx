@@ -98,6 +98,8 @@ export async function SummarySection({ title, text }: Props) {
         /* 흐름 그림 아래 '함께하면 좋은 점' 카드와의 간격은 카드 쪽 mt 가 맡는다 */
         .summary-flow .ch-flow { margin-top: 88px; }
         @media (max-width: 767px) { .summary-flow .ch-flow { margin-top: 64px; } }
+        /* 휴대폰 — 칸 설명('시공 사례 · 오시는 길' 등)을 한 단계 작게 해 한 줄로 */
+        @media (max-width: 767px) { .summary-flow .ch-steps small { font-size: .64rem; letter-spacing: -0.04em; white-space: nowrap; } }
         .summary-flow { margin-bottom: 40px; }
       `}</style>
     </section>

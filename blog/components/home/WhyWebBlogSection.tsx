@@ -17,6 +17,8 @@ export function WhyWebBlogSection() {
         @media (min-width: 1024px) { .wwb .bwy-pin { top: 80px; height: calc(100svh - 80px); } }
         /* 헤더 아래 공간의 정가운데는 조금 낮아 보여, 장면들을 24px 위로 (아랫변을 48px 올려 가운데가 24px 올라가게) */
         .wwb .bwy-ask, .wwb .bwy-answer, .wwb .bwy-end { bottom: 48px; }
+        /* 휴대폰 — 답 다섯 장면(01~05)만 원래 가운데로 (24px 내림) */
+        @media (max-width: 800px) { .wwb .bwy-answer { bottom: 0; } }
       `}</style>
     </div>
   );
