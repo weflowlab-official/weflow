@@ -6,6 +6,7 @@
 import Image from "next/image";
 import { IconAlertTriangle, IconCheck, IconShieldCheck, IconX } from "@tabler/icons-react";
 import { Reveal } from "@/blog/components/ui/Reveal";
+import PhpWhat from "@/components/home/PhpWhat";
 
 const NEWS = [
   { src: "/images/blog/news-php-01.webp", w: 900, h: 411, source: "연합뉴스", date: "2026.10.22", title: "PHP 보안 취약점에 해킹 비상…국내 IT·보안업계 긴급 대응" },
@@ -50,6 +51,9 @@ export function SecurityNewsSection() {
             <br /> 오래된 기술 위에 만든 홈페이지는<br className="md:hidden" /> 보안 업데이트를 놓치는 순간 위험해집니다.
           </p>
         </div>
+
+        {/* PHP란? — 메인 사이트 보안 섹션과 같은 박스 */}
+        <PhpWhat />
 
         {/* 기사 4건: 모바일은 옆으로 넘기는 카드, md 이상은 2열 (높이가 달라 위쪽 정렬) */}
         <div className="-mx-4 mt-10 flex snap-x snap-mandatory gap-3 overflow-x-auto overflow-y-hidden overscroll-x-contain px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:px-6 md:mx-0 md:mt-14 md:grid md:grid-cols-2 md:items-start md:gap-5 md:overflow-visible md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden">

@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { AlertTriangle, Check, ShieldCheck, X } from 'lucide-react'
 import InView from './InView'
+import PhpWhat from '@/components/home/PhpWhat'
 
 /**
  * 보안 — WHY NOW 03 "그럼 병원 홈페이지는 괜찮을까요? PHP 보안 취약점 뉴스는 끊이지 않습니다" (네이버 위험 다음, 세 번째 이유).
@@ -43,6 +44,9 @@ export default function SecurityNews({ who = '병원' }: { who?: string }) {
           국내 PHP 서버 상당수가 업데이트되지 않은<br className="cb-mo" /> 옛 버전이라는 보도가 잇따랐습니다.<br />
           오래된 기술로 만든 {who} 홈페이지는<br className="cb-mo" /> 보안 업데이트를 놓치는 순간 위험해집니다.
         </p>
+
+        {/* PHP란? — 메인 보안 섹션과 같은 박스 */}
+        <PhpWhat />
 
         {/* 기사 4장 — 넓은 화면은 2열(오른쪽 열을 내려 엇갈리게), 휴대폰은 옆으로 넘기는 카드 */}
         <InView className="cbs-news">

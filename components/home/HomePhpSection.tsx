@@ -1,14 +1,15 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { Check, X, ShieldCheck, Code2 } from 'lucide-react'
+import { Check, X, ShieldCheck } from 'lucide-react'
+import PhpWhat from './PhpWhat'
 
 /**
  * 메인 — 제작 사례 아래 'PHP 보안' 섹션. 메인 카드 섹션(HomeCardSections)과 같은 모양으로 그린다:
  * 검은 바탕 버전(.hs-section--dark 와 같은 색) · 회색 띄어 쓴 작은 제목 · 굵은 흰 제목(강조는 하늘색) · 어두운 둥근 카드.
  * '경고' 이야기라 앞뒤 흰 섹션(제작 사례 · 웹블로그 출시) 사이에서 어두운 바탕으로 끊는다.
  *  1) PHP 보안 뉴스 기사 네 장 (병의원 페이지 보안 섹션과 같은 이미지 public/images/blog/news-php-0N.webp)
- *  2) 'PHP란?' — 처음 듣는 사람을 위한 한 줄 설명
+ *  2) 'PHP란?' — 처음 듣는 사람을 위한 한 줄 설명 + 수치 (PhpWhat — 병의원 웹블로그·웹블로그 보안 섹션도 같은 것을 쓴다)
  *  3) 옛 방식(PHP) vs WEFLOW(Next.js) 카드 두 장
  * 문구 기준: "Next.js 는 절대 안전" 이라고 하지 않는다 — "PHP 를 쓰지 않으니 PHP 취약점 걱정은 없다" 까지만.
  */
@@ -55,20 +56,8 @@ export default function HomePhpSection() {
           </p>
         </header>
 
-        {/* PHP란? */}
-        <div className={`hp-what${headShown ? ' is-in' : ''}`}>
-          <span className="hp-what__icon"><Code2 size={24} strokeWidth={1.8} /></span>
-          <div>
-            <b>PHP란?</b>
-            <p>홈페이지를 만들 때 20년 넘게 널리 쓰여 온 서버 프로그래밍 언어입니다.<br className="hp-pc" />{' '}워드프레스·그누보드 같은 템플릿 홈페이지 제작 도구도 PHP로 만들어져 있습니다.</p>
-            {/* 수치 출처: W3Techs 집계(서버 언어가 확인되는 사이트 기준)를 인용한 2026-10-22 보도 · 보안업체 말로리의 쇼단 집계 보도 */}
-            <ul className="hp-stats">
-              <li><strong>83%</strong><span>국내 웹사이트 중<br />PHP를 쓰는 비율</span></li>
-              <li><strong>89%</strong><span>버전이 확인된 국내 PHP 서버 중<br />지원이 끝난 옛 버전 비율</span></li>
-            </ul>
-            <small className="hp-src">출처: W3Techs 집계 인용 보도(디지털타임스·뉴시스, 2026.10.22) · 쇼단 집계 인용 보도(스페셜타임스)</small>
-          </div>
-        </div>
+        {/* PHP란? — 병의원 웹블로그·웹블로그 보안 섹션과 같은 박스 */}
+        <PhpWhat />
 
         {/* 기사 네 장 — 넓은 화면은 2열, 휴대폰은 옆으로 넘긴다 */}
         <div ref={newsRef} className={`hp-news${newsShown ? ' is-in' : ''}`}>
@@ -120,21 +109,6 @@ export default function HomePhpSection() {
         .hp-card { border-radius: clamp(18px, 2.2vw, 28px); background: #1a1b1f; opacity: 0; transform: translateY(40px); transition: opacity .8s cubic-bezier(.16,1,.3,1) calc(.05s + var(--d, 0) * .1s), transform .8s cubic-bezier(.16,1,.3,1) calc(.05s + var(--d, 0) * .1s), background .25s; }
         .is-in > .hp-card { opacity: 1; transform: none; }
 
-        /* 박스 폭은 안의 글 길이에 맞춘다 (최대 860px) */
-        .hp-what { display: flex; gap: 18px; align-items: flex-start; width: fit-content; max-width: 860px; margin: clamp(2.5rem, 5vw, 3.5rem) auto 0; padding: clamp(1.25rem, 2.4vw, 1.75rem) clamp(1.4rem, 2.6vw, 2rem); border-radius: clamp(18px, 2.2vw, 24px); background: rgba(63,143,224,.12); box-shadow: inset 0 0 0 1px rgba(111,176,242,.25); opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.16,1,.3,1) .15s, transform .8s cubic-bezier(.16,1,.3,1) .15s; }
-        .hp-what.is-in { opacity: 1; transform: none; }
-        .hp-what__icon { flex: none; width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,.08); color: #6fb0f2; display: flex; align-items: center; justify-content: center; }
-        .hp-what b { font-size: 1.1rem; font-weight: 800; }
-        .hp-what p { margin: .35rem 0 0; font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,.78); word-break: keep-all; }
-        .hp-stats { list-style: none; margin: 1.1rem 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .hp-stats li { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 14px; background: rgba(255,255,255,.05); }
-        .hp-stats strong { flex: none; font-size: clamp(1.8rem, 3.4vw, 2.4rem); font-weight: 800; letter-spacing: -0.03em; color: #ff7a7a; line-height: 1; }
-        .hp-stats span { font-size: .88rem; line-height: 1.45; color: rgba(255,255,255,.72); word-break: keep-all; }
-        @media (max-width: 520px) { .hp-stats { grid-template-columns: 1fr; } }
-        /* 휴대폰 — 수치 카드·출처는 아이콘 칸만큼 왼쪽으로 넓혀, 박스 안 가로폭을 다 쓴다 (왼쪽 끝을 아이콘 시작점에 맞춤: 아이콘 48 + 간격 18) */
-        @media (max-width: 767px) { .hp-stats, .hp-src { margin-left: -66px; } .hp-src { text-align: center; } }
-        .hp-src { display: block; margin-top: .7rem; font-size: .75rem; color: rgba(255,255,255,.4); }
-
         .hp-news { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(.85rem, 1.8vw, 1.4rem); margin-top: clamp(2.5rem, 5vw, 3.5rem); }
         .hp-news__card { margin: 0; padding: clamp(.75rem, 1.4vw, 1rem); }
         /* 네 장을 같은 크기로 — 같은 비율(가로 900 : 세로 411) 칸에 기사 위쪽부터 채운다 */
@@ -166,7 +140,7 @@ export default function HomePhpSection() {
         .hp-v { color: #6fb0f2; }
 
         @media (prefers-reduced-motion: reduce) {
-          .hp-head, .hp-what, .hp-card { opacity: 1; transform: none; transition: none; }
+          .hp-head, .hp-card { opacity: 1; transform: none; transition: none; }
         }
       `}</style>
     </section>
