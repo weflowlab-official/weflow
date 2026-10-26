@@ -29,6 +29,8 @@ export const metadata: Metadata = {
   description:
     '우리 홈페이지 안에 쌓이는 블로그, 웹블로그. 글 하나만 올려도 네이버·구글 검색과 AI 답변에 맞춰지는 구조(SEO·AEO·GEO)를 Next.js로 만듭니다. 병원부터 인테리어·학원·법률까지 전 업종 가능합니다.',
   alternates: { canonical: '/webblog' },
+  // 10-26: 메뉴에서 내렸고 내용이 웹블로그(/blog) 메인으로 옮겨가 검색에서 뺀다 (사이트맵에서도 뺐다). 링크는 따라가게 둔다
+  robots: { index: false, follow: true },
   openGraph: {
     title: '웹블로그란? · WEFLOW',
     description: '경쟁업체보다 먼저 검색되는 방법 — 우리 홈페이지 안에 쌓이는 웹블로그.',
