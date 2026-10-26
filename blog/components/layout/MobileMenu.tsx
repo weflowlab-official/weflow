@@ -1,12 +1,11 @@
 "use client";
 // 헤더 햄버거로 여는 전체 메뉴 (xl 미만): 오른쪽에서 밀려 나오는 드로어, 뒤는 어둡게.
-// 로고 + 닫기 → 블로그 메뉴(전체 글 · 큰 업종 · 검색) → 맨 아래 홈페이지·전화·카카오톡 버튼.
+// 로고 + 닫기 → 블로그 메뉴(전체 글 · 큰 업종 · 검색) → 맨 아래 홈페이지·바로 전화·무료 견적 신청 버튼.
 // 큰 업종은 누르면 세부업종이 아래로 펼쳐지는 드롭다운(한 번에 하나만).
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconArrowRight, IconArrowUpRight, IconChevronDown, IconPhone, IconSearch, IconX } from "@tabler/icons-react";
-import { KakaoIcon } from "@/blog/components/ui/KakaoIcon";
+import { IconArrowRight, IconArrowUpRight, IconChevronDown, IconClipboardList, IconPhone, IconSearch, IconX } from "@tabler/icons-react";
 import { useSite } from "@/blog/components/SiteProvider";
 import { Sheet } from "@/blog/components/ui/Sheet";
 import { BlogLogo, homepageLinkProps } from "@/blog/components/layout/BlogLogo";
@@ -135,7 +134,7 @@ export function FullMenuSheet({ open, onClose }: FullProps) {
         <div className="mt-1">{menuList}</div>
       </div>
 
-      {/* 하단: 홈페이지 · 전화 · 카카오톡 */}
+      {/* 하단: 홈페이지 · 바로 전화 · 무료 견적 신청 */}
       <div className="shrink-0 space-y-2 border-t border-neutral-200 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         <a
           {...homepageLinkProps(clinic.homepageUrl)}
@@ -144,20 +143,17 @@ export function FullMenuSheet({ open, onClose }: FullProps) {
           WEFLOW 홈페이지
           <IconArrowUpRight className="size-4" />
         </a>
+        {/* 글 끝 상담 블록과 같은 두 버튼 (같은 폭) */}
         <div className="grid grid-cols-2 gap-2">
-          <a href={tel} className="flex h-12 items-center justify-center gap-2 rounded-[11px] bg-primary text-base font-semibold text-white">
-            <IconPhone className="size-5" />
+          {/* 바로 전화 — 위 'WEFLOW 홈페이지'(파란 테두리)와 구분되게 초록 테두리·아이콘 (PC 플로팅 전화와 같은 색) */}
+          <a href={tel} className="flex h-12 items-center justify-center gap-1.5 rounded-[11px] border border-[#16a34a] bg-white text-base font-semibold text-neutral-900">
+            <IconPhone className="size-5 text-[#16a34a]" />
             바로 전화
           </a>
-          <a
-            href={clinic.kakaoChannelUrl || clinic.consultUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-12 items-center justify-center gap-2 rounded-[11px] bg-[#fee500] text-base font-semibold text-[#191919]"
-          >
-            <KakaoIcon className="size-5" />
-            카카오톡
-          </a>
+          <Link href={clinic.consultUrl} onClick={onClose} className="flex h-12 items-center justify-center gap-1.5 rounded-[11px] bg-primary text-base font-semibold text-white">
+            <IconClipboardList className="size-5" />
+            무료 견적 신청
+          </Link>
         </div>
       </div>
     </Sheet>

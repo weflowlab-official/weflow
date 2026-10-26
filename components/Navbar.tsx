@@ -34,7 +34,7 @@ const NAV_ITEMS: (NavLink | NavGroup)[] = [
   // 실제 웹블로그(/blog)와 병의원 웹블로그 안내(/clinic-blog)로 바로 간다
   // external: 새 창으로 열고 글자 옆에 새 창 아이콘을 단다
   { href: "/blog", label: "웹블로그", isNew: true, external: true },
-  { href: "/clinic-blog", label: "병의원 웹블로그", isNew: true, external: true },
+  { href: "/clinic-blog", label: "병의원 전문", isNew: true, external: true },
   // '웹블로그란?' 탭(/webblog)은 메뉴에서만 내렸다 — 페이지 코드는 남아 있다 (2026-10-25)
   // { href: "/webblog", label: "웹블로그란?", isNew: true },
   // 예약 신청(/booking)은 메뉴에서 내리고 그 자리에 사이트 점검을 뒀다 — 페이지 자체는 남아 있다

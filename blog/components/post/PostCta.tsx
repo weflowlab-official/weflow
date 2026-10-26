@@ -1,5 +1,5 @@
 // 글 하단 장점·상담 블록. 모든 글 끝에 자동으로 붙는다 (해시태그 아래).
-// 위: WEFLOW 웹블로그 장점 (2열 목록) / 아래: 상담 문구 + 버튼 3개(무료 견적 신청 / 카카오톡 / 전화).
+// 위: WEFLOW 웹블로그 장점 (2열 목록) / 아래: 상담 문구 + 버튼 2개(바로 전화 / 무료 견적 신청).
 // 문구는 관리자 '회사 정보 → 글 하단 문구' 에서 바꿀 수 있고, 비어 있으면 기본 문구(lib/clinicDefaults.ts).
 // 장점을 글마다 따로 쓰지 않으려고 만든 블록이다 — 고치면 모든 글이 같이 바뀐다.
 import Link from "next/link";
@@ -16,7 +16,6 @@ import {
   IconWorldSearch,
   type Icon,
 } from "@tabler/icons-react";
-import { KakaoIcon } from "@/blog/components/ui/KakaoIcon";
 import { getClinic } from "@/blog/lib/payload";
 import { MobileBreaks } from "@/blog/components/ui/MobileBreaks";
 import { BENEFITS, BENEFITS_TITLE, CTA_TITLE as DEFAULT_TITLE, ctaText as defaultText } from "@/blog/lib/clinicDefaults";
@@ -68,25 +67,8 @@ export async function PostCta({ className = "" }: Props) {
         <p className="m-0! mt-3! whitespace-pre-line text-[15px] leading-relaxed text-neutral-600 md:text-base">
           <MobileBreaks text={text} />
         </p>
-        <div className="mt-6 flex flex-col items-stretch justify-center gap-2.5 sm:flex-row sm:items-center">
-          <Link
-            href={clinic.consultUrl}
-            className="inline-flex h-12 items-center justify-center gap-1.5 whitespace-nowrap rounded-[11px] bg-primary px-6 text-base font-semibold text-white no-underline! transition-colors hover:bg-brand-secondary"
-          >
-            <IconClipboardList className="size-5" />
-            무료 견적 신청
-          </Link>
-          {clinic.kakaoChannelUrl && (
-            <a
-              href={clinic.kakaoChannelUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 items-center justify-center gap-1.5 whitespace-nowrap rounded-[11px] bg-[#fee500] px-6 text-base font-semibold text-[#191919] no-underline! transition-colors hover:bg-[#f5dc00]"
-            >
-              <KakaoIcon className="size-5" />
-              카카오톡 상담
-            </a>
-          )}
+        {/* 두 버튼은 같은 폭 — 넓은 화면은 두 칸짜리 inline-grid 라 두 칸이 더 긴 버튼('무료 견적 신청') 폭에 맞춰진다. 휴대폰은 한 줄 가득 */}
+        <div className="mt-6 flex flex-col items-stretch gap-2.5 sm:inline-grid sm:grid-cols-2">
           <a
             href={tel}
             className="inline-flex h-12 items-center justify-center gap-1.5 whitespace-nowrap rounded-[11px] border border-primary bg-white px-6 text-base font-semibold text-primary no-underline! transition-colors hover:bg-primary hover:text-white"
@@ -94,6 +76,13 @@ export async function PostCta({ className = "" }: Props) {
             <IconPhone className="size-5" />
             바로 전화
           </a>
+          <Link
+            href={clinic.consultUrl}
+            className="inline-flex h-12 items-center justify-center gap-1.5 whitespace-nowrap rounded-[11px] bg-primary px-6 text-base font-semibold text-white no-underline! transition-colors hover:bg-brand-secondary"
+          >
+            <IconClipboardList className="size-5" />
+            무료 견적 신청
+          </Link>
         </div>
       </div>
     </section>
