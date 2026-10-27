@@ -10,9 +10,20 @@ type Props = { items?: FaqItem[] }; // HomeContent.faq
 export async function FaqSection({ items }: Props) {
   const clinic = await getClinic();
   const faqItems = items && items.length > 0 ? items : defaultFaq(clinic);
+  // 검색엔진·AI 답변엔진이 질문·답을 그대로 읽어 가도록 FAQ 구조화 데이터 (글 페이지의 FAQ 와 같은 형식)
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: { "@type": "Answer", text: f.answer },
+    })),
+  };
 
   return (
     <section aria-labelledby="home-faq-title" className="bg-neutral-50 py-16 md:py-24">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <div className="mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-site-4xl">
         <div className="grid gap-8 lg:grid-cols-12 lg:gap-16">
           {/* 왼쪽: 아이브로우 + 제목 + 안내 */}

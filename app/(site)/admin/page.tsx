@@ -114,6 +114,11 @@ interface PageView {
 
 // 목록 위 상태 필터 버튼
 const FILTERS: Filter[] = ["전체", "대기", "진행중", "완료"];
+// 문의 폼 출처(source) → 목록 칩. DB 칸은 따로 없고, 폼이 보내는 source 값으로만 구분한다
+const FORM_LABEL: Record<string, { label: string; bg: string; color: string }> = {
+  "clinic-blog": { label: "병의원", bg: "rgba(13, 148, 136, 0.15)", color: "#0d9488" },
+  blog: { label: "웹블로그", bg: "rgba(245, 158, 11, 0.15)", color: "#d97706" },
+};
 // 사이드바·드로어 메뉴 = 탭 목록 (순서대로 노출)
 const TABS: { key: Tab; label: string }[] = [
   { key: "overview", label: "전체 현황" },
@@ -912,6 +917,24 @@ function RequestTable({
                           }}
                         >
                           {SITE_LABEL[row.site] || row.site}
+                        </span>
+                      )}
+                      {/* 웹블로그(/blog)·병의원 웹블로그(/clinic-blog) 문의 폼으로 들어온 접수는 칩으로 구분 */}
+                      {"source" in row && row.source && FORM_LABEL[row.source] && (
+                        <span
+                          style={{
+                            marginLeft: "0.5rem",
+                            padding: "0.15rem 0.5rem",
+                            borderRadius: "6px",
+                            fontSize: "0.72rem",
+                            fontWeight: 600,
+                            background: FORM_LABEL[row.source].bg,
+                            color: FORM_LABEL[row.source].color,
+                            whiteSpace: "nowrap",
+                            verticalAlign: "middle",
+                          }}
+                        >
+                          {FORM_LABEL[row.source].label}
                         </span>
                       )}
                     </td>
@@ -1722,10 +1745,30 @@ const PAGE_KO: Record<string, string> = {
 function pageName(path: string): string {
   const clean = path.split(/[?#]/)[0].replace(/\/$/, "") || "/";
   if (PAGE_KO[clean]) return PAGE_KO[clean];
+  // 웹블로그(/blog) — 홈 · 그 밖(카테고리·글)은 한 줄로
+  if (clean === "/blog") return "웹블로그 홈";
+  if (clean.startsWith("/blog/")) return "웹블로그 글";
   // 사례 상세는 주소 그대로 보여준다 (/cases/atelier 등)
   if (/^\/cases\/[a-z0-9-]+$/i.test(clean)) return clean;
   // 그 밖은 우리 사이트에 없는 주소 — 봇·잘못 복사된 링크가 남긴 기록이라 한 줄로 묶는다
   return "없는 주소";
+}
+// 이탈 페이지 집계 키 — 웹블로그 글은 글마다 흩어지지 않게 하나로 묶는다 (pageName 이 "웹블로그 글"로 표기)
+function exitKey(path: string): string {
+  const clean = path.split(/[?#]/)[0].replace(/\/$/, "");
+  return clean.startsWith("/blog/") ? "/blog/*" : path;
+}
+// 경로 → 어느 사이트 영역인지 (메인 사이트 / 병의원 웹블로그 / 웹블로그)
+const AREAS = [
+  { key: "main", label: "메인 사이트", color: "#3373df" },
+  { key: "clinic", label: "병의원 웹블로그", color: "#0d9488" },
+  { key: "blog", label: "웹블로그", color: "#d97706" },
+] as const;
+function areaOf(path: string): (typeof AREAS)[number]["key"] {
+  const clean = path.split(/[?#]/)[0];
+  if (clean === "/clinic-blog" || clean.startsWith("/clinic-blog/")) return "clinic";
+  if (clean === "/blog" || clean.startsWith("/blog/")) return "blog";
+  return "main";
 }
 // 접속 기기 표기·색
 const DEVICE_KO: Record<string, string> = {
@@ -2031,9 +2074,11 @@ function BarRow({
 
 function TrafficView({
   pageViews: allPageViews,
+  inquiries,
   loading,
 }: {
   pageViews: PageView[];
+  inquiries: Inquiry[];
   loading: boolean;
 }) {
   const card: React.CSSProperties = {
@@ -2116,13 +2161,13 @@ function TrafficView({
       });
       // 광고 유입 이탈 페이지 — 키워드 카드와 같은 단위(키워드당 1회)로 세서
       // 두 카드의 합계가 항상 일치한다 (한 기기가 키워드 2개로 오면 이탈도 2로)
-      adExitCount[exit.path] = (adExitCount[exit.path] || 0) + kws.size;
+      adExitCount[exitKey(exit.path)] = (adExitCount[exitKey(exit.path)] || 0) + kws.size;
     } else {
       const src = normSource(entry.source);
       sourceCount[src] = (sourceCount[src] || 0) + 1;
     }
     deviceCount[entry.device] = (deviceCount[entry.device] || 0) + 1;
-    exitCount[exit.path] = (exitCount[exit.path] || 0) + 1;
+    exitCount[exitKey(exit.path)] = (exitCount[exitKey(exit.path)] || 0) + 1;
     if (views.length === 1) bounced++;
     const sessionDur = views.reduce((a, v) => a + (v.durationMs || 0), 0);
     if (sessionDur > 0) {
@@ -2133,6 +2178,33 @@ function TrafficView({
   const bounceRate = totalSessions
     ? Math.round((bounced / totalSessions) * 100)
     : 0;
+  // 영역별 방문자 — 한 방문에서 그 영역 페이지를 하나라도 봤으면 1명 (여러 영역을 봤으면 각각 센다)
+  const areaCount: Record<string, number> = {};
+  sessionList.forEach((views) => {
+    new Set(views.map((v) => areaOf(v.path))).forEach((a) => {
+      areaCount[a] = (areaCount[a] || 0) + 1;
+    });
+  });
+  const maxArea = Math.max(1, ...Object.values(areaCount));
+  // 영역별 유입 경로 — 방문 하나에 소스 하나(광고 클릭이 있으면 그 광고, 없으면 첫 페이지의 소스), 본 영역마다 센다
+  const areaSource: Record<string, Record<string, number>> = {};
+  sessionList.forEach((views) => {
+    const paid = views.find((v) => v.medium === "cpc" || v.medium === "paid");
+    const src = paid ? `${normSource(paid.source)}-ad` : normSource(views[0].source);
+    new Set(views.map((v) => areaOf(v.path))).forEach((a) => {
+      (areaSource[a] ||= {})[src] = (areaSource[a][src] || 0) + 1;
+    });
+  });
+  // 영역별 문의 — 폼 출처로 나눈다 (병의원·웹블로그 폼 외에는 전부 메인 사이트)
+  const areaInq: Record<string, number> = {};
+  withinPeriod(inquiries, period).forEach((i) => {
+    const a = i.source === "clinic-blog" ? "clinic" : i.source === "blog" ? "blog" : "main";
+    areaInq[a] = (areaInq[a] || 0) + 1;
+  });
+  const maxRate = Math.max(
+    0.0001,
+    ...AREAS.map((a) => (areaCount[a.key] ? Math.min(100, ((areaInq[a.key] || 0) / areaCount[a.key]) * 100) : 0)),
+  );
   const avgDur = durN ? durSum / durN : 0;
 
   const sourceRows = Object.entries(sourceCount).sort((a, b) => b[1] - a[1]);
@@ -2389,6 +2461,116 @@ function TrafficView({
                 right={`${cnt}명 (${totalSessions ? Math.round((cnt / totalSessions) * 100) : 0}%)`}
               />
             ))}
+          </div>
+        </section>
+
+        {/* 영역별 유입 경로 — 그 영역을 본 방문의 유입 소스(첫 페이지 기준, 광고 클릭이 있으면 광고) 비율 */}
+        <section style={card} className="area-src-card">
+          <SectionHead
+            Icon={LogIn}
+            tint="#d97706"
+            title="영역별로 어디서 들어왔나요?"
+            desc="메인 사이트 · 병의원 웹블로그 · 웹블로그를 본 고객의 유입 경로"
+          />
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}
+          >
+            {AREAS.map((a) => {
+              const m = areaSource[a.key] || {};
+              const total = Object.values(m).reduce((s, v) => s + v, 0);
+              const rows = Object.entries(m).sort((x, y) => y[1] - x[1]);
+              return (
+                <div key={a.key}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      fontSize: "0.88rem",
+                      fontWeight: 600,
+                      color: "var(--text)",
+                      marginBottom: "0.4rem",
+                    }}
+                  >
+                    <span>{a.label}</span>
+                    <span className="c-muted" style={{ fontWeight: 500 }}>{total}명</span>
+                  </div>
+                  {total === 0 ? (
+                    <p className="c-muted" style={{ margin: 0, fontSize: "0.85rem" }}>데이터 없음</p>
+                  ) : (
+                    <>
+                      <div style={{ display: "flex", height: 10, borderRadius: 999, overflow: "hidden", background: "var(--border)" }}>
+                        {rows.map(([src, cnt]) => (
+                          <span key={src} title={`${SOURCE_KO[src] || src} ${cnt}명`} style={{ width: `${(cnt / total) * 100}%`, background: SOURCE_COLOR[src] || "var(--accent)" }} />
+                        ))}
+                      </div>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem 0.9rem", marginTop: "0.45rem", fontSize: "0.8rem", color: "var(--text-secondary)" }}>
+                        {rows.map(([src, cnt]) => (
+                          <span key={src} style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+                            <span style={{ width: 8, height: 8, borderRadius: 2, background: SOURCE_COLOR[src] || "var(--accent)" }} />
+                            {SOURCE_KO[src] || src} {Math.round((cnt / total) * 100)}%
+                          </span>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section style={card} className="area-card">
+          <SectionHead
+            Icon={Eye}
+            tint="#0d9488"
+            title="어디를 봤나요?"
+            desc="메인 사이트 · 병의원 웹블로그 · 웹블로그별 방문자"
+          />
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}
+          >
+            {AREAS.map((a) => (
+              <BarRow
+                key={a.key}
+                label={a.label}
+                color={a.color}
+                value={areaCount[a.key] || 0}
+                max={maxArea}
+                labelWidth={110}
+                right={`${areaCount[a.key] || 0}명 (${totalSessions ? Math.round(((areaCount[a.key] || 0) / totalSessions) * 100) : 0}%)`}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* 영역별 문의 전환 — 같은 기간의 문의를 폼 출처(source)로 영역에 나눠, 그 영역 방문자 수로 나눈다 */}
+        <section style={card} className="area-card">
+          <SectionHead
+            Icon={MousePointerClick}
+            tint="#16a34a"
+            title="문의로 이어졌나요?"
+            desc="영역별 방문자 중 문의를 남긴 비율"
+          />
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}
+          >
+            {AREAS.map((a) => {
+              const n = areaCount[a.key] || 0;
+              const k = areaInq[a.key] || 0;
+              const rate = n ? Math.min(100, (k / n) * 100) : 0;
+              return (
+                <BarRow
+                  key={a.key}
+                  label={a.label}
+                  color={a.color}
+                  value={rate}
+                  max={maxRate}
+                  labelWidth={110}
+                  rightWidth={150}
+                  right={`${k}건 / ${n}명 (${rate ? rate.toFixed(1) : 0}%)`}
+                />
+              );
+            })}
           </div>
         </section>
 
@@ -3475,7 +3657,7 @@ export default function AdminPage() {
 
           {/* 유입 통계 탭 */}
           {tab === "traffic" && (
-            <TrafficView pageViews={pageViews} loading={pvLoading} />
+            <TrafficView pageViews={pageViews} inquiries={inquiries} loading={pvLoading} />
           )}
 
           {/* 필터 + 새로고침 */}
@@ -3606,7 +3788,7 @@ export default function AdminPage() {
         .detail-dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; font-size: 0.95rem; }
         .analytics-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
         /* 광고 기기 카드 — 두 칸 그리드를 가로로 꽉 채우고 안은 전체·광고별·키워드별 3열 */
-        .analytics-2col .ad-dev-card { grid-column: 1 / -1; }
+        .analytics-2col .ad-dev-card, .analytics-2col .area-src-card { grid-column: 1 / -1; }
         .ad-dev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
         .ad-dev-col { min-width: 0; }
         /* 왼쪽 칸에서 전체 아래에 붙는 광고별 — 가로선으로 나눈다 */

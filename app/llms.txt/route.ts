@@ -52,10 +52,13 @@ ${planLines}
 - [회사 소개](${BASE}/about): 사업자 정보와 소개
 - [사이트 자동 점검](${BASE}/check): 주소를 입력하면 로딩 속도·검색 노출·모바일 대응·문의 동선을 바로 분석
 - [맞춤 견적 받기](${BASE}/diagnosis): 홈페이지 맞춤 견적과 제작 방향 안내
+- [병의원 웹블로그](${BASE}/clinic-blog): 병원 주소에서 운영하는 병의원 전용 웹블로그 — 네이버·구글 검색과 AI 답변에 인용되도록 설계하고, 홈페이지와 함께 제작
+- [웹블로그](${BASE}/blog): 업종별 웹블로그 소개와 글 — 차량·금융·병의원·인테리어 등 업종마다 웹블로그가 필요한 이유, SEO·AEO·GEO 구조 설계
 
 ## 참고
 
 - 사이트맵: ${BASE}/sitemap.xml
+- 웹블로그 사이트맵: ${BASE}/blog/sitemap.xml
 - 블로그: https://blog.naver.com/weflowlab
 `
 

@@ -7,6 +7,7 @@ import { FloatingCta } from "@/blog/components/layout/FloatingCta";
 import { SiteProvider } from "@/blog/components/SiteProvider";
 import { LivePreviewListener } from "@/blog/components/LivePreviewListener";
 import { getSiteData } from "@/blog/lib/payload";
+import PageTracker from "@/components/PageTracker";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
 
@@ -81,6 +82,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {/* 우하단 퀵메뉴 플로팅 버튼 + 드로어 */}
           <FloatingCta />
         </SiteProvider>
+        {/* 방문 기록 — 사이트와 같은 /api/track 으로 보내 관리자 유입 관리에 웹블로그로 잡힌다 (관리자 미리보기는 세지 않음) */}
+        {!isPreview && <PageTracker />}
       </body>
     </html>
   );

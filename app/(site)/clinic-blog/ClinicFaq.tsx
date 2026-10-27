@@ -22,11 +22,23 @@ const FAQ: { q: string; a: string; link?: { href: string; label: string } }[] = 
   { q: '병원 말고 다른 업종도 만들 수 있나요?', a: '네. 웹블로그는 차량·금융·인테리어·학원 등 업종에 맞게 카테고리와 글 구조를 설계해 만들 수 있습니다.', link: { href: '/blog', label: '전 업종 웹블로그 보기' } },
 ]
 
+// 검색엔진·AI 답변엔진이 질문·답을 그대로 읽어 가도록 FAQ 구조화 데이터 (메인 FaqSection 과 같은 형식)
+const FAQ_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.map(f => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+}
+
 export default function ClinicFaq() {
   const [open, setOpen] = useState(-1) // 열려 있는 질문 번호 (-1 = 모두 접힘)
 
   return (
     <section id="faq" className="cf" aria-labelledby="cf-title">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }} />
       <div className="cf-inner">
         {/* 왼쪽 묶음 — 좁은 화면에서는 풀려서 제목은 목록 위로, 물어보기는 목록 아래로 간다 */}
         <div className="cf-side">
