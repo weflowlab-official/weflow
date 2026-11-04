@@ -89,8 +89,7 @@ export function SiteHeader() {
                 aria-label="홈페이지 바로가기"
                 className="flex min-w-0 shrink-0 items-center gap-1 rounded-full border border-white/40 bg-white/10 px-2.5 py-1 text-xs font-semibold text-white transition-colors hover:bg-white hover:text-primary sm:gap-1.5 sm:px-3 sm:py-1.5 lg:gap-2 lg:px-5 lg:py-2 lg:text-sm xl:px-6 xl:py-2.5 xl:text-base xl:tracking-[-0.18px]"
               >
-                {/* 휴대폰은 짧게 "홈페이지" */}
-                <span className="min-w-0 truncate"><span className="sm:hidden">홈페이지</span><span className="hidden sm:inline">홈페이지 바로가기</span></span>
+                <span className="min-w-0 truncate">홈페이지 바로가기</span>
                 <IconArrowRight className="size-2.5 shrink-0 lg:size-[15px]" stroke={2.5} />
               </a>
             </div>
