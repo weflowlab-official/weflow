@@ -22,7 +22,7 @@ function Photo({ post, sizes }: { post: Post; sizes: string }) {
 function Rank({ n, large = false }: { n: number; large?: boolean }) {
   return (
     <span
-      className={`absolute left-4 top-4 z-10 flex items-center justify-center rounded-full bg-primary font-bold text-white shadow-md ${large ? "size-10 text-base md:size-12 md:text-lg" : "size-8 text-sm"}`}
+      className={`absolute right-4 top-4 z-10 flex items-center justify-center rounded-full bg-primary font-bold text-white shadow-md ${large ? "size-10 text-base md:size-12 md:text-lg" : "size-8 text-sm"}`}
     >
       {n}
     </span>
