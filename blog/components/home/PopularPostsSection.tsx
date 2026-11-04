@@ -1,4 +1,4 @@
-// 메인 페이지 "가장 많이 본 글". 실제 조회수(views) 상위 4개를 가로로, 사진 + 제목만 단순하게.
+// 메인 페이지 "가장 많이 본 글". 정해 둔 글 4개(POPULAR_SLUGS)를 가로로, 사진 + 제목만 단순하게.
 import Link from "next/link";
 import { IconArrowRight } from "@tabler/icons-react";
 import { Reveal } from "@/blog/components/ui/Reveal";
@@ -7,7 +7,7 @@ import { Placeholder } from "@/blog/components/ui/Placeholder";
 import type { Post } from "@/blog/lib/types";
 import { formatDate } from "@/blog/lib/formatDate";
 
-type Props = { posts: Post[] }; // 조회수순 상위 글 (서버 페이지가 getPopularPosts(3) 로 넘김)
+type Props = { posts: Post[] }; // 서버 페이지가 POPULAR_SLUGS 순서대로 넘김
 
 // 사진 (없으면 자리표시)
 function Photo({ post, sizes }: { post: Post; sizes: string }) {

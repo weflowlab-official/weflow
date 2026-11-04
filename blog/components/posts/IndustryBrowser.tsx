@@ -11,13 +11,14 @@ type Props = {
   posts: Post[];
   subs: SubIndustry[];
   tabs: ReactNode;
+  pinSlug?: string; // 최신순에서 맨 앞에 둘 글
 };
 
 const chip = "shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors md:text-[15px]";
 const on = "border-primary bg-primary text-white";
 const off = "border-neutral-200 bg-white text-neutral-700 hover:border-primary hover:text-primary";
 
-export function IndustryBrowser({ posts, subs, tabs }: Props) {
+export function IndustryBrowser({ posts, subs, tabs, pinSlug }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const sub = useSearchParams().get("sub");
@@ -43,7 +44,7 @@ export function IndustryBrowser({ posts, subs, tabs }: Props) {
         </div>
       )}
       {/* 칩을 바꾸면 정렬·더보기 상태를 처음부터 */}
-      <PostBrowser key={current ?? "all"} posts={shown} tabs={tabs} />
+      <PostBrowser key={current ?? "all"} posts={shown} tabs={tabs} pinSlug={pinSlug} />
     </>
   );
 }

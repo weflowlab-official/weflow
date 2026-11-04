@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getCategories, getCategory, getPostsByCategory } from "@/blog/lib/payload";
+import { CLINIC_LEAD_SLUG, getCategories, getCategory, getPostsByCategory } from "@/blog/lib/payload";
 import { Breadcrumb } from "@/blog/components/ui/Breadcrumb";
 import { PageTitle } from "@/blog/components/posts/PageTitle";
 import { CategoryTabs } from "@/blog/components/posts/CategoryTabs";
@@ -32,6 +32,7 @@ export default async function CategoryPage({ params }: PageProps<"/blog/[categor
   if (!cat) notFound();
 
   const [posts, categories] = await Promise.all([getPostsByCategory(cat.slug), getCategories()]);
+  const pinSlug = cat.slug === "clinic" ? CLINIC_LEAD_SLUG : undefined; // 병의원 탭은 대표 글이 맨 앞
   const tabs = <CategoryTabs basePath={`/blog/${cat.slug}`} categories={categories} current={cat.slug} mode="path" />;
 
   return (
@@ -43,8 +44,8 @@ export default async function CategoryPage({ params }: PageProps<"/blog/[categor
 
       {/* 세부업종 칩(?sub=) → 탭(전체 + 모든 업종, 현재 업종 활성) + 정렬 드롭박스 → 목록.
           칩은 주소의 ?sub 를 읽어야 해서 Suspense 로 감싼다. 서버 HTML 에는 전체 글 목록이 먼저 그려진다 */}
-      <Suspense fallback={<PostBrowser posts={posts} tabs={tabs} />}>
-        <IndustryBrowser posts={posts} subs={cat.subs} tabs={tabs} />
+      <Suspense fallback={<PostBrowser posts={posts} tabs={tabs} pinSlug={pinSlug} />}>
+        <IndustryBrowser posts={posts} subs={cat.subs} tabs={tabs} pinSlug={pinSlug} />
       </Suspense>
     </div>
   );

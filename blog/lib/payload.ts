@@ -141,6 +141,18 @@ export const getPostsByAuthor = cache((slug: string) => findPosts({ where: { "au
 
 export const getPopularPosts = cache((n = 4) => findPosts({ sort: "-views", limit: n }));
 
+// 메인의 "가장 많이 본 글"은 조회수와 상관없이 이 순서로 고정한다 (지금 밀고 싶은 글)
+export const POPULAR_SLUGS = ["how-web-blog-gets-indexed-on-naver-google", "seo-aeo-geo-for-web-blog", "naver-blog-vs-web-blog", "why-web-blog-for-clinic"];
+// 병의원 글 목록의 맨 앞에 오는 글 — 병의원 탭과 메인 "최신 글" 첫 번째
+export const CLINIC_LEAD_SLUG = "why-web-blog-for-clinic";
+// 메인 "최신 글"에서 병의원 글 뒤에 붙는 글
+const LATEST_AFTER_CLINIC_SLUGS = ["why-web-blog-for-law-tax", "why-web-blog-for-real-estate"];
+// 메인 "최신 글": 병의원 대표 글 → 나머지 병의원 글(최신순) → 법무·세무 · 부동산
+export const getHomeLatestPosts = cache(async () => {
+  const [clinic, after] = await Promise.all([getPostsByCategory("clinic"), getPostsBySlugs(LATEST_AFTER_CLINIC_SLUGS)]);
+  return [...clinic.filter((p) => p.slug === CLINIC_LEAD_SLUG), ...clinic.filter((p) => p.slug !== CLINIC_LEAD_SLUG), ...after];
+});
+
 export const getLatestPosts = cache((n = 6) => findPosts({ sort: "-publishedAt", limit: n }));
 
 export const getPostsBySlugs = cache(async (slugs: string[]): Promise<Post[]> => {

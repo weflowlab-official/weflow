@@ -14,23 +14,25 @@ const SORTS: { key: SortKey; label: string }[] = [
   { key: "oldest", label: "오래된순" },
 ];
 
-function sortPosts(posts: Post[], key: SortKey): Post[] {
+function sortPosts(posts: Post[], key: SortKey, pinSlug?: string): Post[] {
   const arr = [...posts];
   if (key === "views") return arr.sort((a, b) => b.views - a.views);
   if (key === "oldest") return arr.sort((a, b) => a.publishedAt.localeCompare(b.publishedAt));
-  return arr.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  // 최신순(기본)에서만 pinSlug 글을 맨 앞으로
+  return arr.sort((a, b) => Number(b.slug === pinSlug) - Number(a.slug === pinSlug) || b.publishedAt.localeCompare(a.publishedAt));
 }
 
 type Props = {
   posts: Post[];
   tabs: ReactNode; // CategoryTabs (서버 컴포넌트) 를 그대로 넘긴다
+  pinSlug?: string; // 최신순에서 맨 앞에 둘 글
   initialCount?: number;
   step?: number;
 };
 
-export function PostBrowser({ posts, tabs, initialCount = 8, step = 8 }: Props) {
+export function PostBrowser({ posts, tabs, pinSlug, initialCount = 8, step = 8 }: Props) {
   const [sort, setSort] = useState<SortKey>("latest");
-  const sorted = sortPosts(posts, sort);
+  const sorted = sortPosts(posts, sort, pinSlug);
 
   return (
     <>
