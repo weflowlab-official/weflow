@@ -1,5 +1,5 @@
 // 블로그 메인(/blog). 헤더/푸터는 app/(blog)/layout.tsx 가 감싸고, 여기서는 본문 섹션만 순서대로 조립한다.
-// 구성: 히어로(검색·무료 견적) → 가장 많이 본 글 → 최신 글 → 보안 뉴스·Next.js 비교 → AI 검색 장면 → 플랫폼 블로그의 한계 → 그래서 웹블로그(답 다섯) → 검색에 자리 잡는 구조(SEO·AEO·GEO) → 웹블로그란?(홈페이지 비교·흐름·함께하면 좋은 점) → 업종 카드 → 병의원 전용(/clinic-blog 로) → 상품 3종 → 제작 사례 → FAQ → 무료 견적 신청 폼(#contact)
+// 구성: 히어로(검색·무료 견적) → 웹블로그 제작 사례 → 가장 많이 본 글 → 최신 글 → 보안 뉴스·Next.js 비교 → AI 검색 장면 → 플랫폼 블로그의 한계 → 그래서 웹블로그(답 다섯) → 검색에 자리 잡는 구조(SEO·AEO·GEO) → 웹블로그란?(홈페이지 비교·흐름·함께하면 좋은 점) → 업종 카드 → 병의원 전용(/clinic-blog 로) → 상품 3종 → 제작 사례 → FAQ → 무료 견적 신청 폼(#contact)
 // 홍보용 흐름: 업종을 골라 들어가거나, 웹블로그가 무엇을 하는지 보고, 사례와 FAQ 를 거쳐 상담으로.
 // 데이터: Payload 'home' 글로벌(getHome) + 글 목록 + 카테고리. 글로벌 값이 비어 있으면 각 섹션의 기본 문구를 쓴다.
 import { Suspense } from "react";
@@ -12,6 +12,7 @@ import { ClinicFocusSection } from "@/blog/components/home/ClinicFocusSection";
 import { AiSearchSection } from "@/blog/components/home/AiSearchSection";
 import { PlatformDropSection } from "@/blog/components/home/PlatformDropSection";
 import { WhyWebBlogSection } from "@/blog/components/home/WhyWebBlogSection";
+import { WebBlogCasesSection } from "@/blog/components/home/WebBlogCasesSection";
 import { PopularPostsSection } from "@/blog/components/home/PopularPostsSection";
 import { LatestPostsSection } from "@/blog/components/home/LatestPostsSection";
 import { SummarySection } from "@/blog/components/home/SummarySection";
@@ -34,7 +35,9 @@ export default async function HomePage() {
       <Suspense>
         <HeroSection title={home.heroTitle} text={home.heroText} placeholder={home.searchPlaceholder} />
       </Suspense>
-      {/* 실제 글(가장 많이 본 글·최신 글)을 히어로 바로 아래에 — 들어오자마자 글을 보여 준다 */}
+      {/* 실제로 운영 중인 웹블로그 사례 먼저 — 생소한 상품이라 실물부터 보여 준다 */}
+      <WebBlogCasesSection />
+      {/* 그다음 실제 글(가장 많이 본 글·최신 글) */}
       <PopularPostsSection posts={popular} />
       <Suspense>
         <LatestPostsSection posts={latest} />
