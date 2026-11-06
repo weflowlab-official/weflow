@@ -4,6 +4,9 @@ import { getAllPosts, getCategories } from "@/blog/lib/payload";
 
 const SITE_URL = `${process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000"}/blog`;
 
+// 최대 1분에 한 번 다시 생성 — 이게 없으면 빌드할 때 한 번만 만들어져, 새 글이 다음 배포 전까지 사이트맵에 안 들어간다 (rss.xml 과 같은 주기)
+export const revalidate = 60;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [posts, categories] = await Promise.all([getAllPosts(), getCategories()]);
   return [
