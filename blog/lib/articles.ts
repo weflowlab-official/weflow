@@ -7,6 +7,7 @@
 import { lx } from "./lexical";
 import type { LexicalState } from "./lexical";
 import { subIndustryArticles } from "./subIndustryArticles"; // 세부업종 글 18편 (치과 글과 같은 뼈대)
+import { clinicGuideArticles } from "./clinicGuideArticles"; // 병의원 원장님 고민 글
 
 export type Article = {
   slug: string;
@@ -1521,4 +1522,7 @@ export const articles: Article[] = [
 
   // ─────────────────────────── 세부업종 글 18편 (lib/subIndustryArticles.ts) ───────────────────────────
   ...subIndustryArticles,
+
+  // ─────────────────────────── 병의원 원장님 고민 글 (lib/clinicGuideArticles.ts) ───────────────────────────
+  ...clinicGuideArticles,
 ];

@@ -1,4 +1,4 @@
-// 세부업종 글 18편(blog/lib/subIndustryArticles.ts)을 웹블로그에 새 글로 만든다 — Payload REST API(/api/blog), 관리자 계정으로 로그인해서.
+// 세부업종 글 18편(blog/lib/subIndustryArticles.ts)과 병의원 고민 글(blog/lib/clinicGuideArticles.ts)을 웹블로그에 새 글로 만든다 — Payload REST API(/api/blog), 관리자 계정으로 로그인해서.
 // 시드(/api/blog/dev-seed)는 운영에서 막혀 있어, 운영에는 이 스크립트로 넣는다. DB 에 직접 붙지 않고 배포된 사이트(또는 로컬 dev 서버)의 API 를 거친다.
 //  · 같은 slug 의 글이 이미 있으면 건너뛴다 (여러 번 돌려도 안전하다. 이미 있는 글의 내용은 고치지 않는다)
 //  · 카테고리·작성자·관련 글은 slug 로 그 사이트의 id 를 찾아 넣는다
@@ -10,12 +10,13 @@
 //   BLOG_URL=https://weflowlab.kr  BLOG_EMAIL=... BLOG_PASSWORD=... npx tsx design/blog-thumbnails/create-posts.ts
 // 일부 글만: 뒤에 slug 를 붙인다. DRY=1 이면 무엇을 할지 출력만 하고 만들지 않는다.
 import { subIndustryArticles } from "../../blog/lib/subIndustryArticles";
+import { clinicGuideArticles } from "../../blog/lib/clinicGuideArticles";
 
 const BASE = (process.env.BLOG_URL || "http://localhost:3000").replace(/\/$/, "");
 const API = `${BASE}/api/blog`;
 const DRY = process.env.DRY === "1";
 const only = process.argv.slice(2);
-const targets = subIndustryArticles.filter((a) => !only.length || only.includes(a.slug));
+const targets = [...subIndustryArticles, ...clinicGuideArticles].filter((a) => !only.length || only.includes(a.slug));
 
 let token = "";
 async function api(method: string, url: string, body?: unknown) {
