@@ -3,7 +3,7 @@
 // 홍보용 흐름: 업종을 골라 들어가거나, 웹블로그가 무엇을 하는지 보고, 사례와 FAQ 를 거쳐 상담으로.
 // 데이터: Payload 'home' 글로벌(getHome) + 글 목록 + 카테고리. 글로벌 값이 비어 있으면 각 섹션의 기본 문구를 쓴다.
 import { Suspense } from "react";
-import { POPULAR_SLUGS, getAllPosts, getCategories, getHome, getHomeLatestPosts, getPostsBySlugs } from "@/blog/lib/payload";
+import { POPULAR_SLUGS, getAllPosts, getCategories, getHome, getLatestPosts, getPostsBySlugs } from "@/blog/lib/payload";
 import { HeroSection } from "@/blog/components/home/HeroSection";
 import { SecurityNewsSection } from "@/blog/components/home/SecurityNewsSection";
 import { HowItWorksSection } from "@/blog/components/home/HowItWorksSection";
@@ -25,7 +25,7 @@ import { InquirySection } from "@/blog/components/home/InquirySection";
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [home, popular, latest, categories, all] = await Promise.all([getHome(), getPostsBySlugs(POPULAR_SLUGS), getHomeLatestPosts(), getCategories(), getAllPosts()]);
+  const [home, popular, latest, categories, all] = await Promise.all([getHome(), getPostsBySlugs(POPULAR_SLUGS), getLatestPosts(8), getCategories(), getAllPosts()]);
 
   return (
     <>

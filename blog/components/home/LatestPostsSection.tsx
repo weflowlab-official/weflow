@@ -13,7 +13,7 @@ import { Placeholder } from "@/blog/components/ui/Placeholder";
 import type { Post } from "@/blog/lib/types";
 import { formatDate } from "@/blog/lib/formatDate";
 
-type Props = { posts: Post[] }; // 서버 페이지가 getHomeLatestPosts() 로 넘김 (병의원 글 → 법무·세무 · 부동산)
+type Props = { posts: Post[] }; // 최신순 글 (서버 페이지가 getLatestPosts(8) 로 넘김)
 
 // 원형 회색 화살표 버튼, 끝에 도달하면 흐리게
 const navButtonClass =
