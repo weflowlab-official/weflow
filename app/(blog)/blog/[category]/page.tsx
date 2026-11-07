@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/blog/[category]">): Promise<Metadata> {
   const { category } = await params;
   const cat = await getCategory(decodeURIComponent(category));
-  return cat ? { title: cat.name, description: cat.description } : {};
+  return cat ? { title: cat.name, description: cat.description, alternates: { canonical: `/blog/${cat.slug}` } } : {};
 }
 
 // params 를 최상위에서 읽어 없는 카테고리는 진짜 404 상태코드를 돌려준다 (SEO).

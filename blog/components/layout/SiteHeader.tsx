@@ -94,17 +94,17 @@ export function SiteHeader() {
               </a>
             </div>
 
-            {/* 오른쪽: 업종 메뉴(xl 이상 — 업종이 8개라 그보다 좁으면 햄버거로) + 검색 + 전체 메뉴 햄버거 */}
+            {/* 오른쪽: 업종 메뉴(xl 이상 — 업종이 8개라 그보다 좁으면 햄버거로. 메뉴 이름이 잘리지 않게 xl 은 글자·간격을 줄인다) + 검색 + 전체 메뉴 햄버거 */}
             <div className="flex h-full min-w-0 flex-1 items-center justify-end gap-2 md:gap-6 lg:gap-6">
-              <nav className="hidden h-full min-w-0 flex-1 items-center justify-end gap-5 xl:flex 2xl:gap-7">
+              <nav className="hidden h-full min-w-0 flex-1 items-center justify-end gap-3 xl:flex min-[1440px]:gap-5 2xl:gap-7">
                 {nav.map((item) => (
                   // 업종 하나 = 링크 + (세부업종이 있으면) 마우스를 올리거나 탭으로 들어오면 펼쳐지는 드롭다운
-                  <div key={item.id} className="group/nav relative flex h-full min-w-0 shrink items-center">
+                  <div key={item.id} className="group/nav relative flex h-full shrink-0 items-center">
                     <Link
                       href={item.href}
-                      className={`group relative flex min-w-0 items-center gap-0.5 py-1 text-[15px] font-semibold transition-colors xl:text-base ${item.active ? "text-white" : "text-white/90 hover:text-white"}`}
+                      className={`group relative flex items-center gap-0.5 py-1 text-[15px] font-semibold transition-colors xl:text-sm min-[1440px]:text-[15px] 2xl:text-base ${item.active ? "text-white" : "text-white/90 hover:text-white"}`}
                     >
-                      <span className="block min-w-0 truncate">{item.label}</span>
+                      <span className="block whitespace-nowrap">{item.label}</span>
                       {item.subs.length > 0 && <IconChevronDown className="size-3.5 shrink-0 opacity-70 transition-transform group-hover/nav:rotate-180" stroke={2.5} />}
                       {/* hover 시 가운데서 퍼지는 밑줄 */}
                       <div className="absolute bottom-0 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-white transition-all duration-300 group-hover:w-full" />

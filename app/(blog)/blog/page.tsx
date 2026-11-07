@@ -3,6 +3,7 @@
 // 홍보용 흐름: 업종을 골라 들어가거나, 웹블로그가 무엇을 하는지 보고, 사례와 FAQ 를 거쳐 상담으로.
 // 데이터: Payload 'home' 글로벌(getHome) + 글 목록 + 카테고리. 글로벌 값이 비어 있으면 각 섹션의 기본 문구를 쓴다.
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import { POPULAR_SLUGS, getAllPosts, getCategories, getHome, getLatestPosts, getPostsBySlugs } from "@/blog/lib/payload";
 import { HeroSection } from "@/blog/components/home/HeroSection";
 import { SecurityNewsSection } from "@/blog/components/home/SecurityNewsSection";
@@ -20,6 +21,11 @@ import { PlansSection } from "@/blog/components/home/PlansSection";
 import { CasesSection } from "@/blog/components/home/CasesSection";
 import { FaqSection } from "@/blog/components/home/FaqSection";
 import { InquirySection } from "@/blog/components/home/InquirySection";
+
+// 정식 주소 — 검색엔진이 ?query 가 붙은 주소도 이 페이지 하나로 본다. alternates 는 레이아웃과 합쳐지지 않고 덮어써서 RSS 도 다시 적는다
+export const metadata: Metadata = {
+  alternates: { canonical: "/blog", types: { "application/rss+xml": "/blog/rss.xml" } },
+};
 
 // 최대 1분에 한 번 다시 생성: 예약 발행(발행일이 지난 글)이 1분 안에 나타나고, 조회수 순위도 갱신된다. 방문자는 항상 캐시된 페이지를 받는다.
 export const revalidate = 60;

@@ -13,6 +13,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "전체 콘텐츠",
   description: "모든 카테고리의 글을 최신순으로 모았습니다.",
+  alternates: { canonical: "/blog/posts" },
 };
 
 export default async function PostsPage() {
