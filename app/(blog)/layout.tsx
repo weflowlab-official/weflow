@@ -8,6 +8,7 @@ import { SiteProvider } from "@/blog/components/SiteProvider";
 import { LivePreviewListener } from "@/blog/components/LivePreviewListener";
 import { getSiteData } from "@/blog/lib/payload";
 import PageTracker from "@/components/PageTracker";
+import { BlogClarity } from "@/blog/components/BlogClarity";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
 
@@ -84,6 +85,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </SiteProvider>
         {/* 방문 기록 — 사이트와 같은 /api/track 으로 보내 관리자 유입 관리에 웹블로그로 잡힌다 (관리자 미리보기는 세지 않음) */}
         {!isPreview && <PageTracker />}
+        {/* 방문자 행동 기록(Clarity) — 웹블로그만. 관리자 미리보기는 빼고 */}
+        {!isPreview && <BlogClarity />}
       </body>
     </html>
   );
