@@ -45,7 +45,7 @@ export default function PrivacyPage() {
             <li>폼에 따라: 지출 예산, 진행 방식, 참고 사이트 주소, 제작 종류, 업종, 문의 내용</li>
           </ul>
           <p style={{ margin: "0.6rem 0 0" }}>
-            서비스 개선을 위해 방문 기록(접속 페이지, 유입 경로, 기기 종류)이 자동으로 수집될 수 있습니다. 웹블로그(/blog)에서는 Microsoft Clarity로 화면의 클릭·스크롤 같은 이용 행동도 기록되며, 입력란에 적은 내용은 가려진 채 기록됩니다. 이 기록은 특정 개인을 식별하지 않습니다.
+            서비스 개선을 위해 방문 기록(접속 페이지, 유입 경로, 기기 종류)이 자동으로 수집될 수 있습니다. 또한 Microsoft Clarity로 화면의 클릭·스크롤 같은 이용 행동도 기록되며, 입력란에 적은 내용은 가려진 채 기록됩니다. 이 기록은 특정 개인을 식별하지 않습니다.
           </p>
         </Section>
 
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
           <ul style={ul}>
             <li>Vercel Inc. — 웹사이트 호스팅</li>
             <li>Neon Inc. — 문의·예약 데이터 보관</li>
-            <li>Microsoft Corporation — 웹블로그 이용 행동 분석(Clarity)</li>
+            <li>Microsoft Corporation — 홈페이지 이용 행동 분석(Clarity)</li>
           </ul>
         </Section>
 

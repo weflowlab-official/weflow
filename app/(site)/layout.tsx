@@ -7,6 +7,7 @@ import ClientLayout from '@/components/ClientLayout'
 import Analytics from '@/components/Analytics'
 import NaverAds from '@/components/NaverAds'
 import PageTracker from '@/components/PageTracker'
+import Clarity from '@/components/Clarity'
 import FontLoader from '@/components/FontLoader'
 import { makePlans } from '@/data/pricing'
 import { OFFICIAL_CHANNELS } from '@/data/common'
@@ -158,6 +159,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Analytics />
         <NaverAds />
         <PageTracker />
+        {/* 방문자 행동 기록(Clarity) — 웹블로그와 같은 프로젝트. 관리자(/admin)는 스크립트 안에서 뺀다 */}
+        <Clarity />
       </body>
     </html>
   )
