@@ -10,7 +10,8 @@ import { getAllPosts, getSiteData } from "@/blog/lib/payload";
 import { SearchHero } from "@/blog/components/posts/SearchHero";
 import { SearchResults } from "@/blog/components/posts/SearchResults";
 
-export const metadata: Metadata = { title: "업종·주제 검색" };
+// 검색어마다 주소가 생기는 화면이라 검색 결과에는 넣지 않는다 (링크는 따라가 글은 수집되게)
+export const metadata: Metadata = { title: "업종·주제 검색", robots: { index: false, follow: true } };
 
 export default async function SearchPage() {
   // 인기 키워드는 사이트 공통 데이터(home 글로벌, 비어 있으면 기본값)
