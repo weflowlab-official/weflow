@@ -25,7 +25,7 @@ export const clinic: ClinicInfo = {
   ],
   legalLinks: [{ label: "개인정보처리방침", href: "/privacy" }],
   homepageMenu: [],
-  consultUrl: "/blog#contact", // 블로그 메인 맨 아래 무료 견적 신청 폼 (components/home/InquirySection)
+  consultUrl: "/blog#contact", // 블로그 메인 맨 아래 맞춤 견적 받기 폼 (components/home/InquirySection)
   kakaoChannelUrl: KAKAO_URL,
   stats: [],
   statsNote: "",

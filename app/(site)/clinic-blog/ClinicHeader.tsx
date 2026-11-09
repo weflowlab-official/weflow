@@ -8,7 +8,7 @@ import { ArrowRight, Menu, X, ClipboardList, Phone, ExternalLink } from 'lucide-
  * 첫 화면에서는 투명하게 두어 제목에 시선이 가게 하고, 조금이라도 내리면 흰 바탕과 아래 선을 깐다.
  * 가운데 메뉴는 페이지 안의 섹션(id)으로만 이동한다 — 넓은 화면에서만 보인다.
  * 좁은 화면에서는 상담 버튼 오른쪽에 햄버거 버튼을 두고, 누르면 오른쪽에서 메뉴 판이 밀려 나온다
- * (메인 사이트 모바일 메뉴와 같은 구성 — 위에 로고·닫기, 가운데 메뉴, 아래 바로 전화 · 무료 견적 신청 버튼).
+ * (메인 사이트 모바일 메뉴와 같은 구성 — 위에 로고·닫기, 가운데 메뉴, 아래 바로 전화 · 맞춤 견적 받기 버튼).
  * base: 404 처럼 이 페이지 밖에서 쓸 때 '/clinic-blog' 를 넘긴다 — 메뉴·버튼이 이 페이지의 각 섹션으로, 로고는 이 페이지 맨 위로 간다.
  *   본 페이지에서는 비워 둔다 (#id 만 쓰면 광고 주소의 ?utm 같은 꼬리가 그대로 남는다).
  */
@@ -98,7 +98,7 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
           <div className="cb-top-right">
             <a href={`tel:${TEL}`} className="cb-tel"><Phone size={17} /> {TEL}</a>
             <a href={`${base}#contact-form`} className="cb-top-btn">
-              무료 견적 신청 <ArrowRight size={15} />
+              맞춤 견적 받기 <ArrowRight size={15} />
             </a>
           <button type="button" className="cb-burger" aria-label="메뉴 열기" aria-expanded={open} onClick={() => setOpen(true)}>
             <Menu size={26} />
@@ -130,7 +130,7 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
             <Phone size={19} fill="currentColor" /> 바로 전화
           </a>
           <a href={`${base}#contact-form`} className="cb-drawer-btn cb-drawer-btn--fill" onClick={close} tabIndex={open ? 0 : -1}>
-            <ClipboardList size={19} /> 무료 견적 신청
+            <ClipboardList size={19} /> 맞춤 견적 받기
           </a>
         </div>
       </aside>
@@ -180,7 +180,7 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
           .cb-top-right { margin-left: auto; }
           .cb-top-btn { margin-right: 6px; }
         }
-        /* 휴대폰 — 화면 아래 두 칸 바에 '무료 견적 신청' 이 늘 있으니 헤더에서는 뺀다 */
+        /* 휴대폰 — 화면 아래 두 칸 바에 '맞춤 견적 받기' 이 늘 있으니 헤더에서는 뺀다 */
         @media (max-width: 768px) { .cb-top-btn { display: none !important; } }
 
         /* 메뉴 판 — 오른쪽에서 밀려 나오고, 뒤는 어둡게 깔린다 */

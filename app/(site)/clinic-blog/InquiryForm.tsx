@@ -135,7 +135,7 @@ export default function InquiryForm() {
     <form id="contact-form" className="cb-form" onSubmit={onSubmit} noValidate>
       <HoneypotField value={honeypot} onChange={setHoneypot} />
       <div className="cb-form-head cb-full">
-        <strong>무료 견적 신청</strong>
+        <strong>맞춤 견적 받기</strong>
       </div>
       {/* 문의 유형 — 셋 중 하나를 고르는 칩. 선택 칸이라 안 골라도 신청된다 */}
       <div className="cb-field cb-full" role="radiogroup" aria-label="문의 유형">
@@ -254,7 +254,7 @@ export default function InquiryForm() {
       </div>
       {error && <p className="cb-error cb-full" role="alert">{error}</p>}
       <button type="submit" className="cb-btn cb-full" disabled={submitting}>
-        {submitting ? '접수 중…' : '무료 견적 신청하기'}
+        {submitting ? '접수 중…' : '맞춤 견적 받기'}
       </button>
     </form>
   )

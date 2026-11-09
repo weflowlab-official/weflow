@@ -1,6 +1,6 @@
 "use client";
 // 헤더 햄버거로 여는 전체 메뉴 (xl 미만): 오른쪽에서 밀려 나오는 드로어, 뒤는 어둡게.
-// 로고 + 닫기 → 블로그 메뉴(전체 글 · 큰 업종 · 검색) → 맨 아래 홈페이지·바로 전화·무료 견적 신청 버튼.
+// 로고 + 닫기 → 블로그 메뉴(전체 글 · 큰 업종 · 검색) → 맨 아래 홈페이지·바로 전화·맞춤 견적 받기 버튼.
 // 큰 업종은 누르면 세부업종이 아래로 펼쳐지는 드롭다운(한 번에 하나만).
 import { useState } from "react";
 import Link from "next/link";
@@ -134,7 +134,7 @@ export function FullMenuSheet({ open, onClose }: FullProps) {
         <div className="mt-1">{menuList}</div>
       </div>
 
-      {/* 하단: 홈페이지 · 바로 전화 · 무료 견적 신청 */}
+      {/* 하단: 홈페이지 · 바로 전화 · 맞춤 견적 받기 */}
       <div className="shrink-0 space-y-2 border-t border-neutral-200 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         <a
           {...homepageLinkProps(clinic.homepageUrl)}
@@ -152,7 +152,7 @@ export function FullMenuSheet({ open, onClose }: FullProps) {
           </a>
           <Link href={clinic.consultUrl} onClick={onClose} className="flex h-12 items-center justify-center gap-1.5 rounded-[11px] bg-primary text-base font-semibold text-white">
             <IconClipboardList className="size-5" />
-            무료 견적 신청
+            맞춤 견적 받기
           </Link>
         </div>
       </div>

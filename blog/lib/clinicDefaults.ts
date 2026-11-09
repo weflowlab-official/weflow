@@ -51,4 +51,4 @@ export const COMMON_FAQ: { question: string; answer: string }[] = [
 
 export const CTA_TITLE = "우리 업종에 맞는 웹블로그,|상담받아 보세요";
 export const ctaText = (companyName: string) =>
-  `업종과 지금 운영 중인 채널을 알려 주시면|어떤 구조가 맞는지 먼저 정리해 드립니다.\n${companyName} 무료 견적은|부담 없이 받아 보셔도 됩니다.`;
+  `업종과 지금 운영 중인 채널을 알려 주시면|어떤 구조가 맞는지 먼저 정리해 드립니다.\n${companyName} 맞춤 견적은|부담 없이 받아 보셔도 됩니다.`;

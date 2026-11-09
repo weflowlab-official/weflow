@@ -126,7 +126,7 @@ export const Clinic: GlobalConfig = {
         {
           label: "채널·링크",
           fields: [
-            { name: "consultUrl", label: "상담 버튼 연결 주소 (무료 견적 신청)", type: "text", required: true, admin: { description: "기본은 블로그 메인 맨 아래 신청 폼(/blog#contact)" } },
+            { name: "consultUrl", label: "상담 버튼 연결 주소 (맞춤 견적 받기)", type: "text", required: true, admin: { description: "기본은 블로그 메인 맨 아래 신청 폼(/blog#contact)" } },
             { name: "kakaoChannelUrl", label: "카카오톡 채널 주소 (퀵메뉴·상담 버튼)", type: "text" },
             links("sns", "채널 링크 (푸터)"),
             links("legalLinks", "하단 법적 링크 (개인정보처리방침 등)"),

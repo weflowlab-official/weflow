@@ -9,11 +9,11 @@ const POP_FOLD_KEY = 'weflow_clinic_blog_pop_fold'
 
 /**
  * 늘 떠 있는 상담 버튼 — 화면 크기에 따라 모양이 다르다 (메인 사이트 components/FloatingButtons.tsx 와 같은 구성).
- *  · PC: 오른쪽 아래 동그란 버튼 둘(무료 견적 · 24시간 상담 전화). 아이콘이 위아래 차례로 흔들리고, 마우스를 올리면 왼쪽으로 이름표가 펼쳐진다.
+ *  · PC: 오른쪽 아래 동그란 버튼 둘(맞춤 견적 · 24시간 상담 전화). 아이콘이 위아래 차례로 흔들리고, 마우스를 올리면 왼쪽으로 이름표가 펼쳐진다.
  *        견적 아이콘은 메인 사이트 플로팅 버튼과 같은 클립보드 체크. 첫 화면부터 보인다.
  *        그 왼쪽에는 '실제 웹블로그 둘러보기' 카드 — 메인 사이트 우측 하단 '30초만에 … 견적 받기' 팝업과 같은 모양.
  *        카드 오른쪽 위 ✕ 로 접으면 작은 ＋ 버튼만 남고, ＋ 를 누르면 다시 펼쳐진다.
- *  · 모바일: 화면 맨 아래에 붙는 두 칸 바(무료 견적 신청 · 웹블로그 바로가기). 늘 같은 자리에 있다.
+ *  · 모바일: 화면 맨 아래에 붙는 두 칸 바(맞춤 견적 받기 · 웹블로그 바로가기). 늘 같은 자리에 있다.
  * 웹블로그(/blog)는 모두 새 탭으로 연다 — 이 광고 랜딩을 떠나지 않게.
  */
 export default function FloatingCta() {
@@ -52,8 +52,8 @@ export default function FloatingCta() {
     <>
       {/* PC — 오른쪽 아래 동그란 버튼 둘 */}
       <div className={`fc-wrap ${show ? 'is-on' : ''}`} aria-hidden={!show}>
-        <a href="#contact-form" className="fc fc--form" aria-label="무료 견적 신청" tabIndex={show ? 0 : -1}>
-          <span className="fc-label">무료 견적 신청</span>
+        <a href="#contact-form" className="fc fc--form" aria-label="맞춤 견적 받기" tabIndex={show ? 0 : -1}>
+          <span className="fc-label">맞춤 견적 받기</span>
           <span className="fc-icon"><ClipboardCheck size={26} /></span>
         </a>
         <a href={`tel:${TEL}`} className="fc fc--tel" aria-label={`전화 상담 ${TEL}`} tabIndex={show ? 0 : -1}>
@@ -88,7 +88,7 @@ export default function FloatingCta() {
       {/* 모바일 — 화면 맨 아래 두 칸 바 */}
       <div className="fc-bar">
         <a href="#contact-form" className="fc-bar-btn fc-bar-btn--form">
-          <ClipboardList size={19} strokeWidth={2.2} /> 무료 견적 신청
+          <ClipboardList size={19} strokeWidth={2.2} /> 맞춤 견적 받기
         </a>
         <a href="/blog" target="_blank" rel="noopener noreferrer" className="fc-bar-btn fc-bar-btn--blog">
           웹블로그 바로가기 <ExternalLink size={18} strokeWidth={2.2} />

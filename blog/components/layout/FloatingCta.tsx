@@ -1,6 +1,6 @@
 "use client";
 // 화면 고정 빠른 연결 버튼.
-// - 데스크톱(md+): 오른쪽 아래 세로 원형 버튼 (맨 위로 / 무료 견적 / 전화). 올리면 왼쪽으로 라벨이 펼쳐진다.
+// - 데스크톱(md+): 오른쪽 아래 세로 원형 버튼 (맨 위로 / 맞춤 견적 / 전화). 올리면 왼쪽으로 라벨이 펼쳐진다.
 // - 모바일: 화면 맨 아래 고정 바 2칸 (바로 전화 / 맞춤 견적 받기) + 오른쪽 아래 작은 맨 위로 버튼.
 // 드로어는 두지 않는다 (위치·진료시간은 푸터에 있음).
 import { useEffect, useState } from "react";
@@ -31,7 +31,7 @@ export function FloatingCta() {
 
   return (
     <>
-      {/* ── 데스크톱: 세로 원형 버튼 (맨 위로 → 무료 견적 → 전화) ── */}
+      {/* ── 데스크톱: 세로 원형 버튼 (맨 위로 → 맞춤 견적 → 전화) ── */}
       <div className="fixed bottom-8 right-8 z-20 hidden flex-col items-end gap-3 md:flex">
         <button
           type="button"
@@ -45,8 +45,8 @@ export function FloatingCta() {
             <IconArrowUp className="size-6" />
           </span>
         </button>
-        <Link href={clinic.consultUrl} className={desktopBtn} aria-label="무료 견적 신청">
-          <span className={label}>무료 견적 신청</span>
+        <Link href={clinic.consultUrl} className={desktopBtn} aria-label="맞춤 견적 받기">
+          <span className={label}>맞춤 견적 받기</span>
           <span className={`${circle} bg-primary text-white`}>
             <IconClipboardList className="size-6 animate-wiggle motion-reduce:animate-none" />
           </span>

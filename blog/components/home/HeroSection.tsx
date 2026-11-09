@@ -1,5 +1,5 @@
 "use client";
-// 메인 페이지 히어로: 흰 배경 + 은은한 장식(연한 파란 번짐 2개 + 격자), 가운데 정렬로 제목·소개·검색창·인기 키워드·버튼(무료 견적 / 업종별로 보기).
+// 메인 페이지 히어로: 흰 배경 + 은은한 장식(연한 파란 번짐 2개 + 격자), 가운데 정렬로 제목·소개·검색창·인기 키워드·버튼(맞춤 견적 / 업종별로 보기).
 import { useState, type FormEvent, type MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -199,7 +199,7 @@ export function HeroSection({ title, text, placeholder }: Props) {
             </div>
           )}
 
-          {/* 버튼: 무료 견적(맨 아래 신청 폼으로) / 업종별로 보기(아래 업종 카드로). 모바일은 하단 고정 바가 있어 숨긴다 */}
+          {/* 버튼: 맞춤 견적(맨 아래 신청 폼으로) / 업종별로 보기(아래 업종 카드로). 모바일은 하단 고정 바가 있어 숨긴다 */}
           <div className="animate-fade-slide-up mx-auto mt-8 hidden items-center justify-center gap-2.5 md:flex" style={{ animationDelay: "0.6s", animationDuration: "0.6s" }}>
             <a
               href="#contact"
@@ -207,7 +207,7 @@ export function HeroSection({ title, text, placeholder }: Props) {
               className="inline-flex h-12 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-primary px-3 text-[15px] font-bold text-white shadow-[0_6px_20px_0_var(--brand-primary-20)] transition-colors hover:bg-brand-secondary sm:flex-none sm:px-7 sm:text-base"
             >
               <IconClipboardList className="size-5" />
-              무료 견적 신청
+              맞춤 견적 받기
             </a>
             <a
               href="#industries"

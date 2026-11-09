@@ -1,5 +1,5 @@
 "use client";
-// 웹블로그 무료 견적 신청 폼 — weflowlab.kr/clinic-blog 하단 폼(app/(site)/clinic-blog/InquiryForm.tsx)을 업종 공통으로 옮긴 것.
+// 웹블로그 맞춤 견적 받기 폼 — weflowlab.kr/clinic-blog 하단 폼(app/(site)/clinic-blog/InquiryForm.tsx)을 업종 공통으로 옮긴 것.
 // 사이트의 다른 문의와 같은 /api/inquiries 로 보내고, 관리자(/admin) 문의 목록에서 구분되도록 type '웹블로그', source 'blog' 로 남긴다.
 // 진료과목 선택 대신 업종을 직접 입력한다(industry 칸). 문의 유형·예산·참고 사이트는 메모에 한 줄씩 들어간다.
 import { useEffect, useState, type FormEvent } from "react";
@@ -126,7 +126,7 @@ export function InquiryForm() {
       className="relative grid gap-4 rounded-[20px] border border-neutral-200 bg-white p-5 shadow-[0_12px_40px_0_var(--brand-primary-10)] sm:grid-cols-2 md:p-8"
     >
       <HoneypotField value={honeypot} onChange={setHoneypot} />
-      <strong className="text-xl font-bold text-foreground sm:col-span-2 md:text-2xl">무료 견적 신청</strong>
+      <strong className="text-xl font-bold text-foreground sm:col-span-2 md:text-2xl">맞춤 견적 받기</strong>
 
       {/* 문의 유형 — 넷 중 하나를 고르는 칩. 선택 칸이라 안 골라도 신청된다 */}
       <div className="sm:col-span-2" role="radiogroup" aria-label="문의 유형">
@@ -296,7 +296,7 @@ export function InquiryForm() {
         disabled={submitting}
         className="h-14 rounded-[12px] bg-primary text-lg font-bold text-white transition-colors hover:bg-brand-secondary disabled:opacity-60 sm:col-span-2"
       >
-        {submitting ? "접수 중…" : "무료 견적 신청하기"}
+        {submitting ? "접수 중…" : "맞춤 견적 받기"}
       </button>
     </form>
   );

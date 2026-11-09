@@ -18,7 +18,7 @@ export default function NotFoundActions() {
         <Home size={18} strokeWidth={2.2} /> 메인으로 가기
       </Link>
       <Link href={clinic ? '/clinic-blog#contact-form' : '/diagnosis'} className="btn-primary nf-btn nf-btn--ghost">
-        {clinic ? '무료 견적 신청' : '맞춤 견적 받기'} <ArrowRight size={18} strokeWidth={2.5} />
+        맞춤 견적 받기<ArrowRight size={18} strokeWidth={2.5} />
       </Link>
     </>
   )

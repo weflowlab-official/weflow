@@ -42,7 +42,7 @@ export const CLINIC_WHY: BlogWhyCopy = {
     admin: { title: '관리자 페이지에서\n직접 작성 · 수정', desc: '블로그 글은 물론 홈페이지의 사진과 문구도,\n관리자 페이지에서 바로 바꿉니다.' },
     category: { title: '진료과목별\n카테고리 정리', desc: '환자가 검색하는 말 그대로 나눠,\n관련 글을 이어서 읽게 합니다.' },
   },
-  end: { eyebrow: 'WEFLOW FOR CLINIC', lead: '블로그를, ', accent: '병원 안으로.', desc: '우리 병원도 웹블로그로 바꿔 볼까요?', chips: ['AI 검색 인용', '홈페이지 연결', '병원 자산으로', '직접 관리'], href: '#contact-form', label: '무료 견적 신청' },
+  end: { eyebrow: 'WEFLOW FOR CLINIC', lead: '블로그를, ', accent: '병원 안으로.', desc: '우리 병원도 웹블로그로 바꿔 볼까요?', chips: ['AI 검색 인용', '홈페이지 연결', '병원 자산으로', '직접 관리'], href: '#contact-form', label: '맞춤 견적 받기' },
   demo: {
     brand: '우리병원치과',
     domain: '우리병원.com',

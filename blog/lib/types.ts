@@ -66,7 +66,7 @@ export type ClinicInfo = {
   sns: { label: string; href: string }[]; // 채널 (카카오톡 채널, 블로그, 인스타그램 등)
   legalLinks: { label: string; href: string }[];
   homepageMenu: { label: string; href: string }[]; // 홈페이지 사이트맵 (전체 메뉴 시트의 외부 링크)
-  consultUrl: string; // 상담 버튼 연결처 (무료 견적 신청)
+  consultUrl: string; // 상담 버튼 연결처 (맞춤 견적 받기)
   kakaoChannelUrl: string; // 카카오채널 (퀵메뉴)
   stats: { label: string; value: string }[]; // 수술 실적 (예: 망막수술 7,000례 이상)
   statsNote: string; // 실적 기준 시점 (예: 2024년 12월 기준)

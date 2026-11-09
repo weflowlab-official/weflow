@@ -1,11 +1,11 @@
 // 메인 페이지 "그래서, 웹블로그" — 플랫폼 블로그의 한계 바로 뒤.
 // 메인 사이트 /webblog 의 WHY WEB BLOG(화면이 붙어 있는 동안 스크롤에 맞춰 답 다섯 개가 차례로 지나가는 섹션)를 그대로 쓴다.
 // 예전 '장점 카드'(StrengthsSection — SEO·AEO·GEO / AI 검색 / 업종)와 내용이 겹쳐, 그 자리를 이 섹션이 맡는다.
-// 남색 헤더 아래에서 화면이 붙게 맞추고, 맺음 버튼만 이 페이지 아래 무료 견적 폼(#contact)으로 보낸다 (메인 사이트는 /diagnosis).
+// 남색 헤더 아래에서 화면이 붙게 맞추고, 맺음 버튼만 이 페이지 아래 맞춤 견적 폼(#contact)으로 보낸다 (메인 사이트는 /diagnosis).
 import BlogWhy from "@/app/(site)/clinic-blog/BlogWhy";
 import { GENERAL_WHY } from "@/app/(site)/clinic-blog/blogWhyCopy";
 
-const COPY = { ...GENERAL_WHY, end: { ...GENERAL_WHY.end, href: "#contact", label: "무료 견적 신청" } };
+const COPY = { ...GENERAL_WHY, end: { ...GENERAL_WHY.end, href: "#contact", label: "맞춤 견적 받기" } };
 
 export function WhyWebBlogSection() {
   return (

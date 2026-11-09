@@ -99,7 +99,7 @@ export default function ClinicBlogPage() {
           </h1>
           {/* 바로 문의하려는 분은 상담으로, 직접 보고 싶은 분은 실제 웹블로그(/blog, 새 탭)로 */}
           <div className="cb-hero-btns">
-            <a href="#contact-form" className="cb-hero-btn cb-hero-btn--fill"><ClipboardList size={18} /> 무료 견적 신청</a>
+            <a href="#contact-form" className="cb-hero-btn cb-hero-btn--fill"><ClipboardList size={18} /> 맞춤 견적 받기</a>
             <a href="/blog" target="_blank" rel="noopener noreferrer" className="cb-hero-btn"><NotebookPen size={18} /> 실제 웹블로그 보기</a>
           </div>
         </div>
