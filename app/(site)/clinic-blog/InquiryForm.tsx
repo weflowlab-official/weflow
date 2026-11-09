@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
 import { attributionLine } from '@/lib/attribution'
@@ -254,7 +254,7 @@ export default function InquiryForm() {
       </div>
       {error && <p className="cb-error cb-full" role="alert">{error}</p>}
       <button type="submit" className="cb-btn cb-full" disabled={submitting}>
-        {submitting ? '접수 중…' : '맞춤 견적 받기'}
+        {submitting ? '접수 중…' : <>맞춤 견적 받아보기 <ArrowRight size={18} strokeWidth={2.5} /></>}
       </button>
     </form>
   )

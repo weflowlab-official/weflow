@@ -3,7 +3,7 @@
 // 사이트의 다른 문의와 같은 /api/inquiries 로 보내고, 관리자(/admin) 문의 목록에서 구분되도록 type '웹블로그', source 'blog' 로 남긴다.
 // 진료과목 선택 대신 업종을 직접 입력한다(industry 칸). 문의 유형·예산·참고 사이트는 메모에 한 줄씩 들어간다.
 import { useEffect, useState, type FormEvent } from "react";
-import { IconCheck, IconChevronDown } from "@tabler/icons-react";
+import { IconArrowRight, IconCheck, IconChevronDown } from "@tabler/icons-react";
 import HoneypotField from "@/components/HoneypotField";
 import { HONEYPOT_FIELD, wasSaved } from "@/lib/leadInput";
 import { attributionLine } from "@/lib/attribution";
@@ -294,9 +294,9 @@ export function InquiryForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="h-14 rounded-[12px] bg-primary text-lg font-bold text-white transition-colors hover:bg-brand-secondary disabled:opacity-60 sm:col-span-2"
+        className="flex h-14 items-center justify-center gap-2 rounded-[12px] bg-primary text-lg font-bold text-white transition-colors hover:bg-brand-secondary disabled:opacity-60 sm:col-span-2"
       >
-        {submitting ? "접수 중…" : "맞춤 견적 받기"}
+        {submitting ? "접수 중…" : <>맞춤 견적 받아보기 <IconArrowRight className="size-5" stroke={2.5} /></>}
       </button>
     </form>
   );
