@@ -9,7 +9,8 @@ const CLARITY_ID = "z9uxwu1vno";
 
 export default function Clarity() {
   return (
-    <Script id="clarity" strategy="afterInteractive">
+    // id 를 "clarity" 로 두면 안 된다 — 브라우저가 id 를 전역 이름으로도 잡아 window.clarity 가 이 <script> 요소가 되고, Clarity 가 시작하지 못한다
+    <Script id="clarity-init" strategy="afterInteractive">
       {`
         (function () {
           if (location.hostname !== "weflowlab.kr" && location.hostname !== "www.weflowlab.kr") return;
