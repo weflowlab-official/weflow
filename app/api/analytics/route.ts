@@ -5,12 +5,13 @@ import { NextResponse } from 'next/server'
 import { pageViewStore } from '@/lib/store'
 import { isAdmin } from '@/lib/adminAuth'
 
-// ?days=N (1~90, 기본 30) → 최근 N일 방문 기록 전체를 반환
+// ?days=N (1~3650, 기본 30) → 최근 N일 방문 기록 전체를 반환
+// 관리자 유입 관리는 '지난달'·'전체' 기간도 고를 수 있어 전체 기간을 받아 간다 (예전엔 90일 상한이라 30일 이전이 0으로 보였다)
 export async function GET(req: Request) {
   if (!(await isAdmin()))
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
   const { searchParams } = new URL(req.url)
-  const days = Math.min(Math.max(Number(searchParams.get('days')) || 30, 1), 90)
+  const days = Math.min(Math.max(Number(searchParams.get('days')) || 30, 1), 3650)
   const rows = await pageViewStore.getRecent(days)
   return NextResponse.json(rows)
 }

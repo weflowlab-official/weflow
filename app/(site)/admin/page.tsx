@@ -3004,7 +3004,8 @@ export default function AdminPage() {
   useEffect(() => {
     if (!authed || tab !== "traffic") return;
     setPvLoading(true);
-    fetch("/api/analytics?days=30")
+    // 기간 선택에 '지난달'·'전체'가 있어 최근 30일만 받으면 그 이전이 0으로 보인다 — 전체 기간을 받는다
+    fetch("/api/analytics?days=3650")
       .then((r) => r.json())
       .then((d) => setPageViews(Array.isArray(d) ? d : []))
       .catch(() => {})
