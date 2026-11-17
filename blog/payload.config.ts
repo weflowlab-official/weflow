@@ -91,8 +91,10 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },
   // DB: BLOG_DATABASE_URI 가 Postgres 주소(Neon)면 Postgres, 없으면 로컬 SQLite 파일(blog/payload.db).
+  // Postgres 에선 사이트 테이블(문의·방문 통계, public)과 같은 DB 를 쓰므로 blog 스키마에 따로 둔다 —
+  // 같은 칸에 두면 개발 모드 스키마 동기화가 설정에 없는 사이트 테이블을 지우자고 할 수 있다.
   db: process.env.BLOG_DATABASE_URI?.startsWith("postgres")
-    ? postgresAdapter({ pool: { connectionString: process.env.BLOG_DATABASE_URI } })
+    ? postgresAdapter({ schemaName: "blog", pool: { connectionString: process.env.BLOG_DATABASE_URI } })
     : sqliteAdapter({
         client: { url: process.env.BLOG_DATABASE_URI || "file:./blog/payload.db", authToken: process.env.BLOG_DATABASE_AUTH_TOKEN },
         // SQLite 는 쓰기 잠금이 하나뿐이라, 요청 하나가 트랜잭션 안에서 실패하면 잠금이 풀리지 않고 서버 전체가 멈추는 일이 있었다.

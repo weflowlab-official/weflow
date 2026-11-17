@@ -2160,8 +2160,9 @@ function TrafficView({
         (adDeviceByKeyword[kw] ||= {})[dev] = (adDeviceByKeyword[kw][dev] || 0) + 1;
       });
       // 광고 유입 이탈 페이지 — 키워드 카드와 같은 단위(키워드당 1회)로 세서
-      // 두 카드의 합계가 항상 일치한다 (한 기기가 키워드 2개로 오면 이탈도 2로)
-      adExitCount[exitKey(exit.path)] = (adExitCount[exitKey(exit.path)] || 0) + kws.size;
+      // 두 카드의 합계가 항상 일치한다 (한 기기가 키워드 2개로 오면 이탈도 2로).
+      // 구글 광고(gclid)처럼 주소에 키워드가 안 오는 클릭은 1회로 센다 — 0으로 세면 광고로 왔는데 이탈이 안 잡힌다
+      adExitCount[exitKey(exit.path)] = (adExitCount[exitKey(exit.path)] || 0) + Math.max(1, kws.size);
     } else {
       const src = normSource(entry.source);
       sourceCount[src] = (sourceCount[src] || 0) + 1;
