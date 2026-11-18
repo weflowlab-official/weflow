@@ -6,6 +6,7 @@ import '../../styles/globals.css'
 import ClientLayout from '@/components/ClientLayout'
 import Analytics from '@/components/Analytics'
 import NaverAds from '@/components/NaverAds'
+import GoogleAds from '@/components/GoogleAds'
 import PageTracker from '@/components/PageTracker'
 import Clarity from '@/components/Clarity'
 import FontLoader from '@/components/FontLoader'
@@ -158,6 +159,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ClientLayout>{children}</ClientLayout>
         <Analytics />
         <NaverAds />
+        <GoogleAds />
         <PageTracker />
         {/* 방문자 행동 기록(Clarity) — 웹블로그와 같은 프로젝트. 관리자(/admin)는 스크립트 안에서 뺀다 */}
         <Clarity />

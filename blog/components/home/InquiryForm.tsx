@@ -8,6 +8,7 @@ import HoneypotField from "@/components/HoneypotField";
 import { HONEYPOT_FIELD, wasSaved } from "@/lib/leadInput";
 import { attributionLine } from "@/lib/attribution";
 import { trackNaverLead } from "@/lib/naverConversion";
+import { trackGoogleLead } from "@/lib/googleConversion";
 import { formatPhone, isValidPhone } from "@/lib/phone";
 import { PLAN_EVENT } from "./PlanButton";
 
@@ -83,7 +84,10 @@ export function InquiryForm() {
         return;
       }
       // 허니팟에 걸린 요청도 성공으로 답하므로, 실제 저장된 응답에만 전환을 쏜다 (lib/leadInput.ts 참고)
-      if (wasSaved(await res.json().catch(() => null))) trackNaverLead();
+      if (wasSaved(await res.json().catch(() => null))) {
+        trackNaverLead();
+        trackGoogleLead();
+      }
       setDone(true);
     } catch {
       setError("네트워크 연결을 확인한 뒤 다시 시도해 주세요.");

@@ -7,6 +7,7 @@ import {
 import Reveal from '@/components/Reveal'
 import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
+import { trackGoogleLead } from '@/lib/googleConversion'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
 import { formatPhone, isValidPhone } from '@/lib/phone'
@@ -202,7 +203,10 @@ export default function CheckPage() {
       setUnlocked(true)
       // 저장이 실제로 됐을 때만 광고 쪽에 "신청 완료" 전환을 알린다 —
       // 저장되지 않은 요청까지 세면 광고 성과가 부풀려져 집행 판단이 틀어진다
-      if (saved) trackNaverLead()
+      if (saved) {
+        trackNaverLead()
+        trackGoogleLead()
+      }
     } catch {
       // 저장이 실패해도 방문자 경험을 막지 않는다 — 리포트는 열어 준다
       setUnlocked(true)

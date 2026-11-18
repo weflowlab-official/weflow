@@ -76,6 +76,7 @@ export default function PrivacyPage() {
             <li>Vercel Inc. — 웹사이트 호스팅</li>
             <li>Neon Inc. — 문의·예약 데이터 보관</li>
             <li>Microsoft Corporation — 홈페이지 이용 행동 분석(Clarity)</li>
+            <li>Google LLC — 광고 성과 측정(Google Ads 전환 추적)</li>
           </ul>
         </Section>
 

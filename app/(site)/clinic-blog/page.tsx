@@ -107,10 +107,10 @@ export default function ClinicBlogPage() {
               견적 문의는 헤더 버튼 · 떠 있는 버튼 · 휴대폰 하단 바가 맡는다 */}
           <div className="cb-hero-btns">
             <a href="/clinic-blog/check" target="_blank" rel="noopener noreferrer" className="cb-hero-btn cb-hero-btn--fill">
-              <ScanSearch size={18} /> AI 검색 무료 진단
+              <ScanSearch size={18} /> <span>AI 검색 무료 진단<span className="cb-pc">하기</span></span>
             </a>
             <a href="/clinic-blog/demo" target="_blank" rel="noopener noreferrer" className="cb-hero-btn">
-              <PenLine size={18} /> <span>관리자<span className="cb-pc">페이지</span> 체험하기</span>
+              <PenLine size={18} /> <span>관리자페이지 체험<span className="cb-pc">하기</span></span>
             </a>
           </div>
         </div>

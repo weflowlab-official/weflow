@@ -9,6 +9,7 @@ import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
 import { attributionLine } from '@/lib/attribution'
 import { trackNaverLead } from '@/lib/naverConversion'
+import { trackGoogleLead } from '@/lib/googleConversion'
 import { formatPhone, isValidPhone } from '@/lib/phone'
 
 /**
@@ -179,7 +180,10 @@ export default function CheckClient() {
         }),
       })
       // 허니팟에 걸린 요청에도 성공으로 답하므로, 실제 저장된 응답에만 광고 전환을 알린다 (lib/leadInput.ts 의 wasSaved)
-      if (res.ok && wasSaved(await res.json().catch(() => null))) trackNaverLead()
+      if (res.ok && wasSaved(await res.json().catch(() => null))) {
+        trackNaverLead()
+        trackGoogleLead()
+      }
     } catch {
       /* 저장이 실패해도 리포트는 열어 준다 — 방문자 경험을 막지 않는다 */
     } finally {
@@ -312,7 +316,7 @@ export default function CheckClient() {
             {!unlocked ? (
               <form onSubmit={submitLead} className="ckc-lead-form" noValidate>
                 <h2>전체 진단 결과를 바로 확인하세요</h2>
-                <p>연락처를 남기면 나머지 항목을 바로 확인할 수 있고, <br className="cb-mo" />전담 매니저가 결과를 바탕으로 리뉴얼 방향을 무료로 안내드립니다.</p>
+                <p>연락처를 남기면 <br className="cb-mo" />나머지 항목을 바로 확인할 수 있고, <br className="cb-mo" />전담 매니저가 결과를 바탕으로 <br className="cb-mo" />리뉴얼 방향을 무료로 안내드립니다.</p>
                 <HoneypotField value={honeypot} onChange={setHoneypot} />
                 <div className="ckc-lead-row">
                   <div>
@@ -371,7 +375,7 @@ export default function CheckClient() {
             </div>
             <Link href="/clinic-blog#contact-form" className="ckc-btn-fill">맞춤 견적 받기 <ArrowRight size={16} /></Link>
           </div>
-          <p className="ckc-foot">진단은 밖에서 보이는 정보만으로 판단합니다. 어떤 기술도 &lsquo;절대 안전&rsquo;하지는 않으며, 정확한 상태는 상담에서 함께 확인해 드립니다.</p>
+          <p className="ckc-foot">진단은 밖에서 보이는 정보만으로 판단합니다. <br className="cb-mo" />어떤 기술도 &lsquo;절대 안전&rsquo;하지는 않으며, <br className="cb-mo" />정확한 상태는 상담에서 함께 확인해 드립니다.</p>
         </div>
       </section>
 
@@ -455,6 +459,8 @@ export default function CheckClient() {
         .ckc-lead-form small { display: block; margin: 6px 2px 0; color: #d64545; font-size: .85rem; font-weight: 600; text-align: left; }
         .ckc-agree { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 16px 0; font-size: .9rem; color: var(--cb-sub); cursor: pointer; }
         .ckc-agree input { width: 18px; height: 18px; margin: 0; flex: none; accent-color: var(--cb-accent); }
+        /* 휴대폰 — 동의 문구를 늘 한 줄에. 폭이 모자라면 글자가 화면 폭에 맞춰 줄어든다 */
+        @media (max-width: 560px) { .ckc-agree { gap: 5px; font-size: min(.9rem, 3.08vw); white-space: nowrap; } .ckc-agree input { width: 15px; height: 15px; } }
         .ckc-agree a { color: var(--cb-muted); text-underline-offset: 3px; }
         .ckc-lead-form .ckc-agree-err { margin: -8px 0 12px; text-align: center; }
 

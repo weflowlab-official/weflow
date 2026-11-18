@@ -1,6 +1,7 @@
 'use client'
 import { useEffect } from 'react'
 import { takeNaverLeadMark } from '@/lib/naverConversion'
+import { trackGoogleLead } from '@/lib/googleConversion'
 
 /**
  * 네이버 전환 스크립트 — 상담 신청이 완료된 주소(/diagnosis/success)에만 놓는다.
@@ -20,9 +21,11 @@ const MAX_TRIES = 40 // 최대 10초
 export default function NaverLeadConversion() {
   useEffect(() => {
     const WA = process.env.NEXT_PUBLIC_NAVER_WA
-    if (!WA) return
     // 실제로 저장된 신청을 거쳐 온 경우에만 쏜다 (봇·주소 직접 입력 제외)
     if (!takeNaverLeadMark()) return
+    // 구글 광고 전환도 같은 순간에 — 네이버 설정이 없어도 구글 쪽은 보낸다
+    trackGoogleLead()
+    if (!WA) return
 
     let tries = 0
     let timer: ReturnType<typeof setInterval> | undefined

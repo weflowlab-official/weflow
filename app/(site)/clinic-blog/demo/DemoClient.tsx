@@ -289,7 +289,7 @@ export default function DemoClient() {
 
             {tab === 'faq' && (
               <div className="dm-panel">
-                <p className="dm-help">환자가 자주 묻는 질문과 답을 적습니다. 발행하면 AI와 검색엔진이 읽는 형식으로 자동으로 함께 올라갑니다.</p>
+                <p className="dm-help">환자가 자주 묻는 질문과 답을 적습니다. <br className="cb-mo" />발행하면 AI와 검색엔진이 읽는 형식으로 자동으로 함께 올라갑니다.</p>
                 {d.faq.map((f, i) => (
                   <div key={f.id} className="dm-faq">
                     <div className="dm-faq-head">
@@ -411,6 +411,8 @@ export default function DemoClient() {
         .dm-saved svg { color: #16a34a; }
         .dm-publish { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 18px; border: 0; border-radius: 10px; background: var(--cb-accent); color: #fff; font: inherit; font-size: .95rem; font-weight: 700; text-decoration: none; cursor: pointer; white-space: nowrap; transition: background .15s; }
         .dm-publish:hover { background: #1852b5; }
+        /* 휴대폰 — 발행 뒤 띠의 '우리 병원에도 도입하기'가 길어 로고와 붙는다. 버튼을 작게 하고 띠 사이 간격을 확보한다 */
+        @media (max-width: 480px) { .dm-top { gap: 14px; } .dm-publish { height: 36px; padding: 0 12px; gap: 4px; font-size: .82rem; } .dm-publish svg { width: 14px; height: 14px; } }
         .dm-note { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0; padding: 9px 16px; background: #fff8e6; color: #8a6116; font-size: .86rem; font-weight: 600; text-align: center; word-break: keep-all; }
         .dm-note svg { flex: none; }
 
