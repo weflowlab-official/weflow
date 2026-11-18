@@ -1,12 +1,14 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { ArrowRight, Menu, X, ClipboardList, Phone, ExternalLink } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, ClipboardList, Phone, ExternalLink } from 'lucide-react'
 
 /**
  * 병의원 블로그 페이지 상단 띠 — 브랜드와 상담 버튼만 있고, 메인 사이트로 가는 링크는 두지 않는다.
  * 첫 화면에서는 투명하게 두어 제목에 시선이 가게 하고, 조금이라도 내리면 흰 바탕과 아래 선을 깐다.
- * 가운데 메뉴는 페이지 안의 섹션(id)으로만 이동한다 — 넓은 화면에서만 보인다.
+ * 가운데 메뉴는 페이지 안의 섹션(id)으로 이동한다 — 넓은 화면에서만 보인다.
+ * 메뉴가 늘어 묶음 둘은 드롭다운으로 편다 (메인 헤더 components/Navbar.tsx 와 같은 방식 — 올리면 펼쳐지고, 좁은 화면 메뉴 판에서는 눌러서 편다).
+ * '무료 진단·체험' 묶음(사이트 진단 · 글쓰기 데모)은 이 페이지 밖의 화면이라 새 탭으로 연다 — 광고 랜딩을 떠나지 않게.
  * 좁은 화면에서는 상담 버튼 오른쪽에 햄버거 버튼을 두고, 누르면 오른쪽에서 메뉴 판이 밀려 나온다
  * (메인 사이트 모바일 메뉴와 같은 구성 — 위에 로고·닫기, 가운데 메뉴, 아래 바로 전화 · 맞춤 견적 받기 버튼).
  * base: 404 처럼 이 페이지 밖에서 쓸 때 '/clinic-blog' 를 넘긴다 — 메뉴·버튼이 이 페이지의 각 섹션으로, 로고는 이 페이지 맨 위로 간다.
@@ -15,13 +17,29 @@ import { ArrowRight, Menu, X, ClipboardList, Phone, ExternalLink } from 'lucide-
 /** 대표 번호 — 메인 헤더(components/Navbar.tsx)와 같은 번호 */
 const TEL = '010-2971-7280'
 
-// 페이지 순서와 같게: 이런 고민(WHY NOW 01~03) → 웹블로그란 → SEO·AEO·GEO(HOW IT WORKS) → 홈페이지와 함께 → FAQ.
+// 페이지 순서와 같게: 제작 사례 → 우리 병원은?(WHY NOW 01~03) → 웹블로그 소개(웹블로그란 · SEO·AEO·GEO란 · 홈페이지와 함께) → 무료 진단·체험 → FAQ.
 // '진행 과정'은 메뉴로 찾아갈 만큼 궁금한 내용이 아니라 뺐다 (스크롤로 지나며 본다)
-const MENU = [
-  { href: '#story', label: '이런 고민' },
-  { href: '#webblog', label: '웹블로그란?' },
-  { href: '#how', label: 'SEO·AEO·GEO' },
-  { href: '#with-homepage', label: '홈페이지와 함께' },
+// ext: 이 페이지 밖의 화면(진단 · 데모) — 주소를 그대로 쓰고 새 탭으로 연다
+type MenuLink = { href: string; label: string; ext?: boolean }
+type MenuGroup = { label: string; children: MenuLink[] }
+const MENU: (MenuLink | MenuGroup)[] = [
+  { href: '#cases', label: '제작 사례' },
+  { href: '#story', label: '우리 병원은?' },
+  {
+    label: '웹블로그 소개',
+    children: [
+      { href: '#webblog', label: '웹블로그란?' },
+      { href: '#how', label: 'SEO·AEO·GEO란?' },
+      { href: '#with-homepage', label: '홈페이지와 함께' },
+    ],
+  },
+  {
+    label: '무료 진단·체험',
+    children: [
+      { href: '/clinic-blog/check', label: 'AI 검색 무료 진단', ext: true },
+      { href: '/clinic-blog/demo', label: '관리자페이지 체험', ext: true },
+    ],
+  },
   { href: '#faq', label: '자주 묻는 질문' },
 ]
 
@@ -52,6 +70,7 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [open, setOpen] = useState(false) // 모바일 메뉴 판
+  const [groups, setGroups] = useState<Record<string, boolean>>({}) // 메뉴 판에서 펼친 묶음
 
   // 내려가면 위로 스르륵 숨고, 올리면 다시 내려온다.
   // 손떨림 정도의 작은 움직임(6px 미만)은 무시하고, 첫 화면 근처(헤더 높이 안쪽)에서는 늘 보인다
@@ -83,6 +102,9 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
   }, [open])
 
   const close = () => setOpen(false)
+  // 페이지 안 이동은 base 를 붙이고(#id), 밖의 화면은 주소 그대로 새 탭으로
+  const linkProps = (m: MenuLink) =>
+    m.ext ? { href: m.href, target: '_blank', rel: 'noopener noreferrer' } : { href: base + m.href }
 
   return (
     <>
@@ -90,9 +112,29 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
         <div className="cb-wrap cb-top-inner">
           <Brand base={base} />
           <nav className="cb-menu" aria-label="페이지 안 이동">
-            {MENU.map(m => (
-              <a key={m.href} href={base + m.href}>{m.label}</a>
-            ))}
+            {MENU.map(m =>
+              'children' in m ? (
+                // 묶음 — 올리거나 탭 키로 들어오면 아래로 펼쳐진다 (CSS :hover · :focus-within).
+                // 고른 뒤에는 초점을 풀어 목록이 열린 채 남지 않게 한다
+                <div key={m.label} className="cb-menu-group">
+                  <button type="button" className="cb-menu-trigger" aria-haspopup="true">
+                    {m.label} <ChevronDown size={15} />
+                  </button>
+                  <div className="cb-menu-pop">
+                    <div className="cb-menu-list">
+                      {m.children.map(c => (
+                        <a key={c.href} {...linkProps(c)} onClick={e => e.currentTarget.blur()}>
+                          {c.label}
+                          {c.ext && <ArrowUpRight size={14} />}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <a key={m.href} className="cb-menu-link" {...linkProps(m)}>{m.label}</a>
+              ),
+            )}
           </nav>
           {/* 오른쪽 묶음 — 대표 번호(넓은 화면에서만) · 견적 버튼 · 햄버거(좁은 화면에서만) */}
           <div className="cb-top-right">
@@ -117,12 +159,40 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
           </button>
         </div>
         <nav className="cb-drawer-nav">
-          {MENU.map(m => (
-            <a key={m.href} href={base + m.href} onClick={close} tabIndex={open ? 0 : -1}>{m.label}</a>
-          ))}
-          {/* 실제 웹블로그 — 메뉴 줄처럼, 새 탭으로 */}
+          {MENU.map(m => {
+            if (!('children' in m)) {
+              return <a key={m.href} {...linkProps(m)} onClick={close} tabIndex={open ? 0 : -1}>{m.label}</a>
+            }
+            // 묶음 — 눌러서 편다. 하나를 펴면 다른 묶음은 접힌다. grid-rows 0fr ↔ 1fr 로 높이가 부드럽게 열리고, 접힌 동안에는 탭 키로도 안 잡힌다
+            const shown = !!groups[m.label]
+            return (
+              <div key={m.label}>
+                <button
+                  type="button"
+                  className="cb-drawer-group"
+                  aria-expanded={shown}
+                  onClick={() => setGroups({ [m.label]: !shown })}
+                  tabIndex={open ? 0 : -1}
+                >
+                  {m.label}
+                  <ChevronDown size={19} style={{ transform: shown ? 'rotate(180deg)' : 'none' }} />
+                </button>
+                <div className="cb-drawer-sub" style={{ gridTemplateRows: shown ? '1fr' : '0fr' }}>
+                  <div style={{ visibility: shown ? 'visible' : 'hidden' }}>
+                    {m.children.map(c => (
+                      <a key={c.href} {...linkProps(c)} onClick={close} tabIndex={open && shown ? 0 : -1}>
+                        {c.label}
+                        {c.ext && <ArrowUpRight size={16} />}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+          {/* 실제 웹블로그 — 메뉴 줄처럼, 새 탭으로. 메인 사이트의 금색 광택 글씨 */}
           <a href="/blog" target="_blank" rel="noopener noreferrer" className="cb-drawer-ext" onClick={close} tabIndex={open ? 0 : -1}>
-            웹블로그 바로가기 <ExternalLink size={17} />
+            <span>웹블로그 바로가기</span> <ExternalLink size={17} />
           </a>
         </nav>
         <div className="cb-drawer-foot">
@@ -159,11 +229,21 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
           .cb-brand { justify-self: start; }
         }
         /* 메뉴가 다섯 개라, 메뉴가 처음 보이는 폭(960~1199px)에서는 간격·글자를 줄여 로고·버튼과 겹치지 않게 */
-        @media (min-width: 960px) and (max-width: 1199px) { .cb-menu { gap: 26px; } .cb-menu a { font-size: .9rem !important; } }
-        .cb-menu a { position: relative; color: var(--cb-sub); font-weight: 600; font-size: .95rem; text-decoration: none; padding: 6px 0; transition: color .15s; }
-        .cb-menu a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--cb-text); transform: scaleX(0); transition: transform .25s ease; }
-        .cb-menu a:hover { color: var(--cb-text); }
-        .cb-menu a:hover::after { transform: scaleX(1); }
+        @media (min-width: 960px) and (max-width: 1199px) { .cb-menu { gap: 26px; } .cb-menu-link, .cb-menu-trigger { font-size: .9rem !important; } }
+        .cb-menu-link, .cb-menu-trigger { position: relative; display: inline-flex; align-items: center; gap: 3px; color: var(--cb-sub); font: inherit; font-weight: 600; font-size: .95rem; text-decoration: none; padding: 6px 0; border: 0; background: none; cursor: pointer; white-space: nowrap; transition: color .15s; }
+        .cb-menu-link::after, .cb-menu-trigger::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--cb-text); transform: scaleX(0); transition: transform .25s ease; }
+        .cb-menu-link:hover, .cb-menu-group:hover .cb-menu-trigger, .cb-menu-group:focus-within .cb-menu-trigger { color: var(--cb-text); }
+        .cb-menu-link:hover::after, .cb-menu-group:hover .cb-menu-trigger::after, .cb-menu-group:focus-within .cb-menu-trigger::after { transform: scaleX(1); }
+        /* 묶음 드롭다운 — 메인 헤더와 같은 흰 상자. 위 여백(padding-top)까지가 hover 영역이라 내려가는 사이에 닫히지 않는다 */
+        .cb-menu-group { position: relative; }
+        .cb-menu-trigger svg { transition: transform .2s; }
+        .cb-menu-group:hover .cb-menu-trigger svg, .cb-menu-group:focus-within .cb-menu-trigger svg { transform: rotate(180deg); }
+        .cb-menu-pop { position: absolute; top: 100%; left: 50%; padding-top: 10px; transform: translateX(-50%) translateY(-4px); opacity: 0; visibility: hidden; transition: opacity .18s, transform .18s, visibility .18s; }
+        .cb-menu-group:hover .cb-menu-pop, .cb-menu-group:focus-within .cb-menu-pop { opacity: 1; visibility: visible; transform: translateX(-50%); }
+        .cb-menu-list { min-width: 176px; padding: 6px; background: #fff; border: 1px solid rgba(17,17,17,.08); border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,.12); }
+        .cb-menu-list a { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 8px; color: var(--cb-sub); font-weight: 600; font-size: .93rem; text-decoration: none; white-space: nowrap; transition: background .15s, color .15s; }
+        .cb-menu-list a:hover { background: var(--cb-soft); color: var(--cb-text); }
+        .cb-menu-list a svg { color: var(--cb-muted); }
         .cb-top-btn svg { transition: transform .3s cubic-bezier(.16,1,.3,1); }
         .cb-top-btn:hover svg { transform: translateX(3px); }
         @media (max-width: 420px) { .cb-brand-sep, .cb-brand-sub { display: none; } }
@@ -194,12 +274,30 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
         .cb-drawer-nav { flex: 1; display: flex; flex-direction: column; padding: 16px 0; overflow-y: auto; }
         .cb-drawer-nav a { padding: 18px 28px; font-size: 1.15rem; font-weight: 600; color: #111418; text-decoration: none; }
         .cb-drawer-nav a:active { background: #f7f8fa; }
-        .cb-drawer-nav .cb-drawer-ext { display: flex; align-items: center; gap: 6px; color: #1f63d6; }
+        /* 묶음 — 이름 줄을 누르면 아래 줄들이 펼쳐진다 (조금 들여 쓰고 한 단계 작게) */
+        .cb-drawer-group { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 28px; border: 0; background: none; font: inherit; font-size: 1.15rem; font-weight: 600; color: #111418; text-align: left; cursor: pointer; }
+        .cb-drawer-group svg { color: #8a919c; transition: transform .2s; }
+        .cb-drawer-sub { display: grid; transition: grid-template-rows .25s ease; }
+        /* 펼친 줄들은 연회색 판 위에 — 어느 묶음에 속한 줄인지 한눈에 보이게 */
+        .cb-drawer-sub > div { overflow: hidden; display: flex; flex-direction: column; background: #f7f8fa; transition: visibility .25s; }
+        .cb-drawer-sub > div > a:first-child { margin-top: 6px; }
+        .cb-drawer-sub > div > a:last-child { margin-bottom: 6px; }
+        .cb-drawer-nav .cb-drawer-sub a { display: flex; align-items: center; gap: 4px; padding: 12px 28px 12px 40px; font-size: 1rem; font-weight: 500; color: #4b5360; }
+        .cb-drawer-nav .cb-drawer-sub a:active { background: #eef0f3; }
+        /* 펼친 묶음의 이름은 파랗게 */
+        .cb-drawer-group[aria-expanded="true"] { color: #1f63d6; }
+        .cb-drawer-group[aria-expanded="true"] svg { color: #1f63d6; }
+        .cb-drawer-nav .cb-drawer-sub a svg { color: #8a919c; }
+        /* 웹블로그 바로가기 — 메인 사이트의 금색 + 왼쪽에서 오른쪽으로 흐르는 광택 (금색 테두리 .btn-goldline 과 같은 색·속도).
+           흰 바탕 위라 메인의 밝은 금색(.c-gold) 대신 한 단계 짙은 금색을 쓴다 */
+        .cb-drawer-nav .cb-drawer-ext { display: flex; align-items: center; gap: 6px; font-weight: 800; color: #a8823e; }
+        .cb-drawer-ext span { background: linear-gradient(115deg, #9a7434 0%, #b8903f 38%, #ecd08a 50%, #b8903f 62%, #9a7434 100%); background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: cbGoldSheen 2.8s linear infinite; }
+        @keyframes cbGoldSheen { from { background-position: 250% center; } to { background-position: 0% center; } }
         .cb-drawer-foot { display: grid; gap: 10px; padding: 18px 20px max(22px, env(safe-area-inset-bottom)); border-top: 1px solid #e9ebef; }
         .cb-drawer-btn { display: flex; align-items: center; justify-content: center; gap: 8px; height: 56px; border-radius: 16px; border: 1.5px solid #d5d9df; color: #111418; font-size: 1.05rem; font-weight: 700; text-decoration: none; }
         .cb-drawer-btn--fill { background: #1f63d6; border-color: #1f63d6; color: #fff; }
         .cb-drawer-btn--tel svg { color: #16a34a; } /* 하단 바 '바로 전화' 와 같은 초록 수화기 */
-        @media (prefers-reduced-motion: reduce) { .cb-drawer, .cb-drawer.is-open, .cb-drawer-dim { transition: none; } }
+        @media (prefers-reduced-motion: reduce) { .cb-drawer, .cb-drawer.is-open, .cb-drawer-dim, .cb-drawer-sub { transition: none; } .cb-drawer-ext span { animation: none; } }
       `}</style>
     </>
   )

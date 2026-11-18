@@ -10,7 +10,7 @@ import InView from './InView'
  */
 
 const steps = (who: string) => [
-  { Icon: PenLine, title: '글 작성', text: '관리자 페이지에서\n제목·본문·자주 묻는 질문만 채웁니다.' },
+  { Icon: PenLine, title: '글 작성', text: '관리자페이지에서\n제목·본문·자주 묻는 질문만 채웁니다.' },
   { Icon: Settings2, title: '자동으로 함께 생성', text: '사이트맵·구조화 데이터·요약이\n글과 함께 저절로\n만들어집니다.' },
   { Icon: Globe, title: '네이버·구글이 수집', text: '서치어드바이저·서치콘솔에 등록된 사이트를\n검색엔진이 읽어 갑니다.' },
   { Icon: Sparkles, title: '검색·AI 답변에 노출 기회', text: `검색 결과와 AI 답변의 출처로\n${who} 글이 쓰일\n기회가 생깁니다.` },

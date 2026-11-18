@@ -83,14 +83,17 @@ function GainVisual({ kind, copy }: { kind: (typeof GAINS)[number]['key']; copy:
   )
 }
 
-// 상품 세 장 — 이름은 고정, 누구를 위한지와 항목은 업종 글귀(copy.plans)에서
+// 상품 세 장 — 이름은 고정, 누구를 위한지와 항목은 업종 글귀(copy.plans)에서.
+// price: 제작 시작 가격(만원). 병의원 랜딩처럼 showPrice 를 준 곳에서만 보인다 — 광고로 온 분이 가격대를 몰라 문의를 망설이지 않게.
+// 운영관리비는 적지 않는다 (상담에서 안내). 금액을 바꾸면 상담 폼의 예산 구간(InquiryForm 의 BUDGETS)도 같이 본다
 const PLAN_BASE = [
-  { name: '웹블로그', plan: '웹블로그만' },
-  { name: '웹블로그 + 홈페이지', plan: '웹블로그 + 홈페이지', best: true },
-  { name: '홈페이지', plan: '홈페이지만' },
+  { name: '웹블로그', plan: '웹블로그만', price: 150, note: '' },
+  // note: 가격 바로 아래 한 줄 — 함께 만들 때 왜 값이 더 나가는지(처음부터 같이 설계한다)를 답한다. 가격과 같이 showPrice 일 때만 보인다
+  { name: '웹블로그 + 홈페이지', plan: '웹블로그 + 홈페이지', best: true, price: 500, note: '' },
+  { name: '홈페이지', plan: '홈페이지만', price: 300, note: '' },
 ]
 
-export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepageCopy }) {
+export default function WithHomepage({ copy = WH_CLINIC, showPrice = false }: { copy?: WithHomepageCopy; showPrice?: boolean }) {
   const PLANS = copy.plans && PLAN_BASE.map((p, i) => ({ ...p, ...copy.plans![i] }))
   return (
     <section id="with-homepage" className="ch">
@@ -124,7 +127,7 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
           <div className="ch-plans-head">
             <h3>웹블로그만, 홈페이지만, <br className="ch-mo" />또는 함께</h3>
           </div>
-          <div className="ch-plans">
+          <div className={`ch-plans${showPrice ? ' is-priced' : ''}`}>
             {PLANS.map(p => (
               <div key={p.name} className={`ch-plan${p.best ? ' is-best' : ''}`}>
                 {p.best && (
@@ -137,9 +140,11 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
                 )}
                 <small>{p.for}</small>
                 <h4>{p.name}</h4>
+                {showPrice && <p className="ch-price">{p.price}<span>만원~</span></p>}
+                {showPrice && p.note && <p className="ch-note">{p.note}</p>}
                 <ul>
                   {p.items.map(it => (
-                    <li key={it}><Check size={16} /> {it}</li>
+                    <li key={it}><Check size={16} /><span>{it}</span></li>
                   ))}
                 </ul>
                 <PlanButton plan={p.plan} fill={p.best} />
@@ -256,8 +261,17 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
         .ch-plan small { font-size: .9rem; font-weight: 700; color: #1f63d6; }
         @media (max-width: 899px) { .ch-plan.is-best { order: -1; } } /* 휴대폰은 한 줄로 쌓이니 추천 카드를 먼저 */
         .ch-plan h4 { margin: 6px 0 20px; font-size: 1.45rem; font-weight: 800; letter-spacing: -0.03em; color: #111418; }
+        /* 시작 가격 — 이름 바로 아래, 숫자만 크게. 가격이 있으면 이름 아래 여백을 줄여 한 묶음으로 보이게 */
+        .ch-plan h4:has(+ .ch-price) { margin-bottom: 8px; }
+        .ch-price { margin: 0 0 20px; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.03em; color: #111418; }
+        .ch-price:has(+ .ch-note) { margin-bottom: 10px; }
+        .ch-note { margin: 0 0 20px; color: #1f63d6; font-size: .95rem; font-weight: 700; line-height: 1.55; word-break: keep-all; }
+        .ch-price span { position: relative; top: -1px; margin-left: 1px; font-size: .88em; }
         .ch-plan ul { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 10px; flex: 1; }
         .ch-plan li { display: flex; align-items: center; gap: 8px; font-size: 1rem; color: #3a414c; }
+        /* 추천 카드의 첫 줄(함께 설계) 강조 — 조금 굵고 진하게만 (형광펜·두꺼운 체크는 과해서 뺐다). 병의원 랜딩(가격을 보이는 곳)에서만 */
+        .ch-plans.is-priced .ch-plan.is-best li:first-child { font-weight: 600; color: #111418; }
+        .ch-plans.is-priced .ch-plan.is-best li:first-child svg { stroke-width: 2.6; }
         .ch-plan li svg { flex: none; color: #1f63d6; }
         .ch-plan-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 15px 20px; border-radius: 999px; border: 1.5px solid #d5d9df; color: #111418; font-weight: 700; text-decoration: none; transition: border-color .15s, background .15s, color .15s; }
         .ch-plan-btn:hover { border-color: #111418; }

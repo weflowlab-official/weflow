@@ -14,6 +14,7 @@ const POP_FOLD_KEY = 'weflow_clinic_blog_pop_fold'
  *        그 왼쪽에는 '실제 웹블로그 둘러보기' 카드 — 메인 사이트 우측 하단 '30초만에 … 견적 받기' 팝업과 같은 모양.
  *        카드 오른쪽 위 ✕ 로 접으면 작은 ＋ 버튼만 남고, ＋ 를 누르면 다시 펼쳐진다.
  *  · 모바일: 화면 맨 아래에 붙는 두 칸 바(맞춤 견적 받기 · 웹블로그 바로가기). 늘 같은 자리에 있다.
+ *        그 바로 위 오른쪽에는 동그란 전화 버튼이 늘 떠 있다 — 수화기가 흔들려 눈에 띄고, 누르면 바로 전화가 걸린다.
  * 웹블로그(/blog)는 모두 새 탭으로 연다 — 이 광고 랜딩을 떠나지 않게.
  */
 export default function FloatingCta() {
@@ -85,6 +86,11 @@ export default function FloatingCta() {
         </div>
       )}
 
+      {/* 모바일 — 하단 바 바로 위 오른쪽에 떠 있는 전화 버튼 */}
+      <a href={`tel:${TEL}`} className="fc-call" aria-label={`전화 상담 ${TEL}`}>
+        <Phone size={24} fill="currentColor" />
+      </a>
+
       {/* 모바일 — 화면 맨 아래 두 칸 바 */}
       <div className="fc-bar">
         <a href="#contact-form" className="fc-bar-btn fc-bar-btn--form">
@@ -137,15 +143,23 @@ export default function FloatingCta() {
         .fc-bar-btn--form { background: #1f63d6; color: #fff; }
         .fc-bar-btn--blog { gap: 4px; background: #fff; color: #111418; border-top: 1px solid #e3e5e8; }
         .fc-bar-btn--blog svg { color: #1f63d6; }
+        /* ── 모바일 전화 버튼 — 하단 바(56px + 아이폰 아래 여백) 바로 위 오른쪽. 흰 동그라미에 초록 수화기(PC 전화 버튼과 같은 색).
+              수화기가 흔들렸다 쉬기를 되풀이하고, 둘레로 초록 물결이 퍼진다 ── */
+        .fc-call { display: none; position: fixed; right: 14px; bottom: calc(56px + 14px + max(0px, calc(env(safe-area-inset-bottom) - 12px))); z-index: 45; width: 54px; height: 54px; align-items: center; justify-content: center; border-radius: 50%; background: #fff; color: #16a34a; box-shadow: 0 10px 26px rgba(17,20,24,.2); }
+        .fc-call::before { content: ''; position: absolute; inset: 0; border-radius: 50%; animation: fcCallRing 2.4s ease-out infinite; }
+        .fc-call svg { animation: fcWiggle 2.4s ease-in-out infinite; transform-origin: 50% 60%; }
+        @keyframes fcCallRing { 0% { box-shadow: 0 0 0 0 rgba(22,163,74,.45); } 60%, 100% { box-shadow: 0 0 0 14px rgba(22,163,74,0); } }
         @media (max-width: 1023px) { .fc-pop, .fc-pop-open { display: none; } }
         @media (max-width: 768px) {
           .fc-wrap { display: none; }
           .fc-bar { display: flex; }
+          .fc-call { display: flex; }
         }
         @media (prefers-reduced-motion: reduce) {
           .fc-wrap, .fc-label { transition: none; }
           .fc-wrap.is-on .fc-icon svg { animation: none; }
           .fc-pop, .fc-pop-open { animation: none; }
+          .fc-call svg, .fc-call::before { animation: none; }
         }
       `}</style>
     </>

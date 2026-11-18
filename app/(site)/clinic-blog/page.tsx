@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { MessagesSquare, FolderTree, PenTool, Rocket, Check, ClipboardList, NotebookPen, Phone } from 'lucide-react'
+import { MessagesSquare, FolderTree, PenTool, Rocket, Check, ScanSearch, PenLine, Phone } from 'lucide-react'
 import InquiryForm from './InquiryForm'
 import BlogWhy from './BlogWhy'
 import ClinicHeader from './ClinicHeader'
@@ -12,6 +12,8 @@ import FloatingCta from './FloatingCta'
 import WithHomepage from './WithHomepage'
 import SecurityNews from './SecurityNews'
 import HowItWorks from './HowItWorks'
+import ClinicCases from './ClinicCases'
+import EasyWrite from './EasyWrite'
 import { AiSearchScene, PlatformDropScene, type Line } from './Scenes'
 import { CLINIC_RESULTS } from './SearchMock'
 
@@ -90,17 +92,26 @@ export default function ClinicBlogPage() {
         {/* 제목 둘레에서 고민 메시지가 계속 오간다 (좁은 화면에서는 말풍선 없이 궤도·모눈만) */}
         <HeroWorries />
         <div className="cb-wrap cb-hero-inner">
-          <p className="cb-tag">병의원 웹블로그 · 홈페이지 제작</p>
+          {/* 아이브로우 칩 둘 — 무엇을 만드는 곳인지, 누구를 위한 페이지인지 (메인 히어로의 체크 칩과 같은 알약 모양. 짙은 칩은 밝은 화면에서 무거워 보여 흰 바탕 · 검은 글씨 · 금색 체크로) */}
+          <div className="cb-eyebrow">
+            <span><Check size={15} strokeWidth={3} aria-hidden="true" />리뉴얼 · 신규 대상</span>
+            <span><Check size={15} strokeWidth={3} aria-hidden="true" />병의원 웹블로그 · 홈페이지 제작</span>
+          </div>
           {/* 글 하나로 SEO·AEO·GEO 까지 — 웹블로그 메인(/blog)의 병의원 섹션과 같은 메시지 */}
           <h1 className="cb-h1">
             글 하나 올렸을 뿐인데,<br />
             AI·네이버·구글까지<br />
-            <span className="cb-mark">SEO·AEO·GEO</span>로<br className="cb-mo" /> 챙겨진다면?
+            <span className="cb-mark">SEO·AEO·GEO</span>로<br className="cb-mo" /> 한번에 챙겨진다면?
           </h1>
-          {/* 바로 문의하려는 분은 상담으로, 직접 보고 싶은 분은 실제 웹블로그(/blog, 새 탭)로 */}
+          {/* 광고로 처음 온 분이 부담 없이 눌러 볼 두 가지 — 우리 병원 사이트 진단, 글쓰기 직접 써 보기. 둘 다 새 탭이라 이 페이지는 그대로 남는다.
+              견적 문의는 헤더 버튼 · 떠 있는 버튼 · 휴대폰 하단 바가 맡는다 */}
           <div className="cb-hero-btns">
-            <a href="#contact-form" className="cb-hero-btn cb-hero-btn--fill"><ClipboardList size={18} /> 맞춤 견적 받기</a>
-            <a href="/blog" target="_blank" rel="noopener noreferrer" className="cb-hero-btn"><NotebookPen size={18} /> 실제 웹블로그 보기</a>
+            <a href="/clinic-blog/check" target="_blank" rel="noopener noreferrer" className="cb-hero-btn cb-hero-btn--fill">
+              <ScanSearch size={18} /> AI 검색 무료 진단
+            </a>
+            <a href="/clinic-blog/demo" target="_blank" rel="noopener noreferrer" className="cb-hero-btn">
+              <PenLine size={18} /> <span>관리자<span className="cb-pc">페이지</span> 체험하기</span>
+            </a>
           </div>
         </div>
         {/* 아래로 내려가라는 선 — 제목 묶음의 높이에 끼지 않게 바닥에 따로 띄운다 */}
@@ -110,7 +121,10 @@ export default function ClinicBlogPage() {
         </span>
       </section>
 
-      {/* 흐름: 약속(히어로) → 지금 놓치고 있는 것 셋(WHY NOW 01 AI · 02 플랫폼 · 03 보안) → 그래서, 웹블로그 → 어떻게 자리 잡나 → 홈페이지와 함께 → 진행 → FAQ → 상담 */}
+      {/* ── 제작 사례 — 광고로 온 분이 가장 먼저 확인하는 것: 실제로 만들어 운영 중인 병원 웹블로그 ── */}
+      <ClinicCases />
+
+      {/* 흐름: 약속(히어로) → 제작 사례 → 지금 놓치고 있는 것 셋(WHY NOW 01 AI · 02 플랫폼 · 03 보안) → 그래서, 웹블로그 → 어떻게 자리 잡나 → 홈페이지와 함께 → 진행 → FAQ → 상담 */}
 
       {/* ── 장면 1 — PC 검색 결과 + 휴대폰 AI 검색 (Scenes.tsx) ── */}
       <AiSearchScene
@@ -159,11 +173,14 @@ export default function ClinicBlogPage() {
       {/* ── 어떻게 자리 잡나: 글만 쓰면 네이버·구글에 자리 잡고 AI 까지 읽어 가는 구조 — 히어로의 약속을 여기서 보여 준다 ── */}
       <HowItWorks />
 
+      {/* ── 누구나 쓸 수 있다 — '글은 누가 쓰나' 걱정을 풀고, 글쓰기 데모(새 탭)로 잇는다 ── */}
+      <EasyWrite />
+
       {/* ── 홈페이지 vs 웹블로그 — 둘이 무엇이 다른지 창 두 개로, 바로 아래 '홈페이지와 함께하면'으로 잇는다 ── */}
       <HomeVsBlog />
 
       {/* ── 홈페이지와 함께하면 + 상품 두 가지 ── */}
-      <WithHomepage />
+      <WithHomepage showPrice />
 
       {/* ── 진행 과정 ── */}
       <section id="process" className="cb-sec cb-step-sec">
@@ -230,6 +247,11 @@ export default function ClinicBlogPage() {
 
         /* 좁은 화면 — 제목을 위에 두고, 그 아래 채팅 목록 */
         /* 좁은 화면에서는 말풍선이 없으므로 넓은 화면과 같이 제목 묶음을 세로 가운데에 둔다 */
+        .cb-eyebrow { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin: 0 0 22px; }
+        .cb-eyebrow span { display: inline-flex; align-items: center; gap: .38rem; height: 2.2rem; padding: 0 1rem; border-radius: 999px; background: #fff; border: 1px solid #d5d9df; color: var(--cb-accent); font-size: .95rem; font-weight: 700; line-height: 1; white-space: nowrap; }
+        .cb-eyebrow svg { flex: none; color: #c9a262; } /* 메인 사이트 금색 — 흰 바탕에서 보이게 한 단계 짙은 값 */
+        /* 휴대폰 — 칩 둘을 늘 한 줄에. 화면이 좁아지면 글자가 화면 폭에 맞춰 같이 줄어든다 (360px 폰에서 약 10px) */
+        @media (max-width: 480px) { .cb-eyebrow { flex-wrap: nowrap; gap: 5px; margin-bottom: 16px; } .cb-eyebrow span { height: 2.6em; padding: 0 .7em; gap: .3em; font-size: min(.84rem, 2.85vw); } .cb-eyebrow svg { width: 1.1em; height: 1.1em; } }
         .cb-tag { font-weight: 700; font-size: clamp(1.05rem, 1.6vw, 1.3rem); letter-spacing: -0.01em; color: var(--cb-accent); margin: 0 0 22px; }
         /* 세 줄 제목 — 한 줄이 넓은 화면 양옆 말풍선(HeroWorries)에 닿지 않게, 휴대폰에서는 줄이 다시 꺾이지 않게 크기를 잡았다 */
         .cb-h1 { font-size: clamp(1.8rem, 5.6vw, 4rem); line-height: 1.22; font-weight: 800; letter-spacing: -0.04em; margin: 0 0 24px; }
@@ -241,7 +263,7 @@ export default function ClinicBlogPage() {
         .cb-hero-btn:hover { border-color: var(--cb-text); background: #fff; }
         .cb-hero-btn--fill { background: var(--cb-text); border-color: var(--cb-text); color: #fff; }
         .cb-hero-btn--fill:hover { background: var(--cb-accent); border-color: var(--cb-accent); }
-        .cb-hero-btn--fill svg { position: relative; top: -.75px; } /* 클립보드 아이콘이 글자보다 아래로 처져 보여 살짝 올린다 */
+        .cb-hero-btn svg { flex: none; }
         /* 휴대폰(기본 규칙보다 뒤에 둬야 덮어쓴다) — 위아래로 쌓지 않고 나란히. 화면 폭을 꽉 채우는 두 칸으로 두고 글자·여백을 줄여 한 줄에 들어가게 한다 */
         @media (max-width: 480px) {
           .cb-hero-btns { display: grid; width: 100%; max-width: 340px; margin: 8px auto 0; gap: 8px; }

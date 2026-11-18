@@ -175,8 +175,10 @@ export default function HeroWorries() {
         .hw-slot { position: absolute; transform: translate3d(calc(var(--mx) * var(--z) * -44px), calc(var(--my) * var(--z) * -32px), 0) rotate(calc(var(--mx) * var(--z) * -2.5deg)); }
         .hw-s0 { top: 15%; left: 4%; }
         .hw-s1 { top: 13%; right: 5%; }
-        .hw-s2 { top: 45%; left: 2%; }
-        .hw-s3 { top: 48%; right: 2%; }
+        /* 양옆 가운데 둘 — 제목 셋째 줄('SEO·AEO·GEO로 한번에 챙겨진다면?')이 가장 길어 옆까지 온다.
+           그 줄보다 위(첫째·둘째 줄 높이)에 둬서 글자와 겹치지 않게 한다 */
+        .hw-s2 { top: 35%; left: 2%; }
+        .hw-s3 { top: 37%; right: 2%; }
         .hw-s4 { bottom: 12%; left: 8%; }
         .hw-s5 { bottom: 10%; right: 7%; }
         /* 제목 양옆 가운데 두 자리는 화면이 아주 넓을 때만 — 그보다 좁으면 말풍선이 제목에 겹친다 */

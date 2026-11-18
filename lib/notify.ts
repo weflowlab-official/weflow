@@ -32,8 +32,8 @@ export async function notifyInquiry(item: Inquiry): Promise<void> {
   const pass = process.env.GMAIL_APP_PASSWORD
   if (!user || !pass) return
 
-  // 관리자 화면과 같은 기준 — type 이 '사이트 점검'이면 사이트 점검 탭, 나머지는 문의 관리 탭
-  const kind = item.type === '사이트 점검' ? '사이트 점검' : '문의'
+  // 관리자 화면과 같은 기준 — 메인 점검('사이트 점검')과 병의원 진단('병의원 사이트 진단')은 사이트 점검 탭, 나머지는 문의 관리 탭
+  const kind = item.type === '사이트 점검' || item.type === '병의원 사이트 진단' ? '사이트 점검' : '문의'
   // 받침에 따라 조사를 맞춘다 — '문의가', '사이트 점검이'
   const josa = kind === '사이트 점검' ? '이' : '가'
   const site = item.site && item.site !== 'weflow' ? ` · ${SITE_LABEL[item.site] ?? item.site}` : ''

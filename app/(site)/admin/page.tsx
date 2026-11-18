@@ -2199,7 +2199,7 @@ function TrafficView({
   // 영역별 문의 — 폼 출처로 나눈다 (병의원·웹블로그 폼 외에는 전부 메인 사이트)
   const areaInq: Record<string, number> = {};
   withinPeriod(inquiries, period).forEach((i) => {
-    const a = i.source === "clinic-blog" ? "clinic" : i.source === "blog" ? "blog" : "main";
+    const a = i.source === "clinic-blog" || i.source === "clinic-diagnosis" ? "clinic" : i.source === "blog" ? "blog" : "main";
     areaInq[a] = (areaInq[a] || 0) + 1;
   });
   const maxRate = Math.max(
@@ -3196,8 +3196,10 @@ export default function AdminPage() {
   }
 
   // 사이트 점검(/check) 리드는 source 로 구분해 일반 문의와 따로 관리한다
-  const generalI = inquiries.filter((i) => i.source !== "auto-diagnosis");
-  const checkI = inquiries.filter((i) => i.source === "auto-diagnosis");
+  // 사이트 점검 탭 — 메인 점검(/check, auto-diagnosis)과 병의원 진단(/clinic-blog/check, clinic-diagnosis)에서 연락처를 남긴 리드
+  const isCheckLead = (src?: string) => src === "auto-diagnosis" || src === "clinic-diagnosis";
+  const generalI = inquiries.filter((i) => !isCheckLead(i.source));
+  const checkI = inquiries.filter((i) => isCheckLead(i.source));
   const pendingC = checkI.filter((c) => c.status === "pending").length;
   const pendingI = generalI.filter((i) => i.status === "pending").length;
   const filteredC = filterRows(withinPeriod(checkI, listPeriod));

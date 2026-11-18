@@ -5,6 +5,10 @@ import { checkRateLimit, clientIp } from '@/lib/rateLimit'
  * 자동 진단 API — 방문자가 넣은 사이트 주소를 서버에서 직접 받아
  * 로딩 속도 · 검색엔진 노출 구조 · 모바일 대응 · 문의 동선을 분석한다.
  *
+ * mode: 'clinic' — 병의원 진단(/clinic-blog/check)이 쓴다. 위 네 가지에 더해
+ * 제작 기술·보안(그누보드·PHP 같은 옛 방식인지)과 AI 검색 준비도를 함께 보고, 종합 점수도 여섯 가지로 낸다.
+ * 메인 사이트 점검(/check)은 mode 없이 불러 예전과 같은 네 가지 결과를 받는다.
+ *
  * 외부 서비스 없이 자체 측정한다:
  * 1) HTML 을 받으며 응답 속도와 무게를 재고
  * 2) 받은 HTML 을 파싱해 구조 항목을 점검한다
@@ -121,6 +125,55 @@ async function exists(url: string): Promise<boolean> {
   }
 }
 
+/** robots.txt 본문 — AI 크롤러를 막고 있는지 보려고 읽는다. 없거나 HTML 안내 페이지면 빈 문자열 */
+async function fetchText(url: string): Promise<string> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), AUX_TIMEOUT)
+  try {
+    const res = await fetch(url, {
+      signal: controller.signal,
+      redirect: 'follow',
+      headers: { 'User-Agent': 'WeflowCheck/1.0' },
+    })
+    if (!res.ok) return ''
+    const text = (await res.text()).slice(0, 20000)
+    return /^\s*<(!doctype|html)/i.test(text) ? '' : text
+  } catch {
+    return ''
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+/** robots.txt 에서 주요 AI 크롤러가 사이트 전체(Disallow: /)를 막혔는지 — 막힌 크롤러 이름 목록 */
+function blockedAiBots(robots: string): string[] {
+  const bots = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot', 'Google-Extended']
+  const groups: { agents: string[]; disallowAll: boolean }[] = []
+  let cur: { agents: string[]; disallowAll: boolean } | null = null
+  let lastWasAgent = false
+  for (const raw of robots.split(/\r?\n/)) {
+    const line = raw.replace(/#.*/, '').trim()
+    const m = line.match(/^([a-z-]+)\s*:\s*(.*)$/i)
+    if (!m) continue
+    const key = m[1].toLowerCase()
+    const val = m[2].trim()
+    if (key === 'user-agent') {
+      if (!lastWasAgent || !cur) groups.push((cur = { agents: [], disallowAll: false }))
+      cur.agents.push(val.toLowerCase())
+      lastWasAgent = true
+    } else {
+      lastWasAgent = false
+      if (cur && key === 'disallow' && val === '/') cur.disallowAll = true
+    }
+  }
+  return bots.filter(bot => {
+    // 이름을 콕 집은 규칙이 있으면 그걸 따르고, 없으면 * 규칙을 따른다
+    const own = groups.find(g => g.agents.includes(bot.toLowerCase()))
+    const star = groups.find(g => g.agents.includes('*'))
+    return (own ?? star)?.disallowAll === true
+  })
+}
+
 /** 항목들의 가중 평균으로 카테고리 점수를 낸다 (good 1 · warn 0.5 · bad 0) */
 function score(items: { item: CheckItem; weight: number }[]): Category {
   const total = items.reduce((s, x) => s + x.weight, 0)
@@ -135,12 +188,13 @@ const pick = (ok: boolean, warn?: boolean): CheckItem['status'] =>
   ok ? 'good' : warn ? 'warn' : 'bad'
 
 export async function POST(req: Request) {
-  let body: { url?: string }
+  let body: { url?: string; mode?: string }
   try {
     body = await req.json()
   } catch {
     return NextResponse.json({ error: '요청 형식이 잘못되었습니다.' }, { status: 400 })
   }
+  const clinic = body.mode === 'clinic'
   const target = normalizeUrl(body.url || '')
   if (!target) {
     return NextResponse.json({ error: '올바른 사이트 주소를 입력해 주세요. (예: example.co.kr)' }, { status: 400 })
@@ -180,10 +234,11 @@ export async function POST(req: Request) {
   const lower = html.toLowerCase()
 
   // robots.txt · sitemap.xml 은 본문과 별개로 병렬 확인
-  const [robotsOk, sitemapOk] = await Promise.all([
-    exists(`${finalUrl.origin}/robots.txt`),
+  const [robotsText, sitemapOk] = await Promise.all([
+    fetchText(`${finalUrl.origin}/robots.txt`),
     exists(`${finalUrl.origin}/sitemap.xml`),
   ])
+  const robotsOk = robotsText.trim().length > 0
 
   /* ── 1. 로딩 속도 ── */
   const htmlKb = Math.round(bytes / 1024)
@@ -443,6 +498,194 @@ export async function POST(req: Request) {
       },
     },
   ])
+
+  /* ── 5. AI 검색 준비도 ──
+   * 챗GPT·네이버 AI 브리핑 같은 AI 답변이 이 페이지를 읽고 인용할 수 있는 상태인지.
+   * 사장님이 읽는 화면이라 기술 용어 대신 "무엇이 안 되는지"로 말한다. */
+  const visibleText = html
+    .replace(/<(script|style|noscript|svg|template)[\s\S]*?<\/\1>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-z#0-9]+;/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+  const textLen = visibleText.length
+  const ldTypes = [...html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)]
+    .flatMap(m => [...m[1].matchAll(/"@type"\s*:\s*(\[[^\]]*\]|"[^"]+")/g)].map(t => t[1]))
+    .join(' ')
+  const hasLd = ldTypes.length > 0
+  const hasOrgLd = /(Organization|LocalBusiness|Corporation|Clinic|Dentist|Physician|Medical|Hospital|Store|Restaurant|ProfessionalService|Lodging|Campground|AutoRepair)/.test(ldTypes)
+  const hasFaqLd = /FAQPage/.test(ldTypes)
+  const hasFaqText = /(자주\s*묻는|FAQ|Q&A|질문과\s*답)/i.test(visibleText)
+  const h2Count = (lower.match(/<h2[\s>]/g) || []).length
+  const hasNaverVerify = /<meta[^>]+name=["']naver-site-verification["']/i.test(html)
+  const hasBizNo = /\d{3}-\d{2}-\d{5}/.test(visibleText)
+  const hasAddress = /(시|군|구)\s?[가-힣0-9]+(로|길|동)\s?\d/.test(visibleText)
+  const blocked = robotsOk ? blockedAiBots(robotsText) : []
+
+  const ai = score([
+    {
+      weight: 3,
+      item: {
+        label: '본문이 글자로 읽히는지',
+        status: pick(textLen >= 500, textLen >= 200),
+        value: `글자 ${textLen.toLocaleString()}자`,
+        advice:
+          textLen >= 500
+            ? 'AI와 검색엔진이 읽을 수 있는 글이 충분합니다.'
+            : '읽을 수 있는 글이 거의 없습니다. 설명이 이미지 안에만 있거나 화면이 나중에 그려지는 구조라, AI는 빈 페이지로 봅니다.',
+      },
+    },
+    {
+      weight: 2,
+      item: {
+        label: '업체 정보 표시(구조화 데이터)',
+        status: pick(hasOrgLd, hasLd),
+        value: hasOrgLd ? '있음' : hasLd ? '일부만 있음' : '없음',
+        advice: hasOrgLd
+          ? '업체 이름·연락처를 AI가 정확히 알아볼 수 있게 표시되어 있습니다.'
+          : 'AI가 업체 이름·주소·연락처를 확실히 알아볼 표시(구조화 데이터)가 없습니다. 답변에 다른 업체 정보가 섞일 수 있습니다.',
+      },
+    },
+    {
+      weight: 2,
+      item: {
+        label: '자주 묻는 질문(FAQ)',
+        status: pick(hasFaqLd, hasFaqText),
+        value: hasFaqLd ? 'AI용 표시까지 있음' : hasFaqText ? '화면에만 있음' : '없음',
+        advice: hasFaqLd
+          ? '질문과 답이 AI가 바로 가져갈 수 있는 형태로 준비되어 있습니다.'
+          : hasFaqText
+            ? 'FAQ는 있지만 AI용 표시가 없어 답변에 그대로 쓰이기 어렵습니다.'
+            : '고객이 자주 묻는 질문과 답이 없습니다. AI 답변은 질문에 바로 답하는 글을 가장 많이 인용합니다.',
+      },
+    },
+    {
+      weight: 1,
+      item: {
+        label: '소제목으로 나뉜 글',
+        status: pick(h2Count >= 2, h2Count === 1),
+        value: h2Count === 0 ? '소제목 없음' : `소제목 ${h2Count}개`,
+        advice:
+          h2Count >= 2
+            ? '글이 소제목으로 나뉘어 있어 필요한 부분만 골라 인용하기 좋습니다.'
+            : '글이 소제목으로 나뉘어 있지 않아, AI가 어느 부분이 무슨 내용인지 구분하기 어렵습니다.',
+      },
+    },
+    {
+      weight: 2,
+      item: {
+        label: 'AI 수집 허용',
+        status: pick(blocked.length === 0),
+        value: blocked.length === 0 ? '막힌 곳 없음' : `${blocked.length}곳 차단`,
+        advice:
+          blocked.length === 0
+            ? '챗GPT·클로드 등 AI가 사이트를 읽을 수 있습니다.'
+            : `사이트 설정(robots.txt)이 ${blocked.join(', ')}의 접근을 막고 있습니다. 막힌 AI의 답변에는 이 사이트가 나올 수 없습니다.`,
+      },
+    },
+    {
+      weight: 1,
+      item: {
+        // 네이버는 메타 태그 대신 HTML 파일 업로드로도 인증할 수 있어, 태그가 없다고 '나쁨'으로 단정하지 않는다
+        label: '네이버 등록 표시',
+        status: pick(hasNaverVerify, true),
+        value: hasNaverVerify ? '확인됨' : '페이지에서 미확인',
+        advice: hasNaverVerify
+          ? '네이버 서치어드바이저에 등록된 사이트입니다.'
+          : '네이버 서치어드바이저 등록 표시가 페이지에 없습니다. 파일로 등록했을 수 있으니, 등록하지 않았다면 네이버 검색·AI 브리핑을 위해 등록이 필요합니다.',
+      },
+    },
+    {
+      weight: 1,
+      item: {
+        label: '상호·주소 글자 표시',
+        status: pick(hasBizNo || (hasAddress && hasTel), hasAddress || hasTel),
+        value: hasBizNo ? '사업자 정보 있음' : hasAddress ? '주소 있음' : '확인 안 됨',
+        advice:
+          hasBizNo || (hasAddress && hasTel)
+            ? '업체 정보가 글자로 적혀 있어 AI가 실제 업체로 확인하기 좋습니다.'
+            : '사업자 정보나 주소가 글자로 보이지 않습니다. 이미지에만 있으면 AI가 실제 업체인지 확인하기 어렵습니다.',
+      },
+    },
+  ])
+
+  /* ── 6. 제작 기술·보안 (병의원 진단 전용) ──
+   * 어떤 방식으로 만든 사이트인지, 서버가 무엇을 드러내고 있는지 — 응답 헤더와 HTML 흔적으로만 본다 (침투 검사가 아니다).
+   * 감지는 흔적 기반이라 틀릴 수 있으니 단정하지 않고 "~로 보입니다"로 말한다. */
+  const h = (name: string) => res.headers.get(name) || ''
+  const cookies = h('set-cookie')
+  const poweredBy = h('x-powered-by')
+  const serverHeader = h('server')
+  const generator = (html.match(/<meta[^>]+name=["']generator["'][^>]*content=["']([^"']*)["']/i) || [])[1] || ''
+  const isGnuboard = /(\/bbs\/board\.php|bo_table=|g5_url|g5_bbs_url|gnuboard|youngcart)/i.test(html)
+  const isWordpress = /(wp-content\/|wp-includes\/)/i.test(html) || /wordpress/i.test(generator)
+  const isXe = /(xpressengine|rhymix|\/modules\/board\/|xe\.min\.js)/i.test(html) || /(xpressengine|rhymix)/i.test(generator)
+  const isCafe24 = /(cafe24|echosting)/i.test(html)
+  const isImweb = /(imweb|vendor-cdn\.imweb)/i.test(html)
+  const isPhp = /php/i.test(poweredBy) || /PHPSESSID/i.test(cookies) || /href=["'](?!https?:|\/\/)[^"']*\.php[?"']/i.test(html) // 같은 사이트 안의 .php 링크만 (밖으로 나가는 링크는 남의 사이트다)
+  const isNext = /(\/_next\/static|__next_f|id=["']__next["'])/i.test(html)
+  const builder = isGnuboard ? '그누보드(PHP)' : isWordpress ? '워드프레스(PHP)' : isXe ? 'XE·라이믹스(PHP)' : isPhp ? 'PHP' : ''
+  const phpVer = (poweredBy.match(/PHP\/(\d+)\.(\d+)/i) || []).slice(1).map(Number)
+  // PHP 는 8.1 까지 공식 보안 지원이 끝났다 (8.1 은 2025-12-31 종료)
+  const phpOld = phpVer.length === 2 && (phpVer[0] < 8 || (phpVer[0] === 8 && phpVer[1] <= 1))
+  const leaksVersion = /\d+\.\d+/.test(poweredBy) || /\/\d+\.\d+/.test(serverHeader)
+  const secHeaders = [
+    h('strict-transport-security') && 'HSTS',
+    h('x-content-type-options') && 'nosniff',
+    (h('x-frame-options') || /frame-ancestors/i.test(h('content-security-policy'))) && '클릭재킹 방지',
+  ].filter(Boolean) as string[]
+
+  const tech = score([
+    {
+      weight: 3,
+      item: {
+        label: '제작 방식',
+        status: builder ? 'bad' : isNext ? 'good' : 'warn',
+        value: builder || (isNext ? 'Next.js' : isCafe24 ? '카페24' : isImweb ? '아임웹' : '확인 안 됨'),
+        advice: builder
+          ? `${builder} 기반으로 보입니다. 널리 쓰이는 만큼 취약점이 공개되면 자동 공격의 대상이 되기 쉽고, 서버와 프로그램 업데이트를 계속 직접 챙겨야 합니다.`
+          : isNext
+            ? '최신 방식(Next.js)으로 만들어져 있습니다. 관리할 PHP 서버·게시판 프로그램이 없는 구조입니다.'
+            : '제작 방식이 밖에서 확인되지 않습니다. 오래된 PHP 기반인지 상담에서 함께 확인해 드립니다.',
+      },
+    },
+    {
+      weight: 2,
+      item: {
+        label: '서버 정보 노출',
+        status: pick(!leaksVersion && !phpOld, !phpOld),
+        value: phpOld ? `PHP ${phpVer.join('.')} (지원 종료)` : leaksVersion ? '버전 노출됨' : '노출 없음',
+        advice: phpOld
+          ? `보안 지원이 끝난 PHP ${phpVer.join('.')} 버전을 쓰고 있습니다. 새 취약점이 나와도 고쳐지지 않는 버전입니다.`
+          : leaksVersion
+            ? '서버 프로그램의 버전이 밖에 그대로 보입니다. 공격자가 그 버전의 알려진 취약점부터 찾아보게 됩니다.'
+            : '서버 프로그램의 버전이 밖으로 드러나지 않습니다.',
+      },
+    },
+    {
+      weight: 1,
+      item: {
+        label: '보안 설정(헤더)',
+        status: pick(secHeaders.length >= 2, secHeaders.length === 1),
+        value: `3가지 중 ${secHeaders.length}가지`,
+        advice:
+          secHeaders.length >= 2
+            ? '브라우저가 사이트를 안전하게 다루도록 하는 기본 보안 설정이 갖춰져 있습니다.'
+            : '접속을 늘 보안 연결로 고정하거나, 다른 사이트에 몰래 끼워 넣지 못하게 하는 기본 보안 설정이 빠져 있습니다.',
+      },
+    },
+  ])
+
+  if (clinic) {
+    const overall = Math.round(
+      tech.score * 0.15 + ai.score * 0.2 + seo.score * 0.2 + speed.score * 0.2 + mobile.score * 0.1 + contact.score * 0.15,
+    )
+    return NextResponse.json({
+      finalUrl: finalUrl.toString(),
+      overall,
+      categories: { tech, ai, seo, speed, mobile, contact },
+    })
+  }
 
   const overall = Math.round(
     speed.score * 0.3 + seo.score * 0.3 + mobile.score * 0.2 + contact.score * 0.2,
