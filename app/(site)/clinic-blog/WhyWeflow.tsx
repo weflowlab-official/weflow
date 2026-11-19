@@ -107,8 +107,11 @@ export default function WhyWeflow() {
         .ww-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; padding: 15px 26px; border-radius: 999px; background: var(--cb-text); color: #fff; font-weight: 700; font-size: 1.02rem; text-decoration: none; transition: background .15s; }
         .ww-btn:hover { background: var(--cb-accent); }
         /* 휴대폰 — 제목 둘째 줄('지금 Next.js로 리뉴얼해야 하는 이유')이 한 줄에 들어가게 글자를 화면 폭에 맞춰 줄인다 */
-        /* .ww 를 앞에 붙여 세게 건다 — 공통 제목 규칙(.cb-h2)이 page.tsx 의 <style> 에 있어 이 <style> 보다 뒤에 오므로, 같은 세기면 그쪽이 이긴다 */
+        /* .ww 를 앞에 붙여 세게 건다 — 공통 제목 규칙(.cb-h2)이 page.tsx 쪽 스타일에 있어 이 파일의 것보다 뒤에 오므로, 같은 세기면 그쪽이 이긴다.
+           (이 CSS 글 안에는 꺾쇠로 감싼 태그 이름을 적지 않는다 — 서버가 그 글자를 바꿔 내보내 브라우저와 어긋나고 하이드레이션 오류가 난다) */
         @media (max-width: 767px) { .ww .ww-h2 { font-size: min(1.7rem, 5.6vw); } }
+        /* 제목 안 형광펜 부분(Next.js로 리뉴얼)은 공통 규칙이 한 단계 가늘게(700) 잡는다 — 이 제목은 첫 줄과 같은 굵기(800)로 맞춘다 */
+        .ww .ww-h2 .cb-hl { font-weight: inherit; }
         /* 휴대폰 — 카드 세 장을 옆으로 넘기는 줄로. 카드 폭을 화면의 82%로 둬 다음 카드가 살짝 보이고(넘길 수 있다는 신호), 멈추면 카드가 가운데에 온다.
            차례로 돌아가며 강조하던 연출은 끄고, 지금 가운데에 와 있는 카드(WwList 가 is-on 을 붙인다)와 누르고 있는 카드를 강조한다.
            위아래 여백은 떠오른 카드와 그림자가 잘리지 않게 줄 안쪽에 둔다 */
@@ -117,6 +120,8 @@ export default function WhyWeflow() {
           .ww-list::-webkit-scrollbar { display: none; }
           .ww-card, .ww-list.is-in .ww-card { flex: 0 0 82%; scroll-snap-align: center; opacity: 1; transform: none; animation: none; transition: transform .3s ease, background-color .3s ease, border-color .3s ease, box-shadow .3s ease; transition-delay: 0s; }
           .ww-list .ww-card.is-on, .ww-list .ww-card:active { transform: translateY(-8px); background-color: #eef4fd; border-color: #a9c6f5; box-shadow: 0 18px 34px rgba(31,99,214,.16); }
+          /* 카드 한 줄 요약('직접 챙길 서버와 프로그램이 없습니다')이 한 줄에 들어가게 — 카드 폭이 화면을 따라가므로 글자도 화면 폭에 맞춰 줄인다 */
+          .ww-lead { font-size: min(1.04rem, 4.2vw); white-space: nowrap; }
           .ww-foot { margin-top: 4px; }
         }
         @media (prefers-reduced-motion: reduce) { .ww-card { opacity: 1; transform: none; transition: none; } .ww-list.is-in .ww-card { animation: none; } }

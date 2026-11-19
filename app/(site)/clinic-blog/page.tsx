@@ -315,9 +315,9 @@ export default function ClinicBlogPage() {
         @media (min-width: 640px) { .qq-row { grid-template-columns: 1fr 1.3fr auto; align-items: start; } .qq-f-agree { grid-column: 1 / -1; grid-row: 2; } }
         /* 휴대폰 — 제목이 한 줄에 들어가게 글자를 화면 폭에 맞춰 줄인다 */
         @media (max-width: 767px) { .qq-text strong { font-size: min(1.45rem, 5.4vw); white-space: nowrap; } }
-        .qq-row input { width: 100%; height: 54px; padding: 0 16px; border: 1px solid #d5e0f3; border-radius: 12px; background: #fff; font: inherit; font-size: 1rem; color: var(--cb-text); }
-        .qq-row input::placeholder { color: #9aa1ac; }
-        .qq-row input:focus { outline: 2px solid var(--cb-accent); outline-offset: -1px; }
+        .qq-row input:not([type="checkbox"]) { width: 100%; height: 54px; padding: 0 16px; border: 1px solid #d5e0f3; border-radius: 12px; background: #fff; font: inherit; font-size: 1rem; color: var(--cb-text); }
+        .qq-row input:not([type="checkbox"])::placeholder { color: #9aa1ac; }
+        .qq-row input:not([type="checkbox"]):focus { outline: 2px solid var(--cb-accent); outline-offset: -1px; }
         .qq-row button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 54px; padding: 0 26px; border: 0; border-radius: 12px; background: var(--cb-accent); color: #fff; font: inherit; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background .15s, transform .12s; }
         .qq-row button:hover { background: #1852b5; }
         .qq-row button:active { transform: scale(.97); }
@@ -326,7 +326,7 @@ export default function ClinicBlogPage() {
         .qq-agree { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 6px 0; font-size: .9rem; color: var(--cb-sub); cursor: pointer; }
         .qq-agree input { width: 18px; height: 18px; margin: 0; flex: none; accent-color: var(--cb-accent); }
         /* 휴대폰 — 동의 문구를 늘 한 줄에. 폭이 모자라면 글자가 화면 폭에 맞춰 줄어든다 */
-        @media (max-width: 560px) { .qq-agree { gap: 5px; font-size: min(.9rem, 3.08vw); white-space: nowrap; } .qq-agree input { width: 15px; height: 15px; } }
+        @media (max-width: 560px) { .qq-agree { gap: 8px; font-size: min(.9rem, 3.08vw); white-space: nowrap; } .qq-agree input { width: 15px; height: 15px; } }
         .qq-agree a { color: var(--cb-muted); text-underline-offset: 3px; }
         .qq-form .qq-agree-err { margin-top: 8px; text-align: center; }
         .qq-error { margin: 12px 0 0; color: #d64545; font-size: .88rem; font-weight: 600; }

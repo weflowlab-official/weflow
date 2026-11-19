@@ -112,8 +112,9 @@ export default function ClinicPlans({ children }: { children?: ReactNode }) {
 
         /* ── 플랜 카드 — /pricing 과 같은 짜임. 바탕만 회색 대신 흰 카드 · 옅은 파란 테두리로 (회색은 이 페이지에서 탁해 보였다), 추천 카드는 파란 테두리에 위쪽이 옅은 파랑 ── */
         .cp .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.85rem, 1.8vw, 1.4rem); align-items: stretch; margin-top: 56px; text-align: left; }
-        .cp .pricing-card { position: relative; display: flex; flex-direction: column; background: #fff; border: 1.5px solid #e1e8f2; box-shadow: 0 10px 30px rgba(17,20,24,.04); border-radius: clamp(18px, 2.2vw, 28px); padding: clamp(1.5rem, 2.6vw, 2rem); transition: border-color .15s; }
-        .cp .pricing-card:hover { border-color: var(--accent); }
+        .cp .pricing-card { position: relative; display: flex; flex-direction: column; background: #fff; border: 2px solid #e1e8f2; box-shadow: 0 10px 30px rgba(17,20,24,.04); border-radius: clamp(18px, 2.2vw, 28px); padding: clamp(1.5rem, 2.6vw, 2rem); transition: border-color .15s; }
+        /* 올리거나(PC) 누르면(휴대폰) 추천 카드와 같은 두께(2px)의 파란 테두리 — 두께는 처음부터 2px 로 두고 색만 바꿔, 테두리가 생길 때 카드 안이 밀리지 않는다 */
+        .cp .pricing-card:hover, .cp .pricing-card:active { border-color: var(--accent); }
         .cp .pricing-card.is-highlight { border: 2px solid var(--accent); background: linear-gradient(180deg, #f1f7ff 0%, #fff 55%); z-index: 0; box-shadow: 0 18px 44px rgba(31,99,214,.16); }
         /* 반짝이 레이어 — 카드 안쪽으로만 보이게(클립), 글자·버튼 뒤 */
         .cp .hl-sparkle-layer { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; z-index: -1; pointer-events: none; }
@@ -128,7 +129,9 @@ export default function ClinicPlans({ children }: { children?: ReactNode }) {
         @media (prefers-reduced-motion: reduce) { .cp .hl-sparkle { animation: none; opacity: .25; } .cp .pricing-tag { animation: none; } }
         /* 좁은 화면 — 한 장씩 */
         @media (max-width: 860px) { .cp .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; gap: 1.6rem; margin-top: 40px; }
-          .cp .pricing-card.is-highlight { order: -1; } /* 한 줄로 쌓이니 추천 카드를 먼저 */
+          /* 한 줄로 쌓이니 비싼 순으로 — ALL-IN-ONE(추천) → SIGNATURE(홈페이지) → PREMIER(웹블로그). 넓은 화면은 적힌 순서(가격 낮은 순) 그대로 */
+          .cp .pricing-card.is-highlight { order: -1; }
+          .cp .pricing-card:first-child { order: 1; }
         }
 
         /* 견적 신청 버튼 — 카드 맨 아래. 추천 카드는 채운 버튼 */
