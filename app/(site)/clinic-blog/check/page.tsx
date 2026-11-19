@@ -14,12 +14,12 @@ import CheckClient from './CheckClient'
  */
 
 export const metadata: Metadata = {
-  title: '병원 홈페이지 무료 진단 · WEFLOW',
+  title: '병원 홈페이지 무료 점검 · WEFLOW',
   description:
     '우리 병원 홈페이지, 지금 몇 점일까요? 주소만 넣으면 제작 기술 및 보안부터 AI 검색 준비도, 검색 노출, 속도까지 바로 점검해 드립니다.',
   alternates: { canonical: '/clinic-blog/check' },
   openGraph: {
-    title: '병원 홈페이지 무료 진단 · WEFLOW',
+    title: '병원 홈페이지 무료 점검 · WEFLOW',
     description: '주소만 넣으면 제작 기술 및 보안부터 AI 검색 준비도까지 바로 점검해 드립니다.',
     url: '/clinic-blog/check',
     images: [{ url: '/images/main/og-logo-2.jpg', width: 1200, height: 630 }],

@@ -80,7 +80,8 @@ export default function QuickQuote({ place, title, desc }: {
       {done ? (
         <p className="qq-done" role="status">
           <span><Check size={18} strokeWidth={3} /></span>
-          {name.trim()}님, 접수됐어요. 담당자가 확인 후 연락드릴게요.
+          {/* 휴대폰에서는 두 줄 — '○○님, 접수됐어요.' 다음에 줄을 바꾼다 (cb-mo 는 휴대폰에서만 살아 있는 줄바꿈) */}
+          <b>{name.trim()}님, 접수됐어요. <br className="cb-mo" />담당자가 확인 후 연락드릴게요.</b>
         </p>
       ) : (
         <form className="qq-form" onSubmit={onSubmit} noValidate>

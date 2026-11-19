@@ -139,7 +139,7 @@ export default function ClinicBlogPage() {
       <ClinicPlans>
         {/* 간편 견적 ① — 가격을 본 직후, 이름·번호만 남기는 짧은 띠 */}
         <QuickQuote
-          place="가격 안내 아래"
+          place="상단"
           title="어떤 플랜이 맞을지 고민된다면"
           desc={<>이름과 번호만 남겨 주세요. <br className="cb-mo" />우리 병원에 맞는 구성과 견적을 안내해 드립니다.</>}
         />
@@ -198,7 +198,7 @@ export default function ClinicBlogPage() {
       {/* 간편 견적 ② — 웹블로그 소개(왜 · 어떻게 · 누구나 · 홈페이지 vs 웹블로그)를 다 본 뒤. ①과 맨 아래 상담 폼 사이 중간쯤이다. 앞 섹션(흰 바탕)의 아래 여백 안으로 끌어올려 한 덩어리로 보이게 한다 */}
       <div className="qq-sec">
         <QuickQuote
-          place="웹블로그 소개 아래"
+          place="중단"
           title={<>우리 병원은 <br className="cb-mo" />어떻게 바꿀 수 있을까요?</>}
           desc={<>이름과 번호만 남겨 주세요. <br className="cb-mo" />지금 상태를 보고 맞는 방법을 안내해 드립니다.</>}
         />
@@ -331,6 +331,8 @@ export default function ClinicBlogPage() {
         .qq-form .qq-agree-err { margin-top: 8px; text-align: center; }
         .qq-error { margin: 12px 0 0; color: #d64545; font-size: .88rem; font-weight: 600; }
         .qq-done { display: inline-flex; align-items: center; gap: 12px; margin: 28px 0 0; padding: 14px 22px; border-radius: 999px; background: #fff; border: 1px solid #d5e0f3; font-weight: 700; font-size: 1rem; line-height: 1.5; text-align: left; word-break: keep-all; }
+        .qq-done b { font-weight: inherit; }
+        @media (max-width: 767px) { .qq-done { border-radius: 20px; } }
         .qq-done span { flex: none; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--cb-accent); color: #fff; }
 
         /* 공통 섹션 여백 */
