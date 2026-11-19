@@ -10,6 +10,8 @@ import WwList from './WwList'
  * 문구 기준: 특정 회사 제품 이름을 쓰지 않는다. "절대 안전"·검색 순위를 약속하지 않는다 ("관리할 것이 줄어든다", "읽어 갈 정보가 함께 만들어진다").
  */
 
+// oldM · weM: 휴대폰용 — 같은 문장을 세 줄로 끊어 둔 것. 옆으로 넘기는 카드라 상자마다 줄 수가 다르면 들쭉날쭉해 보여서, 여섯 상자 모두 세 줄로 맞춘다.
+// 문장을 고치면 둘 다 고친다. 한 줄이 너무 길면(한글 17자 안팎) 좁은 폰에서 네 줄로 넘어간다.
 const REASONS = [
   {
     Icon: ShieldCheck,
@@ -17,6 +19,8 @@ const REASONS = [
     lead: '직접 챙길 서버와 프로그램이 없습니다',
     old: '서버·게시판 프로그램·플러그인의\n보안 업데이트를 사이트마다 직접\n챙겨야 합니다.',
     we: '미리 만들어 둔 페이지를 내보내는 구조라 공격받을 곳이 줄고, 업데이트는 운영관리에서 계속 챙깁니다.',
+    oldM: '서버·게시판 프로그램·플러그인의\n보안 업데이트를 사이트마다 직접\n챙겨야 합니다.',
+    weM: '미리 만들어 둔 페이지를 내보내는\n구조라 공격받을 곳이 줄고, 업데이트는\n운영관리에서 계속 챙깁니다.',
   },
   {
     Icon: Zap,
@@ -24,6 +28,8 @@ const REASONS = [
     lead: '미리 만든 페이지를 바로 보여 줍니다',
     old: '페이지를 열 때마다 서버가 화면을 새로 만들어, 접속이 몰리거나 기능이 늘수록 느려집니다.',
     we: '완성된 페이지를 가까운 서버망(CDN)에서 바로 보내, 휴대폰에서도 빠르게 열립니다.',
+    oldM: '페이지를 열 때마다 서버가 화면을\n새로 만들어, 접속이 몰리거나\n기능이 늘수록 느려집니다.',
+    weM: '완성된 페이지를 가까운\n서버망(CDN)에서 바로 보내,\n휴대폰에서도 빠르게 열립니다.',
   },
   {
     Icon: ScanSearch,
@@ -31,6 +37,8 @@ const REASONS = [
     lead: '검색엔진과 AI가 읽어 가기 좋은 구조',
     old: '진료 안내가 이미지로 되어 있거나,\n검색용 정보를 페이지마다 따로 넣어야 합니다.',
     we: '글자 중심으로 만들고, 사이트맵·구조화 데이터 같은 검색용 정보가 함께 만들어집니다.',
+    oldM: '진료 안내가 이미지로 되어 있거나,\n검색용 정보를 페이지마다\n따로 넣어야 합니다.',
+    weM: '글자 중심으로 만들고,\n사이트맵·구조화 데이터 같은\n검색용 정보가 함께 만들어집니다.',
   },
 ]
 
@@ -45,7 +53,7 @@ export default function WhyWeflow() {
         </p>
 
         <WwList className="ww-list">
-          {REASONS.map(({ Icon, title, lead, old, we }, i) => (
+          {REASONS.map(({ Icon, title, lead, old, we, oldM, weM }, i) => (
             <article key={title} className="ww-card" style={{ '--i': i } as React.CSSProperties}>
               {/* 아이콘과 제목을 한 줄에 — [아이콘] 보안 */}
               <h3><span className="ww-icon"><Icon size={22} /></span>{title}</h3>
@@ -53,11 +61,11 @@ export default function WhyWeflow() {
               <dl>
                 <div className="ww-old">
                   <dt><X size={14} strokeWidth={3} /> 지금 홈페이지</dt>
-                  <dd>{old}</dd>
+                  <dd><span className="ww-wide">{old}</span><span className="ww-narrow">{oldM}</span></dd>
                 </div>
                 <div className="ww-we">
                   <dt><Check size={14} strokeWidth={3} /> WEFLOW · Next.js</dt>
-                  <dd>{we}</dd>
+                  <dd><span className="ww-wide">{we}</span><span className="ww-narrow">{weM}</span></dd>
                 </div>
               </dl>
             </article>
@@ -98,8 +106,9 @@ export default function WhyWeflow() {
         .ww-card dl > div { padding: 15px 16px; border-radius: 14px; background: #fff; }
         .ww-card dt { display: flex; align-items: center; gap: 5px; margin-bottom: 6px; font-size: .84rem; font-weight: 800; }
         .ww-card dd { margin: 0; font-size: .95rem; line-height: 1.65; word-break: keep-all; white-space: pre-line; } /* pre-line — 문구에 넣은 줄바꿈(\\n)을 그대로 살린다 */
-        .ww-old dt { color: #8a919c; }
-        .ww-old dd { color: #6b7380; }
+        .ww-narrow { display: none; }
+        .ww-old dt { color: #f87171; } /* 윗 섹션(SecurityNews) '옛 방식' X 표시와 같은 붉은색 */
+        .ww-old dd { color: #555d69; }
         .ww-we { box-shadow: inset 0 0 0 1.5px #cfe0fb; }
         .ww-we dt { color: var(--cb-accent); }
         .ww-we dd { color: var(--cb-text); font-weight: 600; }
@@ -118,10 +127,16 @@ export default function WhyWeflow() {
         @media (max-width: 767px) {
           .ww-list { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 32px -20px 0; padding: 16px 20px 34px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
           .ww-list::-webkit-scrollbar { display: none; }
-          .ww-card, .ww-list.is-in .ww-card { flex: 0 0 82%; scroll-snap-align: center; opacity: 1; transform: none; animation: none; transition: transform .3s ease, background-color .3s ease, border-color .3s ease, box-shadow .3s ease; transition-delay: 0s; }
+          .ww-card, .ww-list.is-in .ww-card { flex: 0 0 min(82vw, 340px); padding: 30px min(5vw, 20.75px) 26px; scroll-snap-align: center; opacity: 1; transform: none; animation: none; transition: transform .3s ease, background-color .3s ease, border-color .3s ease, box-shadow .3s ease; transition-delay: 0s; }
           .ww-list .ww-card.is-on, .ww-list .ww-card:active { transform: translateY(-8px); background-color: #eef4fd; border-color: #a9c6f5; box-shadow: 0 18px 34px rgba(31,99,214,.16); }
           /* 카드 한 줄 요약('직접 챙길 서버와 프로그램이 없습니다')이 한 줄에 들어가게 — 카드 폭이 화면을 따라가므로 글자도 화면 폭에 맞춰 줄인다 */
           .ww-lead { font-size: min(1.04rem, 4.2vw); white-space: nowrap; }
+          /* 상자 안 글 — 세 줄로 끊어 둔 휴대폰용 문장을 쓴다. 끊은 자리에서만 줄이 바뀌도록 카드 폭 · 안쪽 여백 · 글자 크기를 모두 화면 폭에 비례하게 잡는다
+             (한 줄에 한글 18자쯤 들어간다. 화면이 415px 을 넘으면 셋 다 같은 지점에서 멈춰 비율이 그대로다) */
+          .ww-wide { display: none; }
+          .ww-narrow { display: inline; }
+          .ww-card dl > div { padding: 15px min(3.6vw, 15px); }
+          .ww-card dd { font-size: min(3.8vw, 15.8px); }
           .ww-foot { margin-top: 4px; }
         }
         @media (prefers-reduced-motion: reduce) { .ww-card { opacity: 1; transform: none; transition: none; } .ww-list.is-in .ww-card { animation: none; } }
