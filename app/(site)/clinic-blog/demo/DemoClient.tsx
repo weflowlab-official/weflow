@@ -486,13 +486,17 @@ export default function DemoClient() {
         .dm-art h1 { margin: 0; font-size: clamp(1.45rem, 3vw, 1.9rem); line-height: 1.35; font-weight: 800; letter-spacing: -0.03em; word-break: keep-all; }
         .dm-art-meta { margin: 10px 0 0; color: var(--cb-muted); font-size: .88rem; }
         .dm-art-thumb { display: grid; align-content: center; gap: 10px; aspect-ratio: 16 / 9; margin: 22px 0 0; padding: 8% 9%; border-radius: 14px; }
+        @media (min-width: 768px) { .dm-art-thumb { padding-left: 6.5%; padding-right: 6.5%; } } /* 넓은 화면에서는 글을 왼쪽으로 조금 당긴다 */
         .dm-art-thumb span { justify-self: start; padding: 5px 12px; border-radius: 999px; background: rgba(255,255,255,.75); font-size: .8rem; font-weight: 800; }
         .dm-art-thumb strong { font-size: clamp(1.2rem, 3.2vw, 1.8rem); line-height: 1.35; font-weight: 800; letter-spacing: -0.03em; word-break: keep-all; }
         .dm-art-thumb em { font-style: normal; font-size: .82rem; font-weight: 600; opacity: .75; }
         .dm-art-sum { margin: 24px 0 0; padding: 20px 22px; border-radius: 14px; background: #f1f6fe; border: 1px solid #dbe7fb; }
         .dm-art-sum b { display: block; margin-bottom: 8px; color: var(--cb-accent); font-size: .88rem; font-weight: 800; }
         .dm-art-sum p { margin: 0; font-weight: 600; line-height: 1.75; word-break: keep-all; }
-        .dm-art-sum ul { margin: 12px 0 0; padding: 0 0 0 18px; display: grid; gap: 5px; color: var(--cb-sub); font-size: .95rem; line-height: 1.65; }
+        /* 핵심 포인트 — 줄 앞에 파란 점 (사이트 공통 스타일이 목록 기호를 지워서 직접 그린다) */
+        .dm-art-sum ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 5px; color: var(--cb-sub); font-size: .95rem; line-height: 1.65; }
+        .dm-art-sum li { position: relative; padding-left: 16px; }
+        .dm-art-sum li::before { content: ''; position: absolute; left: 3px; top: .68em; width: 5px; height: 5px; border-radius: 50%; background: var(--cb-accent); }
         .dm-art-body h2, .dm-art-faq h2 { margin: 32px 0 10px; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; word-break: keep-all; }
         .dm-art-body p { margin: 14px 0 0; color: #2b313a; font-size: 1.02rem; line-height: 1.85; word-break: keep-all; white-space: pre-line; }
         .dm-art-faq > div { border-bottom: 1px solid var(--cb-line); }
