@@ -297,17 +297,17 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
         .cb-drawer-head .cb-brand-sep, .cb-drawer-head .cb-brand-sub { display: none; }
         .cb-drawer-close { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; border: 0; background: none; color: #111418; cursor: pointer; }
         .cb-drawer-nav { flex: 1; display: flex; flex-direction: column; padding: 16px 0; overflow-y: auto; }
-        .cb-drawer-nav a { padding: 18px 28px; font-size: 1.15rem; font-weight: 600; color: #111418; text-decoration: none; }
+        .cb-drawer-nav a { padding: 15px 28px; font-size: 1.08rem; font-weight: 600; color: #111418; text-decoration: none; }
         .cb-drawer-nav a:active { background: #f7f8fa; }
         /* 묶음 — 이름 줄을 누르면 아래 줄들이 펼쳐진다 (조금 들여 쓰고 한 단계 작게) */
-        .cb-drawer-group { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 28px; border: 0; background: none; font: inherit; font-size: 1.15rem; font-weight: 600; color: #111418; text-align: left; cursor: pointer; }
+        .cb-drawer-group { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 15px 28px; border: 0; background: none; font: inherit; font-size: 1.08rem; font-weight: 600; color: #111418; text-align: left; cursor: pointer; }
         .cb-drawer-group svg { color: #8a919c; transition: transform .2s; }
         .cb-drawer-sub { display: grid; transition: grid-template-rows .25s ease; }
         /* 펼친 줄들은 연회색 판 위에 — 어느 묶음에 속한 줄인지 한눈에 보이게 */
         .cb-drawer-sub > div { overflow: hidden; display: flex; flex-direction: column; background: #f7f8fa; transition: visibility .25s; }
         .cb-drawer-sub > div > a:first-child { margin-top: 6px; }
         .cb-drawer-sub > div > a:last-child { margin-bottom: 6px; }
-        .cb-drawer-nav .cb-drawer-sub a { display: flex; align-items: center; gap: 4px; padding: 12px 28px 12px 40px; font-size: 1rem; font-weight: 500; color: #4b5360; }
+        .cb-drawer-nav .cb-drawer-sub a { display: flex; align-items: center; gap: 4px; padding: 11px 28px 11px 40px; font-size: .97rem; font-weight: 500; color: #4b5360; }
         .cb-drawer-nav .cb-drawer-sub a:active { background: #eef0f3; }
         /* 펼친 묶음의 이름은 파랗게 */
         .cb-drawer-group[aria-expanded="true"] { color: #1f63d6; }
@@ -319,7 +319,7 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
         .cb-drawer-ext span { background: linear-gradient(115deg, #9a7434 0%, #b8903f 38%, #ecd08a 50%, #b8903f 62%, #9a7434 100%); background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: cbGoldSheen 2.8s linear infinite; }
         @keyframes cbGoldSheen { from { background-position: 250% center; } to { background-position: 0% center; } }
         .cb-drawer-foot { display: grid; gap: 10px; padding: 18px 20px max(22px, env(safe-area-inset-bottom)); border-top: 1px solid #e9ebef; }
-        .cb-drawer-btn { display: flex; align-items: center; justify-content: center; gap: 8px; height: 56px; border-radius: 16px; border: 1.5px solid #d5d9df; color: #111418; font-size: 1.05rem; font-weight: 700; text-decoration: none; }
+        .cb-drawer-btn { display: flex; align-items: center; justify-content: center; gap: 8px; height: 52px; border-radius: 16px; border: 1.5px solid #d5d9df; color: #111418; font-size: 1rem; font-weight: 700; text-decoration: none; }
         .cb-drawer-btn--fill { background: #1f63d6; border-color: #1f63d6; color: #fff; }
         .cb-drawer-btn--tel svg { color: #16a34a; } /* 하단 바 '바로 전화' 와 같은 초록 수화기 */
         @media (prefers-reduced-motion: reduce) { .cb-drawer, .cb-drawer.is-open, .cb-drawer-dim, .cb-drawer-sub { transition: none; } .cb-drawer-ext span { animation: none; } }
