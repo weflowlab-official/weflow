@@ -1,15 +1,14 @@
-import { Check, Lock, PenLine, LayoutTemplate, Inbox, Star, ArrowUpRight } from 'lucide-react'
+import { Lock, PenLine, LayoutTemplate, Inbox } from 'lucide-react'
 import InView from './InView'
-import PlanButton from './PlanButton'
 import { WH_CLINIC, type WithHomepageCopy } from './homeCopy'
 
 /**
- * '홈페이지와 함께하면' + 그 바로 아래 상품 두 가지 — WHY WEB BLOG 뒤, PROCESS 앞.
+ * '홈페이지와 함께하면' — WHY WEB BLOG 뒤, PROCESS 앞.
  *
  * 위: 환자가 지나가는 길(검색 → 블로그 글 → 홈페이지 → 예약)을 네 칸으로 보여 준다.
  *     화면에 들어오면 칸이 차례로 켜지고 사이 선이 이어진다. 가운데 두 칸(블로그 글·홈페이지)은
  *     '한 사이트 안' 이라는 띠로 묶어, 밖으로 나가지 않는다는 걸 그림으로 말한다.
- * 아래: 웹블로그 / 웹블로그 + 홈페이지(추천) / 홈페이지 카드. 버튼을 누르면 상담 폼의 문의 유형이 미리 골라진다.
+ * 아래: 함께 두면 좋은 점 네 장. 상품 카드(가격 안내)는 ClinicPlans.tsx 로 떼어 병의원 랜딩 위쪽으로 올렸다.
  * 헤더의 '홈페이지 결합' 메뉴가 여기(#with-homepage)로 온다.
  */
 
@@ -83,18 +82,7 @@ function GainVisual({ kind, copy }: { kind: (typeof GAINS)[number]['key']; copy:
   )
 }
 
-// 상품 세 장 — 이름은 고정, 누구를 위한지와 항목은 업종 글귀(copy.plans)에서.
-// price: 제작 시작 가격(만원). 병의원 랜딩처럼 showPrice 를 준 곳에서만 보인다 — 광고로 온 분이 가격대를 몰라 문의를 망설이지 않게.
-// 운영관리비는 적지 않는다 (상담에서 안내). 금액을 바꾸면 상담 폼의 예산 구간(InquiryForm 의 BUDGETS)도 같이 본다
-const PLAN_BASE = [
-  { name: '웹블로그', plan: '웹블로그만', price: 150, note: '' },
-  // note: 가격 바로 아래 한 줄 — 함께 만들 때 왜 값이 더 나가는지(처음부터 같이 설계한다)를 답한다. 가격과 같이 showPrice 일 때만 보인다
-  { name: '웹블로그 + 홈페이지', plan: '웹블로그 + 홈페이지', best: true, price: 500, note: '' },
-  { name: '홈페이지', plan: '홈페이지만', price: 300, note: '' },
-]
-
-export default function WithHomepage({ copy = WH_CLINIC, showPrice = false }: { copy?: WithHomepageCopy; showPrice?: boolean }) {
-  const PLANS = copy.plans && PLAN_BASE.map((p, i) => ({ ...p, ...copy.plans![i] }))
+export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepageCopy }) {
   return (
     <section id="with-homepage" className="ch">
       <div className="ch-inner">
@@ -119,44 +107,6 @@ export default function WithHomepage({ copy = WH_CLINIC, showPrice = false }: { 
             </InView>
           ))}
         </div>
-
-        {/* 상품 카드 · 홈페이지 견본 링크 — 상담 폼이 같은 페이지에 있는 병의원 랜딩에서만 (메인 '웹블로그란?' 은 copy.plans 가 없어 뺀다) */}
-        {PLANS && (
-          <>
-          {/* 상품 두 가지 */}
-          <div className="ch-plans-head">
-            <h3>웹블로그만, 홈페이지만, <br className="ch-mo" />또는 함께</h3>
-          </div>
-          <div className={`ch-plans${showPrice ? ' is-priced' : ''}`}>
-            {PLANS.map(p => (
-              <div key={p.name} className={`ch-plan${p.best ? ' is-best' : ''}`}>
-                {p.best && (
-                  // 별 다섯 개 — 메인 가격 안내(/pricing)의 강조 카드 태그와 같은 모양
-                  <span className="ch-badge" aria-label="추천">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} size={14} fill="#ffd23f" strokeWidth={0} />
-                    ))}
-                  </span>
-                )}
-                <small>{p.for}</small>
-                <h4>{p.name}</h4>
-                {showPrice && <p className="ch-price">{p.price}<span>만원~</span></p>}
-                {showPrice && p.note && <p className="ch-note">{p.note}</p>}
-                <ul>
-                  {p.items.map(it => (
-                    <li key={it}><Check size={16} /><span>{it}</span></li>
-                  ))}
-                </ul>
-                <PlanButton plan={p.plan} fill={p.best} />
-              </div>
-            ))}
-          </div>
-          {/* WEFLOW 가 만든 홈페이지 견본 — 광고 랜딩이라 이 페이지를 떠나지 않게 새 탭으로 연다 */}
-          <a href="/" target="_blank" rel="noopener noreferrer" className="ch-home-link">
-            WEFLOW가 만든 홈페이지 보기 <ArrowUpRight size={16} />
-          </a>
-          </>
-        )}
       </div>
 
       <style>{CH_FLOW_CSS + `
@@ -241,46 +191,6 @@ export default function WithHomepage({ copy = WH_CLINIC, showPrice = false }: { 
         /* 숫자가 한 칸씩 위로 굴러 올라간다 — 칸마다 미끄러져 넘어가고 잠깐 멈춘다 */
         .ch-gain.is-in .gv-cnt { animation: gvCount 1.8s cubic-bezier(.45,.05,.3,1) .5s both; }
         @keyframes gvCount { 0%, 12% { transform: translateY(0); } 28%, 40% { transform: translateY(-22px); } 56%, 68% { transform: translateY(-44px); } 84%, 100% { transform: translateY(-66px); } }
-
-        /* 상품 두 가지 */
-        .ch-plans-head { margin: 96px 0 0; }
-        .ch-plans-head h3 { margin: 0; font-size: clamp(1.35rem, 2.6vw, 1.75rem); font-weight: 800; letter-spacing: -0.03em; color: #111418; }
-        /* 세 장 — 넓은 화면은 한 줄(추천이 가운데), 좁으면 한 장씩 */
-        .ch-plans { max-width: 1080px; margin: 32px auto 0; display: grid; gap: 16px; text-align: left; }
-        @media (min-width: 900px) { .ch-plans { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
-        .ch-plan { position: relative; display: flex; flex-direction: column; padding: 32px 28px 28px; border-radius: 24px; background: #fff; border: 1.5px solid #e6ebf2; }
-        /* 추천 카드 테두리 — 파랑 · 하늘색 · 민트가 테두리를 따라 천천히 흐른다.
-           안쪽 바탕(padding-box)은 그대로 두고, 테두리 층(border-box)만 3배 넓게 깔아 위치를 옮긴다 */
-        .ch-plan.is-best { border: 2px solid transparent; background: linear-gradient(180deg, #f5f9ff 0%, #fff 60%) padding-box, linear-gradient(90deg, #1f63d6, #6aa2f2, #5fd3c0, #6aa2f2, #1f63d6) border-box; background-size: 100% 100%, 300% 100%; animation: chBorderFlow 4s linear infinite; box-shadow: 0 22px 50px rgba(31,99,214,.14); }
-        @keyframes chBorderFlow { from { background-position: 0 0, 0% 50%; } to { background-position: 0 0, 150% 50%; } }
-        @media (prefers-reduced-motion: reduce) { .ch-plan.is-best { animation: none; } }
-        /* 별 태그 바탕도 테두리와 같은 색(파랑 · 하늘색 · 민트)이 같은 속도로 흐른다 */
-        .ch-badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 2px; padding: 5px 11px; border-radius: 999px; background: linear-gradient(90deg, #1f63d6, #6aa2f2, #5fd3c0, #6aa2f2, #1f63d6); background-size: 300% 100%; animation: chBadgeFlow 4s linear infinite; box-shadow: 0 4px 10px rgba(31,99,214,.32); }
-        @keyframes chBadgeFlow { from { background-position: 0% 50%; } to { background-position: 150% 50%; } }
-        @media (prefers-reduced-motion: reduce) { .ch-badge { animation: none; } }
-        .ch-plan small { font-size: .9rem; font-weight: 700; color: #1f63d6; }
-        @media (max-width: 899px) { .ch-plan.is-best { order: -1; } } /* 휴대폰은 한 줄로 쌓이니 추천 카드를 먼저 */
-        .ch-plan h4 { margin: 6px 0 20px; font-size: 1.45rem; font-weight: 800; letter-spacing: -0.03em; color: #111418; }
-        /* 시작 가격 — 이름 바로 아래, 숫자만 크게. 가격이 있으면 이름 아래 여백을 줄여 한 묶음으로 보이게 */
-        .ch-plan h4:has(+ .ch-price) { margin-bottom: 8px; }
-        .ch-price { margin: 0 0 20px; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.03em; color: #111418; }
-        .ch-price:has(+ .ch-note) { margin-bottom: 10px; }
-        .ch-note { margin: 0 0 20px; color: #1f63d6; font-size: .95rem; font-weight: 700; line-height: 1.55; word-break: keep-all; }
-        .ch-price span { position: relative; top: -1px; margin-left: 1px; font-size: .88em; }
-        .ch-plan ul { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 10px; flex: 1; }
-        .ch-plan li { display: flex; align-items: center; gap: 8px; font-size: 1rem; color: #3a414c; }
-        /* 추천 카드의 첫 줄(함께 설계) 강조 — 조금 굵고 진하게만 (형광펜·두꺼운 체크는 과해서 뺐다). 병의원 랜딩(가격을 보이는 곳)에서만 */
-        .ch-plans.is-priced .ch-plan.is-best li:first-child { font-weight: 600; color: #111418; }
-        .ch-plans.is-priced .ch-plan.is-best li:first-child svg { stroke-width: 2.6; }
-        .ch-plan li svg { flex: none; color: #1f63d6; }
-        .ch-plan-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 15px 20px; border-radius: 999px; border: 1.5px solid #d5d9df; color: #111418; font-weight: 700; text-decoration: none; transition: border-color .15s, background .15s, color .15s; }
-        .ch-plan-btn:hover { border-color: #111418; }
-        .ch-plan-btn--fill { background: #111418; border-color: #111418; color: #fff; }
-        .ch-plan-btn--fill:hover { background: #1f63d6; border-color: #1f63d6; }
-        .ch-plan-btn svg { transition: transform .3s cubic-bezier(.16,1,.3,1); }
-        .ch-plan-btn:hover svg { transform: translateX(3px); }
-        .ch-home-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 28px; font-size: .95rem; font-weight: 700; color: #4b5360; text-decoration: underline; text-decoration-color: #c9ced6; text-underline-offset: 5px; transition: color .15s, text-decoration-color .15s; }
-        .ch-home-link:hover { color: #1f63d6; text-decoration-color: #1f63d6; }
 
         @media (prefers-reduced-motion: reduce) {
           .ch-steps li, .ch-node, .ch-site, .ch-steps li::after, .ch-gain, .gv * { transition: none !important; animation: none !important; }

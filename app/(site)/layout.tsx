@@ -1,6 +1,7 @@
 // 전체 페이지를 감싸는 루트 레이아웃.
 // 사이트 공통 메타데이터(SEO·OG·네이버 인증)를 정의하고,
 // 헤더·푸터 등 공통 UI(ClientLayout)와 방문 통계 스크립트를 얹는다.
+import InlineScript from '@/components/InlineScript'
 import type { Metadata } from 'next'
 import '../../styles/globals.css'
 import ClientLayout from '@/components/ClientLayout'
@@ -147,11 +148,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
          * 화면이 그려지기 전(HTML 파싱 중)에 실행돼야 복원 자체가 일어나지 않는다.
          * 하이드레이션 이후에 끄면 이미 복원된 뒤라, 되돌리려고 맨 위로 튕기는 동작이 필요해진다.
          */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `if('scrollRestoration' in history){history.scrollRestoration='manual'}`,
-          }}
-        />
+        <InlineScript html={`if('scrollRestoration' in history){history.scrollRestoration='manual'}`} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSON_LD) }}

@@ -71,8 +71,6 @@ export type WithHomepageCopy = {
   path: [string, string] // 주소 뒷부분 — 블로그 글 → 홈페이지 안내 화면
   stayDesc: ReactNode
   brandTitle: string
-  /** 상품 카드 — 웹블로그 · 함께 · 홈페이지 순. 없으면 상품 카드 묶음을 통째로 뺀다 (버튼이 같은 페이지 상담 폼으로 가서, 폼이 있는 병의원 랜딩에서만) */
-  plans?: { for: string; items: string[] }[]
 }
 
 export const WH_CLINIC: WithHomepageCopy = {
@@ -88,11 +86,6 @@ export const WH_CLINIC: WithHomepageCopy = {
   path: ['blog/implant', 'doctors'],
   stayDesc: <>글을 읽은 환자가 <br className="ch-mo" />같은 사이트 안에서 바로 병원 정보를 봅니다.</>,
   brandTitle: '병원 이미지가 이어져요',
-  plans: [
-    { for: '이미 병원 홈페이지가 있다면', items: ['진료과목별 웹블로그', '쉬운 글쓰기 관리자 화면', '기존 홈페이지와 연결', 'SEO·AEO·GEO 구조 설계'] },
-    { for: '새로 만들거나 리뉴얼한다면', items: ['기획부터 함께 설계해 디테일까지 통일', '관리자 화면 하나로 모두 관리', '문의·예약이 한곳에 쌓임', 'SEO·AEO·GEO 구조 설계'] },
-    { for: '홈페이지부터 만들고 싶다면', items: ['병원 맞춤 디자인 홈페이지', '의료진 · 진료 안내 · 오시는 길', '문의·예약 접수', 'SEO·AEO·GEO 구조 설계'] },
-  ],
 }
 
 export const WH_GENERAL: WithHomepageCopy = {

@@ -14,6 +14,9 @@ import SecurityNews from './SecurityNews'
 import HowItWorks from './HowItWorks'
 import ClinicCases from './ClinicCases'
 import EasyWrite from './EasyWrite'
+import WhyWeflow from './WhyWeflow'
+import ClinicPlans from './ClinicPlans'
+import QuickQuote from './QuickQuote'
 import { AiSearchScene, PlatformDropScene, type Line } from './Scenes'
 import { CLINIC_RESULTS } from './SearchMock'
 
@@ -25,7 +28,7 @@ import { CLINIC_RESULTS } from './SearchMock'
  * 그래서 이 페이지 안에서도 메인 사이트로 가는 링크를 두지 않는다 — 나가는 길은 문의 폼과 카카오톡뿐이다.
  *
  * 기능을 나열하지 않고 대화 장면으로 풀어 간다 —
- * 지금 놓치고 있는 것 셋 — 환자의 AI 검색(WHY NOW 01) → 노출이 빠진 날(02, 원장님 고민 장면은 숨김) → 옛 기술(PHP) 보안(03, SecurityNews) → 웹블로그란·왜 웹블로그(BlogWhy) → 글만 쓰면 자리 잡는 구조(HowItWorks) → 홈페이지 vs 웹블로그(HomeVsBlog) → 홈페이지와 함께하면 + 상품(WithHomepage)
+ * 제작 사례 → 왜 WEFLOW(WHY WEFLOW 01 옛 기술(PHP) 보안 SecurityNews · 02 WhyWeflow) → 가격 안내(ClinicPlans) → 지금 놓치고 있는 것 둘 — 환자의 AI 검색(WHY NOW 01) → 노출이 빠진 날(02, 원장님 고민 장면은 숨김) → 웹블로그란·왜 웹블로그(BlogWhy) → 글만 쓰면 자리 잡는 구조(HowItWorks) → 홈페이지 vs 웹블로그(HomeVsBlog) → 홈페이지와 함께하면(WithHomepage)
  * → 진행 과정 → 자주 묻는 질문 → 상담. 헤더 메뉴(ClinicHeader)가 각 덩어리의 id(webblog·with-homepage·process·faq·contact)로 이동한다.
  * 장면마다 말풍선이 스크롤에 맞춰 차례로 올라온다 (InView 가 'is-in' 을 붙이고, 순서는 아래 CSS 의 --i 로 늦춘다).
  * 색은 맨 아래 <style> 의 .cb 묶음 안에서만 정의해 다른 페이지에 새지 않게 했다.
@@ -107,7 +110,7 @@ export default function ClinicBlogPage() {
               견적 문의는 헤더 버튼 · 떠 있는 버튼 · 휴대폰 하단 바가 맡는다 */}
           <div className="cb-hero-btns">
             <a href="/clinic-blog/check" target="_blank" rel="noopener noreferrer" className="cb-hero-btn cb-hero-btn--fill">
-              <ScanSearch size={18} /> <span>AI 검색 무료 진단<span className="cb-pc">하기</span></span>
+              <ScanSearch size={18} /> 사이트 점검하기
             </a>
             <a href="/clinic-blog/demo" target="_blank" rel="noopener noreferrer" className="cb-hero-btn">
               <PenLine size={18} /> <span>관리자페이지 체험<span className="cb-pc">하기</span></span>
@@ -124,7 +127,23 @@ export default function ClinicBlogPage() {
       {/* ── 제작 사례 — 광고로 온 분이 가장 먼저 확인하는 것: 실제로 만들어 운영 중인 병원 웹블로그 ── */}
       <ClinicCases />
 
-      {/* 흐름: 약속(히어로) → 제작 사례 → 지금 놓치고 있는 것 셋(WHY NOW 01 AI · 02 플랫폼 · 03 보안) → 그래서, 웹블로그 → 어떻게 자리 잡나 → 홈페이지와 함께 → 진행 → FAQ → 상담 */}
+      {/* 흐름: 약속(히어로) → 제작 사례 → 왜 WEFLOW(WHY WEFLOW 01 보안 · 02 이유 셋) → 가격 안내 → 지금 놓치고 있는 것 둘(WHY NOW 01 AI · 02 플랫폼) → 그래서, 웹블로그 → 어떻게 자리 잡나 → 홈페이지와 함께 → 진행 → FAQ → 상담 */}
+
+      {/* ── WHY WEFLOW 01: 옛 기술(PHP) 보안 — 기사 4장 + 옛 방식 vs Next.js (어두운 바탕) ── */}
+      <SecurityNews chapter="WHY WEFLOW 01" warn={false} lead={false} />
+
+      {/* ── 왜 WEFLOW? — PHP 가 아니어도 Next.js 로 리뉴얼해야 하는 이유 셋 (1 보안 · 2 속도 · 3 검색·AI 구조) ── */}
+      <WhyWeflow />
+
+      {/* ── 가격 안내 — 웹블로그만 · 홈페이지만 · 함께 카드 세 장. 왜 WEFLOW 인지 본 바로 뒤에 가격대를 보여 준다 ── */}
+      <ClinicPlans>
+        {/* 간편 견적 ① — 가격을 본 직후, 이름·번호만 남기는 짧은 띠 */}
+        <QuickQuote
+          place="가격 안내 아래"
+          title="어떤 플랜이 맞을지 고민된다면"
+          desc={<>이름과 번호만 남겨 주세요. <br className="cb-mo" />우리 병원에 맞는 구성과 견적을 안내해 드립니다.</>}
+        />
+      </ClinicPlans>
 
       {/* ── 장면 1 — PC 검색 결과 + 휴대폰 AI 검색 (Scenes.tsx) ── */}
       <AiSearchScene
@@ -164,9 +183,6 @@ export default function ClinicBlogPage() {
         lines={DROP_LINES}
       />
 
-      {/* ── WHY NOW 03: 그럼 홈페이지는? 옛 기술(PHP) 보안 — 기사 4장 + 옛 방식 vs Next.js (어두운 바탕) ── */}
-      <SecurityNews />
-
       {/* ── 그래서, 웹블로그 — 화면을 붙잡아 두고 답 네 개를 차례로 (메인의 '왜 WEFLOW?' 와 같은 방식) ── */}
       <BlogWhy />
 
@@ -179,8 +195,17 @@ export default function ClinicBlogPage() {
       {/* ── 홈페이지 vs 웹블로그 — 둘이 무엇이 다른지 창 두 개로, 바로 아래 '홈페이지와 함께하면'으로 잇는다 ── */}
       <HomeVsBlog />
 
-      {/* ── 홈페이지와 함께하면 + 상품 두 가지 ── */}
-      <WithHomepage showPrice />
+      {/* 간편 견적 ② — 웹블로그 소개(왜 · 어떻게 · 누구나 · 홈페이지 vs 웹블로그)를 다 본 뒤. ①과 맨 아래 상담 폼 사이 중간쯤이다. 앞 섹션(흰 바탕)의 아래 여백 안으로 끌어올려 한 덩어리로 보이게 한다 */}
+      <div className="qq-sec">
+        <QuickQuote
+          place="웹블로그 소개 아래"
+          title={<>우리 병원은 <br className="cb-mo" />어떻게 바꿀 수 있을까요?</>}
+          desc={<>이름과 번호만 남겨 주세요. <br className="cb-mo" />지금 상태를 보고 맞는 방법을 안내해 드립니다.</>}
+        />
+      </div>
+
+      {/* ── 홈페이지와 함께하면 (상품 카드는 위쪽 가격 안내로 옮겼다) ── */}
+      <WithHomepage />
 
       {/* ── 진행 과정 ── */}
       <section id="process" className="cb-sec cb-step-sec">
@@ -275,6 +300,38 @@ export default function ClinicBlogPage() {
         .cb-scroll em { font-style: normal; font-size: .72rem; font-weight: 700; letter-spacing: .32em; margin-right: -.32em; color: var(--cb-muted); }
         .cb-scroll i { display: block; width: 1px; height: 56px; background: linear-gradient(var(--cb-accent), transparent); animation: cb-drop 1.8s ease-in-out infinite; transform-origin: top; }
         @keyframes cb-drop { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+
+        /* 간편 견적 띠 (QuickQuote) — 체험판 마지막 카드(demo 의 .dm-cta)와 같은 파랑→연보라 그라데이션, 가운데 정렬.
+           넓은 화면은 성함 | 연락처 | 버튼 한 줄, 휴대폰은 위아래로 쌓는다. 빠진 칸 안내는 사이트 점검 폼처럼 칸 바로 아래 빨간 한 줄 */
+        .qq-sec { padding: 0 20px 96px; margin-top: -32px; }
+        @media (min-width: 960px) { .qq-sec { padding-bottom: 140px; margin-top: -60px; } }
+        .qq { max-width: 1080px; margin: 0 auto; padding: 40px 20px 34px; border-radius: 24px; text-align: center; color: var(--cb-text); background: linear-gradient(135deg, #dbe9ff 0%, #eaf2ff 50%, #f3f0ff 100%); border: 1px solid #d5e3fa; }
+        @media (min-width: 768px) { .qq { padding: 60px 40px 52px; border-radius: 28px; } }
+        .qq-text strong { display: block; font-size: clamp(1.45rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.035em; line-height: 1.35; }
+        .qq-text p { margin: 10px 0 0; color: var(--cb-sub); font-size: clamp(.98rem, 1.5vw, 1.08rem); line-height: 1.7; word-break: keep-all; }
+        .qq-form { margin-top: 28px; }
+        .qq-row { display: grid; gap: 10px; max-width: 760px; margin: 0 auto; text-align: left; }
+        /* 넓은 화면 — 성함 | 연락처 | 버튼 한 줄, 동의는 그 아래 한 줄. 휴대폰은 적힌 순서대로(성함 → 연락처 → 동의 → 버튼) 쌓여 동의가 버튼 위에 온다 */
+        @media (min-width: 640px) { .qq-row { grid-template-columns: 1fr 1.3fr auto; align-items: start; } .qq-f-agree { grid-column: 1 / -1; grid-row: 2; } }
+        /* 휴대폰 — 제목이 한 줄에 들어가게 글자를 화면 폭에 맞춰 줄인다 */
+        @media (max-width: 767px) { .qq-text strong { font-size: min(1.45rem, 5.4vw); white-space: nowrap; } }
+        .qq-row input { width: 100%; height: 54px; padding: 0 16px; border: 1px solid #d5e0f3; border-radius: 12px; background: #fff; font: inherit; font-size: 1rem; color: var(--cb-text); }
+        .qq-row input::placeholder { color: #9aa1ac; }
+        .qq-row input:focus { outline: 2px solid var(--cb-accent); outline-offset: -1px; }
+        .qq-row button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 54px; padding: 0 26px; border: 0; border-radius: 12px; background: var(--cb-accent); color: #fff; font: inherit; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background .15s, transform .12s; }
+        .qq-row button:hover { background: #1852b5; }
+        .qq-row button:active { transform: scale(.97); }
+        .qq-row button:disabled { opacity: .6; cursor: default; }
+        .qq-form small { display: block; margin: 6px 2px 0; color: #d64545; font-size: .85rem; font-weight: 600; text-align: left; }
+        .qq-agree { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 6px 0; font-size: .9rem; color: var(--cb-sub); cursor: pointer; }
+        .qq-agree input { width: 18px; height: 18px; margin: 0; flex: none; accent-color: var(--cb-accent); }
+        /* 휴대폰 — 동의 문구를 늘 한 줄에. 폭이 모자라면 글자가 화면 폭에 맞춰 줄어든다 */
+        @media (max-width: 560px) { .qq-agree { gap: 5px; font-size: min(.9rem, 3.08vw); white-space: nowrap; } .qq-agree input { width: 15px; height: 15px; } }
+        .qq-agree a { color: var(--cb-muted); text-underline-offset: 3px; }
+        .qq-form .qq-agree-err { margin-top: 8px; text-align: center; }
+        .qq-error { margin: 12px 0 0; color: #d64545; font-size: .88rem; font-weight: 600; }
+        .qq-done { display: inline-flex; align-items: center; gap: 12px; margin: 28px 0 0; padding: 14px 22px; border-radius: 999px; background: #fff; border: 1px solid #d5e0f3; font-weight: 700; font-size: 1rem; line-height: 1.5; text-align: left; word-break: keep-all; }
+        .qq-done span { flex: none; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--cb-accent); color: #fff; }
 
         /* 공통 섹션 여백 */
         .cb-sec { padding: 96px 0; }

@@ -1421,15 +1421,15 @@
  {
   "n": 44,
   "slug": "gnuboard-php-hospital-homepage-renewal",
-  "label": "우리 병원 홈페이지, 그누보드인가요?",
+  "label": "우리 병원 홈페이지, PHP인가요?",
   "sub": [
    "그대로 두면 생기는 일과",
    "리뉴얼해야 하는 이유"
   ],
-  "big": "그누보드·PHP 리뉴얼",
+  "big": "PHP 홈페이지 리뉴얼",
   "en": "time to move on",
   "cardTitle": [
-   "그누보드·PHP 병원 홈페이지,",
+   "PHP로 만든 병원 홈페이지,",
    "리뉴얼해야 하는 이유"
   ],
   "points": [
@@ -1454,15 +1454,15 @@
  {
   "n": 45,
   "slug": "wordpress-hospital-homepage-to-nextjs",
-  "label": "워드프레스, 계속 써도 될까요?",
+  "label": "플러그인 홈페이지, 계속 써도 될까요?",
   "sub": [
    "Next.js로 바꾸면",
    "달라지는 것"
   ],
-  "big": "워드프레스 리뉴얼",
-  "en": "from WordPress to Next.js",
+  "big": "플러그인 홈페이지 리뉴얼",
+  "en": "from plugins to Next.js",
   "cardTitle": [
-   "워드프레스 병원 홈페이지,",
+   "템플릿·플러그인 병원 홈페이지,",
    "Next.js로 바꾸면 달라지는 것"
   ],
   "points": [

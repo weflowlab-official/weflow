@@ -8,6 +8,10 @@ import PhpWhat from '@/components/home/PhpWhat'
  * 웹블로그 메인(/blog)의 보안 섹션(blog/components/home/SecurityNewsSection.tsx)과 같은 내용을 이 페이지 디자인으로 옮긴 것.
  * 기사 4장은 같은 이미지(public/images/blog/news-php-0N.webp)를 쓴다 — 제목·부제만 잘랐고 기사 사진·기자 사진은 뺐다.
  * 문구 기준: "Next.js 는 절대 안전" 이라고 하지 않는다. "PHP 를 쓰지 않으니 PHP 취약점 걱정은 없다" 까지만 말한다.
+ * compare: 아래 '옛 방식 vs WEFLOW' 비교를 보일지 — 병의원 랜딩은 바로 다음 '왜 WEFLOW?' 섹션(WhyWeflow)이 그 이야기를 맡아 끈다.
+ * chapter: 제목 위 작은 영문 — 병의원 랜딩은 이 섹션부터 '왜 WEFLOW?' 묶음이라 'WHY WEFLOW 01' 로 바꿔 쓴다 (다음 WhyWeflow 가 02).
+ * warn: 영문 앞의 주의(세모) 표시를 보일지 — 병의원 랜딩은 '왜 WEFLOW?' 묶음의 첫 섹션이라 뺀다.
+ * lead: 제목 위 한 줄("그럼 병원 홈페이지는 괜찮을까요?")을 보일지 — 앞 섹션(블로그 위험)에서 이어받는 말이라, 제작 사례 바로 뒤에 오는 병의원 랜딩은 뺀다.
  * who: 누구의 홈페이지인지 — 병의원 페이지는 '병원', 메인 '웹블로그란?' 은 '우리 회사'.
  * 두 열의 기사 높이 합이 같아(411+411 = 402+420) 오른쪽 열을 내린 만큼 위·아래 엇갈림이 같다.
  */
@@ -33,12 +37,12 @@ const NEW = [
   '서버·보안 업데이트는 WEFLOW 월 운영관리에서 계속 챙깁니다',
 ]
 
-export default function SecurityNews({ who = '병원' }: { who?: string }) {
+export default function SecurityNews({ who = '병원', compare = true, chapter = 'WHY NOW 03', warn = true, lead = true }: { who?: string; compare?: boolean; chapter?: string; warn?: boolean; lead?: boolean }) {
   return (
     <section id="security" className="cbs" aria-labelledby="cbs-title">
       <div className="cb-wrap">
-        <p className="cbs-chapter"><AlertTriangle size={15} /> WHY NOW 03</p>
-        <p className="cbs-lead">그럼 {who} 홈페이지는 괜찮을까요?</p>
+        <p className="cbs-chapter">{warn && <AlertTriangle size={15} />} {chapter}</p>
+        {lead && <p className="cbs-lead">그럼 {who} 홈페이지는 괜찮을까요?</p>}
         <h2 id="cbs-title" className="cbs-h2">&lsquo;PHP 보안 취약점&rsquo;<br />뉴스는 끊이지 않습니다</h2>
         <p className="cbs-body">
           국내 PHP 서버 상당수가 업데이트되지 않은<br className="cb-mo" /> 옛 버전이라는 보도가 잇따랐습니다.<br />
@@ -62,6 +66,7 @@ export default function SecurityNews({ who = '병원' }: { who?: string }) {
         <p className="cbs-note">기사 화면 일부를 갈무리했습니다.<br className="cb-mo" /> 내용은 각 언론사 보도를 확인해 주세요.</p>
 
         {/* 옛 방식 vs WEFLOW */}
+        {compare && (<>
         <h3 className="cbs-h3">
           하지만 WEFLOW는<br />
           처음부터 <span className="cbs-accent">최신 기술(Next.js)</span>로 만들어<br className="cb-mo" /> PHP 취약점 걱정이 없습니다
@@ -84,6 +89,7 @@ export default function SecurityNews({ who = '병원' }: { who?: string }) {
           </div>
         </div>
         <p className="cbs-foot">어떤 기술도 &lsquo;절대 안전&rsquo;하지는 않습니다.<br className="cb-mo" /> 중요한 건 업데이트가 계속 챙겨지는 구조입니다.</p>
+        </>)}
       </div>
 
       <style>{`

@@ -115,11 +115,9 @@ export default function ClinicCases() {
         .cc-info small { font-size: .95rem; color: var(--cb-sub); }
         .cc-info b { flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 11px 18px; border-radius: 999px; border: 1.5px solid #d5d9df; font-size: .95rem; font-weight: 700; white-space: nowrap; transition: border-color .15s, color .15s; }
         .cc-info:hover b { border-color: var(--cb-accent); color: var(--cb-accent); }
-        @media (max-width: 560px) {
-          .cc-nav { width: 32px; height: 32px; }
-          .cc-info { flex-direction: column; align-items: stretch; gap: 14px; }
-          .cc-info b { justify-content: center; }
-        }
+        /* 휴대폰 — '보러가기' 버튼은 뺀다. 이름 줄과 화면 그림이 그대로 링크라 눌러서 갈 수는 있다 */
+        @media (max-width: 767px) { .cc-info b { display: none; } }
+        @media (max-width: 560px) { .cc-nav { width: 32px; height: 32px; } }
       `}</style>
     </section>
   )

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import {
   ShieldAlert, Sparkles, Search, Gauge, Smartphone, MessageCircle,
-  Lock, ArrowRight, Phone, Globe, RotateCcw, Check, ShieldCheck, Bug, RefreshCw, EyeOff, ClipboardList,
+  Lock, ArrowRight, Phone, Globe, RotateCcw, Check, ClipboardList,
 } from 'lucide-react'
 import HoneypotField from '@/components/HoneypotField'
 import { HONEYPOT_FIELD, wasSaved } from '@/lib/leadInput'
@@ -38,13 +38,6 @@ const CATEGORY_META: { key: CatKey; label: string; Icon: typeof Gauge }[] = [
 const FREE_KEY: CatKey = 'tech'
 
 const LOADING_STEPS = ['사이트 접속 확인', '제작 기술 및 보안 확인', 'AI 검색 준비도 분석', '리포트 작성']
-
-/** 리뉴얼해야 하는 이유 — 짧게 셋 */
-const REASONS = [
-  { Icon: Bug, title: '공개되는 취약점', text: '널리 쓰이는 게시판 프로그램은 취약점이 공개되면 자동 공격의 대상이 되기 쉽습니다.' },
-  { Icon: EyeOff, title: 'AI가 읽기 어려운 구조', text: '이미지로만 된 진료 안내와 옛 구조는 검색엔진과 AI가 내용을 읽어 가기 어렵습니다.' },
-  { Icon: RefreshCw, title: '놓치기 쉬운 업데이트', text: '서버와 프로그램의 보안 업데이트를 계속 직접 챙겨야 하고, 한 번 놓치면 그대로 위험해집니다.' },
-]
 
 const scoreColor = (n: number) => (n >= 80 ? '#15803d' : n >= 60 ? '#b45309' : '#d64545')
 const dotColor = (s: CheckItem['status']) => (s === 'good' ? '#16a34a' : s === 'warn' ? '#d97706' : '#e05252')
@@ -206,12 +199,12 @@ export default function CheckClient() {
         <div className="cb-wrap">
           <p className="cb-chapter">FREE CHECK</p>
           <h1 className="ckc-h1">
-            그누보드·PHP로 만든<br className="cb-mo" /> 병원 홈페이지,<br />
-            <span className="cb-mark">리뉴얼해야 하는 이유</span>
+            우리 병원 홈페이지,<br />
+            <span className="cb-mark">지금 몇 점일까요?</span>
           </h1>
           <p className="cb-body ckc-lead">
-            옛 방식으로 만든 홈페이지는 보안 업데이트를 놓치기 쉽고,<br className="cb-mo" /> AI 검색이 내용을 읽기 어렵습니다.<br />
-            <b>주소만 넣으면 우리 병원 홈페이지를 바로 점검해 드립니다.</b>
+            주소만 넣으면 제작 기술과 보안, AI 검색 준비도까지<br />
+            <b>우리 병원 홈페이지를 바로 점검해 드립니다.</b>
           </p>
 
           {phase !== 'loading' ? (
@@ -353,35 +346,14 @@ export default function CheckClient() {
         </section>
       )}
 
-      {/* ── 리뉴얼해야 하는 이유 + WEFLOW 는 Next.js ── */}
-      <section className="ckc-why">
-        <div className="cb-wrap">
-          <p className="cb-chapter">WHY RENEWAL</p>
-          <h2 className="cb-h2">옛 방식의 홈페이지를 <br className="cb-mo" />그대로 두면 생기는 일</h2>
-          <ul className="ckc-reasons">
-            {REASONS.map(({ Icon, title, text }) => (
-              <li key={title}>
-                <span><Icon size={21} /></span>
-                <strong>{title}</strong>
-                <p>{text}</p>
-              </li>
-            ))}
-          </ul>
-          <div className="ckc-next">
-            <span><ShieldCheck size={24} /></span>
-            <div>
-              <strong>WEFLOW는 PHP가 아닌 <br className="cb-mo" />Next.js로 만듭니다</strong>
-              <p>직접 관리할 PHP 서버와 게시판 프로그램이 없는 구조라 공격받을 곳이 줄고,<br className="cb-pc" /> 글을 올리면 검색·AI가 읽는 정보가 함께 만들어집니다.<br className="cb-pc" /> 진단 후 상담에서 우리 병원에 맞는 리뉴얼 방향을 안내해 드립니다.</p>
-            </div>
-            <Link href="/clinic-blog#contact-form" className="ckc-btn-fill">맞춤 견적 받기 <ArrowRight size={16} /></Link>
-          </div>
-          <p className="ckc-foot">진단은 밖에서 보이는 정보만으로 판단합니다. <br className="cb-mo" />어떤 기술도 &lsquo;절대 안전&rsquo;하지는 않으며, <br className="cb-mo" />정확한 상태는 상담에서 함께 확인해 드립니다.</p>
-        </div>
-      </section>
+      {/* 점검의 한계를 한 줄로 — 리뉴얼해야 하는 이유는 랜딩(/clinic-blog)의 '왜 WEFLOW?' 섹션이 맡는다 (여기는 점검만 한다) */}
+      <p className="ckc-foot">진단은 밖에서 보이는 정보만으로 판단합니다. <br className="cb-mo" />정확한 상태는 상담에서 함께 확인해 드립니다.</p>
 
       <style>{`
         .ckc-hero { padding: calc(76px + clamp(48px, 9vw, 96px)) 0 clamp(48px, 7vw, 80px); text-align: center; background: radial-gradient(60% 70% at 50% 0%, #e8f1ff 0%, rgba(232,241,255,0) 70%), #fff; }
         .ckc-h1 { margin: 0; font-size: clamp(1.75rem, 4.6vw, 3rem); line-height: 1.28; font-weight: 800; letter-spacing: -0.04em; }
+        /* 휴대폰 — 31px 고정. 가장 긴 줄('우리 병원 홈페이지,')이 360px 폰에서도 한 줄에 들어간다 */
+        @media (max-width: 767px) { .ckc-h1 { font-size: 31px; } }
         /* .cb-body 의 margin 이 뒤에서 덮어쓰지 않게 한 단계 세게 건다 — 안 그러면 가운데 정렬이 풀려 왼쪽으로 붙는다 */
         .ckc-hero .ckc-lead { max-width: 820px; margin: 22px auto 0; word-break: keep-all; }
         .ckc-lead b { color: var(--cb-text); }
@@ -476,27 +448,7 @@ export default function CheckClient() {
         .ckc-again { display: inline-flex; align-items: center; gap: 6px; margin-top: 18px; border: 0; background: none; font: inherit; font-size: .92rem; font-weight: 600; color: var(--cb-muted); cursor: pointer; }
         .ckc-again:hover { color: var(--cb-text); }
 
-        .ckc-why { padding: clamp(64px, 9vw, 110px) 0; border-top: 1px solid var(--cb-line); text-align: center; }
-        .ckc-reasons { list-style: none; margin: 40px 0 0; padding: 0; display: grid; gap: 14px; text-align: left; }
-        @media (min-width: 820px) { .ckc-reasons { grid-template-columns: repeat(3, 1fr); gap: 18px; } }
-        /* 휴대폰 — 옆으로 넘기는 줄 (랜딩의 '진행 과정' 카드와 같은 방식). 카드 폭을 화면의 78%로 둬 다음 카드가 조금 보이게 하고, 화면 양끝까지 붙여 넘긴다 */
-        @media (max-width: 639px) {
-          .ckc-reasons { grid-auto-flow: column; grid-auto-columns: 78%; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px; margin-left: -20px; margin-right: -20px; padding: 0 20px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-          .ckc-reasons::-webkit-scrollbar { display: none; }
-          .ckc-reasons li { scroll-snap-align: start; }
-        }
-        .ckc-reasons li { padding: 26px 24px; border-radius: 20px; background: var(--cb-soft); }
-        .ckc-reasons span { display: inline-flex; width: 46px; height: 46px; align-items: center; justify-content: center; border-radius: 13px; background: #fff; color: #d64545; box-shadow: 0 6px 18px rgba(17,20,24,.06); }
-        .ckc-reasons strong { display: block; margin: 18px 0 8px; font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em; }
-        .ckc-reasons p { margin: 0; color: var(--cb-sub); font-size: .97rem; line-height: 1.7; word-break: keep-all; }
-        .ckc-next { display: grid; gap: 18px; margin-top: 18px; padding: 28px 24px; border-radius: 20px; background: #0e1117; color: #fff; text-align: left; }
-        @media (min-width: 820px) { .ckc-next { grid-template-columns: auto 1fr auto; align-items: center; gap: 22px; padding: 30px 34px; } }
-        .ckc-next > span { display: inline-flex; width: 52px; height: 52px; align-items: center; justify-content: center; border-radius: 14px; background: rgba(127,166,239,.16); color: #7fa6ef; }
-        .ckc-next strong { font-size: 1.18rem; font-weight: 800; letter-spacing: -0.02em; }
-        .ckc-next p { margin: 8px 0 0; color: rgba(255,255,255,.7); font-size: .97rem; line-height: 1.7; word-break: keep-all; }
-        .ckc-next .ckc-btn-fill { padding: 17px 36px; font-size: 1.05rem; background: #1f63d6; border-color: #1f63d6; }
-        .ckc-next .ckc-btn-fill:hover { background: #1852b5; border-color: #1852b5; }
-        .ckc-foot { max-width: 720px; margin: 22px auto 0; color: var(--cb-muted); font-size: .85rem; line-height: 1.7; word-break: keep-all; }
+        .ckc-foot { max-width: 720px; margin: 0 auto; padding: 28px 20px 56px; color: var(--cb-muted); font-size: .85rem; line-height: 1.7; text-align: center; word-break: keep-all; }
         @media (prefers-reduced-motion: reduce) { .ckc-spinner { animation-duration: 2s; } .ckc-bar span { transition: none; } }
       `}</style>
     </>

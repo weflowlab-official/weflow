@@ -17,30 +17,38 @@ import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, ClipboardList, Phone, E
 /** 대표 번호 — 메인 헤더(components/Navbar.tsx)와 같은 번호 */
 const TEL = '010-2971-7280'
 
-// 페이지 순서와 같게: 제작 사례 → 우리 병원은?(WHY NOW 01~03) → 웹블로그 소개(웹블로그란 · SEO·AEO·GEO란 · 홈페이지와 함께) → 무료 진단·체험 → FAQ.
-// '진행 과정'은 메뉴로 찾아갈 만큼 궁금한 내용이 아니라 뺐다 (스크롤로 지나며 본다)
+// 페이지 순서와 같게: 제작 사례 → 왜 WEFLOW?(WHY WEFLOW 01~02 · 바로 아래 가격 안내) → 웹블로그 소개(웹블로그란 · 홈페이지와 함께) → SEO·AEO·GEO → 무료 진단·체험(새 탭).
+// 묶음 안의 '홈페이지와 함께'만 실제로는 SEO·AEO·GEO 보다 아래에 있다.
+// 'WHY NOW 두 장면(우리 병원은?)' · '진행 과정' · '자주 묻는 질문'은 메뉴로 찾아갈 만큼 궁금한 내용이 아니라 뺐다 (스크롤로 지나며 본다)
 // ext: 이 페이지 밖의 화면(진단 · 데모) — 주소를 그대로 쓰고 새 탭으로 연다
-type MenuLink = { href: string; label: string; ext?: boolean }
-type MenuGroup = { label: string; children: MenuLink[] }
+// accent: 강조색으로 띄우는 메뉴 ('왜 WEFLOW?')
+type MenuLink = { href: string; label: string; ext?: boolean; accent?: boolean }
+type MenuGroup = { label: string; children: MenuLink[]; accent?: boolean }
 const MENU: (MenuLink | MenuGroup)[] = [
   { href: '#cases', label: '제작 사례' },
-  { href: '#story', label: '우리 병원은?' },
+  {
+    label: '왜 WEFLOW?',
+    accent: true,
+    children: [
+      { href: '#security', label: '왜 WEFLOW?' },
+      { href: '#plans', label: '가격 안내' },
+    ],
+  },
   {
     label: '웹블로그 소개',
     children: [
       { href: '#webblog', label: '웹블로그란?' },
-      { href: '#how', label: 'SEO·AEO·GEO란?' },
       { href: '#with-homepage', label: '홈페이지와 함께' },
     ],
   },
+  { href: '#how', label: 'SEO·AEO·GEO' },
   {
     label: '무료 진단·체험',
     children: [
-      { href: '/clinic-blog/check', label: 'AI 검색 무료 진단', ext: true },
+      { href: '/clinic-blog/check', label: '사이트 점검', ext: true },
       { href: '/clinic-blog/demo', label: '관리자페이지 체험', ext: true },
     ],
   },
-  { href: '#faq', label: '자주 묻는 질문' },
 ]
 
 /** 로고 — 누르면 이 페이지 맨 위로 부드럽게 올라간다 (메인 사이트로 가지 않는다). base 가 있으면 그 주소로 이동 */
@@ -61,7 +69,7 @@ function Brand({ onClick, base }: { onClick?: () => void; base: string }) {
       <Image src="/logo.png" alt="" width={28} height={28} style={{ filter: 'brightness(0)' }} />
       WEFLOW
       <i className="cb-brand-sep" aria-hidden="true" />
-      <span className="cb-brand-sub">병의원 웹블로그</span>
+      <span className="cb-brand-sub">병의원 웹블로그<span className="cb-brand-more"> · 홈페이지</span></span>
     </a>
   )
 }
@@ -103,6 +111,8 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
 
   const close = () => setOpen(false)
   // 페이지 안 이동은 base 를 붙이고(#id), 밖의 화면은 주소 그대로 새 탭으로
+  // 방금 누른 묶음 — 마우스가 아직 그 위에 있어도 목록을 닫아 둔다 (:hover 만으로는 누른 뒤에도 펼쳐진 채 남는다). 마우스가 묶음을 벗어나면 풀린다
+  const [shut, setShut] = useState('')
   const linkProps = (m: MenuLink) =>
     m.ext ? { href: m.href, target: '_blank', rel: 'noopener noreferrer' } : { href: base + m.href }
 
@@ -116,14 +126,15 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
               'children' in m ? (
                 // 묶음 — 올리거나 탭 키로 들어오면 아래로 펼쳐진다 (CSS :hover · :focus-within).
                 // 고른 뒤에는 초점을 풀어 목록이 열린 채 남지 않게 한다
-                <div key={m.label} className="cb-menu-group">
-                  <button type="button" className="cb-menu-trigger" aria-haspopup="true">
+                <div key={m.label} className={`cb-menu-group${shut === m.label ? ' is-shut' : ''}`} onMouseLeave={() => setShut('')}>
+                  {/* 묶음 이름도 링크 — 누르면 목록의 첫 항목으로 간다 (목록은 올리기만 해도 펼쳐진다) */}
+                  <a className={`cb-menu-trigger${m.accent ? ' is-accent' : ''}`} aria-haspopup="true" {...linkProps(m.children[0])} onClick={e => { e.currentTarget.blur(); setShut(m.label) }}>
                     {m.label} <ChevronDown size={15} />
-                  </button>
+                  </a>
                   <div className="cb-menu-pop">
                     <div className="cb-menu-list">
                       {m.children.map(c => (
-                        <a key={c.href} {...linkProps(c)} onClick={e => e.currentTarget.blur()}>
+                        <a key={c.href} {...linkProps(c)} onClick={e => { e.currentTarget.blur(); setShut(m.label) }}>
                           {c.label}
                           {c.ext && <ArrowUpRight size={14} />}
                         </a>
@@ -132,13 +143,12 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
                   </div>
                 </div>
               ) : (
-                <a key={m.href} className="cb-menu-link" {...linkProps(m)}>{m.label}</a>
+                <a key={m.href} className={`cb-menu-link${m.accent ? ' is-accent' : ''}`} {...linkProps(m)}>{m.label}</a>
               ),
             )}
           </nav>
-          {/* 오른쪽 묶음 — 대표 번호(넓은 화면에서만) · 견적 버튼 · 햄버거(좁은 화면에서만) */}
+          {/* 오른쪽 묶음 — 견적 버튼 · 햄버거(좁은 화면에서만). 대표 번호는 뺐다 (전화는 떠 있는 전화 버튼과 메뉴 판의 '바로 전화'가 맡는다) */}
           <div className="cb-top-right">
-            <a href={`tel:${TEL}`} className="cb-tel"><Phone size={17} /> {TEL}</a>
             <a href={`${base}#contact-form`} className="cb-top-btn">
               맞춤 견적 받기 <ArrowRight size={15} />
             </a>
@@ -161,7 +171,7 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
         <nav className="cb-drawer-nav">
           {MENU.map(m => {
             if (!('children' in m)) {
-              return <a key={m.href} {...linkProps(m)} onClick={close} tabIndex={open ? 0 : -1}>{m.label}</a>
+              return <a key={m.href} className={m.accent ? 'is-accent' : undefined} {...linkProps(m)} onClick={close} tabIndex={open ? 0 : -1}>{m.label}</a>
             }
             // 묶음 — 눌러서 편다. 하나를 펴면 다른 묶음은 접힌다. grid-rows 0fr ↔ 1fr 로 높이가 부드럽게 열리고, 접힌 동안에는 탭 키로도 안 잡힌다
             const shown = !!groups[m.label]
@@ -169,12 +179,12 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
               <div key={m.label}>
                 <button
                   type="button"
-                  className="cb-drawer-group"
+                  className={`cb-drawer-group${m.accent ? ' is-accent' : ''}`}
                   aria-expanded={shown}
                   onClick={() => setGroups({ [m.label]: !shown })}
                   tabIndex={open ? 0 : -1}
                 >
-                  {m.label}
+                  <span>{m.label}</span>
                   <ChevronDown size={19} style={{ transform: shown ? 'rotate(180deg)' : 'none' }} />
                 </button>
                 <div className="cb-drawer-sub" style={{ gridTemplateRows: shown ? '1fr' : '0fr' }}>
@@ -216,26 +226,45 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
         .cb-top-inner { height: 76px; display: flex; align-items: center; justify-content: space-between; }
         .cb-brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.35rem; color: var(--cb-text); text-decoration: none; cursor: pointer; letter-spacing: -0.02em; }
         .cb-brand-sep { width: 1px; height: 14px; background: #d5d9df; margin: 0 4px; }
-        .cb-brand-sub { font-weight: 600; font-size: 1.02rem; color: var(--cb-muted); letter-spacing: -0.01em; }
+        /* 로고 옆 한 줄 — 무엇을 만드는 곳인지. 흐린 회색은 눈에 안 들어와 이 페이지 파랑으로 또렷하게 */
+        .cb-brand-sub { font-weight: 700; font-size: 1.02rem; color: var(--cb-accent); letter-spacing: -0.01em; white-space: nowrap; }
+        /* ' · 홈페이지' 는 자리가 넉넉할 때만 — 가운데 메뉴와 함께 보이는 폭(1200~1499px)에서는 메뉴에 자리를 내준다 */
         .cb-top-btn { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 20px; border-radius: 999px; background: var(--cb-text); color: #fff; font-weight: 700; font-size: 1.02rem; text-decoration: none; transition: background .15s; }
         .cb-top-btn:hover { background: var(--cb-accent); }
         /* 휴대폰 — 버튼을 작게 */
         @media (max-width: 640px) { .cb-top-btn { height: 36px; padding: 0 14px; font-size: .86rem; gap: 4px; } }
-        .cb-menu { display: none; gap: 40px; }
-        /* 넓은 화면 — 3칸 격자(양쪽 같은 폭)로 메뉴를 로고·버튼 폭과 상관없이 정확히 가운데에 둔다 */
-        @media (min-width: 960px) {
+        .cb-menu { display: none; gap: 36px; }
+        /* 넓은 화면 — 3칸 격자(양쪽 같은 폭)로 메뉴를 로고·버튼 폭과 상관없이 화면 정가운데에 둔다.
+           로고 묶음(WEFLOW | 병의원 웹블로그 · 홈페이지)이 길어 메뉴가 로고 쪽에 붙어 보여서, 메뉴가 보이는 폭에서는 한 줄 그대로 두고 크기만 한 단계 줄인다 (2026-11-19) */
+        @media (min-width: 1200px) {
           .cb-menu { display: flex; align-items: center; }
           .cb-top-inner { display: grid; grid-template-columns: 1fr auto 1fr; }
-          .cb-brand { justify-self: start; }
+          .cb-top-inner .cb-brand { justify-self: start; font-size: 1.18rem; gap: 8px; }
+          .cb-top-inner .cb-brand img { width: 24px; height: 24px; }
+          .cb-top-inner .cb-brand-sep { height: 12px; margin: 0 2px; }
+          .cb-top-inner .cb-brand-sub { font-size: .88rem; }
         }
-        /* 메뉴가 다섯 개라, 메뉴가 처음 보이는 폭(960~1199px)에서는 간격·글자를 줄여 로고·버튼과 겹치지 않게 */
-        @media (min-width: 960px) and (max-width: 1199px) { .cb-menu { gap: 26px; } .cb-menu-link, .cb-menu-trigger { font-size: .9rem !important; } }
+        /* 메뉴가 다섯 개라, 메뉴가 여섯 개로 늘어, 메뉴가 처음 보이는 폭(1200~1439px)에서는 간격·글자를 줄여 로고·버튼과 겹치지 않게 */
+        @media (min-width: 1200px) and (max-width: 1439px) { .cb-menu { gap: 24px; } .cb-menu-link, .cb-menu-trigger { font-size: .9rem !important; } }
         .cb-menu-link, .cb-menu-trigger { position: relative; display: inline-flex; align-items: center; gap: 3px; color: var(--cb-sub); font: inherit; font-weight: 600; font-size: .95rem; text-decoration: none; padding: 6px 0; border: 0; background: none; cursor: pointer; white-space: nowrap; transition: color .15s; }
         .cb-menu-link::after, .cb-menu-trigger::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--cb-text); transform: scaleX(0); transition: transform .25s ease; }
         .cb-menu-link:hover, .cb-menu-group:hover .cb-menu-trigger, .cb-menu-group:focus-within .cb-menu-trigger { color: var(--cb-text); }
         .cb-menu-link:hover::after, .cb-menu-group:hover .cb-menu-trigger::after, .cb-menu-group:focus-within .cb-menu-trigger::after { transform: scaleX(1); }
+        /* 강조 메뉴('왜 WEFLOW?') — 이 페이지 파랑, 굵게 */
+        .cb-menu-link.is-accent { color: var(--cb-accent); font-weight: 800; }
+        .cb-menu-link.is-accent:hover { color: #1852b5; }
+        .cb-menu-link.is-accent::after { background: var(--cb-accent); }
+        .cb-drawer-nav a.is-accent { color: #1f63d6; font-weight: 800; }
+        /* '왜 WEFLOW?' 묶음 — 금색 글씨에 광택이 왼쪽에서 오른쪽으로 흐른다. 메인 가격 안내(/pricing 의 .pr-gold)와 같은 흰 바탕용 중간 톤 금색,
+           움직임은 사이트 공통 cGoldSheen(styles/globals.css). 글자를 배경으로 오려 내는 방식이라 꺾쇠(svg)는 색을 따로 준다 */
+        .cb-menu-group .cb-menu-trigger.is-accent, .cb-drawer-group.is-accent > span { font-weight: 800; background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #e2c68c 50%, #b8914e 62%, #a8823e 100%); background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: cGoldSheen 2.8s linear infinite; }
+        .cb-menu-trigger.is-accent svg, .cb-drawer-group.is-accent svg, .cb-drawer-group.is-accent[aria-expanded="true"] svg { color: #b8914e; }
+        .cb-menu-trigger.is-accent::after { background: #b8914e; }
+        @media (prefers-reduced-motion: reduce) { .cb-menu-group .cb-menu-trigger.is-accent, .cb-drawer-group.is-accent > span { animation: none; } }
         /* 묶음 드롭다운 — 메인 헤더와 같은 흰 상자. 위 여백(padding-top)까지가 hover 영역이라 내려가는 사이에 닫히지 않는다 */
         .cb-menu-group { position: relative; }
+        /* 누른 직후(.is-shut)와 헤더가 위로 숨은 동안에는 목록을 닫는다 */
+        .cb-menu-group.is-shut .cb-menu-pop, .cb-top.is-hidden .cb-menu-pop { opacity: 0 !important; visibility: hidden !important; }
         .cb-menu-trigger svg { transition: transform .2s; }
         .cb-menu-group:hover .cb-menu-trigger svg, .cb-menu-group:focus-within .cb-menu-trigger svg { transform: rotate(180deg); }
         .cb-menu-pop { position: absolute; top: 100%; left: 50%; padding-top: 10px; transform: translateX(-50%) translateY(-4px); opacity: 0; visibility: hidden; transition: opacity .18s, transform .18s, visibility .18s; }
@@ -246,16 +275,12 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
         .cb-menu-list a svg { color: var(--cb-muted); }
         .cb-top-btn svg { transition: transform .3s cubic-bezier(.16,1,.3,1); }
         .cb-top-btn:hover svg { transform: translateX(3px); }
-        @media (max-width: 420px) { .cb-brand-sep, .cb-brand-sub { display: none; } }
+        @media (max-width: 480px) { .cb-brand-sep, .cb-brand-sub { display: none; } }
 
         .cb-top-right { display: flex; align-items: center; justify-self: end; }
-        /* 대표 번호 — 메인 헤더처럼 견적 버튼 왼쪽. 메뉴와 겹치지 않을 만큼 넓은 화면(1100px 이상)에서만 */
-        .cb-tel { display: none; align-items: center; gap: 6px; margin-right: 20px; color: #111418; font-size: 1.08rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
-        .cb-tel:hover { color: #1f63d6; }
-        @media (min-width: 1100px) { .cb-tel { display: inline-flex; } }
-        /* 햄버거 — 가운데 메뉴가 숨는 화면(960px 미만)에서만, 상담 버튼 오른쪽에 붙는다 */
+        /* 햄버거 — 가운데 메뉴가 숨는 화면(1200px 미만)에서만 (메뉴가 여섯 개라 그보다 좁으면 로고·버튼과 겹친다), 상담 버튼 오른쪽에 붙는다 */
         .cb-burger { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; margin-right: -8px; border: 0; background: none; color: #111418; cursor: pointer; }
-        @media (max-width: 959px) {
+        @media (max-width: 1199px) {
           .cb-burger { display: inline-flex; }
           .cb-top-right { margin-left: auto; }
           .cb-top-btn { margin-right: 6px; }
