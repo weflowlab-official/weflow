@@ -4,41 +4,48 @@ import WwList from './WwList'
 /**
  * 왜 WEFLOW? — WHY NOW 03(PHP 보안 뉴스) 바로 아래. 메뉴 '왜 WEFLOW?'(#why-weflow)가 여기로 온다.
  * 앞 섹션이 "PHP 는 위험하다는 뉴스"였다면, 여기는 "PHP 가 아니어도 지금 Next.js 로 리뉴얼해야 하는 이유"를 순위로 말한다:
- * 1 보안 → 2 속도 → 3 검색·AI 구조. 카드마다 '지금 홈페이지'와 'WEFLOW(Next.js)'를 한 줄씩 맞대어 보여 준다.
+ * 1 보안 → 2 검색·AI 구조(SEO·AEO·GEO) → 3 속도. 카드마다 '지금 홈페이지'와 'WEFLOW(Next.js)'를 한 줄씩 맞대어 보여 준다.
  *
  * 바로 위 SecurityNews 의 '옛 방식 vs WEFLOW' 비교(PHP 보안 이야기)는 그대로 두고, 여기는 보안에 더해 속도·검색까지 넓혀 말한다.
  * 문구 기준: 특정 회사 제품 이름을 쓰지 않는다. "절대 안전"·검색 순위를 약속하지 않는다 ("관리할 것이 줄어든다", "읽어 갈 정보가 함께 만들어진다").
  */
 
+/** 금색 광택 글씨 — 카드마다 타이틀·설명에서 가장 중요한 말 한 군데씩 (모양은 아래 .ww-gold) */
+const G = ({ children }: { children: React.ReactNode }) => <em className="ww-gold">{children}</em>
+
+// why: 병원에 왜 중요한지 — 환자 이야기로 한두 문장 (한 줄 요약 아래 회색 글).
 // oldM · weM: 휴대폰용 — 같은 문장을 세 줄로 끊어 둔 것. 옆으로 넘기는 카드라 상자마다 줄 수가 다르면 들쭉날쭉해 보여서, 여섯 상자 모두 세 줄로 맞춘다.
 // 문장을 고치면 둘 다 고친다. 한 줄이 너무 길면(한글 17자 안팎) 좁은 폰에서 네 줄로 넘어간다.
 const REASONS = [
   {
     Icon: ShieldCheck,
     title: '보안',
-    lead: '직접 챙길 서버와 프로그램이 없습니다',
+    lead: <><G>우리 환자 정보가 유출</G>될 수 있습니다</>,
+    why: <>병원 홈페이지는 <G>보안이 생명</G>입니다.{'\n'}관리가 멈춘 홈페이지는 환자 정보가{'\n'}새어 나갈 수 있어, 리뉴얼이 필요합니다.</>,
     old: '서버·게시판 프로그램·플러그인의\n보안 업데이트를 사이트마다 직접\n챙겨야 합니다.',
     we: '미리 만들어 둔 페이지를 내보내는 구조라 공격받을 곳이 줄고, 업데이트는 운영관리에서 계속 챙깁니다.',
     oldM: '서버·게시판 프로그램·플러그인의\n보안 업데이트를 사이트마다 직접\n챙겨야 합니다.',
     weM: '미리 만들어 둔 페이지를 내보내는\n구조라 공격받을 곳이 줄고, 업데이트는\n운영관리에서 계속 챙깁니다.',
   },
   {
-    Icon: Zap,
-    title: '속도',
-    lead: '미리 만든 페이지를 바로 보여 줍니다',
-    old: '페이지를 열 때마다 서버가 화면을 새로 만들어, 접속이 몰리거나 기능이 늘수록 느려집니다.',
-    we: '완성된 페이지를 가까운 서버망(CDN)에서 바로 보내, 휴대폰에서도 빠르게 열립니다.',
-    oldM: '페이지를 열 때마다 서버가 화면을\n새로 만들어, 접속이 몰리거나\n기능이 늘수록 느려집니다.',
-    weM: '완성된 페이지를 가까운\n서버망(CDN)에서 바로 보내,\n휴대폰에서도 빠르게 열립니다.',
-  },
-  {
     Icon: ScanSearch,
     title: '검색·AI',
-    lead: '검색엔진과 AI가 읽어 가기 좋은 구조',
+    lead: <><G>네이버·구글 등 AI에 노출</G>되는 구조 설계</>,
+    why: <>환자는 증상과 치료법을 먼저 검색합니다.{'\n'}<G>SEO·AEO·GEO</G>에 맞춰 설계해야{'\n'}그 검색에 우리 병원 글이 닿습니다.</>,
     old: '진료 안내가 이미지로 되어 있거나,\n검색용 정보를 페이지마다 따로 넣어야 합니다.',
     we: '글자 중심으로 만들고, 사이트맵·구조화 데이터 같은 검색용 정보가 함께 만들어집니다.',
     oldM: '진료 안내가 이미지로 되어 있거나,\n검색용 정보를 페이지마다\n따로 넣어야 합니다.',
     weM: '글자 중심으로 만들고,\n사이트맵·구조화 데이터 같은\n검색용 정보가 함께 만들어집니다.',
+  },
+  {
+    Icon: Zap,
+    title: '속도',
+    lead: <>미리 만든 페이지를 <G>바로 보여 줍니다</G></>,
+    why: <>환자는 느린 화면을 <G>기다려 주지 않습니다.</G>{'\n'}페이지가 열리기도 전에 뒤로 가기를 누르고 다른 병원으로 넘어갑니다.</>,
+    old: '페이지를 열 때마다 서버가 화면을 새로 만들어, 접속이 몰리거나 기능이 늘수록 느려집니다.',
+    we: '완성된 페이지를 가까운 서버망(CDN)에서 바로 보내, 휴대폰에서도 빠르게 열립니다.',
+    oldM: '페이지를 열 때마다 서버가 화면을\n새로 만들어, 접속이 몰리거나\n기능이 늘수록 느려집니다.',
+    weM: '완성된 페이지를 가까운\n서버망(CDN)에서 바로 보내,\n휴대폰에서도 빠르게 열립니다.',
   },
 ]
 
@@ -53,11 +60,12 @@ export default function WhyWeflow() {
         </p>
 
         <WwList className="ww-list">
-          {REASONS.map(({ Icon, title, lead, old, we, oldM, weM }, i) => (
+          {REASONS.map(({ Icon, title, lead, why, old, we, oldM, weM }, i) => (
             <article key={title} className="ww-card" style={{ '--i': i } as React.CSSProperties}>
               {/* 아이콘과 제목을 한 줄에 — [아이콘] 보안 */}
               <h3><span className="ww-icon"><Icon size={22} /></span>{title}</h3>
               <p className="ww-lead">{lead}</p>
+              <p className="ww-why">{why}</p>
               <dl>
                 <div className="ww-old">
                   <dt><X size={14} strokeWidth={3} /> 지금 홈페이지</dt>
@@ -74,7 +82,7 @@ export default function WhyWeflow() {
 
         <p className="ww-foot">어떤 기술도 &lsquo;절대 안전&rsquo;하지는 않습니다. <br className="cb-mo" />중요한 건 업데이트가 계속 챙겨지는 구조입니다.</p>
         <a href="/clinic-blog/check" target="_blank" rel="noopener noreferrer" className="ww-btn">
-          <ScanSearch size={18} /> 우리 병원 사이트 점검하기
+          <ScanSearch size={18} /> 우리 병원 사이트 진단하기
         </a>
       </div>
 
@@ -102,6 +110,11 @@ export default function WhyWeflow() {
         .ww-icon svg { width: 27px; height: 27px; }
         .ww-card h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 14px; font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em; }
         .ww-lead { margin: 0 0 22px; color: var(--cb-text); font-size: 1.04rem; font-weight: 700; line-height: 1.5; letter-spacing: -0.02em; word-break: keep-all; }
+        .ww-lead:has(+ .ww-why) { margin-bottom: 8px; }
+        .ww-why { margin: 0 0 22px; color: var(--cb-sub); font-size: .95rem; line-height: 1.65; word-break: keep-all; white-space: pre-line; } /* pre-line — 문구에 넣은 줄바꿈을 살린다 */
+        /* 금색 광택 — 헤더 '왜 WEFLOW?' 메뉴와 같은 흰 바탕용 중간 톤 금색, 빛이 왼쪽에서 오른쪽으로 흐른다 (움직임은 사이트 공통 cGoldSheen) */
+        .ww-gold { font-style: normal; font-weight: 800; background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #e2c68c 50%, #b8914e 62%, #a8823e 100%); background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: cGoldSheen 2.8s linear infinite; }
+        @media (prefers-reduced-motion: reduce) { .ww-gold { animation: none; } }
         .ww-card dl { margin: auto 0 0; display: grid; gap: 10px; }
         .ww-card dl > div { padding: 15px 16px; border-radius: 14px; background: #fff; }
         .ww-card dt { display: flex; align-items: center; gap: 5px; margin-bottom: 6px; font-size: .84rem; font-weight: 800; }
@@ -127,12 +140,16 @@ export default function WhyWeflow() {
         @media (max-width: 767px) {
           .ww-list { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 32px -20px 0; padding: 16px 20px 34px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
           .ww-list::-webkit-scrollbar { display: none; }
+          /* 휴대폰에서만 순서를 검색·AI → 보안 → 속도로 — 둘째 카드(검색·AI)를 맨 앞으로 보낸다. 넓은 화면은 적힌 순서(보안 → 검색·AI → 속도) 그대로 */
+          .ww-card:nth-child(2) { order: -1; }
           .ww-card, .ww-list.is-in .ww-card { flex: 0 0 min(82vw, 340px); padding: 30px min(5vw, 20.75px) 26px; scroll-snap-align: center; opacity: 1; transform: none; animation: none; transition: transform .3s ease, background-color .3s ease, border-color .3s ease, box-shadow .3s ease; transition-delay: 0s; }
           .ww-list .ww-card.is-on, .ww-list .ww-card:active { transform: translateY(-8px); background-color: #eef4fd; border-color: #a9c6f5; box-shadow: 0 18px 34px rgba(31,99,214,.16); }
-          /* 카드 한 줄 요약('직접 챙길 서버와 프로그램이 없습니다')이 한 줄에 들어가게 — 카드 폭이 화면을 따라가므로 글자도 화면 폭에 맞춰 줄인다 */
-          .ww-lead { font-size: min(1.04rem, 4.2vw); white-space: nowrap; }
+          /* 카드 한 줄 요약이 한 줄에 들어가게 — 카드 폭이 화면을 따라가므로 글자도 화면 폭에 맞춰 줄인다.
+             가장 긴 '네이버·구글 등 AI에 노출되는 구조 설계'(한글 18자쯤)가 들어가는 크기 */
+          .ww-lead { font-size: min(1.04rem, 4vw); white-space: nowrap; }
           /* 상자 안 글 — 세 줄로 끊어 둔 휴대폰용 문장을 쓴다. 끊은 자리에서만 줄이 바뀌도록 카드 폭 · 안쪽 여백 · 글자 크기를 모두 화면 폭에 비례하게 잡는다
              (한 줄에 한글 18자쯤 들어간다. 화면이 415px 을 넘으면 셋 다 같은 지점에서 멈춰 비율이 그대로다) */
+          .ww-why { font-size: min(3.6vw, 15px); margin-bottom: 18px; } /* 첫 문장이 한 줄에 들어가는 크기 */
           .ww-wide { display: none; }
           .ww-narrow { display: inline; }
           .ww-card dl > div { padding: 15px min(3.6vw, 15px); }

@@ -8,7 +8,7 @@ import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, ClipboardList, Phone, E
  * 첫 화면에서는 투명하게 두어 제목에 시선이 가게 하고, 조금이라도 내리면 흰 바탕과 아래 선을 깐다.
  * 가운데 메뉴는 페이지 안의 섹션(id)으로 이동한다 — 넓은 화면에서만 보인다.
  * 메뉴가 늘어 묶음 둘은 드롭다운으로 편다 (메인 헤더 components/Navbar.tsx 와 같은 방식 — 올리면 펼쳐지고, 좁은 화면 메뉴 판에서는 눌러서 편다).
- * '무료 점검·체험' 묶음(사이트 진단 · 글쓰기 데모)은 이 페이지 밖의 화면이라 새 탭으로 연다 — 광고 랜딩을 떠나지 않게.
+ * '무료 진단·체험' 묶음(사이트 진단 · 글쓰기 데모)은 이 페이지 밖의 화면이라 새 탭으로 연다 — 광고 랜딩을 떠나지 않게.
  * 좁은 화면에서는 상담 버튼 오른쪽에 햄버거 버튼을 두고, 누르면 오른쪽에서 메뉴 판이 밀려 나온다
  * (메인 사이트 모바일 메뉴와 같은 구성 — 위에 로고·닫기, 가운데 메뉴, 아래 바로 전화 · 맞춤 견적 받기 버튼).
  * base: 404 처럼 이 페이지 밖에서 쓸 때 '/clinic-blog' 를 넘긴다 — 메뉴·버튼이 이 페이지의 각 섹션으로, 로고는 이 페이지 맨 위로 간다.
@@ -17,7 +17,7 @@ import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X, ClipboardList, Phone, E
 /** 대표 번호 — 메인 헤더(components/Navbar.tsx)와 같은 번호 */
 const TEL = '010-2971-7280'
 
-// 페이지 순서와 같게: 제작 사례 → 왜 WEFLOW?(WHY WEFLOW 01~02 · 바로 아래 가격 안내) → 웹블로그 소개(웹블로그란 · 홈페이지와 함께) → SEO·AEO·GEO → 무료 점검·체험(새 탭).
+// 페이지 순서와 같게: 제작 사례 → 왜 WEFLOW?(WHY WEFLOW 01~02 · 바로 아래 가격 안내) → 웹블로그 소개(웹블로그란 · 홈페이지와 함께) → SEO·AEO·GEO → 무료 진단·체험(새 탭).
 // 묶음 안의 '홈페이지와 함께'만 실제로는 SEO·AEO·GEO 보다 아래에 있다.
 // 'WHY NOW 두 장면(우리 병원은?)' · '진행 과정' · '자주 묻는 질문'은 메뉴로 찾아갈 만큼 궁금한 내용이 아니라 뺐다 (스크롤로 지나며 본다)
 // ext: 이 페이지 밖의 화면(진단 · 데모) — 주소를 그대로 쓰고 새 탭으로 연다
@@ -43,9 +43,9 @@ const MENU: (MenuLink | MenuGroup)[] = [
   },
   { href: '#how', label: 'SEO·AEO·GEO' },
   {
-    label: '무료 점검·체험',
+    label: '무료 진단·체험',
     children: [
-      { href: '/clinic-blog/check', label: '사이트 점검', ext: true },
+      { href: '/clinic-blog/check', label: '내 사이트 AI 진단', ext: true },
       { href: '/clinic-blog/demo', label: '관리자페이지 체험', ext: true },
     ],
   },

@@ -204,7 +204,7 @@ export default function CheckClient() {
           </h1>
           <p className="cb-body ckc-lead">
             주소만 넣으면 제작 기술과 보안, AI 검색 준비도까지<br />
-            <b>우리 병원 홈페이지를 바로 점검해 드립니다.</b>
+            <b>우리 병원 홈페이지를 바로 진단해 드립니다.</b>
           </p>
 
           {phase !== 'loading' ? (
@@ -234,7 +234,7 @@ export default function CheckClient() {
                   maxLength={300}
                 />
               </label>
-              <button type="submit" className="ckc-go">무료 점검하기 <ArrowRight size={18} strokeWidth={2.5} /></button>
+              <button type="submit" className="ckc-go">무료 AI 진단하기 <ArrowRight size={18} strokeWidth={2.5} /></button>
             </form>
           ) : (
             <div className="ckc-loading" role="status">
@@ -250,7 +250,7 @@ export default function CheckClient() {
           )}
           {notice && phase !== 'loading' && <p className="ckc-notice" role="alert">{notice}</p>}
           {/* 무엇을 보는지 — 여섯 가지를 칩으로 (결과 카드와 같은 이름·아이콘·순서) */}
-          <ul className="ckc-chips" aria-label="점검 항목 6가지">
+          <ul className="ckc-chips" aria-label="진단 항목 6가지">
             {CATEGORY_META.map(({ key, label, Icon }) => (
               <li key={key}><Icon size={14} strokeWidth={2.3} /> {label}</li>
             ))}
@@ -308,7 +308,7 @@ export default function CheckClient() {
 
             {!unlocked ? (
               <form onSubmit={submitLead} className="ckc-lead-form" noValidate>
-                <h2>전체 점검 결과를 바로 확인하세요</h2>
+                <h2>전체 진단 결과를 바로 확인하세요</h2>
                 <p>연락처를 남기면 <br className="cb-mo" />나머지 항목을 바로 확인할 수 있고, <br className="cb-mo" />전담 매니저가 결과를 바탕으로 <br className="cb-mo" />리뉴얼 방향을 무료로 안내드립니다.</p>
                 <HoneypotField value={honeypot} onChange={setHoneypot} />
                 <div className="ckc-lead-row">
@@ -334,12 +334,12 @@ export default function CheckClient() {
               <div className="ckc-after">
                 <span className="ckc-after-icon"><Check size={22} strokeWidth={3} /></span>
                 <h2>리뉴얼 방향이 궁금하신가요?</h2>
-                <p>전담 매니저가 점검 결과를 살펴본 뒤, <br className="cb-mo" />빠르게 연락드려 항목별 개선 방향을 안내드리겠습니다.</p>
+                <p>전담 매니저가 진단 결과를 살펴본 뒤, <br className="cb-mo" />빠르게 연락드려 항목별 개선 방향을 안내드리겠습니다.</p>
                 <div className="ckc-after-btns">
                   <a href={`tel:${TEL}`} className="ckc-btn-line"><Phone size={17} fill="currentColor" /> 바로 전화 상담</a>
                   <Link href="/clinic-blog#contact-form" className="ckc-btn-fill"><ClipboardList size={17} /> 맞춤 견적 받기</Link>
                 </div>
-                <button type="button" className="ckc-again" onClick={checkAnother}><RotateCcw size={15} /> 다른 주소 점검하기</button>
+                <button type="button" className="ckc-again" onClick={checkAnother}><RotateCcw size={15} /> 다른 주소 진단하기</button>
               </div>
             )}
           </div>
@@ -347,7 +347,7 @@ export default function CheckClient() {
       )}
 
       {/* 점검의 한계를 한 줄로 — 리뉴얼해야 하는 이유는 랜딩(/clinic-blog)의 '왜 WEFLOW?' 섹션이 맡는다 (여기는 점검만 한다) */}
-      <p className="ckc-foot">점검은 밖에서 보이는 정보만으로 판단합니다. <br className="cb-mo" />정확한 상태는 상담에서 함께 확인해 드립니다.</p>
+      <p className="ckc-foot">진단은 밖에서 보이는 정보만으로 판단합니다. <br className="cb-mo" />정확한 상태는 상담에서 함께 확인해 드립니다.</p>
 
       <style>{`
         .ckc-hero { padding: calc(76px + clamp(48px, 9vw, 96px)) 0 clamp(48px, 7vw, 80px); text-align: center; background: radial-gradient(60% 70% at 50% 0%, #e8f1ff 0%, rgba(232,241,255,0) 70%), #fff; }
