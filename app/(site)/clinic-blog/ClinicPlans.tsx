@@ -67,15 +67,26 @@ const PLANS = [
   },
 ]
 
-/** children: 카드 아래에 붙는 것 — 병의원 랜딩은 간편 견적 띠(QuickQuote)를 넣는다 */
-export default function ClinicPlans({ children }: { children?: ReactNode }) {
+// 전 업종용(웹블로그 메인 /blog) 구성 항목 — 순서는 PLANS 와 같다 (PREMIER · SIGNATURE · ALL-IN-ONE)
+const GENERAL_FEATURES = [
+  ['카테고리별 웹블로그', '쉬운 글쓰기 관리자 화면', '기존 홈페이지와 연결', 'SEO·AEO·GEO 구조 설계'],
+  ['업종 맞춤 디자인 홈페이지', '회사 소개 · 서비스 안내 · 오시는 길', '문의·상담 접수', '반응형 PC & 모바일 최적화', 'SEO·AEO·GEO 구조 설계'],
+  ['맞춤 홈페이지 + 카테고리별 웹블로그', '기획부터 함께 설계해 디자인 통일', '관리자 화면 하나로 모두 관리', '문의·상담이 한곳에 쌓임', '반응형 PC & 모바일 최적화', 'SEO·AEO·GEO 구조 설계'],
+]
+
+/**
+ * children: 카드 아래에 붙는 것 — 병의원 랜딩은 간편 견적 띠(QuickQuote)를 넣는다
+ * general: 전 업종용 — 구성 항목을 병의원 말 대신 일반 말로
+ * cta: 카드 맨 아래 버튼을 바꿔 끼운다 — 웹블로그 메인은 자기 견적 폼으로 가는 버튼을 넣는다 (안 주면 병의원 랜딩의 PlanButton)
+ */
+export default function ClinicPlans({ children, general = false, cta }: { children?: ReactNode; general?: boolean; cta?: (plan: string, best: boolean) => ReactNode }) {
   return (
     <section id="plans" className="cp" aria-labelledby="cp-title">
       <div className="cp-inner">
         <p className="cb-chapter">PRICING</p>
         <h2 id="cp-title" className="cp-title">제작 플랜 & <span>가격 안내</span></h2>
         <div className="pricing-grid">
-          {PLANS.map(p => (
+          {PLANS.map((p, i) => (
             <PlanCard
               key={p.name}
               icon={p.img}
@@ -83,10 +94,10 @@ export default function ClinicPlans({ children }: { children?: ReactNode }) {
               subtitle={p.tagline}
               price={p.price}
               foot={NOTE}
-              features={p.features}
+              features={general ? GENERAL_FEATURES[i] : p.features}
               highlight={p.best}
               tagLabel="추천"
-              cta={<PlanButton plan={p.plan} fill={p.best} />}
+              cta={cta ? cta(p.plan, p.best) : <PlanButton plan={p.plan} fill={p.best} />}
             />
           ))}
         </div>
@@ -106,6 +117,13 @@ export default function ClinicPlans({ children }: { children?: ReactNode }) {
         }
         @media (min-width: 960px) { .cp { padding: 140px 20px; } }
         .cp-inner { max-width: 1120px; margin: 0 auto; }
+        /* 플랜 카드(PlanCard) 글자 모양 — 사이트 공통 CSS 의 값 그대로. 웹블로그 메인(/blog)은 그 CSS 를 싣지 않아 여기서도 정해 둔다 */
+        .cp .headline { margin: 0; font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.4; color: var(--text); }
+        .cp .title-2 { font-size: clamp(1.35rem, 3vw, 1.5rem); font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; color: var(--text); }
+        .cp .callout { font-size: 0.9375rem; font-weight: 400; line-height: 1.55; color: var(--text-secondary); }
+        .cp .caption-1 { font-size: 0.75rem; font-weight: 500; line-height: 1.35; color: var(--text-muted); }
+        .cp .c-muted { color: var(--text-muted); }
+        .cp .emphasized { font-weight: 700; }
         .cp-title { margin: 0; font-size: clamp(1.7rem, 3.8vw, 2.5rem); line-height: 1.32; font-weight: 800; letter-spacing: -0.035em; color: #111418; }
         .cp-title span { color: #1f63d6; }
         .cp-after { margin-top: clamp(3.5rem, 7vw, 5rem); }
@@ -135,7 +153,7 @@ export default function ClinicPlans({ children }: { children?: ReactNode }) {
         }
 
         /* 견적 신청 버튼 — 카드 맨 아래. 추천 카드는 채운 버튼 */
-        .ch-plan-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-top: 1.75rem; padding: 15px 20px; border-radius: 999px; border: 1.5px solid #d5d9df; background: #fff; color: #111418; font-weight: 700; text-decoration: none; transition: border-color .15s, background .15s, color .15s; }
+        .ch-plan-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-top: 1.75rem; padding: 15px 20px; border-radius: 999px; border: 1.5px solid #d5d9df; background: #fff; color: #111418; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; transition: border-color .15s, background .15s, color .15s; }
         .ch-plan-btn:hover { border-color: #111418; }
         .ch-plan-btn--fill { background: #111418; border-color: #111418; color: #fff; }
         .ch-plan-btn--fill:hover { background: #1f63d6; border-color: #1f63d6; }

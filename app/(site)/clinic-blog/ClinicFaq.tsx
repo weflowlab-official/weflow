@@ -12,7 +12,9 @@ import { ArrowRight, ArrowUpRight } from 'lucide-react'
  * 메인과 달리 상담 버튼은 이 페이지 아래 상담 폼(#contact)으로 내려간다 — 메인 사이트로 나가지 않는다.
  */
 
-const FAQ: { q: string; a: string; link?: { href: string; label: string } }[] = [
+export type ClinicFaqItem = { q: string; a: string; link?: { href: string; label: string } }
+
+const FAQ: ClinicFaqItem[] = [
   { q: '웹블로그도 네이버 검색에 나오나요?', a: '네. 네이버·구글이 잘 읽을 수 있도록 검색 구조부터 설계하고, 오픈할 때 검색엔진 등록까지 마칩니다. 다만 검색 순위는 글의 내용과 꾸준함에 따라 달라집니다.' },
   { q: '지금 쓰는 네이버 블로그는 그만둬야 하나요?', a: '아니요, 함께 운영하셔도 됩니다. 웹블로그는 우리 병원 주소에서 따로 운영됩니다.' },
   { q: '이미 병원 홈페이지가 있어요. 웹블로그만 만들 수 있나요?', a: '네. 기존 홈페이지 주소 아래(예: 병원주소/blog)에 붙이거나 별도 주소로 만들 수 있습니다. 상담을 통해 병원에 더 맞는 방식을 안내해 드립니다.' },
@@ -22,18 +24,34 @@ const FAQ: { q: string; a: string; link?: { href: string; label: string } }[] = 
   { q: '병원 말고 다른 업종도 만들 수 있나요?', a: '네. 웹블로그는 차량·금융·인테리어·학원 등 업종에 맞게 카테고리와 글 구조를 설계해 만들 수 있습니다.', link: { href: '/blog', label: '전 업종 웹블로그 보기' } },
 ]
 
-// 검색엔진·AI 답변엔진이 질문·답을 그대로 읽어 가도록 FAQ 구조화 데이터 (메인 FaqSection 과 같은 형식)
-const FAQ_JSON_LD = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: FAQ.map(f => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
-}
+// 전 업종용(웹블로그 메인 /blog) — 위 병의원 질문에서 병원 말을 걷어 내고, 마지막 '병원 말고 다른 업종도?' 질문은 '어떤 업종이 가능한가요?' 로 바꿨다.
+// 병의원 질문을 고치면 여기도 같이 본다
+const GENERAL_FAQ: ClinicFaqItem[] = [
+  { q: '웹블로그도 네이버 검색에 나오나요?', a: '네. 네이버·구글이 잘 읽을 수 있도록 검색 구조부터 설계하고, 오픈할 때 검색엔진 등록까지 마칩니다. 다만 검색 순위는 글의 내용과 꾸준함에 따라 달라집니다.' },
+  { q: '지금 쓰는 네이버 블로그는 그만둬야 하나요?', a: '아니요, 함께 운영하셔도 됩니다. 웹블로그는 우리 회사 주소에서 따로 운영됩니다.' },
+  { q: '이미 홈페이지가 있어요. 웹블로그만 만들 수 있나요?', a: '네. 기존 홈페이지 주소 아래(예: 우리회사.com/blog)에 붙이거나 별도 주소로 만들 수 있습니다. 상담을 통해 우리 회사에 더 맞는 방식을 안내해 드립니다.' },
+  { q: '웹블로그 없이 홈페이지만 만들 수도 있나요?', a: '네. 홈페이지만 먼저 만들고, 필요할 때 웹블로그를 같은 디자인으로 이어 붙일 수 있습니다.', link: { href: '/', label: 'WEFLOW가 만든 홈페이지 보기' } },
+  { q: '제작 기간과 비용은 어느 정도인가요?', a: '카테고리 수, 디자인 범위, 홈페이지 연동 방식에 따라 달라집니다. 상담을 통해 우리 업종에 맞춰 안내해 드립니다.' },
+  { q: '오픈한 뒤에 수정이 필요하면 어떻게 하나요?', a: '오픈 후에도 디자인 수정이나 기능 추가가 필요하면 상담을 통해 도와드립니다.' },
+  { q: '어떤 업종이 가능한가요?', a: '전 업종 가능합니다. 차량·금융·병의원·인테리어·학원 등 업종에 맞게 카테고리와 글 구조를 설계해 만듭니다.' },
+]
 
-export default function ClinicFaq() {
+/**
+ * general: 전 업종용 질문(GENERAL_FAQ)을 쓴다 — 웹블로그 메인(/blog)
+ * items: 질문 목록을 통째로 바꿔 끼운다 (안 주면 general 에 따라 위 두 목록 중 하나)
+ * contactHref: '상담으로 물어보기' 가 내려가는 곳 (웹블로그 메인은 #contact)
+ */
+export default function ClinicFaq({ general = false, items = general ? GENERAL_FAQ : FAQ, contactHref = '#contact-form' }: { general?: boolean; items?: ClinicFaqItem[]; contactHref?: string }) {
+  // 검색엔진·AI 답변엔진이 질문·답을 그대로 읽어 가도록 FAQ 구조화 데이터 (메인 FaqSection 과 같은 형식)
+  const FAQ_JSON_LD = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  }
   const [open, setOpen] = useState(-1) // 열려 있는 질문 번호 (-1 = 모두 접힘)
 
   return (
@@ -48,7 +66,7 @@ export default function ClinicFaq() {
           </header>
           <div className="cf-ask">
             <p>찾으시는 질문이 없나요?</p>
-            <a href="#contact-form" className="cf-cta">
+            <a href={contactHref} className="cf-cta">
               상담으로 물어보기
               <ArrowRight size={18} />
             </a>
@@ -56,7 +74,7 @@ export default function ClinicFaq() {
         </div>
 
         <ul className="cf-list">
-          {FAQ.map((f, i) => {
+          {items.map((f, i) => {
             const on = open === i
             return (
               <li key={f.q} className={on ? 'cf-item is-open' : 'cf-item'}>

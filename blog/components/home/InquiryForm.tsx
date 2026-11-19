@@ -14,8 +14,8 @@ import { PLAN_EVENT } from "./PlanButton";
 
 const PLANS = ["웹블로그 + 홈페이지", "웹블로그만", "홈페이지만", "상담 후 결정"];
 
-/** 지출 예산 — 선택 칸. 고른 값은 메모에 '예산: …' 한 줄로 남는다 (clinic-blog 폼과 같은 구간) */
-const BUDGETS = ["0~200만원", "200~400만원", "400~600만원", "600만원 이상"];
+/** 지출 예산 — 선택 칸. 고른 값은 메모에 '예산: …' 한 줄로 남는다 (병의원 랜딩 clinic-blog 폼과 같은 구간 — 가격 안내의 시작 가격 150 · 300 · 500만원에 맞췄다. 바꾸면 그쪽 BUDGETS 도 같이 본다) */
+const BUDGETS = ["150~300만원", "300~500만원", "500~1000만원", "1000만원 이상", "미정"];
 
 const label = "mb-1.5 block text-sm font-semibold text-neutral-800";
 const input =
