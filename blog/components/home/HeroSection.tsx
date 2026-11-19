@@ -1,6 +1,6 @@
 "use client";
-// 메인 페이지 히어로: 흰 배경 + 은은한 장식(연한 파란 번짐 2개 + 격자), 가운데 정렬로 제목·소개·검색창·인기 키워드·버튼(맞춤 견적 / 업종별로 보기).
-import { useState, type FormEvent, type MouseEvent } from "react";
+// 메인 페이지 히어로: 흰 배경 + 은은한 장식(연한 파란 번짐 2개 + 격자), 가운데 정렬로 제목·소개·검색창·인기 키워드. (맞춤 견적 / 업종별로 보기 버튼 두 개는 2026-11-20 에 뺐다)
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
   IconSearch,
@@ -10,8 +10,6 @@ import {
   IconHome,
   IconSchool,
   IconToolsKitchen2,
-  IconClipboardList,
-  IconCategory,
 } from "@tabler/icons-react";
 
 // 궤도 위를 도는 업종 아이콘 ("모든 업종"을 그림으로). 궤도가 돌면 같이 돌고, 아이콘 자체는 반대로 돌려 항상 똑바로 선다.
@@ -97,18 +95,6 @@ export function HeroSection({ title, text, placeholder }: Props) {
     if (!trimmed) return;
     router.push(`/blog/search?q=${encodeURIComponent(trimmed)}`);
   };
-  // 버튼 → 같은 페이지의 섹션으로 부드럽게 이동 (섹션의 scroll-mt 가 헤더 높이만큼 띄워 준다).
-  // 주소창의 #은 바꿔 두어 새로고침·공유해도 같은 자리로 온다. '동작 줄이기' 설정이면 바로 이동
-  const scrollToSection = (e: MouseEvent<HTMLAnchorElement>) => {
-    const id = e.currentTarget.hash.slice(1);
-    const target = id && document.getElementById(id);
-    if (!target) return; // 섹션이 없으면 브라우저 기본 이동
-    e.preventDefault();
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-    history.replaceState(null, "", `#${id}`);
-  };
-
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     goSearch(query);
@@ -198,26 +184,6 @@ export function HeroSection({ title, text, placeholder }: Props) {
               ))}
             </div>
           )}
-
-          {/* 버튼: 맞춤 견적(맨 아래 신청 폼으로) / 업종별로 보기(아래 업종 카드로). 모바일은 하단 고정 바가 있어 숨긴다 */}
-          <div className="animate-fade-slide-up mx-auto mt-8 hidden items-center justify-center gap-2.5 md:flex" style={{ animationDelay: "0.6s", animationDuration: "0.6s" }}>
-            <a
-              href="#contact"
-              onClick={scrollToSection}
-              className="inline-flex h-12 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-primary px-3 text-[15px] font-bold text-white shadow-[0_6px_20px_0_var(--brand-primary-20)] transition-colors hover:bg-brand-secondary sm:flex-none sm:px-7 sm:text-base"
-            >
-              <IconClipboardList className="size-5" />
-              맞춤 견적 받기
-            </a>
-            <a
-              href="#industries"
-              onClick={scrollToSection}
-              className="inline-flex h-12 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-neutral-300 bg-white px-3 text-[15px] font-bold text-neutral-800 transition-colors hover:border-primary hover:text-primary sm:flex-none sm:px-7 sm:text-base"
-            >
-              <IconCategory className="size-5" />
-              업종별로 보기
-            </a>
-          </div>
         </div>
       </div>
     </section>

@@ -63,7 +63,7 @@ export default function WhyWeflow({ general = false }: { general?: boolean }) {
     <section id="why-weflow" className="ww" aria-labelledby="ww-title">
       <div className="cb-wrap ww-wrap">
         <p className="cb-chapter">WHY WEFLOW 02</p>
-        <h2 id="ww-title" className="cb-h2 ww-h2">{general ? '우리 홈페이지,' : '병의원이라면,'} <br className="cb-mo" /><span className="cb-hl">WEFLOW</span>여야만 하는 이유</h2>
+        <h2 id="ww-title" className="cb-h2 ww-h2">{general ? '우리 웹블로그,' : '병의원이라면,'} <br className="cb-mo" /><span className="cb-hl">WEFLOW</span>여야만 하는 이유</h2>
         <p className="cb-body">
           홈페이지를 무엇으로 만들었는지가 <br className="cb-mo" />보안과 속도, 검색 노출을 가릅니다.
         </p>
