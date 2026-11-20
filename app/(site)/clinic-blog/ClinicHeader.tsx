@@ -41,7 +41,7 @@ const MENU: (MenuLink | MenuGroup)[] = [
       { href: '#with-homepage', label: '홈페이지와 함께' },
     ],
   },
-  { href: '#how', label: 'SEO·AEO·GEO' },
+  { href: '#how', label: 'SEO·AEO·GEO란?' },
   {
     label: '무료 진단·체험',
     children: [
