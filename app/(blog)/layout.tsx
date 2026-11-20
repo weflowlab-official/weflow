@@ -10,6 +10,7 @@ import { getSiteData } from "@/blog/lib/payload";
 import PageTracker from "@/components/PageTracker";
 import Clarity from "@/components/Clarity";
 import GoogleAds from "@/components/GoogleAds";
+import NaverAds from "@/components/NaverAds";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
 
@@ -90,6 +91,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {!isPreview && <Clarity />}
         {/* 구글 광고 공통 태그 — 사이트 레이아웃과 같은 것. 웹블로그 견적 폼의 전환 신호(trackGoogleLead)가 이게 있어야 나간다 */}
         {!isPreview && <GoogleAds />}
+        {/* 네이버 검색광고 전환추적 공통 스크립트 — 사이트 레이아웃과 같은 것. 웹블로그 견적 폼의 전환 신호(trackNaverLead)가 이게 있어야 나간다 */}
+        {!isPreview && <NaverAds />}
       </body>
     </html>
   );
