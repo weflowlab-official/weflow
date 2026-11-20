@@ -49,8 +49,9 @@ const paths: {
   // 업종 공통 '웹블로그란?'(/webblog)은 메뉴에서 내렸고 내용이 웹블로그(/blog) 메인으로 옮겨가 목록에서 뺐다 (페이지는 주소로만 접근 가능).
   // 웹블로그(/blog)와 글들은 따로 /blog/sitemap.xml 이 맡는다
   // 11-18: 제작 사례·시작 가격·무료 진단·관리자페이지 체험을 넣었다. 병원 홈페이지 무료 진단(/clinic-blog/check)도 검색에 올린다 (체험판 /clinic-blog/demo 는 noindex 라 뺀다)
-  { path: '/clinic-blog', updated: '2026-11-18', priority: 0.9, freq: 'monthly' },
-  { path: '/clinic-blog/check', updated: '2026-11-18', priority: 0.7, freq: 'monthly' },
+  // 11-20: 섹션 순서를 다시 짜고 제작 플랜·가격 안내, 'WEFLOW여야만 하는 이유' 카드, 간편 견적을 넣었다. 진단 페이지는 검색 제목·설명을 '무료 진단'으로 맞췄다
+  { path: '/clinic-blog', updated: '2026-11-20', priority: 0.9, freq: 'monthly' },
+  { path: '/clinic-blog/check', updated: '2026-11-20', priority: 0.7, freq: 'monthly' },
   // /booking 은 메뉴에서 내리면서 검색 노출도 뺐다 — 페이지는 주소로만 접근 가능
 ]
 
