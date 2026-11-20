@@ -1731,8 +1731,8 @@ const PAGE_KO: Record<string, string> = {
   "/check": "사이트 점검",
   "/clinic-blog": "병의원 웹블로그",
   // 병의원 랜딩에서 새 탭으로 여는 두 화면 · 개인정보처리방침 — 빠져 있으면 실제 있는 페이지인데 "없는 주소"로 묶인다
-  "/clinic-blog/check": "병의원 홈페이지 진단",
-  "/clinic-blog/demo": "관리자페이지 체험",
+  "/clinic-blog/check": "병의원 진단",
+  "/clinic-blog/demo": "관리자 체험",
   "/privacy": "개인정보처리방침",
   "/webblog": "웹블로그란?",
   "/diagnosis": "무료 상담",
