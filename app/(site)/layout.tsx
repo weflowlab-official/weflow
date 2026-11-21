@@ -12,6 +12,7 @@ import PageTracker from '@/components/PageTracker'
 import Clarity from '@/components/Clarity'
 import FontLoader from '@/components/FontLoader'
 import { makePlans } from '@/data/pricing'
+import { CLINIC_PLANS } from '@/app/(site)/clinic-blog/plans'
 import { OFFICIAL_CHANNELS } from '@/data/common'
 import { SEO_KEYWORDS } from '@/lib/keywords'
 
@@ -93,7 +94,8 @@ export const metadata: Metadata = {
  * 규격이 금액 범위나 ₩ 기호라, '상담 문의' 같은 문장을 넣으면 그냥 버려진다.
  * /pricing 카드 금액(data/pricing.ts)에서 직접 만들어, 값을 고치면 여기도 따라오게 한다.
  */
-const planPrices = makePlans
+// 메인 플랜(/pricing)과 병의원 플랜(/clinic-blog)을 합쳐 가장 낮은 값 ~ 가장 높은 값으로 낸다
+const planPrices = [...makePlans, ...CLINIC_PLANS]
   .map(p => Number(p.price.replace(/[^0-9]/g, '')))
   .filter(n => Number.isFinite(n) && n > 0)
 const PRICE_RANGE = planPrices.length
@@ -133,7 +135,9 @@ const ORGANIZATION_JSON_LD = {
     '홈페이지 리뉴얼',
     '관리자 페이지 제작',
     '홈페이지 유지보수',
-    '광고 운영 대행',
+    // 웹블로그(/blog) · 병의원 전용(/clinic-blog) — 2026-11-21 추가. '광고 운영 대행'은 더 하지 않아 뺐다
+    '웹블로그 제작',
+    '병의원 홈페이지 제작',
   ],
 }
 

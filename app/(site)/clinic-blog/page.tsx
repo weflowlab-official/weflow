@@ -19,6 +19,7 @@ import ClinicPlans from './ClinicPlans'
 import QuickQuote from './QuickQuote'
 import { AiSearchScene, PlatformDropScene, type Line } from './Scenes'
 import { CLINIC_RESULTS } from './SearchMock'
+import { CLINIC_PLANS, CLINIC_PLAN_NOTE } from './plans'
 
 /**
  * 병의원 전용 웹블로그 홍보 페이지 — /clinic-blog
@@ -45,6 +46,42 @@ export const metadata: Metadata = {
     url: '/clinic-blog',
     // openGraph 를 정의하면 루트의 것을 통째로 덮어쓴다 — 이미지도 여기서 다시 지정해야 한다
     images: [{ url: '/images/main/og-logo-2.jpg', width: 1200, height: 630 }],
+  },
+}
+
+/**
+ * 병의원 제작 플랜을 검색엔진·AI 답변엔진이 읽을 수 있는 형태로 내보낸다 (메인 /pricing 의 것과 같은 짜임).
+ * "병원 홈페이지 제작 비용" 같은 질문에 금액과 구성이 그대로 인용되도록, 화면 카드와 같은 값(plans.ts)에서 직접 만든다.
+ */
+const won = (price: string) => Number(price.replace(/[^0-9]/g, ''))
+const clinicPrices = CLINIC_PLANS.map(p => won(p.price)).filter(n => Number.isFinite(n) && n > 0)
+const CLINIC_PLANS_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: '병의원 웹블로그 · 홈페이지 제작',
+  serviceType: '병의원 홈페이지 제작',
+  description:
+    'WEFLOW의 병의원 전용 제작 플랜. PREMIER(웹블로그)·SIGNATURE(홈페이지)·ALL-IN-ONE(웹블로그 + 홈페이지) 세 가지이며, 네이버·구글·AI 검색에 읽히는 구조(SEO·AEO·GEO)로 설계한다.',
+  provider: { '@type': 'ProfessionalService', name: 'WEFLOW', alternateName: '위플로우', url: 'https://weflowlab.kr' },
+  areaServed: { '@type': 'Country', name: '대한민국' },
+  audience: { '@type': 'BusinessAudience', name: '병의원' },
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'KRW',
+    ...(clinicPrices.length > 0 ? { lowPrice: Math.min(...clinicPrices), highPrice: Math.max(...clinicPrices) } : {}),
+    offerCount: CLINIC_PLANS.length,
+    offers: CLINIC_PLANS.map(p => ({
+      '@type': 'Offer',
+      name: `${p.name} (${p.tagline})`,
+      category: '병의원 홈페이지 제작',
+      // 화면 카드의 구성 목록과 가격 아래 단서 줄을 그대로 옮긴다. 금액은 '~부터'인 시작 가격이다
+      description: [p.features.join(' · '), `제작 시작 가격 · ${CLINIC_PLAN_NOTE}`].join(' / '),
+      url: 'https://weflowlab.kr/clinic-blog#plans',
+      availability: 'https://schema.org/InStock',
+      ...(won(p.price) > 0
+        ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: won(p.price), priceCurrency: 'KRW', valueAddedTaxIncluded: false } }
+        : {}),
+    })),
   },
 }
 
@@ -87,6 +124,7 @@ const STEPS = [
 export default function ClinicBlogPage() {
   return (
     <div className="cb">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(CLINIC_PLANS_JSON_LD) }} />
       {/* 상단 띠 — 브랜드만 보이고 어디로도 이동하지 않는다 */}
       <ClinicHeader />
 
