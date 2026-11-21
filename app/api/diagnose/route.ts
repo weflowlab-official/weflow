@@ -617,14 +617,17 @@ export async function POST(req: Request) {
   const poweredBy = h('x-powered-by')
   const serverHeader = h('server')
   const generator = (html.match(/<meta[^>]+name=["']generator["'][^>]*content=["']([^"']*)["']/i) || [])[1] || ''
-  const isGnuboard = /(\/bbs\/board\.php|bo_table=|g5_url|g5_bbs_url|gnuboard|youngcart)/i.test(html)
+  // 그누보드 — 프로그램이 남기는 흔적(게시판 주소 · 자바스크립트 변수)만 본다. 'gnuboard' 라는 낱말만으로는 판단하지 않는다 —
+  // 그누보드를 다루는 글의 주소(/blog/.../gnuboard-...)가 페이지에 걸려 있기만 해도 그누보드 사이트로 잘못 읽혔다 (우리 /blog 가 그랬다)
+  const isGnuboard = /(\/bbs\/(board|login|register|write)\.php|[?&]bo_table=|\bg5_(url|bbs_url|is_member|bo_table)\b|\/gnuboard\d?\/|youngcart)/i.test(html)
   const isWordpress = /(wp-content\/|wp-includes\/)/i.test(html) || /wordpress/i.test(generator)
   const isXe = /(xpressengine|rhymix|\/modules\/board\/|xe\.min\.js)/i.test(html) || /(xpressengine|rhymix)/i.test(generator)
   const isCafe24 = /(cafe24|echosting)/i.test(html)
   const isImweb = /(imweb|vendor-cdn\.imweb)/i.test(html)
   const isPhp = /php/i.test(poweredBy) || /PHPSESSID/i.test(cookies) || /href=["'](?!https?:|\/\/)[^"']*\.php[?"']/i.test(html) // 같은 사이트 안의 .php 링크만 (밖으로 나가는 링크는 남의 사이트다)
   const isNext = /(\/_next\/static|__next_f|id=["']__next["'])/i.test(html)
-  const builder = isGnuboard ? '그누보드(PHP)' : isWordpress ? '워드프레스(PHP)' : isXe ? 'XE·라이믹스(PHP)' : isPhp ? 'PHP' : ''
+  // Next.js 흔적이 있으면 PHP 계열로 보지 않는다 — 글 본문·링크에 남의 프로그램 이름이나 .php 주소가 섞여 있어도 사이트 자체는 Next.js 다
+  const builder = isNext ? '' : isGnuboard ? '그누보드(PHP)' : isWordpress ? '워드프레스(PHP)' : isXe ? 'XE·라이믹스(PHP)' : isPhp ? 'PHP' : ''
   const phpVer = (poweredBy.match(/PHP\/(\d+)\.(\d+)/i) || []).slice(1).map(Number)
   // PHP 는 8.1 까지 공식 보안 지원이 끝났다 (8.1 은 2025-12-31 종료)
   const phpOld = phpVer.length === 2 && (phpVer[0] < 8 || (phpVer[0] === 8 && phpVer[1] <= 1))
