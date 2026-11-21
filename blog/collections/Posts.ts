@@ -1,6 +1,7 @@
 // 블로그 글 컬렉션. 초안(draft) → 발행(published) 워크플로우와 자동저장, 작성 중 미리보기를 지원한다.
 import type { CollectionConfig } from "payload";
 import { revalidate } from "../lib/revalidate";
+import { pingIndexNow } from "../lib/indexnow";
 import {
   lexicalEditor,
   HeadingFeature,
@@ -273,6 +274,8 @@ export const Posts: CollectionConfig = {
         const paths = ["/", "/posts", `/${cat.slug}`, `/${cat.slug}/${doc.slug}`];
         if (previousDoc?.slug && previousDoc.slug !== doc.slug) paths.push(`/${cat.slug}/${previousDoc.slug}`);
         await revalidate(paths);
+        // 바뀐 주소를 검색엔진(빙·네이버)에 바로 알린다 — 글 · 목록 · 카테고리. 발행을 내린 글도 알려야 검색에서 빨리 빠진다
+        await pingIndexNow(paths);
       },
     ],
     // 삭제 시에도 글 페이지(정적 생성)와 목록을 바로 갱신한다. 없으면 글 페이지가 다음 배포 때까지 남는다
@@ -286,6 +289,7 @@ export const Posts: CollectionConfig = {
           paths.push(`/${cat.slug}`, `/${cat.slug}/${doc.slug}`);
         }
         await revalidate(paths);
+        await pingIndexNow(paths); // 지워진 주소도 알린다
       },
     ],
   },
