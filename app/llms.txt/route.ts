@@ -3,9 +3,14 @@
  *
  * 사람이 보는 페이지는 장식이 많아 요점을 뽑기 어렵다. 여기에 "무엇을 파는 곳이고, 얼마이고,
  * 어느 페이지에 뭐가 있는지"를 평문으로 적어 두면 인용이 정확해진다.
- * 가격은 data/pricing.ts 에서 직접 만들어 쓴다 — 따로 적어두면 값을 고칠 때 여기만 남는다.
+ * 가격은 data/pricing.ts 와 병의원 플랜(clinic-blog/plans.ts)에서 직접 만들어 쓴다 — 따로 적어두면 값을 고칠 때 여기만 남는다.
+ *
+ * 웹블로그(/blog)의 글 목록도 싣는다 (2026-11-21) — 발행된 글이 카테고리별로 제목 · 요약과 함께 자동으로 들어간다.
+ * 글을 올리거나 고치면 최대 5분 안에 반영된다 (revalidate). 글을 못 읽어 오면(DB 오류 등) 글 목록만 빼고 나머지는 그대로 내보낸다.
  */
 import { makePlans, renewPlan, type MakePlan } from '@/data/pricing'
+import { CLINIC_PLANS, CLINIC_PLAN_NOTE } from '@/app/(site)/clinic-blog/plans'
+import { getAllPosts, getCategories } from '@/blog/lib/payload'
 
 const BASE = 'https://weflowlab.kr'
 
@@ -23,7 +28,31 @@ function planLine(p: MakePlan): string {
 // 리뉴얼은 /pricing 에서 3장 아래 한 장으로 따로 서 있다 — 여기서도 같이 싣는다
 const planLines = [...makePlans, renewPlan].map(planLine).join('\n')
 
-const BODY = `# WEFLOW (위플로우)
+// 병의원 플랜 — /clinic-blog 의 '제작 플랜 & 가격 안내' 카드 그대로 (이름 · 무엇을 만드는지 · 시작 가격 · 구성)
+const clinicPlanLines = CLINIC_PLANS.map(p => [`- ${p.name} (${p.tagline}): ${p.price}`, ...p.features].join(' · ')).join('\n')
+
+/** 웹블로그 글 목록 — 카테고리별로 묶어 '- [제목](주소): 요약' 한 줄씩. 글이 없거나 못 읽으면 빈 글자 */
+async function blogSection(): Promise<string> {
+  try {
+    const [posts, categories] = await Promise.all([getAllPosts(), getCategories()])
+    if (!posts.length) return ''
+    const oneLine = (t: string) => t.replace(/\s+/g, ' ').trim()
+    const groups = categories
+      .map(c => {
+        const items = posts.filter(p => p.category === c.slug)
+        if (!items.length) return ''
+        const lines = items.map(p => `- [${oneLine(p.title)}](${BASE}/blog/${p.category}/${encodeURIComponent(p.slug)})${p.summary ? `: ${oneLine(p.summary)}` : ''}`)
+        return `### ${c.name}\n\n${lines.join('\n')}`
+      })
+      .filter(Boolean)
+    if (!groups.length) return ''
+    return `\n## 웹블로그 글\n\nWEFLOW 웹블로그(${BASE}/blog)에 발행된 글. 업종별로 웹블로그·홈페이지가 왜 필요하고 어떻게 만드는지를 다룬다.\n\n${groups.join('\n\n')}\n`
+  } catch {
+    return ''
+  }
+}
+
+const body = (blog: string) => `# WEFLOW (위플로우)
 
 > 홈페이지·랜딩페이지 제작과 광고 연동·운영 관리를 함께 맡는 대한민국 홈페이지 제작 업체.
 > 만들어 주고 끝내지 않고, 문의가 들어오는 구조까지 설계하는 것을 내세운다.
@@ -41,6 +70,14 @@ ${planLines}
 관리자 페이지는 LANDING·BRAND 는 희망 시, SIGNATURE 는 맞춤형으로 제공한다. 모든 금액은 VAT 별도이다.
 홈페이지 리뉴얼은 기존 사이트 규모에 따라 금액을 협의한다.
 
+## 병의원 제작 플랜과 가격
+
+병의원 전용 안내 페이지(${BASE}/clinic-blog)의 플랜. 웹블로그만, 홈페이지만, 또는 둘을 함께 만든다.
+
+${clinicPlanLines}
+
+금액은 제작 시작 가격이며 ${CLINIC_PLAN_NOTE}.
+
 ## 주요 페이지
 
 - [홈](${BASE}/): 서비스 전체 요약과 제작 사례·가격 안내
@@ -53,8 +90,9 @@ ${planLines}
 - [사이트 자동 점검](${BASE}/check): 주소를 입력하면 로딩 속도·검색 노출·모바일 대응·문의 동선을 바로 분석
 - [맞춤 견적 받기](${BASE}/diagnosis): 홈페이지 맞춤 견적과 제작 방향 안내
 - [병의원 웹블로그](${BASE}/clinic-blog): 병원 주소에서 운영하는 병의원 전용 웹블로그 — 네이버·구글 검색과 AI 답변에 인용되도록 설계하고, 홈페이지와 함께 제작
+- [병원 홈페이지 무료 진단](${BASE}/clinic-blog/check): 병원 홈페이지 주소를 넣으면 제작 기술·보안, AI 검색 준비도, 검색 노출, 속도, 모바일, 문의 동선을 바로 진단
 - [웹블로그](${BASE}/blog): 업종별 웹블로그 소개와 글 — 차량·금융·병의원·인테리어 등 업종마다 웹블로그가 필요한 이유, SEO·AEO·GEO 구조 설계
-
+${blog}
 ## 참고
 
 - 사이트맵: ${BASE}/sitemap.xml
@@ -62,10 +100,11 @@ ${planLines}
 - 블로그: https://blog.naver.com/weflowlab
 `
 
-export const dynamic = 'force-static'
+// 최대 5분에 한 번 다시 만든다 — 새 글이 다음 배포를 기다리지 않고 들어온다 (웹블로그 사이트맵과 같은 방식)
+export const revalidate = 300
 
-export function GET() {
-  return new Response(BODY, {
+export async function GET() {
+  return new Response(body(await blogSection()), {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       'Cache-Control': 'public, max-age=3600',
