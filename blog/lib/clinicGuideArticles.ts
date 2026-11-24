@@ -13,6 +13,7 @@ const SRC = {
   google: { label: "Google 서치 콘솔", href: "https://search.google.com/search-console", description: "구글 검색에 사이트를 등록하고 색인 상태를 확인하는 곳." },
   bing: { label: "Bing 웹마스터 도구", href: "https://www.bing.com/webmasters", description: "빙(Bing) 검색에 사이트를 등록하고 사이트맵을 제출하는 곳. 구글 서치 콘솔 정보를 불러와 등록할 수 있다." },
   daum: { label: "Daum 웹마스터도구", href: "https://webmaster.daum.net", description: "다음 검색에 사이트를 인증하고 사이트맵·RSS·문서 수집을 요청하는 곳." },
+  geoPaper: { label: "GEO: Generative Engine Optimization (연구 논문)", href: "https://arxiv.org/abs/2311.09735", description: "생성형 AI 답변에 글이 인용되는 정도를 다룬 연구. GEO 라는 말이 여기서 쓰였다." },
   indexnow: { label: "IndexNow", href: "https://www.indexnow.org", description: "글을 올리거나 고쳤을 때 참여 검색엔진에 바로 알리는 공개 규약 안내." },
 };
 
@@ -34,6 +35,7 @@ const GNUBOARD_SLUG = "gnuboard-php-hospital-homepage-renewal";
 const WORDPRESS_SLUG = "wordpress-hospital-homepage-to-nextjs";
 const COMPANY_SLUG = "hospital-homepage-company-checklist";
 const BING_SLUG = "hospital-chatgpt-bing-daum-registration";
+const GEO_SLUG = "hospital-geo-what-is-it";
 // 병원 홈페이지 무료 진단 — 병의원 랜딩의 진단 페이지 (제작 방식·보안·AI 검색 준비도를 본다)
 const CHECK_URL = "/clinic-blog/check";
 
@@ -875,6 +877,81 @@ export const clinicGuideArticles: Article[] = [
       lx.h2("ANSWER | 등록은 시작이고, 인용되는 건 글입니다"),
       lx.p("등록은 <strong>읽힐 수 있게 하는 일</strong>입니다. AI가 실제로 가져가는 것은 환자의 질문에 답하는 글입니다. 병원 주소 아래에 글이 쌓이는 웹블로그를 두고, 글마다 핵심 요약과 자주 묻는 질문을 넣어 두는 것을 추천합니다."),
       lx.p(`AI가 어떤 글을 고르는지는 <a href="/blog/clinic/${AI_SLUG}">AI 검색에 우리 병원이 나오려면?</a>에, 네이버·구글에 등록되는 과정은 <a href="/blog/guide/${GUIDE_INDEX}">네이버 블로그만 붙잡고 있어도 괜찮을까? 요즘 떠오르는 또 다른 방법</a>에 정리했습니다.`),
+    ]),
+  },
+
+  // ─────────────────────────── GEO 가 뭐예요 ───────────────────────────
+  {
+    slug: GEO_SLUG,
+    categorySlug: "clinic",
+    authorSlug: "weflow",
+    title: "GEO가 뭐예요? AI 답변에 우리 병원이 나오게 하는 3가지",
+    summary:
+      "GEO는 챗GPT 같은 AI가 답을 만들 때 우리 병원 글을 참고하고 출처로 보여 주도록 준비하는 일입니다. 검색 목록에 오르는 SEO와 기본기는 같지만, 질문에 딱 맞는 글, AI가 읽기 쉬운 형식, 검색엔진 등록 세 가지를 더 챙겨야 합니다.",
+    keyPoints: [
+      "GEO는 AI 답변에 우리 글이 출처로 들어가도록 준비하는 일입니다.",
+      "환자의 질문 하나에 답하는 글을, 요약·FAQ·작성자와 함께 글자로 올립니다.",
+      "AI마다 글을 찾는 곳이 달라 네이버·구글·빙·다음에 모두 등록합니다.",
+    ],
+    tags: ["GEO", "GEO 최적화", "AI 검색 최적화", "병원 AI 검색", "챗GPT", "AEO", "SEO", "병원 홈페이지", "웹블로그"],
+    sources: [SRC.geoPaper, SRC.google, SRC.bing],
+    faq: [
+      {
+        question: "GEO를 하면 AI 답변에 반드시 나오나요?",
+        answer: "아닙니다. 어떤 글을 고를지는 AI가 정하고 그 기준은 계속 바뀝니다. GEO는 나오게 만드는 기술이 아니라 읽힐 수 있게 준비하는 일입니다.",
+      },
+      {
+        question: "SEO를 하고 있으면 GEO는 따로 안 해도 되나요?",
+        answer: "기본기는 같아서 SEO가 잘 된 글은 AI도 읽기 좋습니다. 다만 환자의 질문에 바로 답하는 글인지, 요약과 자주 묻는 질문이 있는지, 빙·다음에도 등록돼 있는지는 따로 확인해야 합니다.",
+      },
+      {
+        question: "네이버 블로그 글도 AI 답변에 나오나요?",
+        answer: "나올 수 있습니다. 다만 그 글은 플랫폼 주소에 있어 병원 홈페이지로 바로 이어지지 않습니다. 병원 주소 아래에 글을 쌓으면 출처를 누른 환자가 같은 사이트에서 진료 안내와 예약까지 확인합니다.",
+      },
+    ],
+    related: [AI_SLUG, BING_SLUG, IMAGE_SLUG],
+    views: 0,
+    content: lx.doc([
+      lx.p("요즘 원장님들께 이런 질문을 자주 받습니다. <strong>\"환자가 챗GPT에 물어보고 왔다는데, 우리 병원은 왜 안 나오죠?\"</strong>, <strong>\"GEO라는 걸 해야 한다는데, 그게 뭔가요?\"</strong> GEO가 무엇인지부터 차근차근 정리했습니다."),
+
+      lx.h2("WHAT | GEO가 뭔가요"),
+      lx.p("GEO는 Generative Engine Optimization의 줄임말로, 우리말로는 <strong>생성형 AI 최적화</strong>입니다. 챗GPT 같은 AI가 답을 만들 때 <strong>우리 병원 글을 참고하고 출처로 보여 주도록 준비하는 일</strong>을 뜻합니다."),
+      lx.p("예전에는 환자가 검색창에 \"○○동 안과\"를 치고, 나온 목록에서 하나를 골라 눌렀습니다. 요즘은 AI에게 <strong>\"백내장 수술하면 며칠 쉬어야 해?\"</strong>라고 묻습니다. AI는 여러 글을 읽고 답을 한 번에 정리한 뒤, 참고한 글을 출처로 붙입니다. 그 출처에 우리 병원 글이 들어가면 환자는 우리 병원을 알게 됩니다."),
+      lx.table([
+        ["구분", "SEO", "GEO"],
+        ["목표", "검색 결과 목록에서 잘 보이기", "AI 답변에 출처로 들어가기"],
+        ["읽는 쪽", "검색엔진과 사람", "AI"],
+        ["한마디로", "목록에 오르기", "답변에 인용되기"],
+      ]),
+      callout("tip", "따로 하는 일이 아닙니다", "검색엔진이 읽기 좋은 글은 AI도 읽기 좋습니다. 기본기는 같고, GEO에는 아래 세 가지가 더해집니다."),
+
+      lx.h2("HOW | AI 답변에 나오게 하는 3가지"),
+      lx.h3("1. 환자의 질문 하나에 답하는 글"),
+      lx.p("AI는 넓은 글보다 질문 하나에 정확히 답하는 글을 가져옵니다. \"백내장이란?\"보다 <strong>\"당뇨가 있으면 백내장 수술 전에 무엇을 확인해야 하나요?\"</strong> 같은 글이 출처로 잡히기 쉽습니다. 진료실에서 환자가 실제로 묻는 말을 제목으로 쓰는 것이 시작입니다."),
+      lx.h3("2. AI가 읽기 쉬운 형식"),
+      lx.p(`AI는 이미지 속 글자를 잘 읽지 못합니다. 진료 안내가 이미지 한 장이면 AI에게는 빈 페이지와 같습니다. 자세한 내용은 <a href="/blog/clinic/${IMAGE_SLUG}">병원 홈페이지가 통이미지면 검색에 안 나오는 이유</a>에 정리했습니다.`),
+      checklist("AI가 읽기 좋은 글", [
+        "글 맨 위에 핵심 요약이 있다",
+        "자주 묻는 질문과 답이 짝지어 있다",
+        "어느 의료진이 썼는지 적혀 있다",
+        "내용이 이미지가 아니라 글자로 들어가 있다",
+      ]),
+      lx.h3("3. AI가 글을 찾는 곳에 등록"),
+      lx.p(`AI마다 글을 찾는 검색엔진이 다릅니다. 구글의 AI는 구글에서, 챗GPT는 빙(Bing) 검색을 활용하는 것으로 알려져 있습니다. 네이버·구글·빙·다음 네 곳에 모두 등록해 두는 것이 좋습니다. 등록 방법은 <a href="/blog/clinic/${BING_SLUG}">ChatGPT는 왜 우리 병원을 모를까?</a>에 있습니다.`),
+
+      lx.h2("CHECK | 우리 병원은 얼마나 준비돼 있을까"),
+      checklist("바로 확인해 볼 것", [
+        "환자가 자주 묻는 질문이 제목인 글이 있다",
+        "진료 안내가 글자로 들어가 있다",
+        "글마다 요약과 자주 묻는 질문이 있다",
+        "네이버·구글·빙·다음에서 site:병원주소 로 검색하면 우리 페이지가 나온다",
+      ]),
+      lx.p(`직접 확인하기 번거롭다면 <a href="${CHECK_URL}">병원 홈페이지 무료 진단</a>에 주소를 넣어 보세요. AI 검색 준비도를 포함해 여섯 가지를 한 번에 볼 수 있습니다.`),
+      callout("caution", "약속할 수 없는 것", "GEO를 한다고 AI 답변에 반드시 나오는 것은 아닙니다. 어떤 글을 고를지는 AI가 정하고, 그 기준은 계속 바뀝니다. 병원 글은 의료광고 규정도 함께 확인하고 올려 주세요."),
+
+      lx.h2("ANSWER | 병원 주소 아래에 글을 쌓는 웹블로그를 추천합니다"),
+      lx.p("GEO의 세 가지는 글을 쓸 때마다 챙겨야 해서 손이 많이 갑니다. 웹블로그는 글을 올리면 <strong>핵심 요약, 자주 묻는 질문, 작성 의료진</strong>이 검색엔진과 AI가 읽는 형식으로 함께 올라가고, 글이 <strong>병원 홈페이지 주소 아래</strong>에 쌓입니다."),
+      lx.p(`AI가 어떤 글을 고르는지 더 알고 싶다면 <a href="/blog/clinic/${AI_SLUG}">AI 검색에 우리 병원이 나오려면?</a>을 함께 보세요.`),
     ]),
   },
 ];
