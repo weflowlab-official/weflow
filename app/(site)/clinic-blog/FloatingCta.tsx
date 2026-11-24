@@ -93,11 +93,12 @@ export default function FloatingCta() {
 
       {/* 모바일 — 화면 맨 아래 두 칸 바 */}
       <div className="fc-bar">
-        <a href="#contact-form" className="fc-bar-btn fc-bar-btn--form">
-          <ClipboardList size={19} strokeWidth={2.2} /> 맞춤 견적 받기
-        </a>
+        {/* 왼쪽 웹블로그 바로가기 · 오른쪽 맞춤 견적 받기 (2026-11-24 좌우를 바꿨다 — 엄지가 닿기 쉬운 오른쪽에 견적 버튼) */}
         <a href="/blog" target="_blank" rel="noopener noreferrer" className="fc-bar-btn fc-bar-btn--blog">
           웹블로그 바로가기 <ExternalLink size={18} strokeWidth={2.2} />
+        </a>
+        <a href="#contact-form" className="fc-bar-btn fc-bar-btn--form">
+          <ClipboardList size={19} strokeWidth={2.2} /> 맞춤 견적 받기
         </a>
       </div>
 
