@@ -10,11 +10,20 @@ const HOST = "weflowlab.kr";
 const KEY = "53c299883cd98967346562d2e3d7a079";
 const ENDPOINTS = ["https://api.indexnow.org/indexnow", "https://searchadvisor.naver.com/indexnow"];
 
+// 같은 주소는 10분 안에 한 번만 보낸다 — 글 여러 편을 연달아 올리면 목록 주소(/blog · /blog/posts · 카테고리)가 글마다 다시 나가기 때문.
+// 서버가 켜져 있는 동안만 기억하는 표라(서버가 새로 뜨면 비워진다) 완벽하지는 않지만, 연달아 올리는 경우는 대부분 걸러진다
+const SENT = new Map<string, number>();
+const THROTTLE_MS = 10 * 60 * 1000;
+
 /** paths: 블로그 기준 경로("/", "/posts", "/카테고리/글") — revalidate 에 넘기는 것과 같은 목록을 그대로 준다 */
 export async function pingIndexNow(paths: string[]): Promise<void> {
   if (process.env.VERCEL_ENV !== "production") return;
-  const urlList = [...new Set(paths)].map((p) => `https://${HOST}/blog${p === "/" ? "" : encodeURI(p)}`);
+  const now = Date.now();
+  const urlList = [...new Set(paths)]
+    .map((p) => `https://${HOST}/blog${p === "/" ? "" : encodeURI(p)}`)
+    .filter((u) => now - (SENT.get(u) ?? 0) > THROTTLE_MS);
   if (!urlList.length) return;
+  for (const u of urlList) SENT.set(u, now);
   const body = JSON.stringify({ host: HOST, key: KEY, keyLocation: `https://${HOST}/${KEY}.txt`, urlList });
   await Promise.allSettled(
     ENDPOINTS.map((url) =>

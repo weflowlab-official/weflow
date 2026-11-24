@@ -274,8 +274,16 @@ export const Posts: CollectionConfig = {
         const paths = ["/", "/posts", `/${cat.slug}`, `/${cat.slug}/${doc.slug}`];
         if (previousDoc?.slug && previousDoc.slug !== doc.slug) paths.push(`/${cat.slug}/${previousDoc.slug}`);
         await revalidate(paths);
-        // 바뀐 주소를 검색엔진(빙·네이버)에 바로 알린다 — 글 · 목록 · 카테고리. 발행을 내린 글도 알려야 검색에서 빨리 빠진다
-        await pingIndexNow(paths);
+        // 바뀐 주소를 검색엔진(빙·네이버)에 바로 알린다 — 글 · 목록 · 카테고리. 발행을 내린 글도 알려야 검색에서 빨리 빠진다.
+        // 검색 결과에 보이는 것이 바뀐 저장에만 보낸다 — 발행 상태 · 주소 · 카테고리 · 제목 · 요약 · 본문 · 핵심 포인트 · FAQ.
+        // 썸네일·슬라이드·관련 글만 붙이는 저장에는 보내지 않는다: 명령어로 글과 썸네일을 한꺼번에 올리면 같은 주소로 신호가 몇 분 사이 여러 번 나가,
+        // 검색엔진이 일부를 받지 않았다 (2026-11-24, 글 두 편에 34번 나감)
+        const prevCatId = previousDoc?.category && typeof previousDoc.category === "object" ? previousDoc.category.id : previousDoc?.category;
+        const same = (a: unknown, b: unknown) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+        const searchFields = ["title", "slug", "summary", "content", "keyPoints", "faq"] as const;
+        const changed =
+          doc._status !== previousDoc?._status || catId !== prevCatId || searchFields.some((k) => !same(doc[k], previousDoc?.[k]));
+        if (changed) await pingIndexNow(paths);
       },
     ],
     // 삭제 시에도 글 페이지(정적 생성)와 목록을 바로 갱신한다. 없으면 글 페이지가 다음 배포 때까지 남는다
