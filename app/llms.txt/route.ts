@@ -6,7 +6,7 @@
  * 가격은 data/pricing.ts 와 병의원 플랜(clinic-blog/plans.ts)에서 직접 만들어 쓴다 — 따로 적어두면 값을 고칠 때 여기만 남는다.
  *
  * 웹블로그(/blog)의 글 목록도 싣는다 (2026-11-21) — 발행된 글이 카테고리별로 제목 · 요약과 함께 자동으로 들어간다.
- * 글을 올리거나 고치면 최대 5분 안에 반영된다 (revalidate). 글을 못 읽어 오면(DB 오류 등) 글 목록만 빼고 나머지는 그대로 내보낸다.
+ * 글을 올리거나 고치면 저장 훅(blog/lib/revalidate.ts)이 이 파일을 바로 다시 만든다. revalidate(5분)는 그 훅이 못 돈 경우의 대비다. 글을 못 읽어 오면(DB 오류 등) 글 목록만 빼고 나머지는 그대로 내보낸다.
  */
 import { makePlans, renewPlan, type MakePlan } from '@/data/pricing'
 import { CLINIC_PLANS, CLINIC_PLAN_NOTE } from '@/app/(site)/clinic-blog/plans'
@@ -107,7 +107,8 @@ export async function GET() {
   return new Response(body(await blogSection()), {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600',
+      // 브라우저·CDN 이 따로 오래 붙들지 않게 한다 — 예전 값(1시간)이면 새 글이 들어와도 그동안 옛 내용이 나갔다. 다시 만드는 주기는 위 revalidate 와 글 저장 훅(blog/lib/revalidate.ts)이 맡는다
+      'Cache-Control': 'public, max-age=0, must-revalidate',
     },
   })
 }
