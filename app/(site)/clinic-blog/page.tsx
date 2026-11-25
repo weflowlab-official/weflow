@@ -151,7 +151,7 @@ export default function ClinicBlogPage() {
               견적 문의는 헤더 버튼 · 떠 있는 버튼 · 휴대폰 하단 바가 맡는다 */}
           <div className="cb-hero-btns">
             <a href="/clinic-blog/check" target="_blank" rel="noopener noreferrer" className="cb-hero-btn cb-hero-btn--fill">
-              <ScanSearch size={18} /> 사이트 5초 진단
+              <ScanSearch size={18} /> 내 사이트 5초 진단
             </a>
             <a href="/clinic-blog/demo" target="_blank" rel="noopener noreferrer" className="cb-hero-btn">
               <PenLine size={18} /> 관리자페이지 체험
