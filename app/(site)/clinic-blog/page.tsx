@@ -38,7 +38,10 @@ import { CLINIC_PLANS, CLINIC_PLAN_NOTE } from './plans'
 export const metadata: Metadata = {
   title: '병의원 웹블로그 · 홈페이지 제작 · WEFLOW',
   description:
-    '진료과목별로 정리되고 예약으로 이어지는 병원 전용 웹블로그와 홈페이지를 만들어 드립니다. 웹블로그만, 홈페이지만, 또는 함께 — 네이버·구글·AI 검색 노출까지 설계합니다.',
+    '예약으로 이어지는 병원 전용 웹블로그와 홈페이지를 만들어 드립니다. SEO·AEO·GEO 구조로 네이버·구글·AI 검색 노출까지 설계하고, 우리 병원 홈페이지 무료 진단도 받아 볼 수 있습니다.',
+  // 이 페이지에 맞는 키워드 — 안 적으면 사이트 공통 키워드(lib/keywords.ts, 일반 홈페이지 제작 위주)가 그대로 실린다.
+  // keywords 는 구글·네이버 순위에 거의 쓰이지 않는다. 페이지가 무엇을 다루는지 적어 두는 정도의 의미다
+  keywords: '병원 홈페이지 제작, 병의원 홈페이지 제작, 병원 홈페이지 리뉴얼, 병원 웹블로그, 병원 블로그 제작, 병원 홈페이지 무료 진단, 사이트 진단, SEO, AEO, GEO, AI 검색 최적화, 네이버 검색 노출, 위플로우, WEFLOW',
   alternates: { canonical: '/clinic-blog' },
   openGraph: {
     title: '병의원 웹블로그 · 홈페이지 제작 · WEFLOW',
