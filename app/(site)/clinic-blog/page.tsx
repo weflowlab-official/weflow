@@ -151,10 +151,10 @@ export default function ClinicBlogPage() {
               견적 문의는 헤더 버튼 · 떠 있는 버튼 · 휴대폰 하단 바가 맡는다 */}
           <div className="cb-hero-btns">
             <a href="/clinic-blog/check" target="_blank" rel="noopener noreferrer" className="cb-hero-btn cb-hero-btn--fill">
-              <ScanSearch size={18} /> 내 사이트 진단받기
+              <ScanSearch size={18} /> 내 사이트 5초 진단
             </a>
             <a href="/clinic-blog/demo" target="_blank" rel="noopener noreferrer" className="cb-hero-btn">
-              <PenLine size={18} /> 관리자페이지 체험하기
+              <PenLine size={18} /> 관리자페이지 체험
             </a>
           </div>
         </div>
@@ -340,8 +340,9 @@ export default function ClinicBlogPage() {
         .cb-hero-btn svg { flex: none; }
         /* 휴대폰(기본 규칙보다 뒤에 둬야 덮어쓴다) — 위아래로 쌓지 않고 나란히. 화면 폭을 꽉 채우는 두 칸으로 두고 글자·여백을 줄여 한 줄에 들어가게 한다 */
         @media (max-width: 480px) {
-          .cb-hero-btns { display: grid; width: 100%; max-width: 340px; margin: 8px auto 0; gap: 8px; }
-          .cb-hero-btn { padding: 12px 8px; font-size: .9rem; white-space: nowrap; }
+          /* 두 버튼 폭을 똑같이 — 1fr 만 쓰면 글자가 긴 쪽(관리자페이지 체험하기)이 더 넓어진다. minmax(0, 1fr) 로 반씩 나누고, 긴 쪽이 들어가게 묶음 폭을 조금 넓힌다 */
+          .cb-hero-btns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); width: 100%; max-width: 356px; margin: 8px auto 0; gap: 8px; }
+          .cb-hero-btn { padding: 12px 4px; font-size: min(.9rem, 3.7vw); white-space: nowrap; } /* 좁은 휴대폰에서는 글씨를 화면 폭에 맞춰 줄여 긴 쪽 글자가 버튼 밖으로 나가지 않게 */
         }
         /* 스크롤 유도 — 'SCROLL' 글자 아래로 선이 흘러내린다 */
         /* 제목이 세 줄이 되며 묶음 아래 끝이 약 40px 내려와, 붙어 보이지 않게 그만큼 더 아래에 둔다 */

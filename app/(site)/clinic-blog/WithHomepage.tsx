@@ -89,7 +89,14 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
         <p className="ch-eyebrow">WITH HOMEPAGE</p>
         <h2 className={`ch-title${copy.titleGold ? ' is-gold' : ''}`}>
           {copy.title[0]}<br />
-          <span>{copy.title[1]}</span>
+          {copy.titleMobile ? (
+            <>
+              <span className="ch-pc-only">{copy.title[1]}</span>
+              <span className="ch-mo-only">{copy.titleMobile}</span>
+            </>
+          ) : (
+            <span>{copy.title[1]}</span>
+          )}
         </h2>
         <p className="ch-body">
           {copy.body}
@@ -114,6 +121,10 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
         .ch-inner { max-width: 1120px; margin: 0 auto; }
         .ch-mo { display: inline; }
         @media (min-width: 768px) { .ch-mo { display: none; } }
+        /* 제목 둘째 줄 — 휴대폰용 짧은 문구(copy.titleMobile)와 넓은 화면용 문구를 바꿔 보여 준다. 휴대폰 것은 한 줄 고정, 아주 좁은 화면에서는 글씨가 화면 폭에 맞춰 줄어든다 */
+        .ch-title .ch-mo-only { white-space: nowrap; font-size: min(1em, 7vw); }
+        @media (min-width: 768px) { .ch-title .ch-mo-only { display: none; } }
+        @media (max-width: 767px) { .ch-title .ch-pc-only { display: none; } }
         .ch-eyebrow { margin: 0 0 16px; font-weight: 700; font-size: .85rem; letter-spacing: .22em; color: #1f63d6; }
         .ch-title { margin: 0; font-size: clamp(1.7rem, 3.8vw, 2.5rem); line-height: 1.32; font-weight: 800; letter-spacing: -0.035em; color: #111418; }
         .ch-title span { color: #1f63d6; }
@@ -266,7 +277,7 @@ export const CH_FLOW_CSS = `
           .ch-node svg { width: 20px; height: 20px; }
           .ch-steps li { gap: 3px; padding: 0 2px; }
           .ch-steps strong { font-size: .86rem; }
-          .ch-steps small { font-size: .7rem; line-height: 1.4; word-break: keep-all; }
+          .ch-steps small { font-size: .7rem; line-height: 1.4; word-break: keep-all; white-space: pre-line; } /* pre-line — 문구에 넣어 둔 줄바꿈(통증 원인과 / 관리법)이 휴대폰에서만 살아난다 */
           .ch-steps li:not(:last-child)::after { top: 23px; left: calc(50% + 28px); width: calc(100% - 56px); }
           .ch-site { top: -30px; bottom: -12px; border-radius: 18px; }
           .ch-site span { top: -11px; font-size: .66rem; padding: 3px 9px; }

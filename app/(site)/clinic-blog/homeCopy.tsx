@@ -68,6 +68,7 @@ export const HV_GENERAL: HomeVsBlogCopy = {
 
 export type WithHomepageCopy = {
   title: [string, string] // 두 줄 제목 (둘째 줄은 파란색)
+  titleMobile?: string // 휴대폰에서 쓰는 둘째 줄 — 한 줄에 들어가게 줄인 문구 (없으면 title[1] 그대로)
   titleGold?: boolean // 제목 둘째 줄과, 흐름 그림 가운데 두 칸(웹블로그 · 홈페이지)의 이름을 금색 광택으로 (병의원 랜딩)
   body: ReactNode
   steps: { Icon: LucideIcon; label: string; sub: string }[]
@@ -80,11 +81,12 @@ export type WithHomepageCopy = {
 export const WH_CLINIC: WithHomepageCopy = {
   // 가격 카드 ALL-IN-ONE 첫 줄을 누르면 이 섹션으로 온다 — 같은 말, 같은 금색으로 받는다
   title: ['홈페이지와 웹블로그를,', '하나의 사이트 안에서, 한 번에 /blog'],
+  titleMobile: '한 사이트에서 한 번에 /blog',
   titleGold: true,
   body: <>웹블로그와 홈페이지를 함께 두면, <br className="ch-mo" />검색에서 예약까지 한 사이트 안에서 이어집니다.</>,
   steps: [
     { Icon: Search, label: '검색', sub: '“무릎 통증 원인”' },
-    { Icon: FileText, label: '웹블로그', sub: '통증 원인과 관리법' },
+    { Icon: FileText, label: '웹블로그', sub: '통증 원인과\n관리법' }, // 줄바꿈은 휴대폰에서만 살아난다 (WithHomepage 의 .ch-steps small)
     { Icon: Hospital, label: '홈페이지', sub: '의료진 · 장비 · 오시는 길' },
     { Icon: CalendarCheck, label: '예약', sub: '진료 예약' },
   ],

@@ -45,8 +45,8 @@ const MENU: (MenuLink | MenuGroup)[] = [
   {
     label: '무료 진단·체험',
     children: [
-      { href: '/clinic-blog/check', label: '내 사이트 진단받기', ext: true },
-      { href: '/clinic-blog/demo', label: '관리자페이지 체험하기', ext: true },
+      { href: '/clinic-blog/check', label: '내 사이트 5초 진단', ext: true },
+      { href: '/clinic-blog/demo', label: '관리자페이지 체험', ext: true },
     ],
   },
 ]
