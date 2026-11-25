@@ -234,7 +234,7 @@ export default function CheckClient() {
                   maxLength={300}
                 />
               </label>
-              <button type="submit" className="ckc-go">무료 AI 진단하기 <ArrowRight size={18} strokeWidth={2.5} /></button>
+              <button type="submit" className="ckc-go">사이트 무료 진단하기 <ArrowRight size={18} strokeWidth={2.5} /></button>
             </form>
           ) : (
             <div className="ckc-loading" role="status">

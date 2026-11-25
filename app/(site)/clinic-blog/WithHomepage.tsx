@@ -3,7 +3,7 @@ import InView from './InView'
 import { WH_CLINIC, type WithHomepageCopy } from './homeCopy'
 
 /**
- * '홈페이지와 함께하면' — WHY WEB BLOG 뒤, PROCESS 앞.
+ * '홈페이지와 함께하면' — 병의원 랜딩에서는 WHY NOW 02 뒤, '홈페이지 vs 웹블로그' 앞 (2026-11-25 에 WHY WEB BLOG 위로 올렸다).
  *
  * 위: 환자가 지나가는 길(검색 → 블로그 글 → 홈페이지 → 예약)을 네 칸으로 보여 준다.
  *     화면에 들어오면 칸이 차례로 켜지고 사이 선이 이어진다. 가운데 두 칸(블로그 글·홈페이지)은
@@ -87,7 +87,7 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
     <section id="with-homepage" className="ch">
       <div className="ch-inner">
         <p className="ch-eyebrow">WITH HOMEPAGE</p>
-        <h2 className="ch-title">
+        <h2 className={`ch-title${copy.titleGold ? ' is-gold' : ''}`}>
           {copy.title[0]}<br />
           <span>{copy.title[1]}</span>
         </h2>
@@ -110,13 +110,16 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
       </div>
 
       <style>{CH_FLOW_CSS + `
-        .ch { background: #fff; padding: clamp(5rem, 10vw, 8.75rem) 20px; text-align: center; border-top: 1px solid #e9ebef; } /* 앞 섹션(홈페이지 vs 웹블로그)도 흰 바탕이라 선으로 나눈다 */
+        .ch { background: #fff; padding: clamp(5rem, 10vw, 8.75rem) 20px; text-align: center; border-top: 1px solid #e9ebef; } /* 앞 섹션도 흰 바탕이라 선으로 나눈다 */
         .ch-inner { max-width: 1120px; margin: 0 auto; }
         .ch-mo { display: inline; }
         @media (min-width: 768px) { .ch-mo { display: none; } }
         .ch-eyebrow { margin: 0 0 16px; font-weight: 700; font-size: .85rem; letter-spacing: .22em; color: #1f63d6; }
         .ch-title { margin: 0; font-size: clamp(1.7rem, 3.8vw, 2.5rem); line-height: 1.32; font-weight: 800; letter-spacing: -0.035em; color: #111418; }
         .ch-title span { color: #1f63d6; }
+        /* 둘째 줄 금색 광택 (copy.titleGold) — '왜 WEFLOW?' 의 금색 글씨와 같은 색·움직임 */
+        .ch-title.is-gold span { background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #e2c68c 50%, #b8914e 62%, #a8823e 100%); background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: chGoldLabel 2.8s linear infinite; }
+        @media (prefers-reduced-motion: reduce) { .ch-title.is-gold span { animation: none; } }
         .ch-body { margin: 20px auto 0; max-width: 640px; color: #4b5360; font-size: 1.15rem; line-height: 1.8; }
 
         /* 좋은 점 넷 */
@@ -209,7 +212,7 @@ export default function WithHomepage({ copy = WH_CLINIC }: { copy?: WithHomepage
 export function HomepageFlow({ copy }: { copy: WithHomepageCopy }) {
   // 칸이 차례로 켜지고, 가운데 두 칸은 '한 사이트 안' 띠로 묶인다
   return (
-    <InView className="ch-flow">
+    <InView className={`ch-flow${copy.titleGold ? ' is-gold' : ''}`}>
       <div className="ch-site" aria-hidden="true"><span>{copy.domain} 한 사이트 안</span></div>
       <ol className="ch-steps">
         {copy.steps.map(({ Icon, ...s }, i) => (
@@ -235,14 +238,24 @@ export const CH_FLOW_CSS = `
         .ch-flow.is-in .ch-node { background: #1f63d6; color: #fff; box-shadow: 0 12px 28px rgba(31,99,214,.25); }
         .ch-steps strong { font-size: 1.1rem; font-weight: 800; color: #111418; }
         .ch-steps small { font-size: .9rem; color: #6b7380; }
+        /* 가운데 두 칸(웹블로그 · 홈페이지)의 이름을 금색 광택으로 (copy.titleGold) — '한 사이트 안' 테두리 · 이름표와 한 묶음으로 보이게 */
+        .ch-flow.is-gold .ch-steps li:nth-child(2) strong, .ch-flow.is-gold .ch-steps li:nth-child(3) strong { background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #e2c68c 50%, #b8914e 62%, #a8823e 100%); background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: chGoldLabel 2.8s linear infinite; }
+        @media (prefers-reduced-motion: reduce) { .ch-flow.is-gold .ch-steps strong { animation: none; } }
+        /* 그 두 칸은 아이콘 그림도 금색 — 바탕은 파란색 그대로 두고 안의 그림만. 파란 바탕 위라 밝은 금색을 쓴다 */
+        .ch-flow.is-gold.is-in .ch-steps li:nth-child(2) .ch-node, .ch-flow.is-gold.is-in .ch-steps li:nth-child(3) .ch-node { color: #ecd49c; }
         /* 칸 사이 선 — 앞 칸이 켜진 뒤 다음 칸 쪽으로 그어진다 */
         .ch-steps li:not(:last-child)::after { content: ''; position: absolute; background: #1f63d6; transform-origin: left top; transition: transform .45s ease; transition-delay: calc(var(--i) * .45s + .2s); }
         .ch-steps li:not(:last-child)::after { top: 32px; left: calc(50% + 40px); width: calc(100% - 80px); height: 2px; transform: scaleX(0); }
         .ch-flow.is-in .ch-steps li:not(:last-child)::after { transform: scaleX(1); }
         /* '한 사이트 안' 띠 — 가운데 두 칸(블로그 글·홈페이지)을 감싼다 */
-        .ch-site { position: absolute; border: 1.5px dashed #9fc3f6; border-radius: 26px; background: #f5f9ff; opacity: 0; transition: opacity .5s ease 1.6s; }
+        /* 테두리는 금색 광택 — '왜 WEFLOW?' 의 금색 글씨와 같은 색이 테두리를 따라 흐른다. 테두리에 직접 그라데이션을 줄 수 없어, 안쪽 바탕(padding-box)과 테두리 바탕(border-box)을 겹쳐 그린다 */
+        .ch-site { position: absolute; border: 2px solid transparent; border-radius: 26px; background: linear-gradient(#f5f9ff, #f5f9ff) padding-box, linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #e2c68c 50%, #b8914e 62%, #a8823e 100%) border-box; background-size: auto, 250% auto; animation: chGoldSheen 2.8s linear infinite; opacity: 0; transition: opacity .5s ease 1.6s; }
+        @keyframes chGoldSheen { from { background-position: 0 0, 250% center; } to { background-position: 0 0, 0% center; } }
+        @media (prefers-reduced-motion: reduce) { .ch-site { animation: none; } }
         .ch-flow.is-in .ch-site { opacity: 1; }
-        .ch-site span { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 4px 12px; border-radius: 999px; background: #1f63d6; color: #fff; font-size: .78rem; font-weight: 700; }
+        .ch-site span { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 4px 12px; border-radius: 999px; background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #d9b876 50%, #b8914e 62%, #a8823e 100%); background-size: 250% auto; animation: chGoldLabel 2.8s linear infinite; color: #fff; font-size: .78rem; font-weight: 700; } /* 이름표도 테두리와 같은 금색 광택 — 흰 글씨가 읽히게 가장 밝은 자리만 조금 덜 밝게 */
+        @keyframes chGoldLabel { from { background-position: 250% center; } to { background-position: 0% center; } }
+        @media (prefers-reduced-motion: reduce) { .ch-site span { animation: none; } }
         .ch-site { top: -34px; bottom: -18px; left: 25%; right: 25%; } /* 윗변을 넉넉히 올려 이름표와 아이콘 사이를 띄운다 */
         .ch-site span { top: -13px; }
         /* 휴대폰 — 세로로 쌓지 않고 PC 처럼 가로 네 칸을 작게. 길게 늘어지지 않고 '한 사이트 안' 띠도 그대로 보인다 */

@@ -8,7 +8,7 @@ export const CLINIC_PLAN_NOTE = '월 운영관리 · VAT 별도'
 
 // plan: 상담 폼(InquiryForm 의 PLANS)의 문의 유형 값 — 글자가 같아야 미리 골라진다.
 // price: 제작 시작 가격. 금액을 바꾸면 상담 폼의 예산 구간(InquiryForm 의 BUDGETS)도 같이 본다.
-// features: PREMIER 4 · SIGNATURE 5 · ALL-IN-ONE 6 — 위로 갈수록 한 줄씩 늘어난다.
+// features: PREMIER 4 · SIGNATURE 5 · ALL-IN-ONE 7 — ALL-IN-ONE 첫 줄은 둘을 같이 만들 때만 생기는 강점(한 서버 · 한 도메인)이다.
 export const CLINIC_PLANS = [
   {
     name: 'PREMIER',
@@ -47,6 +47,7 @@ export const CLINIC_PLANS = [
     best: true,
     price: '5,000,000원~',
     features: [
+      '하나의 사이트 안에 두 가지를 한 번에 / blog',
       '병원 맞춤 홈페이지 + 진료과목별 웹블로그',
       '기획부터 함께 설계해 디자인 통일',
       '관리자 화면 하나로 모두 관리',
@@ -56,3 +57,8 @@ export const CLINIC_PLANS = [
     ],
   },
 ]
+
+// 구성 항목 가운데 누르면 그 내용을 풀어 둔 섹션으로 내려가는 줄 — 가격 카드(ClinicPlans.tsx)만 쓴다 (/llms.txt 는 글자만 쓴다)
+export const CLINIC_FEATURE_LINKS: Record<string, string> = {
+  '하나의 사이트 안에 두 가지를 한 번에 / blog': '#with-homepage',
+}

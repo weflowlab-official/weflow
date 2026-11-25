@@ -37,16 +37,16 @@ const MENU: (MenuLink | MenuGroup)[] = [
   {
     label: '웹블로그 소개',
     children: [
-      { href: '#webblog', label: '웹블로그란?' },
       { href: '#with-homepage', label: '홈페이지와 함께' },
+      { href: '#webblog', label: '웹블로그란?' },
     ],
   },
   { href: '#how', label: 'SEO·AEO·GEO란?' },
   {
     label: '무료 진단·체험',
     children: [
-      { href: '/clinic-blog/check', label: '내 사이트 AI 진단', ext: true },
-      { href: '/clinic-blog/demo', label: '관리자페이지 체험', ext: true },
+      { href: '/clinic-blog/check', label: '내 사이트 진단받기', ext: true },
+      { href: '/clinic-blog/demo', label: '관리자페이지 체험하기', ext: true },
     ],
   },
 ]
@@ -227,7 +227,9 @@ export default function ClinicHeader({ base = '' }: { base?: string }) {
         .cb-brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.35rem; color: var(--cb-text); text-decoration: none; cursor: pointer; letter-spacing: -0.02em; }
         .cb-brand-sep { width: 1px; height: 14px; background: #d5d9df; margin: 0 4px; }
         /* 로고 옆 한 줄 — 무엇을 만드는 곳인지. 흐린 회색은 눈에 안 들어와 이 페이지 파랑으로 또렷하게 */
-        .cb-brand-sub { font-weight: 700; font-size: 1.02rem; color: var(--cb-accent); letter-spacing: -0.01em; white-space: nowrap; }
+        .cb-brand-sub { font-weight: 700; font-size: 1.02rem; letter-spacing: -0.01em; white-space: nowrap; background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #e2c68c 50%, #b8914e 62%, #a8823e 100%); background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: cbBrandGold 2.8s linear infinite; } /* 금색 광택 — 히어로 칩 · '왜 WEFLOW?' 와 같은 금색 */
+        @keyframes cbBrandGold { from { background-position: 250% center; } to { background-position: 0% center; } }
+        @media (prefers-reduced-motion: reduce) { .cb-brand-sub { animation: none; } }
         /* ' · 홈페이지' 는 자리가 넉넉할 때만 — 가운데 메뉴와 함께 보이는 폭(1200~1499px)에서는 메뉴에 자리를 내준다 */
         .cb-top-btn { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 20px; border-radius: 999px; background: var(--cb-text); color: #fff; font-weight: 700; font-size: 1.02rem; text-decoration: none; transition: background .15s; }
         .cb-top-btn:hover { background: var(--cb-accent); }

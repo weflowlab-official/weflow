@@ -22,14 +22,16 @@ const optimize = (customer: string) => [
   { tag: 'GEO', name: 'AI 답변 인용', desc: 'AI가 답할 때 인용하게', auto: ['AI가 읽기 좋은 글자 중심 구조', '작성자·발행일·출처 정보', 'AI 검색 로봇이 읽을 수 있게 공개'] },
 ]
 
-export default function HowItWorks({ who = '우리 병원', customer = '환자가' }: { who?: string; customer?: string }) {
+/** gold: 제목의 '네이버·구글' · 'AI까지 읽어 가는 구조' 를 금색 광택으로 (병의원 랜딩) */
+export default function HowItWorks({ who = '우리 병원', customer = '환자가', gold = false }: { who?: string; customer?: string; gold?: boolean }) {
+  const G = gold ? 'chw-gold' : undefined
   const STEPS = steps(who)
   const OPTIMIZE = optimize(customer)
   return (
     <section id="how" className="chw" aria-labelledby="chw-title">
       <div className="cb-wrap chw-wrap">
         <p className="cb-chapter">HOW IT WORKS</p>
-        <h2 id="chw-title" className="cb-h2">글만 쓰면, 네이버·구글에 자리 잡고{'\n'}AI까지 읽어 가는 구조</h2>
+        <h2 id="chw-title" className="cb-h2">글만 쓰면, <span className={G}>네이버·구글</span>에 자리 잡고{'\n'}<span className={G}>AI까지 읽어 가는 구조</span></h2>
         <p className="cb-body">
           웹블로그는 Next.js로 만듭니다.<br className="cb-mo" /> 글을 올리는 순간,<br className="cb-pc" />
           검색엔진과 AI가 읽는 정보가 함께 만들어져 <span className="cb-hl">SEO·AEO·GEO에 맞춰집니다.</span>
@@ -82,6 +84,10 @@ export default function HowItWorks({ who = '우리 병원', customer = '환자�
       </div>
 
       <style>{`
+        /* 제목의 금색 광택 — '왜 WEFLOW?' 의 금색 글씨와 같은 색·움직임 */
+        .chw-gold { background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #e2c68c 50%, #b8914e 62%, #a8823e 100%); background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: chwGoldSheen 2.8s linear infinite; }
+        @keyframes chwGoldSheen { from { background-position: 250% center; } to { background-position: 0% center; } }
+        @media (prefers-reduced-motion: reduce) { .chw-gold { animation: none; } }
         /* 앞(웹블로그란)·뒤(홈페이지 vs 웹블로그)가 흰 바탕이라 연한 회색으로 나눈다 */
         .chw { padding: 96px 0; text-align: center; background: var(--cb-soft); }
         @media (min-width: 960px) { .chw { padding: 140px 0; } }

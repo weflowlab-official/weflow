@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import PlanCard from '@/components/PlanCard'
 import PlanButton from './PlanButton'
-import { CLINIC_PLANS as PLANS, CLINIC_PLAN_NOTE as NOTE } from './plans'
+import { CLINIC_PLANS as PLANS, CLINIC_PLAN_NOTE as NOTE, CLINIC_FEATURE_LINKS as LINKS } from './plans'
 
 /**
  * 제작 플랜 & 가격 안내 — PREMIER(웹블로그) / SIGNATURE(홈페이지) / ALL-IN-ONE(둘 다, 추천) 카드 세 장.
@@ -28,7 +28,7 @@ const GENERAL_FEATURES = [
  */
 export default function ClinicPlans({ children, general = false, cta }: { children?: ReactNode; general?: boolean; cta?: (plan: string, best: boolean) => ReactNode }) {
   return (
-    <section id="plans" className="cp" aria-labelledby="cp-title">
+    <section id="plans" className={`cp${general ? '' : ' cp--clinic'}`} aria-labelledby="cp-title">
       <div className="cp-inner">
         <p className="cb-chapter">PRICING</p>
         <h2 id="cp-title" className="cp-title">제작 플랜 & <span>가격 안내</span></h2>
@@ -41,7 +41,7 @@ export default function ClinicPlans({ children, general = false, cta }: { childr
               subtitle={p.tagline}
               price={p.price}
               foot={NOTE}
-              features={general ? GENERAL_FEATURES[i] : p.features}
+              features={general ? GENERAL_FEATURES[i] : p.features.map(f => (LINKS[f] ? { text: f, href: LINKS[f] } : f))}
               highlight={p.best}
               tagLabel="추천"
               cta={cta ? cta(p.plan, p.best) : <PlanButton plan={p.plan} fill={p.best} />}
@@ -92,6 +92,16 @@ export default function ClinicPlans({ children, general = false, cta }: { childr
         .cp .pricing-tag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 2px; background: linear-gradient(120deg, #1f63d6, #4f8ff5, #7db0ff, #4f8ff5, #1f63d6); background-size: 250% 100%; animation: cp-tag-flow 3.5s ease infinite; padding: 4px 11px; border-radius: 9999px; box-shadow: 0 4px 10px rgba(31,99,214,.34); }
         @keyframes cp-tag-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @media (prefers-reduced-motion: reduce) { .cp .hl-sparkle { animation: none; opacity: .25; } .cp .pricing-tag { animation: none; } }
+        /* 병의원 랜딩의 ALL-IN-ONE 첫 줄 — 둘을 같이 만들 때만 생기는 강점이라 금색 광택으로 띄운다.
+           '왜 WEFLOW?' 카드의 금색(.ww-gold)과 같은 색·움직임. 플랜 카드(PlanCard)는 /pricing 과 같이 쓰는 부품이라 건드리지 않고 여기서 첫 줄만 고른다 */
+        .cp--clinic .pricing-card.is-highlight ul li:first-child .callout { white-space: nowrap; font-size: clamp(.64rem, calc(1.78vw - 4.4px), .9375rem); letter-spacing: -0.02em; font-weight: 800; background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #e2c68c 50%, #b8914e 62%, #a8823e 100%); background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: cpGoldSheen 2.8s linear infinite; }
+        .cp--clinic .pricing-card.is-highlight ul li:first-child svg { color: #b8914e !important; }
+        /* 그 줄은 누르면 'WITH HOMEPAGE' 섹션으로 내려간다 — 글씨는 금색 그대로(바탕 그림이 비쳐야 해서 글자색은 투명을 물려받는다), 금색 밑줄로 눌린다는 것을 알린다 */
+        .cp .plan-feature-link { color: inherit; text-decoration: underline; text-decoration-color: #c9a769; text-decoration-thickness: 1px; text-underline-offset: 4px; cursor: pointer; }
+        @keyframes cpGoldSheen { from { background-position: 250% center; } to { background-position: 0% center; } }
+        @media (prefers-reduced-motion: reduce) { .cp--clinic .pricing-card.is-highlight ul li:first-child .callout { animation: none; } }
+        /* 그 줄은 길어서 한 줄에 들어가게 글씨를 화면 폭에 맞춰 줄인다 — 카드 안쪽 폭이 화면 폭을 따라 바뀌므로 그 폭에 꽉 차는 크기를 식으로 잡았다 (재 본 값: 세 칸일 때 1.78vw − 4.4px, 한 칸으로 쌓일 때 6vw − 7.3px). 최대는 다른 줄과 같은 .9375rem */
+        @media (max-width: 860px) { .cp--clinic .pricing-card.is-highlight ul li:first-child .callout { font-size: clamp(.66rem, calc(6vw - 7.3px), .9375rem); } }
         /* 좁은 화면 — 한 장씩 */
         @media (max-width: 860px) { .cp .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; gap: 1.6rem; margin-top: 40px; }
           /* 한 줄로 쌓이니 비싼 순으로 — ALL-IN-ONE(추천) → SIGNATURE(홈페이지) → PREMIER(웹블로그). 넓은 화면은 적힌 순서(가격 낮은 순) 그대로 */

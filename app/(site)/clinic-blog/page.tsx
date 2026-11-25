@@ -135,8 +135,8 @@ export default function ClinicBlogPage() {
         <div className="cb-wrap cb-hero-inner">
           {/* 아이브로우 칩 둘 — 무엇을 만드는 곳인지, 누구를 위한 페이지인지 (메인 히어로의 체크 칩과 같은 알약 모양. 짙은 칩은 밝은 화면에서 무거워 보여 흰 바탕 · 검은 글씨 · 금색 체크로) */}
           <div className="cb-eyebrow">
-            <span><Check size={15} strokeWidth={3} aria-hidden="true" />리뉴얼 · 신규 대상</span>
-            <span><Check size={15} strokeWidth={3} aria-hidden="true" />병의원 웹블로그 · 홈페이지 제작</span>
+            <span><Check size={15} strokeWidth={3} aria-hidden="true" /><b className="cb-gold">리뉴얼 · 신규 대상</b></span>
+            <span><Check size={15} strokeWidth={3} aria-hidden="true" /><b className="cb-gold">병의원 웹블로그 · 홈페이지 제작</b></span>
           </div>
           {/* 글 하나로 SEO·AEO·GEO 까지 — 웹블로그 메인(/blog)의 병의원 섹션과 같은 메시지 */}
           <h1 className="cb-h1">
@@ -148,10 +148,10 @@ export default function ClinicBlogPage() {
               견적 문의는 헤더 버튼 · 떠 있는 버튼 · 휴대폰 하단 바가 맡는다 */}
           <div className="cb-hero-btns">
             <a href="/clinic-blog/check" target="_blank" rel="noopener noreferrer" className="cb-hero-btn cb-hero-btn--fill">
-              <ScanSearch size={18} /> 내 사이트 AI 진단
+              <ScanSearch size={18} /> 내 사이트 진단받기
             </a>
             <a href="/clinic-blog/demo" target="_blank" rel="noopener noreferrer" className="cb-hero-btn">
-              <PenLine size={18} /> 관리자페이지 체험
+              <PenLine size={18} /> 관리자페이지 체험하기
             </a>
           </div>
         </div>
@@ -220,19 +220,11 @@ export default function ClinicBlogPage() {
         </>}
         lines={DROP_LINES}
       />
-
-      {/* ── 그래서, 웹블로그 — 화면을 붙잡아 두고 답 네 개를 차례로 (메인의 '왜 WEFLOW?' 와 같은 방식) ── */}
-      <BlogWhy />
-
-      {/* ── 어떻게 자리 잡나: 글만 쓰면 네이버·구글에 자리 잡고 AI 까지 읽어 가는 구조 — 히어로의 약속을 여기서 보여 준다 ── */}
-      <HowItWorks />
-
-      {/* ── 누구나 쓸 수 있다 — '글은 누가 쓰나' 걱정을 풀고, 글쓰기 데모(새 탭)로 잇는다 ── */}
-      <EasyWrite />
-
-      {/* ── 홈페이지 vs 웹블로그 — 둘이 무엇이 다른지 창 두 개로, 바로 아래 '홈페이지와 함께하면'으로 잇는다 ── */}
+      {/* 2026-11-25: '홈페이지와 함께하면 → 홈페이지 vs 웹블로그 → 간편 견적 ②' 를 WHY WEB BLOG 위로 올렸다 — 글을 읽은 환자가 사이트 밖으로 나가지 않는다는 강점을 먼저 보여 준다 */}
+      {/* ── 홈페이지와 함께하면 (상품 카드는 위쪽 가격 안내로 옮겼다) ── */}
+      <WithHomepage />
+      {/* ── 홈페이지 vs 웹블로그 — 둘이 무엇이 다른지 창 두 개로 ── */}
       <HomeVsBlog />
-
       {/* 간편 견적 ② — 웹블로그 소개(왜 · 어떻게 · 누구나 · 홈페이지 vs 웹블로그)를 다 본 뒤. ①과 맨 아래 상담 폼 사이 중간쯤이다. 앞 섹션(흰 바탕)의 아래 여백 안으로 끌어올려 한 덩어리로 보이게 한다 */}
       <div className="qq-sec">
         <QuickQuote
@@ -241,9 +233,17 @@ export default function ClinicBlogPage() {
           desc={<>이름과 번호만 남겨 주세요. <br className="cb-mo" />지금 상태를 보고 맞는 방법을 안내해 드립니다.</>}
         />
       </div>
+      {/* ── 그래서, 웹블로그 — 화면을 붙잡아 두고 답 네 개를 차례로 (메인의 '왜 WEFLOW?' 와 같은 방식) ── */}
+      <BlogWhy />
 
-      {/* ── 홈페이지와 함께하면 (상품 카드는 위쪽 가격 안내로 옮겼다) ── */}
-      <WithHomepage />
+      {/* ── 어떻게 자리 잡나: 글만 쓰면 네이버·구글에 자리 잡고 AI 까지 읽어 가는 구조 — 히어로의 약속을 여기서 보여 준다 ── */}
+      <HowItWorks gold />
+
+      {/* ── 누구나 쓸 수 있다 — '글은 누가 쓰나' 걱정을 풀고, 글쓰기 데모(새 탭)로 잇는다 ── */}
+      <EasyWrite />
+
+
+
 
       {/* ── 진행 과정 ── */}
       <section id="process" className="cb-sec cb-step-sec">
@@ -312,6 +312,14 @@ export default function ClinicBlogPage() {
         /* 좁은 화면에서는 말풍선이 없으므로 넓은 화면과 같이 제목 묶음을 세로 가운데에 둔다 */
         .cb-eyebrow { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin: 0 0 22px; }
         .cb-eyebrow span { display: inline-flex; align-items: center; gap: .38rem; height: 2.2rem; padding: 0 1rem; border-radius: 999px; background: #fff; border: 1px solid #d5d9df; color: var(--cb-accent); font-size: .95rem; font-weight: 700; line-height: 1; white-space: nowrap; }
+        /* 칩 글씨는 금색 광택 — 칩 바탕(흰색)과 겹치지 않게 글자만 따로 감싸(b.cb-gold) 그 안에 금색을 입힌다. 테두리도 옅은 금색 */
+        /* 테두리에 금색 광택이 흐른다 — 테두리에 직접 그라데이션을 줄 수 없어 안쪽 바탕(흰색, padding-box)과 테두리 바탕(금색, border-box)을 겹쳐 그린다 */
+        .cb-eyebrow span { border: 1.5px solid transparent; background: linear-gradient(#fff, #fff) padding-box, linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #e2c68c 50%, #b8914e 62%, #a8823e 100%) border-box; background-size: auto, 250% auto; animation: cbChipBorder 2.8s linear infinite; }
+        @keyframes cbChipBorder { from { background-position: 0 0, 250% center; } to { background-position: 0 0, 0% center; } }
+        @media (prefers-reduced-motion: reduce) { .cb-eyebrow span { animation: none; } }
+        .cb-gold { font-weight: inherit; background: linear-gradient(115deg, #a8823e 0%, #b8914e 38%, #e2c68c 50%, #b8914e 62%, #a8823e 100%); background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: cbGoldSheen 2.8s linear infinite; }
+        @keyframes cbGoldSheen { from { background-position: 250% center; } to { background-position: 0% center; } }
+        @media (prefers-reduced-motion: reduce) { .cb-gold { animation: none; } }
         .cb-eyebrow svg { flex: none; color: #c9a262; } /* 메인 사이트 금색 — 흰 바탕에서 보이게 한 단계 짙은 값 */
         /* 휴대폰 — 칩 둘을 늘 한 줄에. 화면이 좁아지면 글자가 화면 폭에 맞춰 같이 줄어든다 (360px 폰에서 약 10px) */
         @media (max-width: 480px) { .cb-eyebrow { flex-wrap: nowrap; gap: 5px; margin-bottom: 16px; } .cb-eyebrow span { height: 2.6em; padding: 0 .7em; gap: .3em; font-size: min(.84rem, 2.85vw); } .cb-eyebrow svg { width: 1.1em; height: 1.1em; } }

@@ -32,7 +32,8 @@ export default function PlanCard({
   price: string
   /** 가격 아래 단서 줄 — 문자열 하나 또는 여러 줄 (예: ['VAT 별도', '월 유지보수 무제한']) */
   foot?: string | string[]
-  features: string[]
+  /** 구성 항목 — 글자만, 또는 누르면 이동하는 줄({ text, href }) */
+  features: (string | { text: string; href: string })[]
   highlight?: boolean
   tone?: 'accent' | 'violet'
   tagLabel?: string
@@ -122,7 +123,10 @@ export default function PlanCard({
           flex: 1,
         }}
       >
-        {features.map(f => (
+        {features.map(item => {
+          const f = typeof item === 'string' ? item : item.text
+          const href = typeof item === 'string' ? undefined : item.href
+          return (
           <li key={f} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
             <Check
               size={16}
@@ -130,10 +134,11 @@ export default function PlanCard({
               style={{ color: 'var(--accent)', flexShrink: 0, marginTop: '0.15rem' }}
             />
             <span className="callout" style={{ wordBreak: 'keep-all' }}>
-              {f}
+              {href ? <a href={href} className="plan-feature-link">{f}</a> : f}
             </span>
           </li>
-        ))}
+          )
+        })}
       </ul>
 
       {cta}
