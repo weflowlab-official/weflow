@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: '병원 홈페이지 무료 진단 · WEFLOW',
   description:
     '우리 병원 홈페이지, 지금 몇 점일까요? 주소만 넣으면 제작 기술 및 보안부터 AI 검색 준비도(AEO·GEO), 검색 노출(SEO), 속도까지 무료로 바로 진단해 드립니다.',
-  keywords: '병원 홈페이지 진단, 사이트 무료 진단, 홈페이지 점검, SEO 진단, AEO, GEO, AI 검색 준비도, 홈페이지 속도 측정, 홈페이지 보안 점검, 위플로우, WEFLOW',
+  keywords: '병원 홈페이지 진단, 사이트 무료 진단, 홈페이지 점검, SEO 진단, AEO, GEO, AI 검색 준비도, 홈페이지 속도 측정, 홈페이지 보안 점검, 웹블로그, 웹사이트 제작, 홈페이지 검수, 웹사이트 검수, 위플로우, WEFLOW', // 웹블로그 ~ 웹사이트 검수 넷은 광고 담당자가 잡은 광고 메인 키워드 (2026-11-26)
   alternates: { canonical: '/clinic-blog/check' },
   openGraph: {
     title: '병원 홈페이지 무료 진단 · WEFLOW',
