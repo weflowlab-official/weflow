@@ -2,7 +2,7 @@
 // POST only, 공개(인증 없음). 모든 방문자의 브라우저에서 호출된다.
 // 새 방문 기록과 체류시간·스크롤 갱신 두 가지를 body.type으로 구분해 받는다.
 
-import { NextResponse } from 'next/server'
+import { NextResponse, after } from 'next/server'
 import { pageViewStore } from '@/lib/store'
 import { detectDevice } from '@/lib/device'
 
@@ -81,5 +81,7 @@ export async function POST(req: Request) {
     campaign: body.utmCampaign ? String(body.utmCampaign) : '',
     device: detectDevice(ua),
   })
+  // 1년이 지난 방문 기록 지우기 — 응답을 보낸 뒤에, 하루에 한 번만 실제로 실행된다
+  after(() => pageViewStore.pruneOld())
   return NextResponse.json({ id })
 }

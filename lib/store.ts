@@ -142,7 +142,26 @@ function toPageView(row: Record<string, unknown>): PageView {
   }
 }
 
+// 방문 기록 보관 기간 — 최근 1년치만 둔다 (지우지 않으면 DB 용량이 계속 늘어난다)
+const PAGE_VIEW_KEEP_DAYS = 365
+// 서버 인스턴스마다 마지막으로 지운 시각. 인스턴스가 새로 뜨면 한 번 더 돌 수 있지만, 지울 것이 없으면 바로 끝난다
+let lastPrunedAt = 0
+
 export const pageViewStore = {
+  // 1년이 지난 방문 기록 지우기 — /api/track 이 응답을 보낸 뒤 부르고, 하루에 한 번만 실제로 실행된다.
+  // page_views 는 본 사이트와 랜딩페이지가 함께 쓰는 표라, 사이트를 가리지 않고 지운다
+  pruneOld: async (): Promise<void> => {
+    const now = Date.now()
+    if (now - lastPrunedAt < 24 * 60 * 60 * 1000) return
+    lastPrunedAt = now
+    const before = new Date(now - PAGE_VIEW_KEEP_DAYS * 24 * 60 * 60 * 1000).toISOString()
+    try {
+      await getSql()`DELETE FROM page_views WHERE created_at < ${before}`
+    } catch (err) {
+      console.warn('오래된 방문 기록을 지우지 못했습니다', err)
+    }
+  },
+
   // 최근 N일 방문 기록 (관리자 통계 집계용) — Postgres 는 행 수 제한이 없어 한 번에 가져온다
   getRecent: async (days = 30): Promise<PageView[]> => {
     const sql = getSql()

@@ -219,13 +219,22 @@ function withinPeriod<T extends { createdAt: string }>(
   });
 }
 
+// 최근 1년 안의 항목만 — 유입 관리의 맨 끝 기간('최근 1년')에서 문의를 셀 때 쓴다
+function withinLastYear<T extends { createdAt: string }>(rows: T[]): T[] {
+  const from = Date.now() - 365 * DAY_MS;
+  return rows.filter((r) => new Date(r.createdAt).getTime() >= from);
+}
+
 // 기간 선택 버튼 — 누르면 네이버 광고 스타일 팝오버(프리셋 + 달력)가 열린다
 function PeriodSelect({
   value,
   onChange,
+  allLabel,
 }: {
   value: PeriodSel;
   onChange: (v: PeriodSel) => void;
+  /** 맨 끝 단추('전체')의 이름을 바꿀 때 — 유입 관리는 방문 기록을 1년만 보관해 "최근 1년"으로 보여 준다 */
+  allLabel?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [viewY, setViewY] = useState(0); // 달력에 보이는 연·월
@@ -335,7 +344,7 @@ function PeriodSelect({
         }}
       >
         <CalendarDays size={15} strokeWidth={2.2} />
-        {periodLabelOf(value, now)}
+        {value.key === "all" && allLabel ? allLabel : periodLabelOf(value, now)}
         <ChevronDown size={14} strokeWidth={2.2} />
       </button>
 
@@ -430,7 +439,7 @@ function PeriodSelect({
                     setOpen(false);
                   }}
                 >
-                  {p.label}
+                  {p.key === "all" && allLabel ? allLabel : p.label}
                 </button>
               ))}
             </div>
@@ -2202,7 +2211,8 @@ function TrafficView({
   });
   // 영역별 문의 — 폼 출처로 나눈다 (병의원·웹블로그 폼 외에는 전부 메인 사이트)
   const areaInq: Record<string, number> = {};
-  withinPeriod(inquiries, period).forEach((i) => {
+  // 이 탭의 맨 끝 기간은 '최근 1년'이다 — 문의는 지우지 않으므로, 방문 기록과 같은 1년으로 맞춰 센다
+  (period.key === "all" ? withinLastYear(inquiries) : withinPeriod(inquiries, period)).forEach((i) => {
     const a = i.source === "clinic-blog" || i.source === "clinic-diagnosis" ? "clinic" : i.source === "blog" ? "blog" : "main";
     areaInq[a] = (areaInq[a] || 0) + 1;
   });
@@ -2312,7 +2322,7 @@ function TrafficView({
     <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
       {/* 상단 바 — 기간 선택 (왼쪽) */}
       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-        <PeriodSelect value={period} onChange={setPeriod} />
+        <PeriodSelect value={period} onChange={setPeriod} allLabel="최근 1년" />
       </div>
 
       {/* 요약 지표 */}
@@ -3009,8 +3019,8 @@ export default function AdminPage() {
   useEffect(() => {
     if (!authed || tab !== "traffic") return;
     setPvLoading(true);
-    // 기간 선택에 '지난달'·'전체'가 있어 최근 30일만 받으면 그 이전이 0으로 보인다 — 전체 기간을 받는다
-    fetch("/api/analytics?days=3650")
+    // 기간 선택에 '지난달'·'최근 1년'이 있어 최근 30일만 받으면 그 이전이 0으로 보인다 — 보관 기간(1년) 전체를 받는다
+    fetch("/api/analytics?days=365")
       .then((r) => r.json())
       .then((d) => setPageViews(Array.isArray(d) ? d : []))
       .catch(() => {})
